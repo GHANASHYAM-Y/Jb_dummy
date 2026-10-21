@@ -2,13 +2,13 @@ import { NextResponse, connection } from "next/server";
 import { createServerSupabaseClient, createServiceRoleClient } from "@/lib/supabase/server";
 
 /**
- * POST /api/challenges/stories/cleanup
+ * GET / POST /api/challenges/stories/cleanup
  *
  * Retention policy cleanup:
  *  - Identifies stories older than 24 hours (expires_at <= NOW()).
  *  - Permanently deletes the underlying media objects from Supabase Storage.
  *  - Preserves challenge records, match records, and approval history.
- *  - Can be triggered via scheduled cron or maintenance tasks.
+ *  - Triggered via Vercel Cron (HTTP GET) or external schedulers/POST.
  */
 export async function POST(request: Request) {
   await connection();
@@ -83,3 +83,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Internal server error." }, { status: 500 });
   }
 }
+
+// Vercel Cron triggers endpoints using HTTP GET
+export const GET = POST;

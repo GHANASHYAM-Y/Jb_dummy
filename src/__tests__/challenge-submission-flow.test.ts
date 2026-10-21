@@ -203,6 +203,21 @@ describe("24-Hour Expiry & Retention Cleanup Audit", () => {
     expect(cleanupRouteSrc).toContain("cleanup_expired_stories");
     expect(cleanupRouteSrc).toContain('.from("challenge-stories")');
     expect(cleanupRouteSrc).toContain('.remove(expiredPaths)');
+    expect(cleanupRouteSrc).toContain("export async function POST");
+    expect(cleanupRouteSrc).toContain("export const GET = POST");
+    expect(cleanupRouteSrc).toContain("process.env.CRON_SECRET");
+  });
+
+  it("schedules expired story cleanup daily at 3 AM UTC for Vercel Hobby compatibility", () => {
+    const vercelConfig = JSON.parse(
+      fs.readFileSync(path.resolve(__dirname, "../../vercel.json"), "utf-8")
+    );
+    expect(vercelConfig.crons).toBeDefined();
+    const cleanupCron = vercelConfig.crons.find(
+      (c: { path: string }) => c.path === "/api/challenges/stories/cleanup"
+    );
+    expect(cleanupCron).toBeDefined();
+    expect(cleanupCron.schedule).toBe("0 3 * * *");
   });
 });
 

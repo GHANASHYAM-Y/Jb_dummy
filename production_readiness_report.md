@@ -99,7 +99,7 @@ All 13 migration files were audited for schema integrity, RLS policy coverage, a
 | :---: | :--- | :---: | :--- | :--- |
 | **SEC-01** | **Production Migration 0013 Pending Execution** | **CRITICAL** | If unapplied, logged-in production users can call `confirm_story_media_deleted` with an opponent's story path and prematurely delete it. | **BLOCKER (Pending Operator Execution in Prod SQL Editor)** |
 | **CFG-01** | **Supabase Auth Production Redirect URLs** | **CRITICAL** | If production Supabase project Auth settings still point to localhost, email verification and password reset links will fail. | **BLOCKER (Pending Operator Dashboard Config)** |
-| **OPS-01** | **Automated Scheduler for Story Media Cleanup** | **HIGH** | `/api/challenges/stories/cleanup` requires automated recurring invocation; otherwise expired 24h videos accumulate in Storage. | **RESOLVED** (Configured `vercel.json` hourly cron; requires hosting cron setup) |
+| **OPS-01** | **Automated Scheduler for Story Media Cleanup** | **HIGH** | `/api/challenges/stories/cleanup` requires automated recurring invocation; otherwise expired 24h videos accumulate in Storage. | **RESOLVED** (Configured `vercel.json` daily cron at `0 3 * * *` [3 AM UTC] for Vercel Hobby compatibility; requires hosting cron setup) |
 | **UX-01** | **Missing App Router Error Boundaries** | **HIGH** | Unhandled client/SSR errors would display raw unstyled Next.js error page rather than branded recovery UI. | **RESOLVED** (Created `error.tsx`, `global-error.tsx`, and `not-found.tsx`) |
 | **SEC-02** | **Missing `CRON_SECRET` Documentation in `.env.example`** | **HIGH** | Operators configuring a fresh deployment might omit `CRON_SECRET`, preventing external cron authorization. | **RESOLVED** (Documented in `.env.example`) |
 | **SEC-03** | **Missing HTTP Security Response Headers** | **MEDIUM** | Missing clickjacking (`X-Frame-Options`), MIME-sniffing (`X-Content-Type-Options`), and camera/mic permissions policy. | **RESOLVED** (Configured `headers()` in `next.config.ts`) |
@@ -193,7 +193,7 @@ graph TD
    - Build using Node.js 22 LTS runtime.
    - Confirm all 61 routes compile and static assets are cached.
 3. **Verify Automated Cron:**
-   - Confirm Vercel Cron or your external scheduler triggers `POST /api/challenges/stories/cleanup` hourly with `Authorization: Bearer <CRON_SECRET>`.
+   - Confirm Vercel Cron or your external scheduler triggers `POST /api/challenges/stories/cleanup` daily at 3 AM UTC (`0 3 * * *`) with `Authorization: Bearer <CRON_SECRET>`.
 
 ### Phase 4: Production Smoke Testing
 
