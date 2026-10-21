@@ -1,0 +1,626 @@
+@import "tailwindcss";
+
+/* ============================================================
+   EVOORA DESIGN SYSTEM — COASTAL MODERN
+   Light-First, Social, Sophisticated & Calm Gaming Identity
+   ============================================================ */
+
+:root {
+  /* ── Brand Palette ─────────────────────────────────────────── */
+  --bg-page:             #F7F8F4; /* Soft ivory canvas */
+  --surface-white:       #FFFFFF; /* Pure white card and nav surfaces */
+  --surface-pale-teal:   #DDF2EB; /* Mint/pale teal surface for chips, tags */
+  --surface-pale-peach:  #FCE6DE; /* Pale peach for dares & playful accents */
+  --surface-disabled:    #EEF1ED; /* Muted pill backgrounds & disabled states */
+
+  /* Primary Brand: Oceanic Teal */
+  --brand-teal:          #167D78; /* Primary action & brand signifier */
+  --brand-teal-hover:    #12635F; /* Primary button hover */
+  --brand-teal-tint:     rgba(22, 125, 120, 0.08);
+  --brand-teal-glow:     rgba(22, 125, 120, 0.18);
+
+  /* Playful Accent: Warm Coral (Selective for challenges & dares) */
+  --brand-coral:         #D95F49; /* Coral accent */
+  --brand-coral-hover:   #C34E39;
+  --brand-coral-tint:    rgba(217, 95, 73, 0.08);
+  --brand-coral-glow:    rgba(217, 95, 73, 0.18);
+
+  /* Text Hierarchy */
+  --text-primary:        #203331; /* Deep evergreen text (WCAG AAA) */
+  --text-secondary:      #65736F; /* Warm slate gray for descriptions */
+  --text-faint:          #8E9B97; /* Subdued meta, timestamps */
+
+  /* Borders */
+  --border-subtle:       #E2E8E2; /* Clean, light architectural border */
+  --border-hover:        #CBD4CB; /* Hover / focused border */
+
+  /* Semantic Alerts */
+  --color-danger:        #D95F49; /* Error / loss / cancel */
+  --color-danger-bg:     #FCE6DE;
+  --color-success:       #167D78; /* Win / success */
+  --color-success-bg:    #DDF2EB;
+  --color-warning:       #D97706;
+  --color-warning-bg:    #FEF3C7;
+
+  /* ── Compatibility Aliases ─────────────────────────────────── */
+  --evo-navy:            var(--bg-page);
+  --evo-navy-light:      var(--surface-white);
+  --evo-navy-mid:        var(--surface-white);
+  --evo-navy-card:       var(--surface-white);
+  --evo-navy-elevated:   var(--surface-pale-teal);
+  --evo-border:          var(--border-subtle);
+  --evo-border-hover:    var(--border-hover);
+  --evo-violet:          var(--brand-teal);
+  --evo-violet-light:    var(--brand-teal-hover);
+  --evo-violet-pale:     var(--brand-teal);
+  --evo-violet-glow:     var(--brand-teal-glow);
+  --evo-yellow:          var(--brand-coral);
+  --evo-yellow-light:    #FCE6DE;
+  --evo-yellow-glow:     var(--brand-coral-glow);
+  --evo-coral:           var(--brand-coral);
+  --evo-coral-glow:      var(--brand-coral-glow);
+  --evo-green:           var(--brand-teal);
+  --evo-green-glow:      var(--brand-teal-glow);
+  --evo-text:            var(--text-primary);
+  --evo-text-muted:      var(--text-secondary);
+  --evo-text-faint:      var(--text-faint);
+
+  /* Next.js theme mappings */
+  --background:          var(--bg-page);
+  --foreground:          var(--text-primary);
+
+  /* Radii scale */
+  --radius-sm:  8px;
+  --radius-md:  12px;
+  --radius-lg:  16px;
+  --radius-xl:  20px;
+  --radius-2xl: 26px;
+
+  /* Shadows — subtle, calm, tactile */
+  --shadow-subtle:   0 1px 3px rgba(32, 51, 49, 0.04), 0 1px 2px rgba(32, 51, 49, 0.02);
+  --shadow-card:     0 4px 16px -2px rgba(32, 51, 49, 0.06), 0 2px 6px -1px rgba(32, 51, 49, 0.03);
+  --shadow-elevated: 0 12px 32px -4px rgba(32, 51, 49, 0.09), 0 4px 12px -2px rgba(32, 51, 49, 0.04);
+  --shadow-teal:     0 2px 14px var(--brand-teal-glow);
+  --shadow-coral:    0 2px 14px var(--brand-coral-glow);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-inter), "Inter", "Noto Sans Tamil", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: var(--font-manrope), "Manrope", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-tamil: "Noto Sans Tamil", sans-serif;
+}
+
+/* ============================================================
+   BASE RESET & GLOBALS
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100dvh;
+  background: var(--bg-page);
+  color: var(--text-primary);
+  font-family: var(--font-inter), "Inter", "Noto Sans Tamil", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  letter-spacing: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography Hierarchy */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-manrope), "Manrope", sans-serif;
+  color: var(--text-primary);
+  letter-spacing: 0;
+  text-wrap: balance;
+}
+
+h1 {
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+h3 {
+  line-height: 1.35;
+  letter-spacing: 0;
+}
+
+h4, h5, h6 {
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+
+p {
+  line-height: 1.6;
+  letter-spacing: 0;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  letter-spacing: 0;
+}
+
+[lang="ta"],
+.font-tamil {
+  font-family: "Noto Sans Tamil", sans-serif;
+}
+
+/* ============================================================
+   COASTAL MODERN COMPONENT SYSTEM
+   ============================================================ */
+
+/* ----- Cards ----- */
+.evo-card {
+  background: var(--surface-white);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-card);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.evo-card:hover {
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-elevated);
+}
+
+.evo-card-glass {
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+/* ----- Buttons ----- */
+.evo-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  min-height: 44px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  letter-spacing: 0;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  text-decoration: none;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.evo-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Primary Teal CTA */
+.evo-btn-primary {
+  background: var(--brand-teal);
+  color: #FFFFFF;
+  font-weight: 700;
+  box-shadow: var(--shadow-teal);
+}
+.evo-btn-primary:hover:not(:disabled) {
+  background: var(--brand-teal-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 18px rgba(22, 125, 120, 0.28);
+}
+.evo-btn-primary:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* Secondary Neutral Button */
+.evo-btn-secondary {
+  background: var(--surface-white);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-subtle);
+}
+.evo-btn-secondary:hover:not(:disabled) {
+  background: var(--bg-page);
+  border-color: var(--border-hover);
+  transform: translateY(-1px);
+}
+
+/* Playful Coral Button (For dares & winner challenges) */
+.evo-btn-coral,
+.evo-btn-yellow {
+  background: var(--brand-coral);
+  color: #FFFFFF;
+  font-weight: 700;
+  box-shadow: var(--shadow-coral);
+}
+.evo-btn-coral:hover:not(:disabled),
+.evo-btn-yellow:hover:not(:disabled) {
+  background: var(--brand-coral-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 18px rgba(217, 95, 73, 0.28);
+}
+
+.evo-btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+}
+.evo-btn-ghost:hover:not(:disabled) {
+  background: var(--surface-disabled);
+  color: var(--text-primary);
+}
+
+.evo-btn-danger {
+  background: var(--surface-pale-peach);
+  color: var(--brand-coral);
+  border: 1px solid rgba(217, 95, 73, 0.25);
+}
+.evo-btn-danger:hover:not(:disabled) {
+  background: rgba(217, 95, 73, 0.18);
+}
+
+.evo-btn-sm {
+  min-height: 38px;
+  padding: 0.4375rem 0.9375rem;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  letter-spacing: 0;
+  border-radius: var(--radius-sm);
+}
+.evo-btn-lg {
+  min-height: 48px;
+  padding: 0.75rem 1.75rem;
+  font-size: 1rem;
+  line-height: 1.4;
+  letter-spacing: 0;
+  border-radius: var(--radius-md);
+}
+.evo-btn-xl {
+  min-height: 52px;
+  padding: 0.875rem 2rem;
+  font-size: 1.0625rem;
+  line-height: 1.4;
+  letter-spacing: 0;
+  border-radius: var(--radius-lg);
+}
+
+/* ----- Inputs ----- */
+.evo-input {
+  width: 100%;
+  background: var(--surface-white);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0.625rem 0.875rem;
+  min-height: 42px;
+  color: var(--text-primary);
+  font-size: 0.9375rem;
+  font-family: inherit;
+  outline: none;
+  box-shadow: var(--shadow-subtle);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.evo-input.pl-10,
+.evo-input.has-left-icon {
+  padding-left: 2.5rem !important;
+}
+.evo-input.pr-10,
+.evo-input.has-right-icon {
+  padding-right: 2.5rem !important;
+}
+.evo-input::placeholder {
+  color: var(--text-faint);
+}
+.evo-input:focus {
+  border-color: var(--brand-teal);
+  box-shadow: 0 0 0 3px rgba(22, 125, 120, 0.14);
+}
+.evo-input.error {
+  border-color: var(--brand-coral);
+  box-shadow: 0 0 0 3px rgba(217, 95, 73, 0.14);
+}
+
+.evo-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.375rem;
+}
+
+/* ----- Badges ----- */
+.evo-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3125rem 0.6875rem;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.35;
+}
+
+/* Teal Mint Badge */
+.evo-badge-teal,
+.evo-badge-green,
+.evo-badge-lime,
+.evo-badge-violet {
+  background: var(--surface-pale-teal);
+  color: var(--brand-teal);
+  border: 1px solid rgba(22, 125, 120, 0.22);
+}
+
+/* Coral Peach Badge */
+.evo-badge-coral,
+.evo-badge-yellow {
+  background: var(--surface-pale-peach);
+  color: var(--brand-coral);
+  border: 1px solid rgba(217, 95, 73, 0.24);
+}
+
+/* Muted Slate Badge */
+.evo-badge-muted {
+  background: var(--surface-disabled);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+}
+
+/* ----- Dividers ----- */
+.evo-divider {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: 1rem 0;
+}
+
+/* ----- Section helpers ----- */
+.evo-section {
+  padding: 3.5rem 0;
+}
+.evo-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+/* ----- Typography ----- */
+.evo-display {
+  font-family: var(--font-manrope), "Manrope", sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--text-primary);
+}
+
+.evo-gradient-text {
+  color: var(--brand-teal);
+}
+
+/* ----- Navigation ----- */
+.evo-nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-subtle);
+  box-shadow: 0 1px 4px rgba(32, 51, 49, 0.03);
+}
+
+/* ----- Alert / Toast ----- */
+.evo-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  border-left: 3px solid;
+}
+.evo-alert-error {
+  background: var(--surface-pale-peach);
+  border-color: var(--brand-coral);
+  color: var(--brand-coral);
+}
+.evo-alert-success {
+  background: var(--surface-pale-teal);
+  border-color: var(--brand-teal);
+  color: var(--brand-teal);
+}
+.evo-alert-info {
+  background: var(--surface-white);
+  border-color: var(--brand-teal);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-subtle);
+}
+.evo-alert-warning {
+  background: #FEF3C7;
+  border-color: #D97706;
+  color: #92400E;
+}
+
+/* ============================================================
+   ANIMATIONS & MOTION
+   ============================================================ */
+
+@keyframes evo-fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes evo-slide-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes evo-scale-in {
+  from { opacity: 0; transform: scale(0.97); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes evo-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+.animate-fade-in   { animation: evo-fade-in  0.3s ease both; }
+.animate-slide-up  { animation: evo-slide-up 0.35s ease both; }
+.animate-scale-in  { animation: evo-scale-in 0.22s ease both; }
+
+.delay-100 { animation-delay: 0.08s; }
+.delay-200 { animation-delay: 0.16s; }
+.delay-300 { animation-delay: 0.24s; }
+.delay-400 { animation-delay: 0.32s; }
+
+/* ── RPS Arena Duel Animations ── */
+@keyframes rps-fist-pump-left {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-16px) rotate(-10deg); }
+}
+@keyframes rps-fist-pump-right {
+  0%, 100% { transform: translateY(0) scaleX(-1) rotate(0deg); }
+  50% { transform: translateY(-16px) scaleX(-1) rotate(-10deg); }
+}
+@keyframes rps-shockwave {
+  0% { transform: scale(0.5); opacity: 1; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+@keyframes rps-pop-in {
+  0% { transform: scale(0.5); opacity: 0; }
+  75% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes rps-pip-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.35); filter: drop-shadow(0 0 6px var(--brand-teal)); }
+}
+
+.animate-rps-fist-left {
+  animation: rps-fist-pump-left 0.45s ease-in-out infinite;
+}
+.animate-rps-fist-right {
+  animation: rps-fist-pump-right 0.45s ease-in-out infinite;
+}
+.animate-rps-shockwave {
+  animation: rps-shockwave 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.animate-rps-pop {
+  animation: rps-pop-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.animate-pip-pulse {
+  animation: rps-pip-pulse 0.6s ease-in-out;
+}
+
+/* Skeleton loading */
+.evo-skeleton {
+  background: linear-gradient(90deg,
+    var(--surface-disabled) 25%,
+    var(--surface-white)    50%,
+    var(--surface-disabled) 75%
+  );
+  background-size: 200% 100%;
+  animation: evo-shimmer 1.5s ease-in-out infinite;
+  border-radius: var(--radius-sm);
+}
+
+/* ============================================================
+   BACKGROUND DECORATION (Gentle coastal ivory/mint gradient)
+   ============================================================ */
+
+.evo-bg-mesh {
+  background-image:
+    radial-gradient(ellipse 70% 35% at 50% 0%, rgba(221, 242, 235, 0.45) 0%, transparent 70%);
+}
+
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
+
+::-webkit-scrollbar        { width: 6px; height: 6px; }
+::-webkit-scrollbar-track  { background: var(--bg-page); }
+::-webkit-scrollbar-thumb  { background: var(--border-subtle); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-faint); }
+
+/* ============================================================
+   FOCUS / ACCESSIBILITY
+   ============================================================ */
+
+:focus-visible {
+  outline: 2px solid var(--brand-teal);
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   GAME CARD — clean, light-first interactive surface
+   ============================================================ */
+
+.game-card {
+  position: relative;
+  background: var(--surface-white);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.22s ease;
+}
+@media (min-width: 640px) {
+  .game-card {
+    padding: 1.75rem;
+  }
+}
+.game-card:hover {
+  border-color: var(--brand-teal);
+  box-shadow: var(--shadow-elevated);
+  transform: translateY(-2px);
+}
+
+.evo-stat-tile {
+  background: var(--surface-white);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0.875rem 1rem;
+  box-shadow: var(--shadow-subtle);
+  transition: border-color 0.18s ease;
+}
+.evo-stat-tile:hover {
+  border-color: var(--border-hover);
+}
+
+/* ============================================================
+   PREFERS REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

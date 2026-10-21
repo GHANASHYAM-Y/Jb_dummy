@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/challenges/stories/cleanup",
+      "schedule": "0 * * * *"
+    }
+  ]
+}
