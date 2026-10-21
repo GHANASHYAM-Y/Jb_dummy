@@ -154,12 +154,59 @@ export function RpsMatchBoard({
 
   const [matchChallenge, setMatchChallenge] = useState<Challenge | null>(null);
   const [isChallengeModalOpen, setIsChallengeModalOpen] = useState(false);
+  const [playAgainLoading, setPlayAgainLoading] = useState(false);
+  const [playAgainError, setPlayAgainError] = useState<string | null>(null);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const victoryCelebratedRef = useRef(false);
 
   const myPerspective: 1 | 2 = state?.match.player1_id === userId ? 1 : 2;
   const me = myPerspective === 1 ? player1 : player2;
   const opp = myPerspective === 1 ? player2 : player1;
+
+  const handlePlayAgain = useCallback(async () => {
+    setPlayAgainLoading(true);
+    setPlayAgainError(null);
+    try {
+      const res = await fetch("/api/matchmaking/join", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ game_type: "rps" }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        if (data.code === "already_in_match" && data.match_id) {
+          router.push(`/play/rps/${data.match_id}`);
+          return;
+        }
+        if (data.code === "rate_limited") {
+          setPlayAgainError(t("matchmaking.rate_limited") || "Please wait a moment before searching for a new match.");
+          return;
+        }
+        setPlayAgainError(data.error || "Failed to start matchmaking.");
+        return;
+      }
+
+      if (data.code === "matched" && data.match_id) {
+        router.push(`/play/rps/${data.match_id}`);
+        return;
+      }
+
+      // If placed in searching queue or no opponent yet, navigate to lobby where RandomMatchmakingCard takes over
+      if (data.code === "searching" || data.queue_id) {
+        router.push("/play/rps");
+        return;
+      }
+
+      router.push("/play/rps");
+    } catch (err) {
+      console.error("[rps/play-again] Failed to join matchmaking:", err);
+      setPlayAgainError("Network error. Please try again or return to lobby.");
+    } finally {
+      setPlayAgainLoading(false);
+    }
+  }, [router, t]);
 
   // Listen to audio mute state changes
   useEffect(() => {
@@ -723,17 +770,36 @@ export function RpsMatchBoard({
               </>
             )}
 
+            {playAgainError && (
+              <div className="w-full max-w-md mx-auto mt-4 text-left">
+                <Alert variant="error" icon={<AlertCircle className="h-4 w-4" />}>
+                  {playAgainError}
+                </Alert>
+              </div>
+            )}
+
             <div className="flex flex-wrap gap-3 justify-center mt-6">
               <Button
                 variant="primary"
                 size="md"
-                onClick={() => router.push("/play/rps")}
+                onClick={handlePlayAgain}
+                loading={playAgainLoading}
+                disabled={playAgainLoading}
                 id="rps-play-again-btn"
               >
-                {t("rps.rematch") || "Play Again"}
+                <RefreshCw className={cn("h-4 w-4 mr-1.5", playAgainLoading && "animate-spin")} />
+                {playAgainLoading ? "Finding Match..." : (t("rps.rematch") || "Play Again")}
               </Button>
               <Button
                 variant="secondary"
+                size="md"
+                onClick={() => router.push("/play/rps")}
+                id="rps-back-lobby-btn"
+              >
+                Back to Lobby
+              </Button>
+              <Button
+                variant="ghost"
                 size="md"
                 onClick={() => router.push("/history")}
                 id="rps-view-history-btn"

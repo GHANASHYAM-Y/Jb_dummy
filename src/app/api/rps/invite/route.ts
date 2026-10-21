@@ -51,6 +51,8 @@ export async function POST(request: NextRequest) {
 /**
  * GET /api/rps/invite
  * Returns pending invites (incoming + outgoing) for the authenticated user.
+ * For accepted invites, authoritatively checks matches.phase so completed or cancelled
+ * matches are never returned as active games.
  */
 export async function GET() {
   await connection();
@@ -67,7 +69,60 @@ export async function GET() {
       console.error("[rps/invite GET] RPC error:", error.message);
       return NextResponse.json({ error: "Internal server error." }, { status: 500 });
     }
-    return NextResponse.json(data);
+
+    interface InviteItem {
+      invite_id: string;
+      direction: "incoming" | "outgoing";
+      other_id: string;
+      other_name: string;
+      other_evoora_id: string;
+      other_avatar: string | null;
+      status: string;
+      expires_at: string;
+      match_id: string | null;
+      created_at: string;
+      is_active?: boolean;
+    }
+
+    const rawInvites = ((data as { invites?: InviteItem[] })?.invites ?? []) as InviteItem[];
+    const acceptedMatchIds = rawInvites
+      .filter((inv) => inv.status === "accepted" && typeof inv.match_id === "string")
+      .map((inv) => inv.match_id as string);
+
+    let activeMatchIdSet = new Set<string>();
+    if (acceptedMatchIds.length > 0) {
+      const { data: activeMatches, error: matchCheckError } = await supabase
+        .from("matches")
+        .select("id, phase")
+        .in("id", acceptedMatchIds)
+        .eq("phase", "active");
+
+      if (!matchCheckError && activeMatches) {
+        activeMatchIdSet = new Set(activeMatches.map((m: { id: string }) => m.id));
+      }
+    }
+
+    const sanitizedInvites = rawInvites.map((inv) => {
+      if (inv.status === "accepted" && inv.match_id) {
+        const isMatchActive = activeMatchIdSet.has(inv.match_id);
+        return {
+          ...inv,
+          is_active: isMatchActive,
+          // Only preserve 'accepted' status if the underlying match is genuinely active!
+          // If the match is completed/cancelled, mark status as 'completed'
+          status: isMatchActive ? "accepted" : "completed",
+        };
+      }
+      return {
+        ...inv,
+        is_active: false,
+      };
+    });
+
+    return NextResponse.json({
+      ...(data as Record<string, unknown>),
+      invites: sanitizedInvites,
+    });
   } catch (err) {
     console.error("[rps/invite GET] Unexpected:", err);
     return NextResponse.json({ error: "Internal server error." }, { status: 500 });

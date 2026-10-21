@@ -25,6 +25,7 @@ interface GameInviteRow {
   expires_at: string;
   match_id: string | null;
   created_at: string;
+  is_active?: boolean;
 }
 
 // ── RpsLobby ──────────────────────────────────────────────────────────────────
@@ -52,8 +53,9 @@ export function RpsLobby({ friends }: { friends: FriendEntry[]; userId?: string 
       const rows: GameInviteRow[] = data.invites ?? [];
       setInvites(rows);
 
-      // Auto-redirect if there's an active accepted match
-      const active = rows.find(r => r.status === "accepted" && r.match_id);
+      // Only auto-redirect if there is a genuinely active match (phase = 'active').
+      // Completed, cancelled, or terminal matches must never be reopened.
+      const active = rows.find(r => r.status === "accepted" && r.match_id && r.is_active === true);
       if (active?.match_id) {
         router.replace(`/play/rps/${active.match_id}`);
       }
