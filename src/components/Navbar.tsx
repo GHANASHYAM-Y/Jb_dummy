@@ -3,11 +3,19 @@
 import React, { useState, useEffect, startTransition } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, Gamepad2, Users, Settings, MessageCircle, UserCircle, HelpCircle, Info } from "lucide-react";
+import { Menu, Gamepad2, Users, Settings, MessageCircle, UserCircle, HelpCircle, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useI18n } from "@/contexts/I18nContext";
 import { Button, Avatar } from "@/components/ui";
 import { LanguageSelector } from "@/components/LanguageSelector";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+} from "@/components/ui/sheet";
 import type { Profile } from "@/types/database";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -164,96 +172,118 @@ export function Navbar({ user, profile, onLogout }: NavbarProps) {
               </div>
             )}
 
-            {/* Mobile menu toggle */}
-            <button
-              className="md:hidden flex items-center justify-center w-10 h-10 rounded-lg bg-white border border-[#E2E8E2] text-[#203331] hover:bg-[#F7F8F4] transition-all shrink-0"
-              onClick={() => setMobileOpen((v) => !v)}
-              aria-label={mobileOpen ? "Close menu" : "Open menu"}
-              aria-expanded={mobileOpen}
-            >
-              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </button>
+            {/* Mobile Sheet Navigation */}
+            <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+              <SheetTrigger asChild>
+                <button
+                  type="button"
+                  className="md:hidden flex items-center justify-center w-10 h-10 min-h-[40px] min-w-[40px] rounded-lg bg-white border border-[#E2E8E2] text-[#203331] hover:bg-[#F7F8F4] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78] focus-visible:ring-offset-2 transition-all shrink-0"
+                  aria-label="Open navigation menu"
+                >
+                  <Menu className="h-5 w-5" />
+                </button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[85vw] max-w-sm p-5 flex flex-col bg-white">
+                <SheetHeader className="pb-3 border-b border-[#E2E8E2]">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-lg bg-[#DDF2EB] border border-[rgba(22,125,120,0.25)] flex items-center justify-center">
+                      <span className="font-display font-extrabold text-xs text-[#167D78] tracking-wider">
+                        EQ
+                      </span>
+                    </div>
+                    <SheetTitle className="font-display font-extrabold text-lg text-[#203331]">
+                      EVOAIQU
+                    </SheetTitle>
+                  </div>
+                  <SheetDescription className="sr-only">
+                    Navigation menu
+                  </SheetDescription>
+                </SheetHeader>
+
+                <div className="flex-1 overflow-y-auto py-3 flex flex-col gap-1.5">
+                  {user && (
+                    <div className="flex items-center gap-3 p-3 rounded-xl bg-[#F7F8F4] border border-[#E2E8E2] mb-2">
+                      <Avatar src={profile?.avatar_url} name={profile?.display_name ?? user.email ?? "P"} size="sm" />
+                      <div className="flex flex-col min-w-0">
+                        <span className="text-sm font-semibold text-[#203331] truncate">
+                          {profile?.display_name ?? user.email?.split("@")[0] ?? "Player"}
+                        </span>
+                        {profile?.evoora_id && (
+                          <span className="text-[11px] font-mono text-[#167D78] font-bold">
+                            {profile.evoora_id}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {links.map(({ href, label, icon: Icon }) => {
+                    const active = pathname === href || pathname.startsWith(href + "/");
+                    return (
+                      <Link
+                        key={href}
+                        href={href}
+                        onClick={() => setMobileOpen(false)}
+                        className={cn(
+                          "flex items-center gap-3 px-3.5 min-h-[44px] rounded-lg text-sm font-medium transition-colors",
+                          active
+                            ? "bg-[#DDF2EB] text-[#167D78] border border-[rgba(22,125,120,0.2)] font-semibold"
+                            : "text-[#65736F] hover:text-[#203331] hover:bg-[#F7F8F4]",
+                        )}
+                      >
+                        <Icon className={cn("h-4 w-4 flex-shrink-0", active ? "text-[#167D78]" : "text-[#8E9B97]")} />
+                        <span>{label}</span>
+                      </Link>
+                    );
+                  })}
+
+                  <hr className="evo-divider my-2 border-[#E2E8E2]" />
+
+                  {user ? (
+                    <div className="flex flex-col gap-1">
+                      <Link
+                        href="/profile"
+                        onClick={() => setMobileOpen(false)}
+                        className="flex items-center gap-3 px-3.5 min-h-[44px] rounded-lg text-sm font-medium text-[#65736F] hover:text-[#203331] hover:bg-[#F7F8F4] transition-colors"
+                      >
+                        <Avatar src={profile?.avatar_url} name={profile?.display_name ?? "U"} size="xs" />
+                        <span>{t("nav.profile")}</span>
+                      </Link>
+                      <Link
+                        href="/settings"
+                        onClick={() => setMobileOpen(false)}
+                        className="flex items-center gap-3 px-3.5 min-h-[44px] rounded-lg text-sm font-medium text-[#65736F] hover:text-[#203331] hover:bg-[#F7F8F4] transition-colors"
+                      >
+                        <Settings className="h-4 w-4 text-[#8E9B97]" />
+                        <span>{t("nav.settings")}</span>
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setMobileOpen(false);
+                          onLogout?.();
+                        }}
+                        className="flex items-center gap-3 px-3.5 min-h-[44px] rounded-lg text-sm font-medium text-[#D95F49] hover:bg-[#FCE6DE] transition-colors w-full text-left"
+                      >
+                        <span>{t("nav.logout")}</span>
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col gap-2 pt-2">
+                      <Link href="/login" onClick={() => setMobileOpen(false)}>
+                        <Button variant="secondary" className="w-full min-h-[44px]">{t("nav.login")}</Button>
+                      </Link>
+                      <Link href="/signup" onClick={() => setMobileOpen(false)}>
+                        <Button variant="primary" className="w-full min-h-[44px] font-bold">{t("nav.signup")}</Button>
+                      </Link>
+                    </div>
+                  )}
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
       </div>
-
-      {/* Mobile menu */}
-      {mobileOpen && (
-        <div className="md:hidden border-t border-[#E2E8E2] bg-white animate-slide-up shadow-xl">
-          <div className="evo-container py-4 flex flex-col gap-1.5">
-            {user && (
-              <div className="flex items-center gap-3 p-3 rounded-xl bg-[#F7F8F4] border border-[#E2E8E2] mb-2">
-                <Avatar src={profile?.avatar_url} name={profile?.display_name ?? user.email ?? "P"} size="sm" />
-                <div className="flex flex-col min-w-0">
-                  <span className="text-sm font-semibold text-[#203331] truncate">
-                    {profile?.display_name ?? user.email?.split("@")[0] ?? "Player"}
-                  </span>
-                  {profile?.evoora_id && (
-                    <span className="text-[11px] font-mono text-[#167D78] font-bold">
-                      {profile.evoora_id}
-                    </span>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {links.map(({ href, label, icon: Icon }) => {
-              const active = pathname === href || pathname.startsWith(href + "/");
-              return (
-                <Link
-                  key={href}
-                  href={href}
-                  className={cn(
-                    "flex items-center gap-3 px-3.5 min-h-[44px] rounded-lg text-sm font-medium transition-colors",
-                    active
-                      ? "bg-[#DDF2EB] text-[#167D78] border border-[rgba(22,125,120,0.2)] font-semibold"
-                      : "text-[#65736F] hover:text-[#203331] hover:bg-[#F7F8F4]",
-                  )}
-                >
-                  <Icon className={cn("h-4 w-4 flex-shrink-0", active ? "text-[#167D78]" : "text-[#8E9B97]")} />
-                  <span>{label}</span>
-                </Link>
-              );
-            })}
-
-            <hr className="evo-divider my-2 border-[#E2E8E2]" />
-
-            {user ? (
-              <div className="flex flex-col gap-1">
-                <Link
-                  href="/profile"
-                  className="flex items-center gap-3 px-3.5 min-h-[44px] rounded-lg text-sm font-medium text-[#65736F] hover:text-[#203331] hover:bg-[#F7F8F4] transition-colors"
-                >
-                  <Avatar src={profile?.avatar_url} name={profile?.display_name ?? "U"} size="xs" />
-                  <span>{t("nav.profile")}</span>
-                </Link>
-                <Link
-                  href="/settings"
-                  className="flex items-center gap-3 px-3.5 min-h-[44px] rounded-lg text-sm font-medium text-[#65736F] hover:text-[#203331] hover:bg-[#F7F8F4] transition-colors"
-                >
-                  <Settings className="h-4 w-4 text-[#8E9B97]" />
-                  <span>{t("nav.settings")}</span>
-                </Link>
-                <button
-                  onClick={onLogout}
-                  className="flex items-center gap-3 px-3.5 min-h-[44px] rounded-lg text-sm font-medium text-[#D95F49] hover:bg-[#FCE6DE] transition-colors w-full text-left"
-                >
-                  <span>{t("nav.logout")}</span>
-                </button>
-              </div>
-            ) : (
-              <div className="flex flex-col gap-2 pt-2">
-                <Link href="/login">
-                  <Button variant="secondary" className="w-full min-h-[44px]">{t("nav.login")}</Button>
-                </Link>
-                <Link href="/signup">
-                  <Button variant="primary" className="w-full min-h-[44px] font-bold">{t("nav.signup")}</Button>
-                </Link>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
     </nav>
   );
 }
