@@ -3,6 +3,50 @@ import { createServerSupabaseClient, createServiceRoleClient } from "@/lib/supab
 import { isValidVisibility } from "@/lib/challenges";
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const STORAGE_PATH_RE =
+  /^(?:simulated\/)?([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})_(\d+)\.(webm|mp4|mov|ogg)$/i;
+
+/**
+ * Validates storage path format and ensures the path belongs strictly
+ * to the authorized challenge and authenticated user (SEC-06).
+ */
+export function isValidStoragePath(
+  path: string,
+  expectedChallengeId: string,
+  expectedUserId: string
+): boolean {
+  if (!path || typeof path !== "string") return false;
+
+  // Reject unexpected characters, directory traversal, backslashes, double slashes, and URL encodings
+  if (
+    path.includes("..") ||
+    path.includes("\\") ||
+    path.includes("//") ||
+    path.includes("%") ||
+    path.includes("\0") ||
+    path.startsWith("/")
+  ) {
+    return false;
+  }
+
+  const match = path.match(STORAGE_PATH_RE);
+  if (!match) return false;
+
+  const pathChallengeId = match[1];
+  const pathUserId = match[2];
+
+  // Verify challenge ownership
+  if (pathChallengeId.toLowerCase() !== expectedChallengeId.toLowerCase()) {
+    return false;
+  }
+
+  // Verify user ownership
+  if (pathUserId.toLowerCase() !== expectedUserId.toLowerCase()) {
+    return false;
+  }
+
+  return true;
+}
 
 /**
  * POST /api/challenges/submit
@@ -39,6 +83,7 @@ export async function POST(request: NextRequest) {
     let durationSeconds = 10;
     let storagePath = "";
     let mediaType = "video/webm";
+    let file: File | null = null;
 
     if (contentType.includes("multipart/form-data")) {
       const formData = await request.formData();
@@ -46,41 +91,62 @@ export async function POST(request: NextRequest) {
       visibility = (formData.get("visibility") as string) || "private";
       const durationStr = formData.get("duration_seconds") as string;
       if (durationStr) durationSeconds = parseFloat(durationStr) || 10;
-
-      if (!challengeId || !UUID_RE.test(challengeId)) {
-        return NextResponse.json({ error: "challenge_id must be a valid UUID.", code: "invalid_id" }, { status: 400 });
+      file = formData.get("video") as File | null;
+    } else {
+      let body: {
+        challenge_id?: string;
+        storage_path?: string;
+        visibility?: string;
+        duration_seconds?: number;
+        media_type?: string;
+      } = {};
+      try {
+        body = await request.json();
+      } catch {
+        return NextResponse.json({ error: "Invalid request payload.", code: "invalid_body" }, { status: 400 });
       }
 
-      if (!isValidVisibility(visibility)) {
-        return NextResponse.json({ error: "visibility must be 'private' or 'public'.", code: "invalid_visibility" }, { status: 400 });
-      }
+      challengeId = body.challenge_id || "";
+      visibility = body.visibility || "private";
+      durationSeconds = body.duration_seconds || 10;
+      storagePath = body.storage_path || "";
+      mediaType = body.media_type || "video/webm";
+    }
 
-      const file = formData.get("video") as File | null;
+    if (!challengeId || !UUID_RE.test(challengeId)) {
+      return NextResponse.json({ error: "challenge_id must be a valid UUID.", code: "invalid_id" }, { status: 400 });
+    }
+
+    if (!isValidVisibility(visibility)) {
+      return NextResponse.json({ error: "visibility must be 'private' or 'public'.", code: "invalid_visibility" }, { status: 400 });
+    }
+
+    // Pre-flight authorization check: ensure caller is the assigned loser before invoking storage
+    const { data: challengeData, error: checkError } = (await supabase
+      .from("challenges")
+      .select("id, loser_id, status")
+      .eq("id", challengeId)
+      .single()) as unknown as {
+      data: { id: string; loser_id: string; status: string } | null;
+      error: unknown;
+    };
+    const challengeCheck = challengeData;
+
+    if (checkError || !challengeCheck) {
+      return NextResponse.json({ error: "Challenge not found.", code: "not_found" }, { status: 404 });
+    }
+
+    if (challengeCheck.loser_id !== user.id) {
+      return NextResponse.json({ error: "Only the assigned recipient can submit this challenge.", code: "forbidden" }, { status: 403 });
+    }
+
+    if (!["accepted", "retry_requested", "submitted"].includes(challengeCheck.status)) {
+      return NextResponse.json({ error: "Challenge must be accepted or in retry status to submit video.", code: "invalid_status" }, { status: 409 });
+    }
+
+    if (contentType.includes("multipart/form-data")) {
       if (!file) {
         return NextResponse.json({ error: "Video file is required.", code: "missing_file" }, { status: 400 });
-      }
-
-      // Pre-flight authorization check: ensure caller is the assigned loser before invoking storage
-      const { data: challengeData, error: checkError } = (await supabase
-        .from("challenges")
-        .select("id, loser_id, status")
-        .eq("id", challengeId)
-        .single()) as unknown as {
-        data: { id: string; loser_id: string; status: string } | null;
-        error: unknown;
-      };
-      const challengeCheck = challengeData;
-
-      if (checkError || !challengeCheck) {
-        return NextResponse.json({ error: "Challenge not found.", code: "not_found" }, { status: 404 });
-      }
-
-      if (challengeCheck.loser_id !== user.id) {
-        return NextResponse.json({ error: "Only the assigned recipient can submit this challenge.", code: "forbidden" }, { status: 403 });
-      }
-
-      if (!["accepted", "retry_requested", "submitted"].includes(challengeCheck.status)) {
-        return NextResponse.json({ error: "Challenge must be accepted or in retry status to submit video.", code: "invalid_status" }, { status: 409 });
       }
 
       mediaType = file.type || "video/webm";
@@ -109,36 +175,19 @@ export async function POST(request: NextRequest) {
         storagePath = `simulated/${storagePath}`;
       }
     } else {
-      let body: {
-        challenge_id?: string;
-        storage_path?: string;
-        visibility?: string;
-        duration_seconds?: number;
-        media_type?: string;
-      } = {};
-      try {
-        body = await request.json();
-      } catch {
-        return NextResponse.json({ error: "Invalid request payload.", code: "invalid_body" }, { status: 400 });
+      // JSON submission: strictly validate client-supplied storage path
+      if (!storagePath || typeof storagePath !== "string") {
+        return NextResponse.json({ error: "Invalid storage path.", code: "invalid_storage_path" }, { status: 400 });
       }
 
-      challengeId = body.challenge_id || "";
-      visibility = body.visibility || "private";
-      durationSeconds = body.duration_seconds || 10;
-      storagePath = body.storage_path || "";
-      mediaType = body.media_type || "video/webm";
-
-      if (!challengeId || !UUID_RE.test(challengeId)) {
-        return NextResponse.json({ error: "challenge_id must be a valid UUID.", code: "invalid_id" }, { status: 400 });
-      }
-
-      if (!isValidVisibility(visibility)) {
-        return NextResponse.json({ error: "visibility must be 'private' or 'public'.", code: "invalid_visibility" }, { status: 400 });
+      if (!isValidStoragePath(storagePath, challengeId, user.id)) {
+        return NextResponse.json({ error: "Invalid storage path.", code: "invalid_storage_path" }, { status: 400 });
       }
     }
 
-    if (!storagePath || storagePath.includes("..") || storagePath.startsWith("/") || storagePath.startsWith("\\")) {
-      storagePath = `${challengeId}/${user.id}_${Date.now()}.webm`;
+    // Defense-in-depth: storagePath must strictly belong to authenticated user and challenge
+    if (!storagePath || storagePath.includes("..") || storagePath.startsWith("/") || storagePath.startsWith("\\") || !isValidStoragePath(storagePath, challengeId, user.id)) {
+      return NextResponse.json({ error: "Invalid storage path.", code: "invalid_storage_path" }, { status: 400 });
     }
 
     // Call authoritative database RPC

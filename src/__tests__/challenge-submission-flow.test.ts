@@ -285,6 +285,9 @@ describe("Security Hardening & Schema Compatibility Audits", () => {
 
   it("sanitizes storage paths against directory traversal in submit route", () => {
     expect(submitRouteSrc).toContain('storagePath.includes("..")');
+    expect(submitRouteSrc).toContain("isValidStoragePath");
+    expect(submitRouteSrc).toContain("pathChallengeId.toLowerCase() !== expectedChallengeId.toLowerCase()");
+    expect(submitRouteSrc).toContain("pathUserId.toLowerCase() !== expectedUserId.toLowerCase()");
   });
 
   it("prevents viewers from seeing expired or deleted media while allowing creators to view their challenge history", () => {
@@ -390,9 +393,10 @@ describe("Comprehensive Security: Expired Submissions, Blocked Users, Retries, a
       expect(submitRouteSrc).toContain("Only the assigned recipient can submit this challenge.");
     });
 
-    it("guards cleanup route with authorization when CRON_SECRET is not configured", () => {
-      expect(cleanupRouteSrc).toContain("const { data: { user } } = await serverSupabase.auth.getUser();");
-      expect(cleanupRouteSrc).toContain("if (!user)");
+    it("fails closed on cleanup route when CRON_SECRET is not configured or invalid", () => {
+      expect(cleanupRouteSrc).toContain("if (!cronSecret || cronSecret.trim() === \"\")");
+      expect(cleanupRouteSrc).toContain("server_misconfiguration");
+      expect(cleanupRouteSrc).not.toContain("serverSupabase.auth.getUser");
     });
   });
 });

@@ -17,6 +17,8 @@ const PUBLIC_ROUTES = new Set([
   "/how-to-play",
   "/auth/callback",
   "/auth/reset-password",
+  "/api/challenges/stories/cleanup",
+  "/api/friends/invite/resolve",
 ]);
 
 /**
@@ -80,8 +82,25 @@ export async function middleware(request: NextRequest) {
   // Unconfirmed email check: user exists with an email but has not confirmed it
   const isUnconfirmed = Boolean(user && user.email && !user.email_confirmed_at);
 
-  // Redirect unauthenticated or unconfirmed users away from protected routes
+  // Handle unauthenticated or unconfirmed users attempting to access protected routes
   if ((!user || isUnconfirmed) && !isPublic(pathname)) {
+    // Protected API routes return JSON error responses rather than HTML redirects
+    if (pathname.startsWith("/api/")) {
+      const jsonResponse = NextResponse.json(
+        isUnconfirmed
+          ? { error: "Email verification required.", code: "unverified_email" }
+          : { error: "Not authenticated.", code: "unauthenticated" },
+        { status: isUnconfirmed ? 403 : 401 }
+      );
+
+      // Preserve any cookies set/refreshed during session validation
+      supabaseResponse.cookies.getAll().forEach((cookie) => {
+        jsonResponse.cookies.set(cookie.name, cookie.value, cookie);
+      });
+
+      return jsonResponse;
+    }
+
     const loginUrl = request.nextUrl.clone();
     loginUrl.pathname = "/login";
     if (isUnconfirmed) {

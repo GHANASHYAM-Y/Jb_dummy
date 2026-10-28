@@ -420,16 +420,16 @@ export const ChessMatchBoard: React.FC<ChessMatchBoardProps> = ({
             : "bg-white border-[#E2E8E2] shadow-card",
         )}
       >
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 min-w-0">
           <Avatar
             src={oppPlayer.avatar_url ?? undefined}
             name={oppPlayer.display_name}
-            className="w-10 h-10 border border-[#E2E8E2]"
+            className="w-10 h-10 border border-[#E2E8E2] shrink-0"
           />
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="font-bold text-sm text-[#203331]">{oppPlayer.display_name}</span>
-              <span className="text-[10px] text-[#65736F] uppercase font-mono">
+          <div className="min-w-0">
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="font-bold text-sm text-[#203331] truncate">{oppPlayer.display_name}</span>
+              <span className="text-[10px] text-[#65736F] uppercase font-mono shrink-0">
                 {isWhiteViewer ? "Black" : "White"}
               </span>
             </div>
@@ -453,7 +453,7 @@ export const ChessMatchBoard: React.FC<ChessMatchBoardProps> = ({
         {/* Opponent Digital Clock */}
         <div
           className={cn(
-            "flex items-center gap-2 px-3 py-1.5 rounded-xl border font-mono font-bold text-lg md:text-xl",
+            "flex items-center gap-2 px-3 py-1.5 rounded-xl border font-mono font-bold text-lg md:text-xl shrink-0",
             isOppClockLow ? "bg-[#FCE6DE] border-[#D95F49] text-[#D95F49] animate-pulse" : "bg-[#F7F8F4] border-[#E2E8E2] text-[#203331]",
           )}
         >
@@ -514,16 +514,16 @@ export const ChessMatchBoard: React.FC<ChessMatchBoardProps> = ({
             : "bg-white border-[#E2E8E2] shadow-card",
         )}
       >
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 min-w-0">
           <Avatar
             src={myPlayer.avatar_url ?? undefined}
             name={myPlayer.display_name}
-            className="w-10 h-10 border border-[#E2E8E2]"
+            className="w-10 h-10 border border-[#E2E8E2] shrink-0"
           />
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="font-bold text-sm text-[#203331]">{myPlayer.display_name} (You)</span>
-              <span className="text-[10px] text-[#65736F] uppercase font-mono">
+          <div className="min-w-0">
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="font-bold text-sm text-[#203331] truncate">{myPlayer.display_name} (You)</span>
+              <span className="text-[10px] text-[#65736F] uppercase font-mono shrink-0">
                 {isWhiteViewer ? "White" : "Black"}
               </span>
             </div>
@@ -547,7 +547,7 @@ export const ChessMatchBoard: React.FC<ChessMatchBoardProps> = ({
         {/* Viewer Digital Clock */}
         <div
           className={cn(
-            "flex items-center gap-2 px-3 py-1.5 rounded-xl border font-mono font-bold text-lg md:text-xl",
+            "flex items-center gap-2 px-3 py-1.5 rounded-xl border font-mono font-bold text-lg md:text-xl shrink-0",
             isMyClockLow ? "bg-[#FCE6DE] border-[#D95F49] text-[#D95F49] animate-pulse" : "bg-[#F7F8F4] border-[#E2E8E2] text-[#203331]",
           )}
         >
