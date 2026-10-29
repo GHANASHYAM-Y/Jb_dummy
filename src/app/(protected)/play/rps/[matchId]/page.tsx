@@ -29,23 +29,23 @@ export default async function RpsMatchPage({ params }: Props) {
   if (!user) redirect(`/login?next=/play/rps/${matchId}`);
 
   const renderError = (title: string, message: string, actionHref: string, actionLabel: string, isForbidden = false) => (
-    <div className="evo-section py-12 md:py-20">
-      <div className="evo-container max-w-lg">
-        <div className="evo-card p-8 bg-white border border-[#E2E8E2] text-center shadow-card space-y-4">
-          <div className={`w-12 h-12 rounded-2xl ${isForbidden ? "bg-[#FCE6DE] text-[#D95F49]" : "bg-[#EEF1ED] text-[#65736F]"} border border-[#E2E8E2] flex items-center justify-center mx-auto`}>
-            {isForbidden ? <ShieldAlert className="h-6 w-6" /> : <AlertCircle className="h-6 w-6" />}
+    <div className="min-h-screen bg-[#070B25] text-[#F5F7FF] py-12 md:py-20 px-4 flex items-center justify-center">
+      <div className="w-full max-w-lg">
+        <div className="p-8 rounded-3xl bg-[#101638] border border-[#315BFF]/30 text-center shadow-[0_16px_48px_rgba(7,11,37,0.9)] space-y-4">
+          <div className={`w-14 h-14 rounded-2xl ${isForbidden ? "bg-[#FF4B72]/20 text-[#FF4B72] border border-[#FF4B72]/40" : "bg-[#182352] text-[#39DFFF] border border-[#315BFF]/40"} flex items-center justify-center mx-auto shadow-md`}>
+            {isForbidden ? <ShieldAlert className="h-7 w-7" /> : <AlertCircle className="h-7 w-7" />}
           </div>
           <div>
-            <h1 className="font-display font-bold text-xl text-[#203331] mb-1.5">
+            <h1 className="font-display font-bold text-2xl text-[#F5F7FF] mb-2">
               {title}
             </h1>
-            <p className="text-[#65736F] text-sm leading-relaxed">
+            <p className="text-[#9BA8D7] text-sm leading-relaxed">
               {message}
             </p>
           </div>
           <div className="pt-2 flex justify-center">
             <Link href={actionHref}>
-              <Button variant="primary" size="md">
+              <Button variant="primary" size="md" className="bg-gradient-to-r from-[#315BFF] to-[#8B2CFF] text-white font-bold">
                 <ArrowLeft className="h-4 w-4 mr-1.5" />
                 {actionLabel}
               </Button>
@@ -130,23 +130,11 @@ export default async function RpsMatchPage({ params }: Props) {
   }
 
   return (
-    <div className="evo-section py-6 sm:py-10">
-      <div className="evo-container max-w-2xl">
-        <div className="mb-4 flex items-center justify-between">
-          <Link
-            href="/games"
-            className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#167D78] hover:text-[#115E5A] transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Exit to Game Arena
-          </Link>
-          <span className="text-xs text-[#65736F] font-mono">Match #{matchId.slice(0, 8)}</span>
-        </div>
-        <div className="mb-6 animate-fade-in">
-          <h1 className="font-display font-bold text-2xl text-[#203331] mb-1">
-            Rock, Paper, Scissors
-          </h1>
-        </div>
+    <div className="min-h-screen w-full bg-[#070B25] text-[#F5F7FF] py-6 sm:py-10 px-3 sm:px-6 relative overflow-hidden flex flex-col items-center">
+      {/* Ambient background glow highlights */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#315BFF]/15 via-[#8B2CFF]/10 to-transparent pointer-events-none" />
+
+      <div className="w-full max-w-4xl mx-auto relative z-10">
         <RpsMatchBoard
           matchId={matchId}
           userId={user.id}
