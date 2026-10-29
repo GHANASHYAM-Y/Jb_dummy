@@ -1,5 +1,5 @@
 import { NextResponse, connection } from "next/server";
-import { createServerSupabaseClient, createServiceRoleClient } from "@/lib/supabase/server";
+import { createServiceRoleClient } from "@/lib/supabase/server";
 
 /**
  * GET / POST /api/challenges/stories/cleanup
@@ -13,20 +13,19 @@ import { createServerSupabaseClient, createServiceRoleClient } from "@/lib/supab
 export async function POST(request: Request) {
   await connection();
   try {
-    // Require secret verification for external cron runners, or authenticated session
+    // Authoritative authorization: Fail closed if CRON_SECRET is missing or empty.
     const cronSecret = process.env.CRON_SECRET;
-    if (cronSecret) {
-      const authHeader = request.headers.get("authorization");
-      if (authHeader !== `Bearer ${cronSecret}`) {
-        return NextResponse.json({ error: "Unauthorized.", code: "unauthorized" }, { status: 401 });
-      }
-    } else {
-      // If no CRON_SECRET configured, require authenticated caller session
-      const serverSupabase = await createServerSupabaseClient();
-      const { data: { user } } = await serverSupabase.auth.getUser();
-      if (!user) {
-        return NextResponse.json({ error: "Unauthorized.", code: "unauthorized" }, { status: 401 });
-      }
+    if (!cronSecret || cronSecret.trim() === "") {
+      console.error("[stories/cleanup] Server misconfiguration: CRON_SECRET is not configured.");
+      return NextResponse.json(
+        { error: "Server misconfiguration.", code: "server_misconfiguration" },
+        { status: 500 }
+      );
+    }
+
+    const authHeader = request.headers.get("authorization");
+    if (!authHeader || authHeader !== `Bearer ${cronSecret}`) {
+      return NextResponse.json({ error: "Unauthorized.", code: "unauthorized" }, { status: 401 });
     }
 
     // Use service role client for background maintenance

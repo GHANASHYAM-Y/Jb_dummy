@@ -15,6 +15,7 @@ import {
   Plus,
   Search,
   Video,
+  Clock,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Avatar, Button, EvoIdBadge, Spinner } from "@/components/ui";
@@ -92,6 +93,14 @@ export function ChatStoriesClient({
   const [sendingInvite, setSendingInvite] = useState(false);
   const [inviteFeedback, setInviteFeedback] = useState<string | null>(null);
   const chatScrollRef = useRef<HTMLDivElement>(null);
+  const isMountedRef = useRef(true);
+
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   // 1. Fetch Stories for user interactions
   const fetchStories = useCallback(async () => {
@@ -99,14 +108,16 @@ export function ChatStoriesClient({
       const res = await fetch("/api/challenges/stories");
       if (res.ok) {
         const data = await res.json();
-        if (data.ok && data.stories) {
+        if (isMountedRef.current && data.ok && data.stories) {
           setStories(data.stories);
         }
       }
     } catch {
       // Quiet fallback
     } finally {
-      setStoriesLoading(false);
+      if (isMountedRef.current) {
+        setStoriesLoading(false);
+      }
     }
   }, []);
 
@@ -116,7 +127,9 @@ export function ChatStoriesClient({
       const res = await fetch("/api/challenges?filter=all");
       if (res.ok) {
         const data = await res.json();
-        setChallenges(data.challenges || []);
+        if (isMountedRef.current && data.challenges) {
+          setChallenges(data.challenges || []);
+        }
       }
     } catch {
       // Quiet fallback
@@ -215,14 +228,24 @@ export function ChatStoriesClient({
         }));
 
         setInviteFeedback("Game challenge sent!");
-        setTimeout(() => setInviteFeedback(null), 3000);
+        setTimeout(() => {
+          if (isMountedRef.current) {
+            setInviteFeedback(null);
+          }
+        }, 3000);
       } else {
-        setInviteFeedback(data.error || "Could not send challenge.");
+        if (isMountedRef.current) {
+          setInviteFeedback(data.error || "Could not send challenge.");
+        }
       }
     } catch {
-      setInviteFeedback("Error sending challenge.");
+      if (isMountedRef.current) {
+        setInviteFeedback("Error sending challenge.");
+      }
     } finally {
-      setSendingInvite(false);
+      if (isMountedRef.current) {
+        setSendingInvite(false);
+      }
     }
   };
 
@@ -628,7 +651,15 @@ export function ChatStoriesClient({
                 {activeStoryViewer.visibility === "private" ? <Lock className="h-3.5 w-3.5" /> : <Globe className="h-3.5 w-3.5" />}
                 {activeStoryViewer.visibility === "private" ? "Friends Only" : "Public Story"}
               </span>
-              <span>Expires in 24 hours</span>
+              <div className="flex items-center gap-3">
+                {activeStoryViewer.duration_seconds > 0 && (
+                  <span className="flex items-center gap-1 font-mono text-white/80" title={`Duration: ${activeStoryViewer.duration_seconds}s`}>
+                    <Clock className="h-3 w-3 text-white/60" />
+                    {activeStoryViewer.duration_seconds}s
+                  </span>
+                )}
+                <span>Expires in 24 hours</span>
+              </div>
             </div>
           </div>
         </div>

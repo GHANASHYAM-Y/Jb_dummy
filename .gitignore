@@ -23,6 +23,8 @@
 /scratch/
 /.tempmediaStorage/
 supabase/.temp/
+/.worktree-*/
+/.worktree-security/
 
 # Operating System & Editor files
 .DS_Store

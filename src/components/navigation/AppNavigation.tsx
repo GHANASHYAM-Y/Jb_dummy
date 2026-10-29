@@ -282,7 +282,7 @@ export function AppNavigation({ user, profile, children }: AppNavigationProps) {
       <main
         className={cn(
           "flex-1 flex flex-col",
-          !isFullScreenGame && Boolean(user) && "pb-20 md:pb-8",
+          !isFullScreenGame && Boolean(user) && "pb-[calc(5rem+env(safe-area-inset-bottom,0px))] md:pb-8",
         )}
       >
         {children}

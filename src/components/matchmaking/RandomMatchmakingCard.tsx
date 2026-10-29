@@ -16,6 +16,7 @@ import {
 import { useI18n } from "@/contexts/I18nContext";
 import { Button, Alert, Spinner } from "@/components/ui";
 import { cn } from "@/lib/utils";
+import { MatchmakingFloatingIndicator } from "./MatchmakingFloatingIndicator";
 
 type MatchmakingUIState =
   | "idle"
@@ -30,9 +31,14 @@ type MatchmakingUIState =
 interface RandomMatchmakingCardProps {
   className?: string;
   onMatched?: (matchId: string) => void;
+  showFloatingIndicator?: boolean;
 }
 
-export function RandomMatchmakingCard({ className, onMatched }: RandomMatchmakingCardProps) {
+export function RandomMatchmakingCard({
+  className,
+  onMatched,
+  showFloatingIndicator = true,
+}: RandomMatchmakingCardProps) {
   const { t } = useI18n();
   const router = useRouter();
 
@@ -41,19 +47,27 @@ export function RandomMatchmakingCard({ className, onMatched }: RandomMatchmakin
   const [elapsedSecs, setElapsedSecs] = useState(0);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
+  const isMountedRef = useRef(true);
   const pollIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const timerIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const navigationTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Clear timers on unmount
+  // Clear timers and navigation timeout on unmount
   const stopTimers = useCallback(() => {
     if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
     if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
+    if (navigationTimeoutRef.current) clearTimeout(navigationTimeoutRef.current);
     pollIntervalRef.current = null;
     timerIntervalRef.current = null;
+    navigationTimeoutRef.current = null;
   }, []);
 
   useEffect(() => {
-    return () => stopTimers();
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+      stopTimers();
+    };
   }, [stopTimers]);
 
   // Navigate to match
@@ -69,43 +83,61 @@ export function RandomMatchmakingCard({ className, onMatched }: RandomMatchmakin
     [router, onMatched, stopTimers]
   );
 
-  // Poll status while searching
-  const startPolling = useCallback(() => {
-    stopTimers();
-
-    // Elapsed timer
-    setElapsedSecs(0);
-    timerIntervalRef.current = setInterval(() => {
-      setElapsedSecs((s) => s + 1);
-    }, 1000);
-
-    // Status poll
-    pollIntervalRef.current = setInterval(async () => {
-      try {
-        const res = await fetch("/api/matchmaking/status?game_type=rps");
-        if (!res.ok) return;
-        const data = await res.json();
-
-        if (data.status === "matched" && data.match_id) {
-          stopTimers();
-          setMatchId(data.match_id);
-          setState("matched");
-          setTimeout(() => {
-            handleGoToMatch(data.match_id);
-          }, 1200);
-        } else if (data.status === "expired") {
-          stopTimers();
-          setState("expired");
-        } else if (data.status === "in_active_match" && data.match_id) {
-          stopTimers();
-          setMatchId(data.match_id);
-          setState("in_active_match");
+  // Safely schedule navigation timeout with ref cleanup
+  const scheduleGoToMatch = useCallback(
+    (id: string, delayMs: number) => {
+      if (navigationTimeoutRef.current) clearTimeout(navigationTimeoutRef.current);
+      navigationTimeoutRef.current = setTimeout(() => {
+        if (isMountedRef.current) {
+          handleGoToMatch(id);
         }
-      } catch {
-        // Quietly retry on transient network hiccup
-      }
-    }, 2000);
-  }, [stopTimers, handleGoToMatch]);
+      }, delayMs);
+    },
+    [handleGoToMatch]
+  );
+
+  // Poll status while searching (single interval guaranteed via stopTimers)
+  const startPolling = useCallback(
+    (initialSecs = 0) => {
+      stopTimers();
+
+      // Elapsed timer
+      setElapsedSecs(initialSecs);
+      timerIntervalRef.current = setInterval(() => {
+        if (!isMountedRef.current) return;
+        setElapsedSecs((s) => s + 1);
+      }, 1000);
+
+      // Status poll
+      pollIntervalRef.current = setInterval(async () => {
+        try {
+          const res = await fetch("/api/matchmaking/status?game_type=rps");
+          // Discard response if timers were stopped or unmounted while in-flight
+          if (!pollIntervalRef.current || !isMountedRef.current) return;
+          if (!res.ok) return;
+          const data = await res.json();
+          if (!pollIntervalRef.current || !isMountedRef.current) return;
+
+          if (data.status === "matched" && data.match_id) {
+            stopTimers();
+            setMatchId(data.match_id);
+            setState("matched");
+            scheduleGoToMatch(data.match_id, 1200);
+          } else if (data.status === "expired") {
+            stopTimers();
+            setState("expired");
+          } else if (data.status === "in_active_match" && data.match_id) {
+            stopTimers();
+            setMatchId(data.match_id);
+            setState("in_active_match");
+          }
+        } catch {
+          // Quietly retry on transient network hiccup
+        }
+      }, 2000);
+    },
+    [stopTimers, scheduleGoToMatch]
+  );
 
   // Check initial state on mount (refresh recovery)
   useEffect(() => {
@@ -113,18 +145,20 @@ export function RandomMatchmakingCard({ className, onMatched }: RandomMatchmakin
     async function checkExistingStatus() {
       try {
         const res = await fetch("/api/matchmaking/status?game_type=rps");
-        if (!res.ok || ignore) return;
+        if (!res.ok || ignore || !isMountedRef.current) return;
         const data = await res.json();
+        if (ignore || !isMountedRef.current) return;
 
         if (data.status === "searching") {
           setState("searching");
-          startPolling();
+          const initialSecs = data.created_at
+            ? Math.max(0, Math.floor((Date.now() - new Date(data.created_at).getTime()) / 1000))
+            : 0;
+          startPolling(initialSecs);
         } else if (data.status === "matched" && data.match_id) {
           setMatchId(data.match_id);
           setState("matched");
-          setTimeout(() => {
-            handleGoToMatch(data.match_id);
-          }, 800);
+          scheduleGoToMatch(data.match_id, 800);
         } else if (data.status === "in_active_match" && data.match_id) {
           setMatchId(data.match_id);
           setState("in_active_match");
@@ -138,10 +172,57 @@ export function RandomMatchmakingCard({ className, onMatched }: RandomMatchmakin
     return () => {
       ignore = true;
     };
-  }, [startPolling, handleGoToMatch]);
+  }, [startPolling, scheduleGoToMatch]);
 
-  // Join queue
+  // Reconcile status with authoritative endpoint when cancellation fails ambiguously
+  const reconcileStatusAfterFailedCancel = useCallback(async () => {
+    try {
+      const res = await fetch("/api/matchmaking/status?game_type=rps");
+      if (!isMountedRef.current) return;
+      if (!res.ok) {
+        setErrorMsg("Cancellation failed. You are still in queue, please retry.");
+        setState("searching");
+        startPolling(elapsedSecs);
+        return;
+      }
+
+      const data = await res.json();
+      if (!isMountedRef.current) return;
+
+      if (data.status === "matched" && data.match_id) {
+        stopTimers();
+        setMatchId(data.match_id);
+        setState("matched");
+        scheduleGoToMatch(data.match_id, 1000);
+      } else if (data.status === "searching") {
+        setErrorMsg("Cancellation was unsuccessful. You are still in queue.");
+        setState("searching");
+        const initialSecs = data.created_at
+          ? Math.max(0, Math.floor((Date.now() - new Date(data.created_at).getTime()) / 1000))
+          : elapsedSecs;
+        startPolling(initialSecs);
+      } else if (data.status === "in_active_match" && data.match_id) {
+        stopTimers();
+        setMatchId(data.match_id);
+        setState("in_active_match");
+      } else if (data.status === "expired") {
+        stopTimers();
+        setState("expired");
+      } else {
+        stopTimers();
+        setState("idle");
+      }
+    } catch {
+      if (!isMountedRef.current) return;
+      setErrorMsg("Cancellation network error. You may still be in queue, please retry.");
+      setState("searching");
+      startPolling(elapsedSecs);
+    }
+  }, [elapsedSecs, startPolling, stopTimers, scheduleGoToMatch]);
+
+  // Join queue (guards against duplicate concurrent clicks)
   const handleJoin = async () => {
+    if (state === "joining" || state === "searching") return;
     setErrorMsg(null);
     setState("joining");
 
@@ -153,6 +234,7 @@ export function RandomMatchmakingCard({ className, onMatched }: RandomMatchmakin
       });
 
       const data = await res.json();
+      if (!isMountedRef.current) return;
 
       if (!res.ok) {
         if (data.code === "already_in_match" && data.match_id) {
@@ -173,21 +255,21 @@ export function RandomMatchmakingCard({ className, onMatched }: RandomMatchmakin
       if (data.code === "matched" && data.match_id) {
         setMatchId(data.match_id);
         setState("matched");
-        setTimeout(() => {
-          handleGoToMatch(data.match_id);
-        }, 1200);
+        scheduleGoToMatch(data.match_id, 1200);
       } else {
         setState("searching");
         startPolling();
       }
     } catch {
+      if (!isMountedRef.current) return;
       setErrorMsg(t("matchmaking.load_error"));
       setState("idle");
     }
   };
 
-  // Cancel search
+  // Cancel search (reconciles on failure, guards against duplicate cancel clicks)
   const handleCancel = async () => {
+    if (state === "cancelling" || state === "idle") return;
     setState("cancelling");
     stopTimers();
 
@@ -198,19 +280,29 @@ export function RandomMatchmakingCard({ className, onMatched }: RandomMatchmakin
         body: JSON.stringify({ game_type: "rps" }),
       });
 
+      if (!res.ok) {
+        await reconcileStatusAfterFailedCancel();
+        return;
+      }
+
       const data = await res.json();
+      if (!isMountedRef.current) return;
+
       if (data.code === "matched" && data.match_id) {
         setMatchId(data.match_id);
         setState("matched");
-        setTimeout(() => {
-          handleGoToMatch(data.match_id);
-        }, 1000);
+        scheduleGoToMatch(data.match_id, 1000);
+        return;
+      }
+
+      if (data.ok === false) {
+        await reconcileStatusAfterFailedCancel();
         return;
       }
 
       setState("idle");
     } catch {
-      setState("idle");
+      await reconcileStatusAfterFailedCancel();
     }
   };
 
@@ -224,7 +316,7 @@ export function RandomMatchmakingCard({ className, onMatched }: RandomMatchmakin
   return (
     <div
       className={cn(
-        "evo-card p-6 border-[#E2E8E2] bg-white shadow-card relative overflow-hidden transition-all",
+        "evo-card p-4 sm:p-6 border-[#E2E8E2] bg-white shadow-card relative overflow-hidden transition-all",
         state === "searching" && "border-[#167D78] shadow-md",
         state === "matched" && "border-[#167D78] bg-[#DDF2EB]/30 shadow-md",
         className
@@ -258,7 +350,7 @@ export function RandomMatchmakingCard({ className, onMatched }: RandomMatchmakin
             size="md"
             onClick={handleJoin}
             id="play-random-btn"
-            className="w-full sm:w-auto"
+            className="w-full sm:w-auto min-h-[44px] font-bold shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78] focus-visible:ring-offset-2"
           >
             <Play className="h-4 w-4 mr-1.5 fill-current" />
             {t("matchmaking.play_random")}
@@ -287,21 +379,21 @@ export function RandomMatchmakingCard({ className, onMatched }: RandomMatchmakin
                 <h4 className="font-bold text-[#203331] text-sm">
                   {t("matchmaking.searching")}
                 </h4>
-                <p className="text-xs text-[#65736F]">
+                <p className="text-xs text-[#52605C]">
                   {t("matchmaking.searching_desc")}
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EEF1ED] border border-[#E2E8E2] text-xs font-mono font-semibold text-[#65736F]">
+            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EEF1ED] border border-[#E2E8E2] text-xs font-mono font-semibold text-[#52605C]">
               <Clock className="h-3.5 w-3.5 text-[#167D78]" />
               <span>{formatTime(elapsedSecs)}</span>
             </div>
           </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 border-t border-[#E2E8E2]">
-            <div className="flex items-center gap-1.5 text-[11px] text-[#8E9B97]">
-              <Shield className="h-3 w-3 text-[#167D78]" />
+            <div className="flex items-center gap-1.5 text-xs text-[#52605C] font-medium">
+              <Shield className="h-3.5 w-3.5 text-[#167D78]" />
               <span>{t("matchmaking.queue_info")}</span>
             </div>
 
@@ -310,7 +402,7 @@ export function RandomMatchmakingCard({ className, onMatched }: RandomMatchmakin
               size="sm"
               onClick={handleCancel}
               id="cancel-matchmaking-btn"
-              className="text-[#65736F] hover:text-[#D95F49]"
+              className="min-h-[44px] min-w-[44px] px-3.5 inline-flex items-center justify-center font-bold text-[#52605C] hover:text-[#D95F49] hover:bg-[#FCE6DE]/50 rounded-xl transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D95F49] focus-visible:ring-offset-2"
             >
               <X className="h-4 w-4 mr-1" />
               {t("matchmaking.cancel")}
@@ -321,7 +413,7 @@ export function RandomMatchmakingCard({ className, onMatched }: RandomMatchmakin
 
       {/* ── Cancelling State ── */}
       {state === "cancelling" && (
-        <div className="flex items-center justify-center gap-2 py-4 text-xs text-[#65736F]">
+        <div className="flex items-center justify-center gap-2 py-4 text-xs font-semibold text-[#52605C]">
           <Spinner size="sm" />
           <span>{t("matchmaking.cancelling")}</span>
         </div>
@@ -338,7 +430,7 @@ export function RandomMatchmakingCard({ className, onMatched }: RandomMatchmakin
               <h4 className="font-bold text-[#203331] text-sm">
                 {t("matchmaking.matched")}
               </h4>
-              <p className="text-xs text-[#167D78] font-medium">Starting round 1...</p>
+              <p className="text-xs text-[#167D78] font-semibold">Starting round 1...</p>
             </div>
           </div>
 
@@ -347,6 +439,7 @@ export function RandomMatchmakingCard({ className, onMatched }: RandomMatchmakin
               variant="primary"
               size="sm"
               onClick={() => handleGoToMatch(matchId)}
+              className="min-h-[44px] px-4 font-bold shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78] focus-visible:ring-offset-2"
             >
               Enter Game
               <ArrowRight className="h-4 w-4 ml-1.5" />
@@ -362,16 +455,26 @@ export function RandomMatchmakingCard({ className, onMatched }: RandomMatchmakin
             <h4 className="font-semibold text-[#203331] text-sm">
               {t("matchmaking.expired")}
             </h4>
-            <p className="text-xs text-[#65736F]">
+            <p className="text-xs text-[#52605C]">
               No matching opponents were available in the queue during the 2-minute search.
             </p>
           </div>
 
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" onClick={() => setState("idle")}>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setState("idle")}
+              className="min-h-[44px] px-4 font-bold text-[#52605C] hover:text-[#203331] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78] focus-visible:ring-offset-2"
+            >
               {t("common.cancel")}
             </Button>
-            <Button variant="primary" size="sm" onClick={handleJoin}>
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={handleJoin}
+              className="min-h-[44px] px-4 font-bold shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78] focus-visible:ring-offset-2"
+            >
               <RefreshCw className="h-4 w-4 mr-1.5" />
               {t("matchmaking.retry")}
             </Button>
@@ -391,7 +494,7 @@ export function RandomMatchmakingCard({ className, onMatched }: RandomMatchmakin
                 {t("matchmaking.in_active_match")}
               </h4>
             </div>
-            <p className="text-xs sm:text-sm text-[#65736F] max-w-sm">
+            <p className="text-xs sm:text-sm text-[#52605C] max-w-sm">
               You cannot queue for a new game while your current match is unfinished.
             </p>
           </div>
@@ -401,13 +504,26 @@ export function RandomMatchmakingCard({ className, onMatched }: RandomMatchmakin
               variant="primary"
               size="md"
               onClick={() => handleGoToMatch(matchId)}
-              className="w-full sm:w-auto font-bold shrink-0 shadow-xs"
+              className="w-full sm:w-auto min-h-[44px] font-bold shrink-0 shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78] focus-visible:ring-offset-2"
             >
               {t("matchmaking.resume_match")}
               <ArrowRight className="h-4 w-4 ml-1.5" />
             </Button>
           )}
         </div>
+      )}
+
+      {/* ── Persistent Floating Matchmaking Status Indicator (Active Queue) ── */}
+      {showFloatingIndicator && (state === "searching" || state === "cancelling") && (
+        <MatchmakingFloatingIndicator
+          state={state}
+          elapsedSecs={elapsedSecs}
+          onCancel={handleCancel}
+          onScrollToQueue={() => {
+            const el = document.getElementById("arena-quick-play");
+            el?.scrollIntoView({ behavior: "smooth", block: "center" });
+          }}
+        />
       )}
     </div>
   );
