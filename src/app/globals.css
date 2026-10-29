@@ -550,6 +550,14 @@ button, input, select, textarea {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.35); filter: drop-shadow(0 0 6px var(--brand-teal)); }
 }
+@keyframes cyber-float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-7px); }
+}
+@keyframes cyber-radar-scan {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
 
 .animate-rps-fist-left {
   animation: rps-fist-pump-left 0.45s ease-in-out infinite;
@@ -565,6 +573,15 @@ button, input, select, textarea {
 }
 .animate-pip-pulse {
   animation: rps-pip-pulse 0.6s ease-in-out;
+}
+.animate-cyber-float {
+  animation: cyber-float 5s ease-in-out infinite;
+}
+.animate-cyber-float-delayed {
+  animation: cyber-float 5.5s ease-in-out 1.2s infinite;
+}
+.animate-cyber-radar {
+  animation: cyber-radar-scan 18s linear infinite;
 }
 
 /* Skeleton loading */
