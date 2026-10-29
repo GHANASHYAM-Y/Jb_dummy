@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { LandingPage } from "@/components/landing/LandingPage";
 
 export const metadata: Metadata = {
-  title: "EVOAIQU — Play. Connect. Evolve.",
+  title: "EVOAIQU — Futuristic Multiplayer Social Gaming Arena",
   description:
-    "A next-generation social gaming platform. Challenge friends to Chess or RPS, win, then dare them to dance, sing, or act.",
+    "Challenge your friends to Rock-Paper-Scissors and Speed Chess. Fast-paced multiplayer battles, 10-second blitz rounds, and hilarious post-match dares.",
 };
 
 export default function HomePage() {
