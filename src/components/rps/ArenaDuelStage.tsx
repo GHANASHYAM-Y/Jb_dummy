@@ -26,7 +26,8 @@ interface ArenaDuelStageProps {
   latestResolvedRound: Round | null;
   pendingMove: RpsMove | null;
   onSelectMove: (move: RpsMove) => void;
-  onSubmitMove: () => void;
+  onSubmitMove: (move?: RpsMove) => void;
+  onClashActiveChange?: (active: boolean) => void;
 }
 
 export function ArenaDuelStage({
@@ -40,6 +41,7 @@ export function ArenaDuelStage({
   pendingMove,
   onSelectMove,
   onSubmitMove,
+  onClashActiveChange,
 }: ArenaDuelStageProps) {
   // ── Synchronized Clash Reveal Animation State ──
   // null = regular idle/picking state
@@ -48,6 +50,11 @@ export function ArenaDuelStage({
   const [clashStep, setClashStep] = useState<"3" | "2" | "1" | "reveal" | null>(null);
   const [clashingRound, setClashingRound] = useState<Round | null>(null);
   const lastAnimatedRoundNumRef = useRef<number>(0);
+
+  // Notify parent of clash animation status for timer/poll coordination
+  useEffect(() => {
+    onClashActiveChange?.(clashStep !== null);
+  }, [clashStep, onClashActiveChange]);
 
   const labelMap = locale === "ta" ? MOVE_LABEL_TA : MOVE_LABEL_EN;
   const hasSubmitted = myMoveThisRound !== null;
@@ -63,20 +70,23 @@ export function ArenaDuelStage({
 
       if (e.key === "1" || e.key.toLowerCase() === "r") {
         e.preventDefault();
-        rpsAudio.playMoveSelect();
+        rpsAudio.playMoveLockIn();
         onSelectMove("rock");
+        onSubmitMove("rock");
       } else if (e.key === "2" || e.key.toLowerCase() === "p") {
         e.preventDefault();
-        rpsAudio.playMoveSelect();
+        rpsAudio.playMoveLockIn();
         onSelectMove("paper");
+        onSubmitMove("paper");
       } else if (e.key === "3" || e.key.toLowerCase() === "s") {
         e.preventDefault();
-        rpsAudio.playMoveSelect();
+        rpsAudio.playMoveLockIn();
         onSelectMove("scissors");
+        onSubmitMove("scissors");
       } else if (e.key === "Enter" && pendingMove && !submitting) {
         e.preventDefault();
         rpsAudio.playMoveLockIn();
-        onSubmitMove();
+        onSubmitMove(pendingMove);
       }
     }
 
@@ -96,6 +106,17 @@ export function ArenaDuelStage({
     }
 
     lastAnimatedRoundNumRef.current = latestResolvedRound.round_number;
+
+    // Detect double-timeout draw: neither player submitted a move
+    const isDoubleTimeoutDraw =
+      (latestResolvedRound.player1_move === "timeout" || latestResolvedRound.player1_move === null) &&
+      (latestResolvedRound.player2_move === "timeout" || latestResolvedRound.player2_move === null) &&
+      latestResolvedRound.result === "draw";
+
+    // Double-timeout draw: skip lengthy 3.2s clash animation to keep next round promptly interactive
+    if (isDoubleTimeoutDraw) {
+      return;
+    }
 
     const isReducedMotion =
       typeof window !== "undefined" &&
@@ -322,13 +343,16 @@ export function ArenaDuelStage({
           >
             {RPS_MOVES.map((move, idx) => {
               const isSelected = pendingMove === move;
+              const isThisSubmitting = submitting && isSelected;
               return (
                 <button
                   key={move}
                   type="button"
                   onClick={() => {
-                    rpsAudio.playMoveSelect();
+                    if (submitting || hasSubmitted) return;
+                    rpsAudio.playMoveLockIn();
                     onSelectMove(move);
+                    onSubmitMove(move);
                   }}
                   disabled={submitting}
                   aria-pressed={isSelected}
@@ -363,7 +387,11 @@ export function ArenaDuelStage({
                         isSelected ? "text-[#167D78]" : "text-[#8E9B97]"
                       )}
                     >
-                      {isSelected ? "Selected" : "Tap to pick"}
+                      {isThisSubmitting
+                        ? "Locking in..."
+                        : isSelected
+                        ? "Selected"
+                        : "Tap to lock in"}
                     </span>
                   </div>
                 </button>
@@ -377,18 +405,24 @@ export function ArenaDuelStage({
             size="lg"
             className="w-full text-base font-bold shadow-md h-12"
             onClick={() => {
-              rpsAudio.playMoveLockIn();
-              onSubmitMove();
+              if (pendingMove && !submitting) {
+                rpsAudio.playMoveLockIn();
+                onSubmitMove(pendingMove);
+              }
             }}
             loading={submitting}
             disabled={!pendingMove || submitting}
             id="submit-move-btn"
           >
-            {pendingMove ? `Lock In ${labelMap[pendingMove]}` : "Select a Move"}
+            {submitting
+              ? "Locking in..."
+              : pendingMove
+              ? `Lock In ${labelMap[pendingMove]}`
+              : "Select a Move"}
           </Button>
 
           <p className="text-center text-[11px] text-[#8E9B97]">
-            Keyboard: Press <kbd className="font-mono font-bold bg-[#EEF1ED] px-1 py-0.5 rounded">1</kbd>, <kbd className="font-mono font-bold bg-[#EEF1ED] px-1 py-0.5 rounded">2</kbd>, <kbd className="font-mono font-bold bg-[#EEF1ED] px-1 py-0.5 rounded">3</kbd> to choose &middot; <kbd className="font-mono font-bold bg-[#EEF1ED] px-1 py-0.5 rounded">Enter</kbd> to lock in
+            Single-tap any hand to play &middot; Keyboard: <kbd className="font-mono font-bold bg-[#EEF1ED] px-1 py-0.5 rounded">1</kbd>, <kbd className="font-mono font-bold bg-[#EEF1ED] px-1 py-0.5 rounded">2</kbd>, <kbd className="font-mono font-bold bg-[#EEF1ED] px-1 py-0.5 rounded">3</kbd> to choose &middot; <kbd className="font-mono font-bold bg-[#EEF1ED] px-1 py-0.5 rounded">Enter</kbd> to lock in
           </p>
         </div>
       )}

@@ -10,6 +10,7 @@ interface RoundTimerProps {
   roundNumber: number;
   isResolved: boolean;
   hasSubmitted?: boolean;
+  isClashing?: boolean;
   onTimeout?: () => void;
   className?: string;
 }
@@ -32,6 +33,7 @@ export function RoundTimer({
   roundNumber,
   isResolved,
   hasSubmitted = false,
+  isClashing = false,
   onTimeout,
   className,
 }: RoundTimerProps) {
@@ -46,7 +48,7 @@ export function RoundTimer({
   }, [roundNumber]);
 
   useEffect(() => {
-    if (isResolved) return;
+    if (isResolved || isClashing) return;
 
     if (serverNow) {
       serverOffsetRef.current = Date.parse(serverNow) - Date.now();
@@ -64,7 +66,7 @@ export function RoundTimer({
 
       setSecondsRemaining(sec);
 
-      if (sec === 0 && !timeoutTriggeredRef.current && !isResolved) {
+      if (sec === 0 && !timeoutTriggeredRef.current && !isResolved && !isClashing) {
         timeoutTriggeredRef.current = true;
         onTimeout?.();
       }
@@ -73,7 +75,7 @@ export function RoundTimer({
     tick();
     const interval = setInterval(tick, 200);
     return () => clearInterval(interval);
-  }, [roundDeadline, isResolved, onTimeout, serverNow]);
+  }, [roundDeadline, isResolved, isClashing, onTimeout, serverNow]);
 
   const isWarning = secondsRemaining <= 3 && secondsRemaining > 0;
   const isExpired = secondsRemaining === 0 && !isResolved;
@@ -140,7 +142,11 @@ export function RoundTimer({
 
       {/* Status banner under timer */}
       <div className="mt-2 text-center">
-        {isExpired ? (
+        {isClashing ? (
+          <span className="text-xs font-semibold text-[#167D78] animate-pulse">
+            Clash in progress...
+          </span>
+        ) : isExpired ? (
           <span className="inline-flex items-center gap-1 text-xs font-bold text-[#D95F49] animate-pulse">
             <AlertTriangle className="w-3.5 h-3.5" />
             Time&apos;s up! Resolving round...

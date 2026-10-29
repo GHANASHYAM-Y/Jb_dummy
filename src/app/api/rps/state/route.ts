@@ -74,7 +74,7 @@ export async function GET(request: NextRequest) {
     const nowIso = new Date().toISOString();
     let oppSubmitted = result.opponent_has_submitted;
 
-    // If RPC didn't provide opponent_has_submitted, check safely
+    // If RPC didn't provide opponent_has_submitted, check safely without leaking move value
     if (oppSubmitted === undefined && result.match) {
       const oppId =
         result.match.player1_id === user.id
@@ -89,32 +89,6 @@ export async function GET(request: NextRequest) {
         .maybeSingle();
 
       oppSubmitted = !!oppMoveRow;
-    }
-
-    // If match was completed under old 2-win rule, re-activate for First to 5
-    if (
-      result.match &&
-      result.match.phase === "completed" &&
-      ((result.match.player1_wins as number) || 0) < 5 &&
-      ((result.match.player2_wins as number) || 0) < 5
-    ) {
-      const newDeadline = new Date(Date.now() + 10000).toISOString();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await (supabase as any)
-        .from("matches")
-        .update({
-          phase: "active",
-          winner_id: null,
-          completed_at: null,
-          round_deadline: newDeadline,
-          updated_at: nowIso,
-        })
-        .eq("id", matchId);
-
-      result.match.phase = "active";
-      result.match.winner_id = null;
-      result.match.completed_at = null;
-      result.match.round_deadline = newDeadline;
     }
 
     const enrichedData = {

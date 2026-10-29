@@ -146,11 +146,19 @@ export function RpsMatchBoard({
   >(null);
 
   const [submitting, setSubmitting] = useState(false);
+  const submittingRef = useRef(false);
   const [pendingMove, setPendingMove] = useState<RpsMove | null>(null);
   const [submitMsg, setSubmitMsg] = useState<string | null>(null);
   const [connected, setConnected] = useState(true);
+  const [realtimeConnected, setRealtimeConnected] = useState(false);
+  const [isClashActive, setIsClashActive] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
   const [isMuted, setIsMuted] = useState(rpsAudio.getMuted());
+
+  const lastTimedOutRoundRef = useRef<number | null>(null);
+  const isTimingOutRef = useRef<boolean>(false);
+  const isFetchingRef = useRef<boolean>(false);
+  const mountedRef = useRef<boolean>(true);
 
   const [matchChallenge, setMatchChallenge] = useState<Challenge | null>(null);
   const [isChallengeModalOpen, setIsChallengeModalOpen] = useState(false);
@@ -158,6 +166,14 @@ export function RpsMatchBoard({
   const [playAgainError, setPlayAgainError] = useState<string | null>(null);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const victoryCelebratedRef = useRef(false);
+
+  // Reset pending move and submission errors when round advances
+  const currentRound = state?.match.current_round;
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setPendingMove(null);
+    setSubmitMsg(null);
+  }, [currentRound]);
 
   const myPerspective: 1 | 2 = state?.match.player1_id === userId ? 1 : 2;
   const me = myPerspective === 1 ? player1 : player2;
@@ -258,8 +274,11 @@ export function RpsMatchBoard({
 
   // ── Polling / fetch state ──────────────────────────────────────────────────
   const fetchState = useCallback(async () => {
+    if (isFetchingRef.current) return;
+    isFetchingRef.current = true;
     try {
       const res = await fetch(`/api/rps/state?match_id=${encodeURIComponent(matchId)}`);
+      if (!mountedRef.current) return;
       if (!res.ok) {
         let errData: { error?: string; code?: string } = {};
         try {
@@ -284,14 +303,20 @@ export function RpsMatchBoard({
         return;
       }
       const data: MatchState = await res.json();
+      if (!mountedRef.current) return;
       setState(data);
       setError(null);
       setErrorType(null);
     } catch {
-      setErrorType("network");
-      setError(t("rps.network_error"));
+      if (mountedRef.current) {
+        setErrorType("network");
+        setError(t("rps.network_error"));
+      }
     } finally {
-      setLoading(false);
+      isFetchingRef.current = false;
+      if (mountedRef.current) {
+        setLoading(false);
+      }
     }
   }, [matchId, t]);
 
@@ -302,6 +327,7 @@ export function RpsMatchBoard({
 
   // ── Realtime subscriptions ──────────────────────────────────────────────────
   useEffect(() => {
+    mountedRef.current = true;
     const channel = supabase
       .channel(`rps-match-${matchId}`)
       .on(
@@ -313,7 +339,7 @@ export function RpsMatchBoard({
           filter: `id=eq.${matchId}`,
         },
         () => {
-          void fetchState();
+          if (mountedRef.current) void fetchState();
         }
       )
       .on(
@@ -325,7 +351,7 @@ export function RpsMatchBoard({
           filter: `match_id=eq.${matchId}`,
         },
         () => {
-          void fetchState();
+          if (mountedRef.current) void fetchState();
         }
       )
       .on(
@@ -337,7 +363,7 @@ export function RpsMatchBoard({
           filter: `match_id=eq.${matchId}`,
         },
         () => {
-          void fetchState();
+          if (mountedRef.current) void fetchState();
         }
       )
       .on(
@@ -349,32 +375,39 @@ export function RpsMatchBoard({
           filter: `match_id=eq.${matchId}`,
         },
         () => {
-          void fetchChallenge();
+          if (mountedRef.current) void fetchChallenge();
         }
       )
       .subscribe((status) => {
+        if (!mountedRef.current) return;
         if (status === "SUBSCRIBED") {
           setConnected(true);
-        } else if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
+          setRealtimeConnected(true);
+        } else if (status === "CHANNEL_ERROR" || status === "TIMED_OUT" || status === "CLOSED") {
           setConnected(false);
+          setRealtimeConnected(false);
         }
       });
 
     return () => {
+      mountedRef.current = false;
       void supabase.removeChannel(channel);
     };
   }, [matchId, supabase, fetchState, fetchChallenge]);
 
-  // ── Polling fallback ────────────────────────────────────────────────────────
+  // ── Polling fallback & low-frequency safety heartbeat ────────────────────────
   useEffect(() => {
     if (state?.match.phase !== "completed") {
-      const interval = connected ? 3500 : 2000;
+      const interval = realtimeConnected ? 12000 : 2500;
       pollRef.current = setInterval(() => {
-        void fetchState();
+        if (mountedRef.current) void fetchState();
       }, interval);
 
       return () => {
-        if (pollRef.current) clearInterval(pollRef.current);
+        if (pollRef.current) {
+          clearInterval(pollRef.current);
+          pollRef.current = null;
+        }
       };
     }
 
@@ -385,9 +418,9 @@ export function RpsMatchBoard({
         matchChallenge.status === "accepted";
 
       if (isUnresolved) {
-        const interval = connected ? 4000 : 2500;
+        const interval = realtimeConnected ? 12000 : 3000;
         const challengePoll = setInterval(() => {
-          void fetchChallenge();
+          if (mountedRef.current) void fetchChallenge();
         }, interval);
 
         return () => {
@@ -395,45 +428,93 @@ export function RpsMatchBoard({
         };
       }
     }
-  }, [connected, state?.match.phase, state?.match.is_draw, matchChallenge, fetchState, fetchChallenge]);
+  }, [realtimeConnected, state?.match.phase, state?.match.is_draw, matchChallenge, fetchState, fetchChallenge]);
 
   // ── Submit move ─────────────────────────────────────────────────────────────
-  const handleSubmit = useCallback(async () => {
-    if (!pendingMove || submitting) return;
+  const handleSubmit = useCallback(async (selectedMove?: RpsMove) => {
+    const moveToSubmit = selectedMove || pendingMove;
+    if (!moveToSubmit || submittingRef.current || state?.my_move_this_round !== null) return;
+    submittingRef.current = true;
     setSubmitting(true);
     setSubmitMsg(null);
+    if (selectedMove) {
+      setPendingMove(selectedMove);
+    }
     try {
       const res = await fetch("/api/rps/move", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ match_id: matchId, move: pendingMove }),
+        body: JSON.stringify({ match_id: matchId, move: moveToSubmit /* move: pendingMove */ }),
       });
       const data = await res.json();
       if (!res.ok) {
         setSubmitMsg(data.error ?? data.message ?? t("common.error"));
       } else {
-        void fetchState();
+        await fetchState();
       }
     } catch {
       setSubmitMsg(t("common.error"));
     } finally {
-      setSubmitting(false);
+      submittingRef.current = false;
+      if (mountedRef.current) {
+        setSubmitting(false);
+      }
     }
-  }, [pendingMove, submitting, matchId, t, fetchState]);
+  }, [pendingMove, state?.my_move_this_round, matchId, t, fetchState]);
 
   // ── Timeout expiration resolution ───────────────────────────────────────────
   const handleTimeout = useCallback(async () => {
+    const roundToTimeout = state?.match.current_round;
+    if (!roundToTimeout) return;
+
+    // Do not fire competing timeout if move submission is actively in flight
+    if (submittingRef.current) return;
+
+    // Prevent duplicate timeout requests for the same match and round
+    if (lastTimedOutRoundRef.current === roundToTimeout || isTimingOutRef.current) {
+      return;
+    }
+
+    // Do not timeout if match is inactive or already resolved
+    if (
+      state?.match.phase !== "active" ||
+      (state?.my_move_this_round !== null && (state?.opponent_has_submitted ?? false))
+    ) {
+      return;
+    }
+
+    isTimingOutRef.current = true;
+    lastTimedOutRoundRef.current = roundToTimeout;
+
     try {
-      await fetch("/api/rps/timeout", {
+      const res = await fetch("/api/rps/timeout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ match_id: matchId }),
       });
-      void fetchState();
+      if (!mountedRef.current) return;
+      if (res.ok) {
+        await fetchState();
+      } else {
+        const errData = await res.json().catch(() => ({}));
+        // If server deadline has not arrived yet, clear guard so timer can retry when elapsed
+        if (errData.code === "deadline_not_reached") {
+          lastTimedOutRoundRef.current = null;
+        } else {
+          await fetchState();
+        }
+      }
     } catch {
-      // Quiet retry on next poll
+      // On network failure, clear round guard after short backoff to allow retry if round unchanged
+      setTimeout(() => {
+        if (mountedRef.current && state?.match.current_round === roundToTimeout) {
+          lastTimedOutRoundRef.current = null;
+        }
+      }, 2000);
+    } finally {
+      isTimingOutRef.current = false;
     }
-  }, [matchId, fetchState]);
+  }, [state?.match.current_round, state?.match.phase, state?.my_move_this_round, state?.opponent_has_submitted, matchId, fetchState]);
 
   // ── Victory Celebration trigger ──
   useEffect(() => {
@@ -703,6 +784,7 @@ export function RpsMatchBoard({
             roundNumber={match.current_round}
             isResolved={hasSubmitted && (opponent_has_submitted ?? false)}
             hasSubmitted={hasSubmitted}
+            isClashing={isClashActive}
             onTimeout={handleTimeout}
           />
 
@@ -724,6 +806,7 @@ export function RpsMatchBoard({
             pendingMove={pendingMove}
             onSelectMove={(move) => setPendingMove(move)}
             onSubmitMove={handleSubmit}
+            onClashActiveChange={(active) => setIsClashActive(active)}
           />
         </div>
       )}
