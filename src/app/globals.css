@@ -131,67 +131,73 @@
    BASE RESET & GLOBALS
    ============================================================ */
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 
-html {
-  scroll-behavior: smooth;
-  -webkit-text-size-adjust: 100%;
-}
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
 
-body {
-  min-height: 100dvh;
-  background: var(--bg-page);
-  color: var(--text-primary);
-  font-family: var(--font-inter), "Inter", "Noto Sans Tamil", -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 1rem;
-  line-height: 1.6;
-  letter-spacing: 0;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+  body {
+    min-height: 100dvh;
+    max-width: 100%;
+    overflow-x: hidden;
+    background: var(--bg-page);
+    color: var(--text-primary);
+    font-family: var(--font-inter), "Inter", "Noto Sans Tamil", -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
+    letter-spacing: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 
-/* Typography Hierarchy */
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-manrope), "Manrope", sans-serif;
-  color: var(--text-primary);
-  letter-spacing: 0;
-  text-wrap: balance;
-}
+  /* Typography Hierarchy */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-manrope), "Manrope", sans-serif;
+    color: var(--text-primary);
+    letter-spacing: 0;
+    text-wrap: balance;
+  }
 
-h1 {
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-}
+  h1 {
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
 
-h2 {
-  line-height: 1.25;
-  letter-spacing: -0.01em;
-}
+  h2 {
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+  }
 
-h3 {
-  line-height: 1.35;
-  letter-spacing: 0;
-}
+  h3 {
+    line-height: 1.35;
+    letter-spacing: 0;
+  }
 
-h4, h5, h6 {
-  line-height: 1.4;
-  letter-spacing: 0;
-}
+  h4, h5, h6 {
+    line-height: 1.4;
+    letter-spacing: 0;
+  }
 
-p {
-  line-height: 1.6;
-  letter-spacing: 0;
-}
+  p {
+    line-height: 1.6;
+    letter-spacing: 0;
+  }
 
-button, input, select, textarea {
-  font-family: inherit;
-  letter-spacing: 0;
+  button, input, select, textarea {
+    font-family: inherit;
+    letter-spacing: 0;
+  }
 }
 
 [lang="ta"],
