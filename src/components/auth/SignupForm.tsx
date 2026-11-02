@@ -357,42 +357,44 @@ export function SignupForm() {
     const isCodeComplete = otp.join("").length === 6;
 
     return (
-      <div className="flex-1 flex flex-col items-center justify-center px-4 py-12">
+      <div className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 py-12 sm:py-16 selection:bg-[#39DFFF]/30 selection:text-white">
         {/* Mini header */}
-        <div className="w-full max-w-sm mb-8 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-[#167D78] flex items-center justify-center shadow-sm">
-              <span className="text-white font-extrabold text-xs tracking-wider">EQ</span>
+        <div className="w-full max-w-md mb-8 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-3 group select-none">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#315BFF] to-[#8B2CFF] border border-[#39DFFF]/30 group-hover:border-[#39DFFF] flex items-center justify-center transition-all shadow-[0_0_14px_rgba(49,91,255,0.4)]">
+              <span className="text-white font-black text-xs tracking-wider">EQ</span>
             </div>
-            <span className="font-display font-extrabold text-xl text-[#203331]">EVOAIQU</span>
+            <span className="font-display font-black text-xl text-[#F5F7FF] tracking-tight group-hover:text-[#39DFFF] transition-colors">
+              EVOAIQU
+            </span>
           </Link>
-          <LanguageSelector compact />
+          <LanguageSelector compact variant="dark" />
         </div>
 
         {/* Card */}
-        <div className="w-full max-w-sm animate-scale-in">
-          <div className="evo-card p-8">
+        <div className="w-full max-w-md animate-scale-in">
+          <div className="bg-[#101638] border border-[#315BFF]/35 rounded-3xl p-6 sm:p-10 shadow-[0_16px_50px_rgba(7,11,37,0.8)] relative overflow-hidden">
             {/* Header with icon */}
-            <div className="text-center mb-6">
-              <div className="w-14 h-14 rounded-2xl bg-[#DDF2EB] border border-[#167D78]/20 flex items-center justify-center mx-auto mb-4 text-[#167D78] shadow-sm">
+            <div className="text-center mb-7">
+              <div className="w-14 h-14 rounded-2xl bg-[#39DFFF]/15 border border-[#39DFFF]/30 flex items-center justify-center mx-auto mb-4 text-[#39DFFF] shadow-[0_0_20px_rgba(57,223,255,0.25)]">
                 <KeyRound className="h-7 w-7" />
               </div>
-              <h1 className="font-display font-bold text-2xl text-[#203331] mb-2">
+              <h1 className="font-display font-black text-2xl sm:text-3xl text-[#F5F7FF] mb-2 tracking-tight">
                 {t("auth.otp.title")}
               </h1>
-              <p className="text-[#65736F] text-sm leading-relaxed">
+              <p className="text-[#B8C3E0] text-sm leading-relaxed max-w-xs mx-auto">
                 {t("auth.otp.subtitle", { email })}
               </p>
             </div>
 
             {/* Error & Success Alerts */}
             {error && (
-              <Alert variant="error" icon={<AlertCircle className="h-4 w-4" />} className="mb-4">
+              <Alert variant="error" icon={<AlertCircle className="h-4 w-4" />} className="mb-5">
                 {error}
               </Alert>
             )}
             {resendSuccess && (
-              <Alert variant="success" icon={<CheckCircle2 className="h-4 w-4" />} className="mb-4">
+              <Alert variant="success" icon={<CheckCircle2 className="h-4 w-4" />} className="mb-5">
                 {resendSuccess}
               </Alert>
             )}
@@ -406,7 +408,7 @@ export function SignupForm() {
               noValidate
             >
               <div
-                className="flex items-center justify-center gap-2 sm:gap-2.5 my-6"
+                className="flex items-center justify-center gap-2 sm:gap-3 my-6 sm:my-8"
                 role="group"
                 aria-label={t("auth.otp.code_label")}
               >
@@ -429,13 +431,13 @@ export function SignupForm() {
                     onFocus={(e) => e.target.select()}
                     disabled={otpLoading}
                     className={cn(
-                      "w-11 h-13 sm:w-12 sm:h-14 text-center text-xl sm:text-2xl font-bold font-mono rounded-xl",
-                      "bg-[#F7F8F4] border text-[#203331] transition-all duration-150 outline-none",
+                      "w-11 h-14 sm:w-13 sm:h-16 text-center text-xl sm:text-2xl font-bold font-mono rounded-xl",
+                      "bg-[#070B25] border text-[#F5F7FF] transition-all duration-150 outline-none",
                       digit
-                        ? "border-[#167D78] bg-white shadow-sm"
-                        : "border-[#E2E8E2]",
-                      "focus:border-[#167D78] focus:bg-white focus:ring-2 focus:ring-[#167D78]/20",
-                      error && "border-[#D95F49] text-[#D95F49]",
+                        ? "border-[#39DFFF] shadow-[0_0_12px_rgba(57,223,255,0.3)]"
+                        : "border-[#315BFF]/30",
+                      "focus:border-[#39DFFF] focus:ring-2 focus:ring-[#39DFFF]/30",
+                      error && "border-[#FF5370] text-[#FF5370]",
                     )}
                     aria-label={`Digit ${idx + 1} of 6`}
                   />
@@ -449,16 +451,16 @@ export function SignupForm() {
                 size="lg"
                 loading={otpLoading}
                 disabled={!isCodeComplete || otpLoading}
-                className="w-full shadow-sm hover:shadow"
+                className="w-full shadow-[0_0_24px_rgba(49,91,255,0.45)] hover:shadow-[0_0_32px_rgba(57,223,255,0.6)] font-bold text-base"
               >
                 {t("auth.otp.submit")}
               </Button>
             </form>
 
             {/* Resend Cooldown Section */}
-            <div className="mt-5 text-center">
+            <div className="mt-6 text-center">
               {resendCooldown > 0 ? (
-                <p className="text-xs text-[#65736F]">
+                <p className="text-xs text-[#8A98C0]">
                   {t("auth.otp.resend_in", { seconds: resendCooldown })}
                 </p>
               ) : (
@@ -466,7 +468,7 @@ export function SignupForm() {
                   type="button"
                   onClick={handleResend}
                   disabled={resending}
-                  className="text-xs text-[#167D78] hover:text-[#115E59] transition-colors font-semibold underline underline-offset-4 disabled:opacity-50"
+                  className="text-xs text-[#39DFFF] hover:text-[#5B7BFF] transition-colors font-bold underline underline-offset-4 disabled:opacity-50 cursor-pointer"
                 >
                   {resending ? t("auth.otp.resending") : t("auth.otp.resend")}
                 </button>
@@ -474,7 +476,7 @@ export function SignupForm() {
             </div>
 
             {/* Back / Edit Email */}
-            <div className="mt-4 pt-4 border-t border-[#E2E8E2] text-center">
+            <div className="mt-6 pt-5 border-t border-[#315BFF]/20 text-center">
               <button
                 type="button"
                 onClick={() => {
@@ -482,9 +484,9 @@ export function SignupForm() {
                   setError(null);
                   setResendSuccess(null);
                 }}
-                className="inline-flex items-center gap-1.5 text-xs text-[#65736F] hover:text-[#203331] transition-colors"
+                className="inline-flex items-center gap-1.5 text-xs text-[#B8C3E0] hover:text-[#F5F7FF] transition-colors cursor-pointer"
               >
-                <ArrowLeft className="h-3 w-3" />
+                <ArrowLeft className="h-3.5 w-3.5" />
                 {t("auth.otp.change_email")}
               </button>
             </div>
@@ -496,40 +498,42 @@ export function SignupForm() {
 
   // ── Step 1: Account Creation Form ──────────────────────────────────────────
   return (
-    <div className="flex-1 flex flex-col items-center justify-center px-4 py-12">
+    <div className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 py-12 sm:py-16 selection:bg-[#39DFFF]/30 selection:text-white">
       {/* Mini header */}
-      <div className="w-full max-w-sm mb-8 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-xl bg-[#167D78] flex items-center justify-center shadow-sm">
-            <span className="text-white font-extrabold text-xs tracking-wider">EQ</span>
+      <div className="w-full max-w-md mb-8 flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-3 group select-none">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#315BFF] to-[#8B2CFF] border border-[#39DFFF]/30 group-hover:border-[#39DFFF] flex items-center justify-center transition-all shadow-[0_0_14px_rgba(49,91,255,0.4)]">
+            <span className="text-white font-black text-xs tracking-wider">EQ</span>
           </div>
-          <span className="font-display font-extrabold text-xl text-[#203331]">EVOAIQU</span>
+          <span className="font-display font-black text-xl text-[#F5F7FF] tracking-tight group-hover:text-[#39DFFF] transition-colors">
+            EVOAIQU
+          </span>
         </Link>
-        <LanguageSelector compact />
+        <LanguageSelector compact variant="dark" />
       </div>
 
       {/* Card */}
-      <div className="w-full max-w-sm animate-scale-in">
-        <div className="evo-card p-8">
+      <div className="w-full max-w-md animate-scale-in">
+        <div className="bg-[#101638] border border-[#315BFF]/35 rounded-3xl p-6 sm:p-10 shadow-[0_16px_50px_rgba(7,11,37,0.8)] relative overflow-hidden">
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="font-display font-bold text-2xl text-[#203331] mb-1">
+            <h1 className="font-display font-black text-2xl sm:text-3xl text-[#F5F7FF] mb-2 tracking-tight">
               {t("auth.signup.title")}
             </h1>
-            <p className="text-[#65736F] text-sm">
+            <p className="text-[#B8C3E0] text-sm leading-relaxed max-w-xs mx-auto">
               {t("auth.signup.subtitle")}
             </p>
           </div>
 
           {/* Error */}
           {error && (
-            <Alert variant="error" icon={<AlertCircle className="h-4 w-4" />} className="mb-5">
+            <Alert variant="error" icon={<AlertCircle className="h-4 w-4" />} className="mb-6">
               {error}
             </Alert>
           )}
 
           {/* Form */}
-          <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
+          <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
             <Input
               id="signup-name"
               label={t("auth.signup.name")}
@@ -540,7 +544,7 @@ export function SignupForm() {
               autoComplete="name"
               required
               leftIcon={<User className="h-4 w-4" />}
-              hint="This is how others will see you."
+              hint="This is how others will see you in arenas."
             />
 
             <Input
@@ -558,10 +562,10 @@ export function SignupForm() {
             {/* Password with strength indicator */}
             <div className="flex flex-col gap-1.5">
               <label htmlFor="signup-password" className="evo-label">
-                {t("auth.signup.password")} <span className="text-[#D95F49]">*</span>
+                {t("auth.signup.password")} <span className="text-[#FF5370]">*</span>
               </label>
               <div className="relative">
-                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#65736F] pointer-events-none">
+                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8A98C0] pointer-events-none">
                   <Lock className="h-4 w-4" />
                 </span>
                 <input
@@ -577,7 +581,7 @@ export function SignupForm() {
                 <button
                   type="button"
                   onClick={() => setShowPwd((v) => !v)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#65736F] hover:text-[#203331] transition-colors"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#8A98C0] hover:text-[#F5F7FF] transition-colors cursor-pointer"
                   aria-label={showPwd ? "Hide password" : "Show password"}
                 >
                   {showPwd ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -585,14 +589,14 @@ export function SignupForm() {
               </div>
               {/* Strength bar */}
               {password.length > 0 && (
-                <div className="flex items-center gap-2 mt-1">
+                <div className="flex items-center gap-2 mt-2">
                   <div className="flex gap-1.5 flex-1">
                     {[1, 2, 3, 4].map((i) => (
                       <div
                         key={i}
                         className="h-1.5 flex-1 rounded-full transition-all duration-300"
                         style={{
-                          background: i <= pwStrength.score ? pwStrength.color : "#EEF1ED",
+                          background: i <= pwStrength.score ? pwStrength.color : "rgba(255, 255, 255, 0.1)",
                         }}
                       />
                     ))}
@@ -607,10 +611,10 @@ export function SignupForm() {
             {/* Confirm password */}
             <div className="flex flex-col gap-1.5">
               <label htmlFor="signup-confirm" className="evo-label">
-                {t("auth.signup.confirm")} <span className="text-[#D95F49]">*</span>
+                {t("auth.signup.confirm")} <span className="text-[#FF5370]">*</span>
               </label>
               <div className="relative">
-                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#65736F] pointer-events-none">
+                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8A98C0] pointer-events-none">
                   <Lock className="h-4 w-4" />
                 </span>
                 <input
@@ -626,14 +630,14 @@ export function SignupForm() {
                 <button
                   type="button"
                   onClick={() => setShowConf((v) => !v)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#65736F] hover:text-[#203331] transition-colors"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#8A98C0] hover:text-[#F5F7FF] transition-colors cursor-pointer"
                   aria-label={showConf ? "Hide password" : "Show password"}
                 >
                   {showConf ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
               {confirm && password !== confirm && (
-                <p className="text-[#D95F49] text-xs font-medium" role="alert">
+                <p className="text-[#FF5370] text-xs font-semibold mt-0.5" role="alert">
                   Passwords do not match.
                 </p>
               )}
@@ -644,32 +648,32 @@ export function SignupForm() {
               variant="primary"
               size="lg"
               loading={loading}
-              className="w-full mt-2 shadow-sm hover:shadow"
+              className="w-full mt-3 shadow-[0_0_24px_rgba(49,91,255,0.45)] hover:shadow-[0_0_32px_rgba(57,223,255,0.6)] font-bold text-base"
             >
               {t("auth.signup.submit")}
             </Button>
           </form>
 
           {/* Terms */}
-          <p className="text-center text-xs text-[#65736F] mt-4 leading-relaxed">
+          <p className="text-center text-xs text-[#8A98C0] mt-5 leading-relaxed">
             {t("auth.signup.terms")}{" "}
-            <Link href="/terms" className="text-[#167D78] font-medium hover:underline">
+            <Link href="/terms" className="text-[#39DFFF] font-semibold hover:underline">
               {t("auth.signup.terms_link")}
             </Link>{" "}
             {t("auth.signup.and")}{" "}
-            <Link href="/privacy" className="text-[#167D78] font-medium hover:underline">
+            <Link href="/privacy" className="text-[#39DFFF] font-semibold hover:underline">
               {t("auth.signup.privacy_link")}
             </Link>.
           </p>
 
-          <Divider className="my-5" />
+          <Divider className="my-6" />
 
           {/* Login link */}
-          <p className="text-center text-sm text-[#65736F]">
+          <p className="text-center text-sm text-[#B8C3E0]">
             {t("auth.signup.have_account")}{" "}
             <Link
               href="/login"
-              className="text-[#167D78] font-semibold hover:text-[#115E59] transition-colors"
+              className="text-[#39DFFF] font-bold hover:text-[#5B7BFF] transition-colors underline underline-offset-4"
             >
               {t("auth.signup.login_link")}
             </Link>

@@ -68,13 +68,19 @@ async function InviteContent({ params }: PageProps) {
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-[#070B25] text-[#F5F7FF] relative overflow-hidden">
+      {/* Ambient background glow */}
+      <div
+        className="pointer-events-none absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-radial from-[#315BFF]/15 via-[#8B2CFF]/10 to-transparent blur-3xl"
+        aria-hidden="true"
+      />
+
       <Navbar
         user={user}
         profile={currentProfile ?? undefined}
       />
 
-      <main className="flex-1 evo-section flex items-center justify-center py-12 px-4">
+      <main className="flex-1 flex items-center justify-center py-16 px-4 relative z-10">
         <InviteLandingClient
           token={token}
           initialData={initialData}
@@ -91,8 +97,8 @@ export default function InvitePage({ params }: PageProps) {
   return (
     <Suspense
       fallback={
-        <div className="flex-1 flex items-center justify-center min-h-screen bg-[#F7F8F4]">
-          <Spinner size="lg" className="text-[#167D78]" />
+        <div className="flex-1 flex items-center justify-center min-h-screen bg-[#070B25] text-[#39DFFF]">
+          <Spinner size="lg" className="text-[#39DFFF]" />
         </div>
       }
     >

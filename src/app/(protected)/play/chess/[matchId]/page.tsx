@@ -42,17 +42,17 @@ export default async function ChessMatchPage({ params }: Props) {
   ) => (
     <div className="evo-section py-12 md:py-20">
       <div className="evo-container max-w-lg">
-        <div className="evo-card p-8 bg-white border border-[#E2E8E2] text-center shadow-card space-y-4">
+        <div className="evo-card p-8 bg-[#101638] border border-[rgba(255,255,255,0.08)] text-center shadow-2xl space-y-4">
           <div
             className={`w-12 h-12 rounded-2xl ${
-              isForbidden ? "bg-[#FCE6DE] text-[#D95F49]" : "bg-[#EEF1ED] text-[#65736F]"
-            } border border-[#E2E8E2] flex items-center justify-center mx-auto`}
+              isForbidden ? "bg-[rgba(255,83,112,0.15)] text-[#FF5370]" : "bg-[#070B25] text-[#8B98B5]"
+            } border border-[rgba(255,255,255,0.08)] flex items-center justify-center mx-auto`}
           >
             {isForbidden ? <ShieldAlert className="h-6 w-6" /> : <AlertCircle className="h-6 w-6" />}
           </div>
           <div>
-            <h1 className="font-display font-bold text-xl text-[#203331] mb-1.5">{title}</h1>
-            <p className="text-[#65736F] text-sm leading-relaxed">{message}</p>
+            <h1 className="font-display font-bold text-xl text-[#F5F7FF] mb-1.5">{title}</h1>
+            <p className="text-[#B8C3E0] text-sm leading-relaxed">{message}</p>
           </div>
           <div className="pt-2 flex justify-center">
             <Link href={actionHref}>

@@ -77,37 +77,57 @@ export default function HowToPlayPage() {
   ];
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F7F8F4] text-[#203331]">
+    <div className="flex flex-col min-h-screen bg-[#070B25] text-[#F5F7FF] relative overflow-hidden">
+      {/* Ambient background glow */}
+      <div
+        className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-radial from-[#315BFF]/15 via-[#8B2CFF]/10 to-transparent blur-3xl"
+        aria-hidden="true"
+      />
+      <div
+        className="pointer-events-none absolute top-1/2 left-0 w-[500px] h-[500px] bg-radial from-[#39DFFF]/10 to-transparent blur-3xl"
+        aria-hidden="true"
+      />
+
       <Navbar />
 
-      <main className="flex-1">
+      <main className="flex-1 relative z-10">
         {/* ── Hero Section ──────────────────────────────────────────────── */}
-        <section className="relative overflow-hidden py-16 sm:py-24 border-b border-[#E2E8E2] bg-white">
-          <div className="evo-container max-w-4xl text-center space-y-6 animate-fade-in">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#DDF2EB] border border-[rgba(22,125,120,0.25)] text-[#167D78] text-xs font-bold tracking-wide uppercase">
+        <section className="py-20 sm:py-28 relative">
+          <div className="evo-container max-w-4xl text-center space-y-7 animate-fade-in px-4">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#101638] border border-[#39DFFF]/30 text-[#39DFFF] text-xs font-bold tracking-wide uppercase shadow-[0_0_16px_rgba(57,223,255,0.2)]">
               <HelpCircle className="h-3.5 w-3.5" />
-              Game Guide & Rules
+              Game Guide & Rules • How to Play
             </div>
 
-            <h1 className="font-display font-black text-3xl sm:text-5xl text-[#203331] tracking-tight leading-[1.15]">
+            <h1 className="font-display font-black text-4xl sm:text-6xl text-[#F5F7FF] tracking-tight leading-[1.12]">
               How EVOAIQU Works: <br className="hidden sm:inline" />
-              <span className="text-[#167D78]">5 Simple Steps to Fun</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#39DFFF] via-[#7B61FF] to-[#8B2CFF]">
+                5 Simple Steps to Fun
+              </span>
             </h1>
 
-            <p className="text-[#65736F] text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-              From the opening move to the viral dare video, here is everything you need to know
+            <p className="text-[#B8C3E0] text-base sm:text-xl max-w-2xl mx-auto leading-relaxed">
+              From the opening Rock Paper Scissors move to the viral dare video, here is everything you need to know
               about how matches, challenges, and 24-hour stories work.
             </p>
 
-            <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+            <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
               <Link href="/games">
-                <Button variant="primary" size="lg" className="font-bold shadow-md">
+                <Button
+                  variant="primary"
+                  size="lg"
+                  className="font-bold shadow-[0_0_24px_rgba(49,91,255,0.45)] hover:shadow-[0_0_32px_rgba(57,223,255,0.6)] px-8 py-3.5 text-base"
+                >
                   Enter Game Arena
                   <ArrowRight className="h-4 w-4 ml-2" />
                 </Button>
               </Link>
               <Link href="/signup">
-                <Button variant="secondary" size="lg" className="font-semibold">
+                <Button
+                  variant="secondary"
+                  size="lg"
+                  className="font-semibold bg-[#101638] hover:bg-[#151D48] text-[#F5F7FF] border border-[#1C2758] hover:border-[#39DFFF]/40 px-8 py-3.5 text-base"
+                >
                   Sign Up Free
                 </Button>
               </Link>
@@ -115,45 +135,47 @@ export default function HowToPlayPage() {
           </div>
         </section>
 
+        <hr className="border-t border-[#1C2758] max-w-5xl mx-auto my-4 opacity-60" />
+
         {/* ── Step-by-Step Flow ─────────────────────────────────────────── */}
-        <section className="py-16 sm:py-20">
-          <div className="evo-container max-w-4xl flex flex-col gap-10">
-            <div className="text-center max-w-xl mx-auto">
-              <h2 className="font-display font-bold text-2xl sm:text-3xl text-[#203331]">
+        <section className="py-20 sm:py-24">
+          <div className="evo-container max-w-4xl flex flex-col gap-14 px-4">
+            <div className="text-center max-w-xl mx-auto space-y-3">
+              <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-[#F5F7FF] tracking-tight">
                 The Complete Gameplay Loop
               </h2>
-              <p className="text-[#65736F] text-sm mt-2">
+              <p className="text-[#B8C3E0] text-base leading-relaxed">
                 Fast, fair, and authoritatively verified on the server from start to finish.
               </p>
             </div>
 
-            <div className="flex flex-col gap-5 sm:gap-6">
+            <div className="flex flex-col gap-6">
               {steps.map((step) => {
                 const Icon = step.icon;
                 return (
                   <div
                     key={step.num}
-                    className="flex flex-col sm:flex-row items-start gap-6 p-6 sm:p-8 rounded-3xl border border-[#E2E8E2] bg-white shadow-xs hover:border-[#167D78] transition-all group"
+                    className="flex flex-col sm:flex-row items-start gap-6 p-7 sm:p-8 rounded-2xl border border-[rgba(57,223,255,0.2)] bg-[#101638]/90 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.35)] hover:border-[#39DFFF]/50 hover:shadow-[0_12px_40px_rgba(57,223,255,0.15)] transition-all group"
                   >
                     <div className="flex items-center gap-4 sm:flex-col sm:items-center shrink-0">
-                      <div className="w-14 h-14 rounded-2xl bg-[#DDF2EB] flex items-center justify-center text-[#167D78] group-hover:scale-105 transition-transform">
-                        <Icon className="h-7 w-7" />
+                      <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-[#39DFFF]/20 to-[#315BFF]/30 border border-[#39DFFF]/40 flex items-center justify-center text-[#39DFFF] group-hover:scale-105 transition-transform shadow-[0_0_16px_rgba(57,223,255,0.25)]">
+                        <Icon className="h-8 w-8" />
                       </div>
-                      <span className="font-mono font-bold text-sm text-[#8E9B97]">
+                      <span className="font-mono font-bold text-xs text-[#39DFFF] tracking-wider uppercase">
                         Step {step.num}
                       </span>
                     </div>
 
-                    <div className="flex-1 space-y-2">
+                    <div className="flex-1 space-y-3">
                       <div className="flex items-center gap-2">
-                        <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider ${step.badgeColor}`}>
+                        <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#39DFFF]/15 text-[#39DFFF] border border-[#39DFFF]/30">
                           {step.badge}
                         </span>
                       </div>
-                      <h3 className="font-display font-bold text-xl text-[#203331]">
+                      <h3 className="font-display font-bold text-2xl text-[#F5F7FF]">
                         {step.title}
                       </h3>
-                      <p className="text-[#65736F] text-sm sm:text-base leading-relaxed">
+                      <p className="text-[#B8C3E0] text-base leading-relaxed">
                         {step.desc}
                       </p>
                     </div>
@@ -164,29 +186,31 @@ export default function HowToPlayPage() {
           </div>
         </section>
 
+        <hr className="border-t border-[#1C2758] max-w-5xl mx-auto my-4 opacity-60" />
+
         {/* ── Dare Catalog Categories ───────────────────────────────────── */}
-        <section className="py-16 bg-white border-t border-b border-[#E2E8E2]">
-          <div className="evo-container max-w-5xl flex flex-col gap-10">
-            <div className="text-center max-w-xl mx-auto space-y-2">
-              <h2 className="font-display font-bold text-2xl sm:text-3xl text-[#203331]">
+        <section className="py-20 sm:py-24">
+          <div className="evo-container max-w-5xl flex flex-col gap-14 px-4">
+            <div className="text-center max-w-xl mx-auto space-y-3">
+              <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-[#F5F7FF] tracking-tight">
                 Dare Categories
               </h2>
-              <p className="text-[#65736F] text-sm">
+              <p className="text-[#B8C3E0] text-base leading-relaxed">
                 Pick from our curated catalog of lighthearted, creative dares or invent your own.
               </p>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               {dareCategories.map((cat) => (
                 <div
                   key={cat.title}
-                  className="p-5 rounded-2xl bg-[#F7F8F4] border border-[#E2E8E2] hover:border-[#167D78] transition-colors space-y-2"
+                  className="p-6 rounded-2xl bg-[#101638]/90 border border-[#1C2758] hover:border-[#8B2CFF]/50 transition-all hover:shadow-[0_8px_24px_rgba(139,44,255,0.2)] space-y-3"
                 >
-                  <span className="text-3xl">{cat.icon}</span>
-                  <h4 className="font-display font-bold text-base text-[#203331]">
+                  <span className="text-4xl block">{cat.icon}</span>
+                  <h4 className="font-display font-bold text-lg text-[#F5F7FF]">
                     {cat.title}
                   </h4>
-                  <p className="text-xs text-[#65736F] leading-relaxed">
+                  <p className="text-sm text-[#B8C3E0] leading-relaxed">
                     {cat.desc}
                   </p>
                 </div>
@@ -195,55 +219,57 @@ export default function HowToPlayPage() {
           </div>
         </section>
 
+        <hr className="border-t border-[#1C2758] max-w-5xl mx-auto my-4 opacity-60" />
+
         {/* ── Fair Play & Privacy Rules ─────────────────────────────────── */}
-        <section className="py-16 sm:py-20">
-          <div className="evo-container max-w-4xl flex flex-col gap-8">
-            <div className="text-center space-y-2">
-              <h2 className="font-display font-bold text-2xl text-[#203331]">
+        <section className="py-20 sm:py-24">
+          <div className="evo-container max-w-4xl flex flex-col gap-12 px-4">
+            <div className="text-center space-y-3">
+              <h2 className="font-display font-extrabold text-3xl text-[#F5F7FF] tracking-tight">
                 Rules & Fair Play Guidelines
               </h2>
-              <p className="text-[#65736F] text-sm">
+              <p className="text-[#B8C3E0] text-base leading-relaxed">
                 Keeping the community fun, safe, and positive for everyone.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="p-5 rounded-2xl bg-white border border-[#E2E8E2] space-y-2">
-                <p className="font-bold text-sm text-[#203331] flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-[#167D78]" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="p-6 rounded-2xl bg-[#101638]/80 border border-[#1C2758] hover:border-[#39DFFF]/30 transition-colors space-y-2.5">
+                <p className="font-bold text-base text-[#F5F7FF] flex items-center gap-2.5">
+                  <Clock className="h-5 w-5 text-[#39DFFF]" />
                   10-Second Move Timer
                 </p>
-                <p className="text-xs text-[#65736F]">
+                <p className="text-sm text-[#B8C3E0] leading-relaxed">
                   Rounds auto-resolve if a player runs out of time. Consistent timeouts result in round concessions.
                 </p>
               </div>
 
-              <div className="p-5 rounded-2xl bg-white border border-[#E2E8E2] space-y-2">
-                <p className="font-bold text-sm text-[#203331] flex items-center gap-2">
-                  <Lock className="h-4 w-4 text-[#167D78]" />
+              <div className="p-6 rounded-2xl bg-[#101638]/80 border border-[#1C2758] hover:border-[#39DFFF]/30 transition-colors space-y-2.5">
+                <p className="font-bold text-base text-[#F5F7FF] flex items-center gap-2.5">
+                  <Lock className="h-5 w-5 text-[#39DFFF]" />
                   Keep It Safe & Respectful
                 </p>
-                <p className="text-xs text-[#65736F]">
+                <p className="text-sm text-[#B8C3E0] leading-relaxed">
                   Dares must never involve danger, harm, harassment, or illegal activities. Respect your friends boundaries.
                 </p>
               </div>
 
-              <div className="p-5 rounded-2xl bg-white border border-[#E2E8E2] space-y-2">
-                <p className="font-bold text-sm text-[#203331] flex items-center gap-2">
-                  <Globe className="h-4 w-4 text-[#167D78]" />
+              <div className="p-6 rounded-2xl bg-[#101638]/80 border border-[#1C2758] hover:border-[#39DFFF]/30 transition-colors space-y-2.5">
+                <p className="font-bold text-base text-[#F5F7FF] flex items-center gap-2.5">
+                  <Globe className="h-5 w-5 text-[#39DFFF]" />
                   Public vs. Private Control
                 </p>
-                <p className="text-xs text-[#65736F]">
+                <p className="text-sm text-[#B8C3E0] leading-relaxed">
                   Only the challenge recipient chooses visibility. Match winners cannot force private videos to become public.
                 </p>
               </div>
 
-              <div className="p-5 rounded-2xl bg-white border border-[#E2E8E2] space-y-2">
-                <p className="font-bold text-sm text-[#203331] flex items-center gap-2">
-                  <Sparkles className="h-4 w-4 text-[#167D78]" />
+              <div className="p-6 rounded-2xl bg-[#101638]/80 border border-[#1C2758] hover:border-[#39DFFF]/30 transition-colors space-y-2.5">
+                <p className="font-bold text-base text-[#F5F7FF] flex items-center gap-2.5">
+                  <Sparkles className="h-5 w-5 text-[#39DFFF]" />
                   Strict 24-Hour Expiry
                 </p>
-                <p className="text-xs text-[#65736F]">
+                <p className="text-sm text-[#B8C3E0] leading-relaxed">
                   All story media is ephemerally retained for 24 hours. Once expired, media cannot be re-streamed or recovered.
                 </p>
               </div>
@@ -251,18 +277,24 @@ export default function HowToPlayPage() {
           </div>
         </section>
 
+        <hr className="border-t border-[#1C2758] max-w-5xl mx-auto my-4 opacity-60" />
+
         {/* ── Bottom CTA ────────────────────────────────────────────────── */}
-        <section className="py-16 text-center border-t border-[#E2E8E2] bg-white">
-          <div className="evo-container max-w-xl space-y-5">
-            <h2 className="font-display font-bold text-2xl sm:text-3xl text-[#203331]">
+        <section className="py-24 text-center">
+          <div className="evo-container max-w-xl space-y-6 px-4">
+            <h2 className="font-display font-black text-3xl sm:text-4xl text-[#F5F7FF] tracking-tight">
               Ready to take your first move?
             </h2>
-            <p className="text-[#65736F] text-sm">
+            <p className="text-[#B8C3E0] text-base leading-relaxed">
               Challenge an online opponent in Quick Play or invite a friend right now.
             </p>
-            <div className="pt-2 flex justify-center gap-3">
+            <div className="pt-2 flex justify-center gap-4">
               <Link href="/games">
-                <Button variant="primary" size="lg" className="font-bold shadow-md">
+                <Button
+                  variant="primary"
+                  size="lg"
+                  className="font-bold shadow-[0_0_24px_rgba(49,91,255,0.45)] hover:shadow-[0_0_32px_rgba(57,223,255,0.6)] px-8 py-3.5 text-base"
+                >
                   Play Quick Play Now
                 </Button>
               </Link>

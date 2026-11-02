@@ -66,14 +66,14 @@ export function DeleteAccountSection() {
   }, [loading]);
 
   return (
-    <div id="delete-account" className="evo-card border-[rgba(217,95,73,0.3)] bg-white p-6 shadow-card">
-      <div className="flex items-start gap-4 mb-4">
-        <div className="w-10 h-10 rounded-xl bg-[#FCE6DE] border border-[rgba(217,95,73,0.3)] flex items-center justify-center flex-shrink-0">
-          <Trash2 className="h-5 w-5 text-[#D95F49]" />
+    <div id="delete-account" className="rounded-2xl border border-[rgba(255,83,112,0.3)] bg-[#101638] p-6 sm:p-8 shadow-[0_0_24px_rgba(255,83,112,0.1)]">
+      <div className="flex items-start gap-4 mb-5">
+        <div className="w-12 h-12 rounded-xl bg-[#FF5370]/15 border border-[#FF5370]/30 flex items-center justify-center flex-shrink-0 text-[#FF5370]">
+          <Trash2 className="h-6 w-6 text-[#FF5370]" />
         </div>
         <div>
-          <h3 className="font-bold text-[#203331]">{t("account.delete")}</h3>
-          <p className="text-[#65736F] text-sm mt-1">
+          <h3 className="font-display font-bold text-lg text-[#F5F7FF]">{t("account.delete")}</h3>
+          <p className="text-[#B8C3E0] text-sm mt-1 leading-relaxed">
             {t("account.delete_confirm_body")}
           </p>
         </div>
@@ -85,20 +85,21 @@ export function DeleteAccountSection() {
           size="sm"
           onClick={() => setOpen(true)}
           id="open-delete-account-dialog"
+          className="mt-2"
         >
           <Trash2 className="h-4 w-4" />
           {t("account.delete")}
         </Button>
       ) : (
-        <div className="mt-4 space-y-4 border-t border-[rgba(217,95,73,0.2)] pt-4">
+        <div className="mt-5 space-y-4 border-t border-[rgba(255,83,112,0.2)] pt-5">
           <div className="flex items-center justify-between">
-            <p className="font-semibold text-[#D95F49] text-sm">
+            <p className="font-semibold text-[#FF5370] text-sm">
               {t("account.delete_confirm_title")}
             </p>
             <button
               onClick={handleClose}
               disabled={loading}
-              className="text-[#8E9B97] hover:text-[#203331] transition-colors"
+              className="text-[#B8C3E0] hover:text-[#F5F7FF] transition-colors p-1 rounded-md"
               aria-label="Cancel"
             >
               <X className="h-4 w-4" />
@@ -112,7 +113,7 @@ export function DeleteAccountSection() {
           )}
 
           <div>
-            <label htmlFor="delete-confirm-input" className="evo-label text-[#D95F49]">
+            <label htmlFor="delete-confirm-input" className="evo-label text-[#FF5370]">
               {t("account.delete_type_confirm")}
             </label>
             <input
@@ -124,13 +125,13 @@ export function DeleteAccountSection() {
               autoComplete="off"
               spellCheck={false}
               className={cn(
-                "evo-input font-mono tracking-widest mt-1",
-                isConfirmed && "border-[#D95F49] text-[#D95F49] font-bold",
+                "evo-input font-mono tracking-widest mt-2",
+                isConfirmed && "border-[#FF5370] text-[#FF5370] font-bold shadow-[0_0_12px_rgba(255,83,112,0.3)]",
               )}
             />
           </div>
 
-          <div className="flex gap-3">
+          <div className="flex gap-3 pt-2">
             <Button
               variant="secondary"
               size="sm"

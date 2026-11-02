@@ -88,15 +88,19 @@ export default async function ChessLobbyPage() {
   });
 
   return (
-    <div className="evo-section py-6 sm:py-10">
+    <div className="evo-section py-8 sm:py-12">
       <div className="evo-container max-w-2xl">
         <div className="mb-8 animate-fade-in">
-          <h1 className="font-display font-black text-3xl text-[#203331] mb-1">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#101638] border border-[rgba(57,223,255,0.25)] text-[11px] font-mono font-semibold tracking-wider text-[#39DFFF] uppercase mb-3">
+            Strategy Arena
+          </div>
+          <h1 className="font-display font-black text-3xl sm:text-4xl text-[#F5F7FF] tracking-tight mb-2">
             Speed Chess Arena
           </h1>
-          <p className="text-[#65736F] text-sm font-medium">
+          <p className="text-[#B8C3E0] text-sm sm:text-base leading-relaxed">
             Server-authoritative FIDE rules, timed blitz clocks, and post-game Dares for the vanquished.
           </p>
+          <hr className="evo-divider mt-6" />
         </div>
 
         <ChessLobby

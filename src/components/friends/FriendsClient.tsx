@@ -89,10 +89,10 @@ function FriendCard({
 }) {
   const { t } = useI18n();
   return (
-    <div className="evo-card p-4 flex items-center gap-4 bg-white border border-[#E2E8E2] animate-fade-in shadow-xs">
-      <Avatar src={friend.avatar_url} name={friend.display_name} size="md" />
+    <div className="p-4 sm:p-5 flex items-center gap-4 bg-[#101638] border border-[rgba(255,255,255,0.08)] rounded-2xl animate-fade-in shadow-xl hover:border-[#39DFFF]/30 transition-all">
+      <Avatar src={friend.avatar_url} name={friend.display_name} size="md" className="border border-[rgba(57,223,255,0.25)]" />
       <div className="flex-1 min-w-0">
-        <p className="font-semibold text-[#203331] truncate">{friend.display_name}</p>
+        <p className="font-semibold text-[#F5F7FF] truncate">{friend.display_name}</p>
         <EvoIdBadge id={friend.evoora_id} className="mt-0.5" />
       </div>
       <div className="flex items-center gap-1">
@@ -102,7 +102,7 @@ function FriendCard({
           onClick={() => onRemove(friend.friend_id, friend.request_id)}
           disabled={busy}
           aria-label={t("friends.remove")}
-          className="text-[#8E9B97] hover:text-[#D95F49] flex-shrink-0"
+          className="text-[#8B98B5] hover:text-[#FF5370] hover:bg-[rgba(255,83,112,0.1)] flex-shrink-0"
         >
           {busy ? <Spinner size="sm" /> : <Trash2 className="h-4 w-4" />}
         </Button>
@@ -113,7 +113,7 @@ function FriendCard({
           disabled={busy}
           aria-label={t("blocks.block")}
           title={t("blocks.block")}
-          className="text-[#8E9B97] hover:text-[#D95F49] flex-shrink-0"
+          className="text-[#8B98B5] hover:text-[#FF5370] hover:bg-[rgba(255,83,112,0.1)] flex-shrink-0"
         >
           <Ban className="h-4 w-4" />
         </Button>
@@ -135,10 +135,10 @@ function BlockedCard({
 }) {
   const { t } = useI18n();
   return (
-    <div className="evo-card p-4 flex items-center gap-4 bg-white border border-[#E2E8E2] animate-fade-in shadow-xs">
-      <Avatar src={user.avatar_url} name={user.display_name} size="md" />
+    <div className="p-4 sm:p-5 flex items-center gap-4 bg-[#101638] border border-[rgba(255,255,255,0.08)] rounded-2xl animate-fade-in shadow-xl">
+      <Avatar src={user.avatar_url} name={user.display_name} size="md" className="border border-[rgba(255,255,255,0.1)]" />
       <div className="flex-1 min-w-0">
-        <p className="font-semibold text-[#203331] truncate">{user.display_name}</p>
+        <p className="font-semibold text-[#F5F7FF] truncate">{user.display_name}</p>
         <EvoIdBadge id={user.evoora_id} className="mt-0.5" />
       </div>
       <Button
@@ -146,7 +146,7 @@ function BlockedCard({
         size="sm"
         onClick={() => onUnblock(user.blocked_id, user.display_name)}
         disabled={busy}
-        className="text-[#D95F49] hover:bg-[#FCE6DE] flex-shrink-0"
+        className="text-[#FF5370] hover:bg-[rgba(255,83,112,0.1)] flex-shrink-0 font-medium"
       >
         {busy ? <Spinner size="sm" /> : t("blocks.unblock")}
       </Button>
@@ -170,14 +170,14 @@ function UserPreviewCard({
   busy: boolean;
 }) {
   return (
-    <div className="evo-card p-4 flex items-center gap-4 bg-white border border-[#E2E8E2] rounded-2xl shadow-xs animate-fade-in">
-      <Avatar src={user.avatar_url} name={user.display_name} size="md" />
+    <div className="p-4 sm:p-5 flex items-center gap-4 bg-[#101638] border border-[rgba(255,255,255,0.08)] rounded-2xl shadow-xl hover:border-[#39DFFF]/30 transition-all animate-fade-in">
+      <Avatar src={user.avatar_url} name={user.display_name} size="md" className="border border-[rgba(57,223,255,0.25)]" />
       <div className="flex-1 min-w-0">
-        <p className="font-bold text-[#203331] truncate text-sm">{user.display_name}</p>
+        <p className="font-bold text-[#F5F7FF] truncate text-sm">{user.display_name}</p>
         <div className="flex items-center gap-2 mt-0.5 flex-wrap">
           <EvoIdBadge id={user.evoora_id} />
           {user.bio && (
-            <span className="text-xs text-[#65736F] truncate max-w-[220px]">
+            <span className="text-xs text-[#B8C3E0] truncate max-w-[220px]">
               {user.bio}
             </span>
           )}
@@ -185,7 +185,7 @@ function UserPreviewCard({
       </div>
       <div className="shrink-0">
         {user.friendship_status === "friend" && (
-          <span className="px-3 py-1 rounded-xl bg-[#DDF2EB] text-[#167D78] text-xs font-bold border border-[rgba(22,125,120,0.2)]">
+          <span className="px-3 py-1 rounded-xl bg-[#39DFFF]/15 text-[#39DFFF] text-xs font-bold border border-[#39DFFF]/30">
             Friends ✓
           </span>
         )}
@@ -195,7 +195,7 @@ function UserPreviewCard({
             size="sm"
             onClick={() => user.request_id && onCancel(user.request_id)}
             disabled={busy || !user.request_id}
-            className="text-xs text-[#65736F] hover:text-[#D95F49]"
+            className="text-xs text-[#B8C3E0] hover:text-[#FF5370]"
           >
             Requested (Cancel)
           </Button>
@@ -248,14 +248,15 @@ function RequestCard({
   const profile = req.sender_profile;
 
   return (
-    <div className="evo-card p-4 flex items-center gap-4 bg-white border border-[#E2E8E2] animate-fade-in shadow-xs">
+    <div className="p-4 sm:p-5 flex items-center gap-4 bg-[#101638] border border-[rgba(255,255,255,0.08)] rounded-2xl animate-fade-in shadow-xl hover:border-[#39DFFF]/30 transition-all">
       <Avatar
         src={profile?.avatar_url ?? null}
         name={profile?.display_name ?? "?"}
         size="md"
+        className="border border-[rgba(57,223,255,0.25)]"
       />
       <div className="flex-1 min-w-0">
-        <p className="font-semibold text-[#203331] truncate">
+        <p className="font-semibold text-[#F5F7FF] truncate">
           {profile?.display_name ?? "Unknown"}
         </p>
         {profile?.evoora_id && <EvoIdBadge id={profile.evoora_id} className="mt-0.5" />}
@@ -269,6 +270,7 @@ function RequestCard({
             onClick={() => onRespond(req.id, "accept")}
             disabled={busy}
             aria-label={t("friends.accept")}
+            className="font-bold"
           >
             {busy ? <Spinner size="sm" /> : <Check className="h-4 w-4" />}
           </Button>
@@ -278,7 +280,7 @@ function RequestCard({
             onClick={() => onRespond(req.id, "reject")}
             disabled={busy}
             aria-label={t("friends.reject")}
-            className="text-[#D95F49]"
+            className="text-[#FF5370] hover:bg-[rgba(255,83,112,0.1)]"
           >
             <X className="h-4 w-4" />
           </Button>
@@ -290,7 +292,7 @@ function RequestCard({
           onClick={() => onCancel(req.id)}
           disabled={busy}
           aria-label={t("friends.cancel")}
-          className="text-[#8E9B97] hover:text-[#D95F49] flex-shrink-0"
+          className="text-[#8B98B5] hover:text-[#FF5370] flex-shrink-0"
         >
           {busy ? <Spinner size="sm" /> : <X className="h-4 w-4" />}
         </Button>
@@ -721,15 +723,15 @@ export function FriendsClient({ userId }: FriendsClientProps) {
   return (
     <div className="space-y-8">
       {/* ── 1. Primary: Invite Friends via Personal Link ── */}
-      <div className="evo-card p-6 space-y-4 border border-[#E2E8E2] bg-white shadow-card">
+      <div className="p-6 sm:p-7 space-y-5 rounded-3xl border border-[rgba(255,255,255,0.08)] bg-[#101638] shadow-xl">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#DDF2EB] border border-[rgba(22,125,120,0.25)] flex items-center justify-center text-[#167D78]">
+          <div className="flex items-center gap-3.5">
+            <div className="w-11 h-11 rounded-2xl bg-[#070B25] border border-[rgba(57,223,255,0.25)] flex items-center justify-center text-[#39DFFF] shadow-[0_0_12px_rgba(57,223,255,0.2)]">
               <Share2 className="h-5 w-5" />
             </div>
             <div>
-              <p className="font-semibold text-[#203331] text-base">{t("friends.invite_title")}</p>
-              <p className="text-[#65736F] text-xs sm:text-sm">
+              <p className="font-bold text-[#F5F7FF] text-base sm:text-lg">{t("friends.invite_title")}</p>
+              <p className="text-[#B8C3E0] text-xs sm:text-sm mt-0.5">
                 {t("friends.invite_subtitle")}
               </p>
             </div>
@@ -740,10 +742,10 @@ export function FriendsClient({ userId }: FriendsClientProps) {
             onClick={handleRotateInvite}
             disabled={rotating || inviteLoading}
             title={t("friends.new_link")}
-            className="text-[#8E9B97] hover:text-[#203331] transition-colors p-1.5 rounded-lg hover:bg-[#EEF1ED] text-xs flex items-center gap-1"
+            className="text-[#8B98B5] hover:text-[#39DFFF] transition-colors p-2 rounded-xl hover:bg-[#070B25] text-xs flex items-center gap-1.5"
           >
             <RefreshCw className={cn("h-3.5 w-3.5", rotating && "animate-spin")} />
-            <span className="hidden md:inline">{t("friends.new_link")}</span>
+            <span className="hidden md:inline font-medium">{t("friends.new_link")}</span>
           </button>
         </div>
 
@@ -754,18 +756,18 @@ export function FriendsClient({ userId }: FriendsClientProps) {
         )}
 
         {/* Link display & quick actions */}
-        <div className="flex flex-col sm:flex-row gap-2.5">
+        <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
             <input
               type="text"
               readOnly
               value={inviteLoading ? t("friends.invite_loading") : inviteUrl || ""}
-              className="evo-input pr-10 text-xs sm:text-sm font-mono truncate select-all bg-[#F7F8F4] text-[#167D78] font-medium"
+              className="evo-input pr-10 text-xs sm:text-sm font-mono truncate select-all bg-[#070B25] text-[#39DFFF] border-[rgba(255,255,255,0.08)] font-medium"
               aria-label="Your personal invite link"
               onClick={(e) => (e.target as HTMLInputElement).select()}
             />
             {copied && (
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-[#167D78] animate-fade-in flex items-center gap-1">
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-[#39DFFF] animate-fade-in flex items-center gap-1">
                 <Check className="h-3.5 w-3.5" />
                 {t("friends.link_copied")}
               </span>
@@ -780,7 +782,7 @@ export function FriendsClient({ userId }: FriendsClientProps) {
               size="md"
               onClick={handleCopyLink}
               disabled={inviteLoading || !inviteUrl}
-              className="flex-1 sm:flex-none justify-center"
+              className="flex-1 sm:flex-none justify-center font-bold"
             >
               {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
               <span>{copied ? t("friends.link_copied") : t("friends.copy_link")}</span>
@@ -793,12 +795,12 @@ export function FriendsClient({ userId }: FriendsClientProps) {
               size="md"
               onClick={handleNativeShare}
               disabled={inviteLoading || !inviteUrl}
-              className="px-3"
+              className="px-3.5"
               title={t("friends.share")}
               aria-label={t("friends.share")}
             >
               <Share2 className="h-4 w-4" />
-              <span className="hidden sm:inline">{t("friends.share")}</span>
+              <span className="hidden sm:inline font-semibold">{t("friends.share")}</span>
             </Button>
 
             {/* WhatsApp Share */}
@@ -807,7 +809,7 @@ export function FriendsClient({ userId }: FriendsClientProps) {
               target="_blank"
               rel="noopener noreferrer"
               className={cn(
-                "evo-btn evo-btn-ghost px-3 text-[#1B8340] bg-[#E8F8EE] hover:bg-[#d6f4df] border border-[rgba(37,211,102,0.3)] flex items-center gap-1.5 font-semibold",
+                "evo-btn px-3.5 text-[#25D366] bg-[#102A1E] hover:bg-[#133827] border border-[rgba(37,211,102,0.3)] flex items-center gap-1.5 font-semibold transition-colors",
                 (!inviteUrl || inviteLoading) && "pointer-events-none opacity-50",
               )}
               title={t("friends.share_whatsapp")}
@@ -821,11 +823,11 @@ export function FriendsClient({ userId }: FriendsClientProps) {
       </div>
 
       {/* ── 2. Player Search Bar ── */}
-      <div className="evo-card p-5 space-y-3 bg-white border border-[#E2E8E2] rounded-3xl shadow-card">
+      <div className="p-6 sm:p-7 space-y-4 rounded-3xl border border-[rgba(255,255,255,0.08)] bg-[#101638] shadow-xl">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Search className="h-4 w-4 text-[#167D78]" />
-            <p className="font-bold text-[#203331] text-sm">Find & Add Players</p>
+          <div className="flex items-center gap-2.5">
+            <Search className="h-4 w-4 text-[#39DFFF]" />
+            <p className="font-bold text-[#F5F7FF] text-sm sm:text-base">Find & Add Players</p>
           </div>
           <span className="text-xs text-[#8E9B97]">{t("friends.or_evoora_id")}</span>
         </div>
@@ -839,7 +841,7 @@ export function FriendsClient({ userId }: FriendsClientProps) {
           </Alert>
         )}
 
-        <div className="flex gap-2">
+        <div className="flex gap-2.5">
           <div className="flex-1">
             <Input
               id="friend-search-input"
@@ -882,6 +884,7 @@ export function FriendsClient({ userId }: FriendsClientProps) {
             loading={searchLoading}
             disabled={!searchId.trim()}
             id="send-friend-request-btn"
+            className="font-semibold"
           >
             <Search className="h-4 w-4 mr-1 sm:inline hidden" />
             <span>Search</span>
@@ -895,7 +898,7 @@ export function FriendsClient({ userId }: FriendsClientProps) {
         <div
           role="tablist"
           aria-label={t("friends.sections")}
-          className="flex gap-1 p-1 bg-[#EEF1ED] rounded-xl border border-[#E2E8E2] mb-4"
+          className="flex gap-1.5 p-1.5 bg-[#070B25] rounded-2xl border border-[rgba(255,255,255,0.08)] mb-6 overflow-x-auto"
         >
           {tabs.map((tab) => (
             <button
@@ -906,10 +909,10 @@ export function FriendsClient({ userId }: FriendsClientProps) {
               aria-controls={`tabpanel-${tab.id}`}
               onClick={() => setActiveTab(tab.id)}
               className={cn(
-                "flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium transition-all",
+                "flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap",
                 activeTab === tab.id
-                  ? "bg-white text-[#167D78] shadow-sm font-semibold border border-[#E2E8E2]"
-                  : "text-[#65736F] hover:text-[#203331] hover:bg-white/60",
+                  ? "bg-[#101638] text-[#39DFFF] shadow-[0_0_12px_rgba(57,223,255,0.15)] border border-[#39DFFF]/40"
+                  : "text-[#B8C3E0] hover:text-[#F5F7FF] hover:bg-white/5",
               )}
             >
               {tab.icon}
@@ -1121,12 +1124,12 @@ function EmptyState({
   description: string;
 }) {
   return (
-    <div className="flex flex-col items-center justify-center py-16 text-center animate-fade-in">
-      <div className="w-16 h-16 rounded-2xl bg-[#DDF2EB] border border-[rgba(22,125,120,0.2)] flex items-center justify-center text-[#167D78] mb-4">
+    <div className="flex flex-col items-center justify-center py-16 px-4 text-center animate-fade-in bg-[#101638] border border-[rgba(255,255,255,0.08)] rounded-3xl shadow-xl">
+      <div className="w-16 h-16 rounded-2xl bg-[#070B25] border border-[rgba(57,223,255,0.25)] flex items-center justify-center text-[#39DFFF] shadow-[0_0_12px_rgba(57,223,255,0.2)] mb-4">
         {icon}
       </div>
-      <p className="font-semibold text-[#203331] mb-1">{title}</p>
-      <p className="text-[#65736F] text-sm max-w-xs">{description}</p>
+      <p className="font-bold text-[#F5F7FF] text-base sm:text-lg mb-1">{title}</p>
+      <p className="text-[#B8C3E0] text-sm max-w-sm">{description}</p>
     </div>
   );
 }

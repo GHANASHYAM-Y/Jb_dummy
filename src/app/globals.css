@@ -1,90 +1,95 @@
 @import "tailwindcss";
 
 /* ============================================================
-   EVOORA DESIGN SYSTEM — COASTAL MODERN
-   Light-First, Social, Sophisticated & Calm Gaming Identity
+   EVOAIQU FUTURISTIC GAMING DESIGN SYSTEM
+   Deep Space Navy (#070B25), Neon Cyan (#39DFFF), Purple (#8B2CFF)
    ============================================================ */
 
 :root {
   /* ── Brand Palette ─────────────────────────────────────────── */
-  --bg-page:             #F7F8F4; /* Soft ivory canvas */
-  --surface-white:       #FFFFFF; /* Pure white card and nav surfaces */
-  --surface-pale-teal:   #DDF2EB; /* Mint/pale teal surface for chips, tags */
-  --surface-pale-peach:  #FCE6DE; /* Pale peach for dares & playful accents */
-  --surface-disabled:    #EEF1ED; /* Muted pill backgrounds & disabled states */
+  --bg-page:             #070B25; /* Deep space navy canvas */
+  --surface-card:        #101638; /* Primary card surface */
+  --surface-card-hover:  #182352; /* Card hover surface */
+  --surface-white:       #101638; /* Semantic card surface fallback */
+  --surface-pale-teal:   rgba(57, 223, 255, 0.12); /* Cyan chip / badge surface */
+  --surface-pale-peach:  rgba(255, 83, 112, 0.14); /* Neon coral badge surface */
+  --surface-disabled:    rgba(255, 255, 255, 0.05); /* Muted / disabled background */
 
-  /* Primary Brand: Oceanic Teal */
-  --brand-teal:          #167D78; /* Primary action & brand signifier */
-  --brand-teal-hover:    #12635F; /* Primary button hover */
-  --brand-teal-tint:     rgba(22, 125, 120, 0.08);
-  --brand-teal-glow:     rgba(22, 125, 120, 0.18);
+  /* Primary Brand: Cyan & Blue Neon */
+  --brand-cyan:          #39DFFF;
+  --brand-purple:        #8B2CFF;
+  --brand-blue:          #315BFF;
+  --brand-teal:          #39DFFF; /* Canonical accent */
+  --brand-teal-hover:    #5B7BFF;
+  --brand-teal-tint:     rgba(57, 223, 255, 0.12);
+  --brand-teal-glow:     rgba(57, 223, 255, 0.35);
 
-  /* Playful Accent: Warm Coral (Selective for challenges & dares) */
-  --brand-coral:         #D95F49; /* Coral accent */
-  --brand-coral-hover:   #C34E39;
-  --brand-coral-tint:    rgba(217, 95, 73, 0.08);
-  --brand-coral-glow:    rgba(217, 95, 73, 0.18);
+  /* Playful Accent: Spicy Coral (Selective for challenges & dares) */
+  --brand-coral:         #FF5370;
+  --brand-coral-hover:   #E03E5A;
+  --brand-coral-tint:    rgba(255, 83, 112, 0.12);
+  --brand-coral-glow:    rgba(255, 83, 112, 0.3);
 
   /* Text Hierarchy */
-  --text-primary:        #203331; /* Deep evergreen text (WCAG AAA) */
-  --text-secondary:      #65736F; /* Warm slate gray for descriptions */
-  --text-faint:          #8E9B97; /* Subdued meta, timestamps */
+  --text-primary:        #F5F7FF; /* Crisp off-white */
+  --text-secondary:      #B8C3E0; /* Futuristic slate-blue */
+  --text-faint:          #8A98C0; /* Subdued meta, timestamps */
 
   /* Borders */
-  --border-subtle:       #E2E8E2; /* Clean, light architectural border */
-  --border-hover:        #CBD4CB; /* Hover / focused border */
+  --border-subtle:       rgba(49, 91, 255, 0.22); /* Neon wireframe subtle */
+  --border-hover:        rgba(57, 223, 255, 0.45); /* Hover cyan glow */
 
   /* Semantic Alerts */
-  --color-danger:        #D95F49; /* Error / loss / cancel */
-  --color-danger-bg:     #FCE6DE;
-  --color-success:       #167D78; /* Win / success */
-  --color-success-bg:    #DDF2EB;
-  --color-warning:       #D97706;
-  --color-warning-bg:    #FEF3C7;
+  --color-danger:        #FF5370;
+  --color-danger-bg:     rgba(255, 83, 112, 0.14);
+  --color-success:       #39DFFF;
+  --color-success-bg:    rgba(57, 223, 255, 0.14);
+  --color-warning:       #FBBF24;
+  --color-warning-bg:    rgba(251, 191, 36, 0.14);
 
   /* ── Compatibility Aliases ─────────────────────────────────── */
-  --evo-navy:            var(--bg-page);
-  --evo-navy-light:      var(--surface-white);
-  --evo-navy-mid:        var(--surface-white);
-  --evo-navy-card:       var(--surface-white);
-  --evo-navy-elevated:   var(--surface-pale-teal);
-  --evo-border:          var(--border-subtle);
-  --evo-border-hover:    var(--border-hover);
-  --evo-violet:          var(--brand-teal);
-  --evo-violet-light:    var(--brand-teal-hover);
-  --evo-violet-pale:     var(--brand-teal);
-  --evo-violet-glow:     var(--brand-teal-glow);
-  --evo-yellow:          var(--brand-coral);
-  --evo-yellow-light:    #FCE6DE;
-  --evo-yellow-glow:     var(--brand-coral-glow);
-  --evo-coral:           var(--brand-coral);
-  --evo-coral-glow:      var(--brand-coral-glow);
-  --evo-green:           var(--brand-teal);
-  --evo-green-glow:      var(--brand-teal-glow);
-  --evo-text:            var(--text-primary);
-  --evo-text-muted:      var(--text-secondary);
-  --evo-text-faint:      var(--text-faint);
+  --evo-navy:            #070B25;
+  --evo-navy-light:      #101638;
+  --evo-navy-mid:        #141B42;
+  --evo-navy-card:       #101638;
+  --evo-navy-elevated:   #182352;
+  --evo-border:          rgba(49, 91, 255, 0.22);
+  --evo-border-hover:    rgba(57, 223, 255, 0.45);
+  --evo-violet:          #8B2CFF;
+  --evo-violet-light:    #A452FF;
+  --evo-violet-pale:     rgba(139, 44, 255, 0.15);
+  --evo-violet-glow:     rgba(139, 44, 255, 0.35);
+  --evo-yellow:          #39DFFF;
+  --evo-yellow-light:    rgba(57, 223, 255, 0.15);
+  --evo-yellow-glow:     rgba(57, 223, 255, 0.35);
+  --evo-coral:           #FF5370;
+  --evo-coral-glow:      rgba(255, 83, 112, 0.3);
+  --evo-green:           #39DFFF;
+  --evo-green-glow:      rgba(57, 223, 255, 0.35);
+  --evo-text:            #F5F7FF;
+  --evo-text-muted:      #B8C3E0;
+  --evo-text-faint:      #8A98C0;
 
-  /* Next.js & shadcn/ui semantic theme mappings (Coastal Modern) */
-  --background:             var(--bg-page);
-  --foreground:             var(--text-primary);
-  --card:                   var(--surface-white);
-  --card-foreground:        var(--text-primary);
-  --popover:                var(--surface-white);
-  --popover-foreground:     var(--text-primary);
-  --primary:                var(--brand-teal);
-  --primary-foreground:     #FFFFFF;
-  --secondary:              var(--surface-disabled);
-  --secondary-foreground:   var(--text-primary);
-  --muted:                  var(--surface-disabled);
-  --muted-foreground:       var(--text-secondary);
-  --accent:                 var(--surface-pale-teal);
-  --accent-foreground:      var(--brand-teal);
-  --destructive:            var(--brand-coral);
+  /* Next.js & shadcn/ui semantic theme mappings (Cyber Navy) */
+  --background:             #070B25;
+  --foreground:             #F5F7FF;
+  --card:                   #101638;
+  --card-foreground:        #F5F7FF;
+  --popover:                #101638;
+  --popover-foreground:     #F5F7FF;
+  --primary:                #39DFFF;
+  --primary-foreground:     #070B25;
+  --secondary:              #182352;
+  --secondary-foreground:   #F5F7FF;
+  --muted:                  rgba(255, 255, 255, 0.06);
+  --muted-foreground:       #B8C3E0;
+  --accent:                 rgba(57, 223, 255, 0.14);
+  --accent-foreground:      #39DFFF;
+  --destructive:            #FF5370;
   --destructive-foreground: #FFFFFF;
-  --border:                 var(--border-subtle);
-  --input:                  var(--border-subtle);
-  --ring:                   var(--brand-teal);
+  --border:                 rgba(49, 91, 255, 0.22);
+  --input:                  rgba(49, 91, 255, 0.25);
+  --ring:                   #39DFFF;
 
   /* Radii scale */
   --radius:     0.75rem;
@@ -94,12 +99,12 @@
   --radius-xl:  20px;
   --radius-2xl: 26px;
 
-  /* Shadows — subtle, calm, tactile */
-  --shadow-subtle:   0 1px 3px rgba(32, 51, 49, 0.04), 0 1px 2px rgba(32, 51, 49, 0.02);
-  --shadow-card:     0 4px 16px -2px rgba(32, 51, 49, 0.06), 0 2px 6px -1px rgba(32, 51, 49, 0.03);
-  --shadow-elevated: 0 12px 32px -4px rgba(32, 51, 49, 0.09), 0 4px 12px -2px rgba(32, 51, 49, 0.04);
-  --shadow-teal:     0 2px 14px var(--brand-teal-glow);
-  --shadow-coral:    0 2px 14px var(--brand-coral-glow);
+  /* Shadows — sleek, ambient, futuristic glows */
+  --shadow-subtle:   0 2px 10px rgba(7, 11, 37, 0.6);
+  --shadow-card:     0 8px 32px rgba(7, 11, 37, 0.55), 0 0 16px rgba(49, 91, 255, 0.1);
+  --shadow-elevated: 0 16px 48px rgba(7, 11, 37, 0.75), 0 0 24px rgba(57, 223, 255, 0.2);
+  --shadow-teal:     0 0 24px rgba(57, 223, 255, 0.4);
+  --shadow-coral:    0 0 24px rgba(255, 83, 112, 0.4);
 }
 
 @theme inline {
@@ -151,8 +156,8 @@
     min-height: 100dvh;
     max-width: 100%;
     overflow-x: hidden;
-    background: var(--bg-page);
-    color: var(--text-primary);
+    background: #070B25;
+    color: #F5F7FF;
     font-family: var(--font-inter), "Inter", "Noto Sans Tamil", -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 1rem;
     line-height: 1.6;
@@ -164,24 +169,24 @@
   /* Typography Hierarchy */
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-manrope), "Manrope", sans-serif;
-    color: var(--text-primary);
-    letter-spacing: 0;
+    color: #F5F7FF;
+    letter-spacing: -0.01em;
     text-wrap: balance;
   }
 
   h1 {
     line-height: 1.15;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
   }
 
   h2 {
     line-height: 1.25;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
   }
 
   h3 {
     line-height: 1.35;
-    letter-spacing: 0;
+    letter-spacing: -0.01em;
   }
 
   h4, h5, h6 {
@@ -190,8 +195,9 @@
   }
 
   p {
-    line-height: 1.6;
+    line-height: 1.65;
     letter-spacing: 0;
+    color: #B8C3E0;
   }
 
   button, input, select, textarea {
@@ -206,30 +212,30 @@
 }
 
 /* ============================================================
-   COASTAL MODERN COMPONENT SYSTEM
+   FUTURISTIC COMPONENT SYSTEM
    ============================================================ */
 
 /* ----- Cards ----- */
 .evo-card {
-  background: var(--surface-white);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
+  background: #101638;
+  border: 1px solid rgba(49, 91, 255, 0.25);
+  border-radius: var(--radius-xl, 1.25rem);
   padding: 1.5rem;
   box-shadow: var(--shadow-card);
   transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .evo-card:hover {
-  border-color: var(--border-hover);
-  box-shadow: var(--shadow-elevated);
+  border-color: rgba(57, 223, 255, 0.45);
+  box-shadow: 0 12px 40px rgba(7, 11, 37, 0.7), 0 0 20px rgba(49, 91, 255, 0.2);
 }
 
 .evo-card-glass {
-  background: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
+  background: rgba(16, 22, 56, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(49, 91, 255, 0.28);
+  border-radius: var(--radius-xl, 1.25rem);
   box-shadow: var(--shadow-card);
 }
 
@@ -242,86 +248,86 @@
   padding: 0.625rem 1.25rem;
   min-height: 44px;
   border-radius: var(--radius-md);
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.9375rem;
   line-height: 1.4;
-  letter-spacing: 0;
+  letter-spacing: 0.01em;
   cursor: pointer;
   border: none;
   outline: none;
   text-decoration: none;
-  transition: all 0.18s ease;
+  transition: all 0.2s ease;
   white-space: nowrap;
   -webkit-user-select: none;
   user-select: none;
 }
 
 .evo-btn:disabled {
-  opacity: 0.45;
+  opacity: 0.4;
   cursor: not-allowed;
   transform: none !important;
 }
 
-/* Primary Teal CTA */
+/* Primary Cyan/Blue Gradient CTA */
 .evo-btn-primary {
-  background: var(--brand-teal);
+  background: linear-gradient(135deg, #315BFF 0%, #8B2CFF 100%);
   color: #FFFFFF;
-  font-weight: 700;
-  box-shadow: var(--shadow-teal);
+  box-shadow: 0 0 24px rgba(49, 91, 255, 0.45);
 }
 .evo-btn-primary:hover:not(:disabled) {
-  background: var(--brand-teal-hover);
+  background: linear-gradient(135deg, #39DFFF 0%, #8B2CFF 100%);
   transform: translateY(-1px);
-  box-shadow: 0 4px 18px rgba(22, 125, 120, 0.28);
+  box-shadow: 0 0 32px rgba(57, 223, 255, 0.6);
 }
 .evo-btn-primary:active:not(:disabled) {
   transform: translateY(0);
 }
 
-/* Secondary Neutral Button */
+/* Secondary Cyber Navy Button */
 .evo-btn-secondary {
-  background: var(--surface-white);
-  color: var(--text-primary);
-  border: 1px solid var(--border-subtle);
+  background: #101638;
+  color: #F5F7FF;
+  border: 1px solid rgba(49, 91, 255, 0.4);
   box-shadow: var(--shadow-subtle);
 }
 .evo-btn-secondary:hover:not(:disabled) {
-  background: var(--bg-page);
-  border-color: var(--border-hover);
+  background: #182352;
+  border-color: #39DFFF;
+  color: #FFFFFF;
   transform: translateY(-1px);
 }
 
-/* Playful Coral Button (For dares & winner challenges) */
+/* Coral Button (For dares & winner challenges) */
 .evo-btn-coral,
 .evo-btn-yellow {
-  background: var(--brand-coral);
+  background: #FF5370;
   color: #FFFFFF;
   font-weight: 700;
   box-shadow: var(--shadow-coral);
 }
 .evo-btn-coral:hover:not(:disabled),
 .evo-btn-yellow:hover:not(:disabled) {
-  background: var(--brand-coral-hover);
+  background: #E03E5A;
   transform: translateY(-1px);
-  box-shadow: 0 4px 18px rgba(217, 95, 73, 0.28);
+  box-shadow: 0 0 28px rgba(255, 83, 112, 0.55);
 }
 
 .evo-btn-ghost {
   background: transparent;
-  color: var(--text-secondary);
+  color: #B8C3E0;
 }
 .evo-btn-ghost:hover:not(:disabled) {
-  background: var(--surface-disabled);
-  color: var(--text-primary);
+  background: #101638;
+  color: #F5F7FF;
 }
 
 .evo-btn-danger {
-  background: var(--surface-pale-peach);
-  color: var(--brand-coral);
-  border: 1px solid rgba(217, 95, 73, 0.25);
+  background: rgba(255, 83, 112, 0.12);
+  color: #FF5370;
+  border: 1px solid rgba(255, 83, 112, 0.35);
 }
 .evo-btn-danger:hover:not(:disabled) {
-  background: rgba(217, 95, 73, 0.18);
+  background: rgba(255, 83, 112, 0.22);
 }
 
 .evo-btn-sm {
@@ -329,7 +335,6 @@
   padding: 0.4375rem 0.9375rem;
   font-size: 0.875rem;
   line-height: 1.4;
-  letter-spacing: 0;
   border-radius: var(--radius-sm);
 }
 .evo-btn-lg {
@@ -337,7 +342,6 @@
   padding: 0.75rem 1.75rem;
   font-size: 1rem;
   line-height: 1.4;
-  letter-spacing: 0;
   border-radius: var(--radius-md);
 }
 .evo-btn-xl {
@@ -345,23 +349,22 @@
   padding: 0.875rem 2rem;
   font-size: 1.0625rem;
   line-height: 1.4;
-  letter-spacing: 0;
   border-radius: var(--radius-lg);
 }
 
 /* ----- Inputs ----- */
 .evo-input {
   width: 100%;
-  background: var(--surface-white);
-  border: 1px solid var(--border-subtle);
+  background: #070B25;
+  border: 1px solid rgba(49, 91, 255, 0.3);
   border-radius: var(--radius-md);
   padding: 0.625rem 0.875rem;
-  min-height: 42px;
-  color: var(--text-primary);
+  min-height: 44px;
+  color: #F5F7FF;
   font-size: 0.9375rem;
   font-family: inherit;
   outline: none;
-  box-shadow: var(--shadow-subtle);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
   transition: border-color 0.18s ease, box-shadow 0.18s ease;
 }
 .evo-input.pl-10,
@@ -373,22 +376,22 @@
   padding-right: 2.5rem !important;
 }
 .evo-input::placeholder {
-  color: var(--text-faint);
+  color: #8A98C0;
 }
 .evo-input:focus {
-  border-color: var(--brand-teal);
-  box-shadow: 0 0 0 3px rgba(22, 125, 120, 0.14);
+  border-color: #39DFFF;
+  box-shadow: 0 0 0 3px rgba(57, 223, 255, 0.2);
 }
 .evo-input.error {
-  border-color: var(--brand-coral);
-  box-shadow: 0 0 0 3px rgba(217, 95, 73, 0.14);
+  border-color: #FF5370;
+  box-shadow: 0 0 0 3px rgba(255, 83, 112, 0.2);
 }
 
 .evo-label {
   display: block;
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #D6DEFF;
   margin-bottom: 0.375rem;
 }
 
@@ -401,40 +404,40 @@
   border-radius: 999px;
   font-size: 0.8125rem;
   font-weight: 600;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.02em;
   line-height: 1.35;
 }
 
-/* Teal Mint Badge */
+/* Cyan / Teal Badge */
 .evo-badge-teal,
 .evo-badge-green,
 .evo-badge-lime,
 .evo-badge-violet {
-  background: var(--surface-pale-teal);
-  color: var(--brand-teal);
-  border: 1px solid rgba(22, 125, 120, 0.22);
+  background: rgba(57, 223, 255, 0.12);
+  color: #39DFFF;
+  border: 1px solid rgba(57, 223, 255, 0.3);
 }
 
 /* Coral Peach Badge */
 .evo-badge-coral,
 .evo-badge-yellow {
-  background: var(--surface-pale-peach);
-  color: var(--brand-coral);
-  border: 1px solid rgba(217, 95, 73, 0.24);
+  background: rgba(255, 83, 112, 0.14);
+  color: #FF5370;
+  border: 1px solid rgba(255, 83, 112, 0.35);
 }
 
 /* Muted Slate Badge */
 .evo-badge-muted {
-  background: var(--surface-disabled);
-  color: var(--text-secondary);
-  border: 1px solid var(--border-subtle);
+  background: rgba(255, 255, 255, 0.06);
+  color: #B8C3E0;
+  border: 1px solid rgba(49, 91, 255, 0.2);
 }
 
 /* ----- Dividers ----- */
 .evo-divider {
   border: none;
-  border-top: 1px solid var(--border-subtle);
-  margin: 1rem 0;
+  border-top: 1px solid rgba(49, 91, 255, 0.2);
+  margin: 1.5rem 0;
 }
 
 /* ----- Section helpers ----- */
@@ -450,14 +453,16 @@
 /* ----- Typography ----- */
 .evo-display {
   font-family: var(--font-manrope), "Manrope", sans-serif;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: -0.02em;
   line-height: 1.15;
-  color: var(--text-primary);
+  color: #F5F7FF;
 }
 
 .evo-gradient-text {
-  color: var(--brand-teal);
+  background: linear-gradient(135deg, #39DFFF 0%, #8B2CFF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 /* ----- Navigation ----- */
@@ -465,11 +470,11 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(255, 255, 255, 0.94);
+  background: rgba(7, 11, 37, 0.85);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border-subtle);
-  box-shadow: 0 1px 4px rgba(32, 51, 49, 0.03);
+  border-bottom: 1px solid rgba(49, 91, 255, 0.25);
+  box-shadow: 0 4px 24px rgba(7, 11, 37, 0.7);
 }
 
 /* ----- Alert / Toast ----- */
@@ -483,25 +488,25 @@
   border-left: 3px solid;
 }
 .evo-alert-error {
-  background: var(--surface-pale-peach);
-  border-color: var(--brand-coral);
-  color: var(--brand-coral);
+  background: rgba(255, 83, 112, 0.12);
+  border-color: #FF5370;
+  color: #FF8096;
 }
 .evo-alert-success {
-  background: var(--surface-pale-teal);
-  border-color: var(--brand-teal);
-  color: var(--brand-teal);
+  background: rgba(57, 223, 255, 0.12);
+  border-color: #39DFFF;
+  color: #39DFFF;
 }
 .evo-alert-info {
-  background: var(--surface-white);
-  border-color: var(--brand-teal);
-  color: var(--text-primary);
+  background: #101638;
+  border-color: #39DFFF;
+  color: #F5F7FF;
   box-shadow: var(--shadow-subtle);
 }
 .evo-alert-warning {
-  background: #FEF3C7;
-  border-color: #D97706;
-  color: #92400E;
+  background: rgba(251, 191, 36, 0.12);
+  border-color: #FBBF24;
+  color: #FDE68A;
 }
 
 /* ============================================================

@@ -180,21 +180,21 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
     switch (status) {
       case "submitted":
         return (
-          <Badge variant="teal" className="flex items-center gap-1 bg-[#DDF2EB] text-[#167D78] animate-pulse">
+          <Badge variant="teal" className="flex items-center gap-1 bg-[#39DFFF]/15 text-[#39DFFF] border border-[#39DFFF]/30 animate-pulse">
             <Video className="h-3 w-3" />
             Story Submitted
           </Badge>
         );
       case "retry_requested":
         return (
-          <Badge variant="coral" className="flex items-center gap-1">
+          <Badge variant="coral" className="flex items-center gap-1 bg-[rgba(255,83,112,0.15)] text-[#FF5370] border border-[#FF5370]/30">
             <RotateCcw className="h-3 w-3" />
             Retry Requested
           </Badge>
         );
       case "accepted":
         return (
-          <Badge variant="teal" className="flex items-center gap-1">
+          <Badge variant="teal" className="flex items-center gap-1 bg-[#39DFFF]/15 text-[#39DFFF] border border-[#39DFFF]/30">
             <CheckCircle2 className="h-3 w-3" />
             {t("challenges.accepted")}
           </Badge>
@@ -202,21 +202,21 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
       case "declined":
       case "skipped":
         return (
-          <Badge variant="coral" className="flex items-center gap-1">
+          <Badge variant="coral" className="flex items-center gap-1 bg-[rgba(255,83,112,0.15)] text-[#FF5370] border border-[#FF5370]/30">
             <XCircle className="h-3 w-3" />
             {t("challenges.declined")}
           </Badge>
         );
       case "completed":
         return (
-          <Badge variant="teal" className="flex items-center gap-1">
+          <Badge variant="teal" className="flex items-center gap-1 bg-[#39DFFF]/15 text-[#39DFFF] border border-[#39DFFF]/30">
             <CheckCircle2 className="h-3 w-3" />
             {t("challenges.completed")}
           </Badge>
         );
       case "cancelled":
         return (
-          <Badge variant="muted" className="flex items-center gap-1">
+          <Badge variant="muted" className="flex items-center gap-1 bg-[#070B25] text-[#8B98B5] border border-[rgba(255,255,255,0.08)]">
             <XCircle className="h-3 w-3" />
             {t("challenges.cancelled")}
           </Badge>
@@ -225,14 +225,14 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
       default:
         if (role === "recipient") {
           return (
-            <Badge variant="coral" className="flex items-center gap-1 bg-[#FCE6DE] text-[#D95F49] border border-[#D95F49]/20">
+            <Badge variant="coral" className="flex items-center gap-1 bg-[rgba(255,83,112,0.15)] text-[#FF5370] border border-[#FF5370]/30 animate-pulse">
               <Clock className="h-3 w-3" />
               {t("challenges.invitation_received")}
             </Badge>
           );
         }
         return (
-          <Badge variant="muted" className="flex items-center gap-1 text-[#65736F] bg-[#EEF1ED]">
+          <Badge variant="muted" className="flex items-center gap-1 text-[#8B98B5] bg-[#070B25] border border-[rgba(255,255,255,0.08)]">
             <Clock className="h-3 w-3" />
             {t("challenges.awaiting_response")}
           </Badge>
@@ -264,23 +264,23 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
   return (
     <div className="space-y-6">
       {/* ── Top Tabs & Refresh ── */}
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#E2E8E2] pb-4">
-        <div className="flex items-center gap-1 bg-[#EEF1ED] p-1 rounded-xl border border-[#E2E8E2]" role="tablist">
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[rgba(255,255,255,0.08)] pb-4">
+        <div className="flex items-center gap-1.5 bg-[#070B25] p-1.5 rounded-2xl border border-[rgba(255,255,255,0.08)]" role="tablist">
           <button
             type="button"
             role="tab"
             aria-selected={activeTab === "received"}
             onClick={() => setActiveTab("received")}
             className={cn(
-              "px-3.5 py-1.5 rounded-lg text-sm font-semibold transition-all duration-150 flex items-center gap-2",
+              "px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-150 flex items-center gap-2",
               activeTab === "received"
-                ? "bg-white text-[#167D78] shadow-xs border border-[#E2E8E2]"
-                : "text-[#65736F] hover:text-[#203331] hover:bg-white/50"
+                ? "bg-[#101638] text-[#39DFFF] shadow-[0_0_12px_rgba(57,223,255,0.15)] border border-[#39DFFF]/40"
+                : "text-[#B8C3E0] hover:text-[#F5F7FF] hover:bg-white/5"
             )}
           >
             <span>{t("challenges.tab_received")}</span>
             {receivedChallenges.length > 0 && (
-              <span className="px-1.5 py-0.2 rounded-full text-xs bg-[#DDF2EB] text-[#167D78] font-bold">
+              <span className="px-1.5 py-0.2 rounded-full text-xs bg-[#39DFFF]/20 text-[#39DFFF] font-bold">
                 {receivedChallenges.length}
               </span>
             )}
@@ -292,15 +292,15 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
             aria-selected={activeTab === "sent"}
             onClick={() => setActiveTab("sent")}
             className={cn(
-              "px-3.5 py-1.5 rounded-lg text-sm font-semibold transition-all duration-150 flex items-center gap-2",
+              "px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-150 flex items-center gap-2",
               activeTab === "sent"
-                ? "bg-white text-[#167D78] shadow-xs border border-[#E2E8E2]"
-                : "text-[#65736F] hover:text-[#203331] hover:bg-white/50"
+                ? "bg-[#101638] text-[#39DFFF] shadow-[0_0_12px_rgba(57,223,255,0.15)] border border-[#39DFFF]/40"
+                : "text-[#B8C3E0] hover:text-[#F5F7FF] hover:bg-white/5"
             )}
           >
             <span>{t("challenges.tab_sent")}</span>
             {sentChallenges.length > 0 && (
-              <span className="px-1.5 py-0.2 rounded-full text-xs bg-[#DDF2EB] text-[#167D78] font-bold">
+              <span className="px-1.5 py-0.2 rounded-full text-xs bg-[#39DFFF]/20 text-[#39DFFF] font-bold">
                 {sentChallenges.length}
               </span>
             )}
@@ -315,16 +315,16 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
               void fetchStories();
             }}
             className={cn(
-              "px-3.5 py-1.5 rounded-lg text-sm font-semibold transition-all duration-150 flex items-center gap-2",
+              "px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-150 flex items-center gap-2",
               activeTab === "stories"
-                ? "bg-white text-[#167D78] shadow-xs border border-[#E2E8E2]"
-                : "text-[#65736F] hover:text-[#203331] hover:bg-white/50"
+                ? "bg-[#101638] text-[#39DFFF] shadow-[0_0_12px_rgba(57,223,255,0.15)] border border-[#39DFFF]/40"
+                : "text-[#B8C3E0] hover:text-[#F5F7FF] hover:bg-white/5"
             )}
           >
             <Video className="h-4 w-4" />
             <span>Stories (24h)</span>
             {stories.length > 0 && (
-              <span className="px-1.5 py-0.2 rounded-full text-xs bg-[#FCE6DE] text-[#D95F49] font-bold">
+              <span className="px-1.5 py-0.2 rounded-full text-xs bg-[rgba(255,83,112,0.2)] text-[#FF5370] font-bold">
                 {stories.length}
               </span>
             )}
@@ -336,10 +336,10 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
             aria-selected={activeTab === "catalog"}
             onClick={() => setActiveTab("catalog")}
             className={cn(
-              "px-3.5 py-1.5 rounded-lg text-sm font-semibold transition-all duration-150 flex items-center gap-2",
+              "px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-150 flex items-center gap-2",
               activeTab === "catalog"
-                ? "bg-white text-[#167D78] shadow-xs border border-[#E2E8E2]"
-                : "text-[#65736F] hover:text-[#203331] hover:bg-white/50"
+                ? "bg-[#101638] text-[#39DFFF] shadow-[0_0_12px_rgba(57,223,255,0.15)] border border-[#39DFFF]/40"
+                : "text-[#B8C3E0] hover:text-[#F5F7FF] hover:bg-white/5"
             )}
           >
             <Sparkles className="h-4 w-4" />
@@ -357,7 +357,7 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
               void fetchStories();
             }}
             disabled={refreshing || loading}
-            className="text-xs text-[#65736F] hover:text-[#203331]"
+            className="text-xs text-[#B8C3E0] hover:text-[#39DFFF]"
           >
             <RefreshCw className={cn("h-3.5 w-3.5 mr-1.5", refreshing && "animate-spin")} />
             {t("challenges.refresh")}
@@ -380,18 +380,18 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
         /* ── Received Tab ── */
         <div className="space-y-4">
           {receivedChallenges.length > 0 && (
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
-              <span className="text-[#65736F] font-semibold text-xs mr-1">Status:</span>
+            <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
+              <span className="text-[#B8C3E0] font-semibold text-xs mr-1">Status:</span>
               {["all", "pending", "accepted", "submitted", "completed"].map((st) => (
                 <button
                   key={st}
                   type="button"
                   onClick={() => setStatusFilter(st)}
                   className={cn(
-                    "px-2.5 py-1 rounded-lg text-xs font-semibold capitalize transition-all",
+                    "px-3 py-1.5 rounded-xl text-xs font-semibold capitalize transition-all",
                     statusFilter === st
-                      ? "bg-[#167D78] text-white shadow-xs"
-                      : "bg-[#EEF1ED] text-[#65736F] hover:text-[#203331]"
+                      ? "bg-[#39DFFF] text-[#070B25] shadow-[0_0_10px_rgba(57,223,255,0.25)] font-bold"
+                      : "bg-[#101638] text-[#B8C3E0] border border-[rgba(255,255,255,0.08)] hover:text-[#F5F7FF]"
                   )}
                 >
                   {st}
@@ -400,20 +400,20 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
             </div>
           )}
           {filteredReceived.length === 0 ? (
-            <div className="evo-card p-12 text-center space-y-4 bg-white border border-[#E2E8E2] shadow-card">
-              <div className="w-14 h-14 rounded-2xl bg-[#DDF2EB] text-[#167D78] flex items-center justify-center mx-auto">
+            <div className="p-12 text-center space-y-4 bg-[#101638] border border-[rgba(255,255,255,0.08)] rounded-3xl shadow-xl">
+              <div className="w-14 h-14 rounded-2xl bg-[#070B25] text-[#39DFFF] border border-[rgba(57,223,255,0.25)] flex items-center justify-center mx-auto shadow-[0_0_12px_rgba(57,223,255,0.2)]">
                 <Trophy className="h-7 w-7" />
               </div>
               <div>
-                <h3 className="font-bold text-[#203331] text-lg">
+                <h3 className="font-bold text-[#F5F7FF] text-lg">
                   {t("challenges.empty_received")}
                 </h3>
-                <p className="text-sm text-[#65736F] max-w-md mx-auto mt-1">
+                <p className="text-sm text-[#B8C3E0] max-w-md mx-auto mt-1">
                   {t("challenges.empty_received_desc")}
                 </p>
               </div>
               <Link href="/play/rps" className="inline-block mt-2">
-                <Button variant="primary" size="sm">
+                <Button variant="primary" size="sm" className="font-bold">
                   {t("challenges.play_now")}
                 </Button>
               </Link>
@@ -426,7 +426,7 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
               return (
                 <div
                   key={challenge.id}
-                  className="evo-card p-6 border-[#E2E8E2] bg-white hover:border-[#167D78] shadow-card transition-all space-y-4"
+                  className="p-6 sm:p-7 rounded-3xl border border-[rgba(255,255,255,0.08)] bg-[#101638] hover:border-[#39DFFF]/40 shadow-xl transition-all space-y-4"
                 >
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div className="flex items-center gap-3">
@@ -434,14 +434,14 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
                         {meta?.emoji ?? "🎯"}
                       </span>
                       <div>
-                        <h4 className="font-bold text-[#203331] text-base">
+                        <h4 className="font-bold text-[#F5F7FF] text-base sm:text-lg">
                           {challenge.title}
                         </h4>
                         <div className="flex items-center gap-2 mt-0.5">
-                          <Badge variant="muted" className="text-xs uppercase">
+                          <Badge variant="muted" className="text-xs uppercase bg-[#070B25] border border-[rgba(255,255,255,0.08)] text-[#39DFFF]">
                             {meta?.name ?? challenge.category}
                           </Badge>
-                          <span className="text-xs text-[#8E9B97]">
+                          <span className="text-xs text-[#8E9B97] font-mono">
                             {new Date(challenge.created_at).toLocaleDateString()}
                           </span>
                         </div>
@@ -450,7 +450,7 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
                     <div className="flex items-center gap-2">
                       {challenge.visibility === "private" ? (
                         <span
-                          className="inline-flex items-center gap-1 text-xs text-[#167D78] bg-[#DDF2EB] px-2.5 py-0.5 rounded-full font-medium"
+                          className="inline-flex items-center gap-1 text-xs text-[#39DFFF] bg-[#39DFFF]/15 border border-[#39DFFF]/30 px-2.5 py-0.5 rounded-full font-medium"
                           title={t("challenges.visibility_private_desc")}
                         >
                           <Shield className="h-3 w-3" />
@@ -458,7 +458,7 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
                         </span>
                       ) : (
                         <span
-                          className="inline-flex items-center gap-1 text-xs text-[#D95F49] bg-[#FCE6DE] px-2.5 py-0.5 rounded-full font-medium"
+                          className="inline-flex items-center gap-1 text-xs text-[#C084FC] bg-[rgba(139,44,255,0.2)] border border-[#8B2CFF]/40 px-2.5 py-0.5 rounded-full font-medium"
                           title={t("challenges.visibility_public_desc")}
                         >
                           <Sparkles className="h-3 w-3" />
@@ -469,17 +469,17 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
                     </div>
                   </div>
 
-                  <p className="text-sm text-[#65736F] leading-relaxed">
+                  <p className="text-sm text-[#B8C3E0] leading-relaxed">
                     {challenge.description}
                   </p>
 
                   {challenge.instructions && (
-                    <div className="p-3.5 rounded-xl bg-[#F7F8F4] border border-[#E2E8E2]">
-                      <p className="text-xs font-semibold text-[#167D78] mb-1 flex items-center gap-1.5">
+                    <div className="p-4 rounded-2xl bg-[#070B25] border border-[rgba(255,255,255,0.08)]">
+                      <p className="text-xs font-semibold text-[#39DFFF] mb-1 flex items-center gap-1.5">
                         <HelpCircle className="h-3.5 w-3.5" />
                         {t("challenges.instructions")}:
                       </p>
-                      <p className="text-xs text-[#65736F] leading-normal font-medium">
+                      <p className="text-xs text-[#F5F7FF] leading-normal font-medium">
                         {challenge.instructions}
                       </p>
                     </div>
@@ -487,7 +487,7 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
 
                   {/* Actions for Pending */}
                   {challenge.status === "pending" && (
-                    <div className="pt-3 border-t border-[#E2E8E2] flex flex-wrap items-center justify-between gap-3">
+                    <div className="pt-3 border-t border-[rgba(255,255,255,0.08)] flex flex-wrap items-center justify-between gap-3">
                       <div className="flex items-center gap-3">
                         <Button
                           variant="primary"
@@ -496,6 +496,7 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
                           disabled={isActing}
                           onClick={() => handleResponse(challenge.id, "accept")}
                           id="accept-challenge-btn"
+                          className="font-bold"
                         >
                           <CheckCircle2 className="h-4 w-4 mr-1.5" />
                           {t("challenges.accept")}
@@ -506,7 +507,7 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
                           loading={isActing}
                           disabled={isActing}
                           onClick={() => handleResponse(challenge.id, "decline")}
-                          className="text-[#65736F] hover:text-[#D95F49] hover:bg-[#FCE6DE]"
+                          className="text-[#B8C3E0] hover:text-[#FF5370] hover:bg-[rgba(255,83,112,0.1)]"
                           id="decline-challenge-btn"
                         >
                           <XCircle className="h-4 w-4 mr-1.5" />
@@ -515,7 +516,7 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
                       </div>
                       <Link
                         href={`/play/rps/${challenge.match_id}`}
-                        className="text-xs text-[#167D78] hover:underline inline-flex items-center gap-1 font-medium"
+                        className="text-xs text-[#39DFFF] hover:underline inline-flex items-center gap-1 font-medium"
                       >
                         <span>View Match</span>
                         <ExternalLink className="h-3 w-3" />
@@ -525,12 +526,12 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
 
                   {/* Actions for Accepted or Retry Requested -> Video Record */}
                   {(challenge.status === "accepted" || challenge.status === "retry_requested") && (
-                    <div className="pt-3 border-t border-[#E2E8E2] flex flex-wrap items-center justify-between gap-3">
+                    <div className="pt-3 border-t border-[rgba(255,255,255,0.08)] flex flex-wrap items-center justify-between gap-3">
                       <Button
                         variant="primary"
                         size="sm"
                         onClick={() => setRecordModalChallenge(challenge)}
-                        className="bg-[#167D78] hover:bg-[#12635F]"
+                        className="font-bold"
                         id="record-video-btn"
                       >
                         <Camera className="h-4 w-4 mr-1.5" />
@@ -538,7 +539,7 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
                       </Button>
                       <Link
                         href={`/play/rps/${challenge.match_id}`}
-                        className="text-xs text-[#167D78] hover:underline inline-flex items-center gap-1 font-medium"
+                        className="text-xs text-[#39DFFF] hover:underline inline-flex items-center gap-1 font-medium"
                       >
                         <span>View Match</span>
                         <ExternalLink className="h-3 w-3" />
@@ -548,14 +549,14 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
 
                   {/* Status indicator when Submitted */}
                   {challenge.status === "submitted" && (
-                    <div className="pt-3 border-t border-[#E2E8E2] flex items-center justify-between text-xs text-[#167D78] font-medium">
+                    <div className="pt-3 border-t border-[rgba(255,255,255,0.08)] flex items-center justify-between text-xs text-[#39DFFF] font-medium">
                       <span className="flex items-center gap-1.5">
-                        <Video className="w-4 h-4 text-[#167D78]" />
+                        <Video className="w-4 h-4 text-[#39DFFF]" />
                         Video active on your 24h Story. Awaiting winner review.
                       </span>
                       <Link
                         href={`/play/rps/${challenge.match_id}`}
-                        className="text-xs text-[#167D78] hover:underline inline-flex items-center gap-1 font-medium"
+                        className="text-xs text-[#39DFFF] hover:underline inline-flex items-center gap-1 font-medium"
                       >
                         <span>View Match</span>
                         <ExternalLink className="h-3 w-3" />
@@ -572,18 +573,18 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
         /* ── Sent Tab ── */
         <div className="space-y-4">
           {sentChallenges.length > 0 && (
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
-              <span className="text-[#65736F] font-semibold text-xs mr-1">Status:</span>
+            <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
+              <span className="text-[#B8C3E0] font-semibold text-xs mr-1">Status:</span>
               {["all", "pending", "accepted", "submitted", "completed"].map((st) => (
                 <button
                   key={st}
                   type="button"
                   onClick={() => setStatusFilter(st)}
                   className={cn(
-                    "px-2.5 py-1 rounded-lg text-xs font-semibold capitalize transition-all",
+                    "px-3 py-1.5 rounded-xl text-xs font-semibold capitalize transition-all",
                     statusFilter === st
-                      ? "bg-[#167D78] text-white shadow-xs"
-                      : "bg-[#EEF1ED] text-[#65736F] hover:text-[#203331]"
+                      ? "bg-[#39DFFF] text-[#070B25] shadow-[0_0_10px_rgba(57,223,255,0.25)] font-bold"
+                      : "bg-[#101638] text-[#B8C3E0] border border-[rgba(255,255,255,0.08)] hover:text-[#F5F7FF]"
                   )}
                 >
                   {st}
@@ -592,20 +593,20 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
             </div>
           )}
           {filteredSent.length === 0 ? (
-            <div className="evo-card p-12 text-center space-y-4 bg-white border border-[#E2E8E2] shadow-card">
-              <div className="w-14 h-14 rounded-2xl bg-[#FCE6DE] text-[#D95F49] flex items-center justify-center mx-auto">
+            <div className="p-12 text-center space-y-4 bg-[#101638] border border-[rgba(255,255,255,0.08)] rounded-3xl shadow-xl">
+              <div className="w-14 h-14 rounded-2xl bg-[#070B25] text-[#39DFFF] border border-[rgba(57,223,255,0.25)] flex items-center justify-center mx-auto shadow-[0_0_12px_rgba(57,223,255,0.2)]">
                 <Sparkles className="h-7 w-7" />
               </div>
               <div>
-                <h3 className="font-bold text-[#203331] text-lg">
+                <h3 className="font-bold text-[#F5F7FF] text-lg">
                   {t("challenges.empty_sent")}
                 </h3>
-                <p className="text-sm text-[#65736F] max-w-md mx-auto mt-1">
+                <p className="text-sm text-[#B8C3E0] max-w-md mx-auto mt-1">
                   {t("challenges.empty_sent_desc")}
                 </p>
               </div>
               <Link href="/play/rps" className="inline-block mt-2">
-                <Button variant="coral" size="sm">
+                <Button variant="coral" size="sm" className="font-bold">
                   {t("challenges.play_now")}
                 </Button>
               </Link>
@@ -617,7 +618,7 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
               return (
                 <div
                   key={challenge.id}
-                  className="evo-card p-6 border-[#E2E8E2] bg-white hover:border-[#167D78] shadow-card transition-all space-y-4"
+                  className="p-6 sm:p-7 rounded-3xl border border-[rgba(255,255,255,0.08)] bg-[#101638] hover:border-[#39DFFF]/40 shadow-xl transition-all space-y-4"
                 >
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div className="flex items-center gap-3">
@@ -625,14 +626,14 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
                         {meta?.emoji ?? "🎯"}
                       </span>
                       <div>
-                        <h4 className="font-bold text-[#203331] text-base">
+                        <h4 className="font-bold text-[#F5F7FF] text-base sm:text-lg">
                           {challenge.title}
                         </h4>
                         <div className="flex items-center gap-2 mt-0.5">
-                          <Badge variant="muted" className="text-xs uppercase">
+                          <Badge variant="muted" className="text-xs uppercase bg-[#070B25] border border-[rgba(255,255,255,0.08)] text-[#39DFFF]">
                             {meta?.name ?? challenge.category}
                           </Badge>
-                          <span className="text-xs text-[#8E9B97]">
+                          <span className="text-xs text-[#8E9B97] font-mono">
                             {new Date(challenge.created_at).toLocaleDateString()}
                           </span>
                         </div>
@@ -641,7 +642,7 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
                     <div className="flex items-center gap-2">
                       {challenge.visibility === "private" ? (
                         <span
-                          className="inline-flex items-center gap-1 text-xs text-[#167D78] bg-[#DDF2EB] px-2.5 py-0.5 rounded-full font-medium"
+                          className="inline-flex items-center gap-1 text-xs text-[#39DFFF] bg-[#39DFFF]/15 border border-[#39DFFF]/30 px-2.5 py-0.5 rounded-full font-medium"
                           title={t("challenges.visibility_private_desc")}
                         >
                           <Shield className="h-3 w-3" />
@@ -649,7 +650,7 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
                         </span>
                       ) : (
                         <span
-                          className="inline-flex items-center gap-1 text-xs text-[#D95F49] bg-[#FCE6DE] px-2.5 py-0.5 rounded-full font-medium"
+                          className="inline-flex items-center gap-1 text-xs text-[#C084FC] bg-[rgba(139,44,255,0.2)] border border-[#8B2CFF]/40 px-2.5 py-0.5 rounded-full font-medium"
                           title={t("challenges.visibility_public_desc")}
                         >
                           <Sparkles className="h-3 w-3" />
@@ -660,25 +661,25 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
                     </div>
                   </div>
 
-                  <p className="text-sm text-[#65736F] leading-relaxed">
+                  <p className="text-sm text-[#B8C3E0] leading-relaxed">
                     {challenge.description}
                   </p>
 
                   {/* Winner Action when Submitted */}
                   {challenge.status === "submitted" && (
-                    <div className="pt-3 border-t border-[#E2E8E2] flex flex-wrap items-center justify-between gap-3">
+                    <div className="pt-3 border-t border-[rgba(255,255,255,0.08)] flex flex-wrap items-center justify-between gap-3">
                       <Button
                         variant="primary"
                         size="sm"
                         onClick={() => setReviewModalChallenge(challenge)}
-                        className="bg-[#167D78] hover:bg-[#12635F]"
+                        className="font-bold"
                         id="review-submitted-challenge-btn"
                       >
                         <Eye className="h-4 w-4 mr-1.5" /> Review Video (1-Time View)
                       </Button>
                       <Link
                         href={`/play/rps/${challenge.match_id}`}
-                        className="text-xs text-[#167D78] hover:underline inline-flex items-center gap-1 font-medium"
+                        className="text-xs text-[#39DFFF] hover:underline inline-flex items-center gap-1 font-medium"
                       >
                         <span>View Match</span>
                         <ExternalLink className="h-3 w-3" />
@@ -687,16 +688,16 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
                   )}
 
                   {challenge.status !== "submitted" && (
-                    <div className="pt-2 border-t border-[#E2E8E2] flex items-center justify-between text-xs text-[#8E9B97]">
+                    <div className="pt-2 border-t border-[rgba(255,255,255,0.08)] flex items-center justify-between text-xs text-[#8E9B97]">
                       <span>
                         Recipient status:{" "}
-                        <strong className="text-[#203331] capitalize">
+                        <strong className="text-[#F5F7FF] capitalize">
                           {challenge.status}
                         </strong>
                       </span>
                       <Link
                         href={`/play/rps/${challenge.match_id}`}
-                        className="text-[#167D78] hover:underline inline-flex items-center gap-1 font-medium"
+                        className="text-[#39DFFF] hover:underline inline-flex items-center gap-1 font-medium"
                       >
                         <span>View Match</span>
                         <ExternalLink className="h-3 w-3" />
@@ -712,19 +713,19 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
       ) : activeTab === "stories" ? (
         /* ── Stories Feed Tab (24h Retention) ── */
         stories.length === 0 ? (
-          <div className="evo-card p-12 text-center space-y-4 bg-white border border-[#E2E8E2] shadow-card">
-            <div className="w-14 h-14 rounded-2xl bg-[#DDF2EB] text-[#167D78] flex items-center justify-center mx-auto">
+          <div className="p-12 text-center space-y-4 bg-[#101638] border border-[rgba(255,255,255,0.08)] rounded-3xl shadow-xl">
+            <div className="w-14 h-14 rounded-2xl bg-[#070B25] text-[#39DFFF] border border-[rgba(57,223,255,0.25)] flex items-center justify-center mx-auto shadow-[0_0_12px_rgba(57,223,255,0.2)]">
               <Video className="h-7 w-7" />
             </div>
             <div>
-              <h3 className="font-bold text-[#203331] text-lg">No Active Stories</h3>
-              <p className="text-sm text-[#65736F] max-w-md mx-auto mt-1">
+              <h3 className="font-bold text-[#F5F7FF] text-lg">No Active Stories</h3>
+              <p className="text-sm text-[#B8C3E0] max-w-md mx-auto mt-1">
                 Completed challenges and public dare videos appear here for 24 hours before expiring.
               </p>
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {stories.map((story) => {
               const hoursLeft = Math.max(
                 0,
@@ -734,7 +735,7 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
               return (
                 <div
                   key={story.id}
-                  className="evo-card p-5 border-[#E2E8E2] bg-white shadow-card space-y-4 flex flex-col justify-between"
+                  className="p-5 sm:p-6 rounded-3xl border border-[rgba(255,255,255,0.08)] bg-[#101638] shadow-xl space-y-4 flex flex-col justify-between"
                 >
                   <div>
                     {/* Author & Visibility */}
@@ -746,10 +747,10 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
                           size="sm"
                         />
                         <div>
-                          <p className="text-xs font-bold text-[#203331]">
+                          <p className="text-xs font-bold text-[#F5F7FF]">
                             {story.creator?.display_name || "Player"}
                           </p>
-                          <p className="text-[10px] text-[#8E9B97] font-mono">
+                          <p className="text-[10px] text-[#39DFFF] font-mono">
                             {story.creator?.evoora_id}
                           </p>
                         </div>
@@ -757,30 +758,30 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
 
                       <div className="flex items-center gap-1.5">
                         {story.visibility === "public" ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#FCE6DE] text-[#D95F49]">
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-[rgba(139,44,255,0.2)] text-[#C084FC] border border-[#8B2CFF]/40">
                             <Globe className="w-3 h-3" /> Public Story
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#DDF2EB] text-[#167D78]">
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-[#39DFFF]/15 text-[#39DFFF] border border-[#39DFFF]/30">
                             <Lock className="w-3 h-3" /> Friends Only
                           </span>
                         )}
-                        <span className="inline-flex items-center gap-1 text-[10px] text-[#65736F] bg-[#EEF1ED] px-2 py-0.5 rounded-full font-mono">
-                          <Clock className="w-3 h-3 text-[#D95F49]" /> {hoursLeft}h left
+                        <span className="inline-flex items-center gap-1 text-[10px] text-[#39DFFF] bg-[#070B25] border border-[rgba(255,255,255,0.08)] px-2.5 py-0.5 rounded-full font-mono">
+                          <Clock className="w-3 h-3 text-[#39DFFF]" /> {hoursLeft}h left
                         </span>
                       </div>
                     </div>
 
                     {/* Challenge title */}
-                    <h4 className="font-bold text-sm text-[#203331] mb-1">
+                    <h4 className="font-bold text-sm text-[#F5F7FF] mb-1">
                       {story.challenge?.title || "Challenge Dare"}
                     </h4>
-                    <p className="text-xs text-[#65736F] line-clamp-2 mb-3">
+                    <p className="text-xs text-[#B8C3E0] line-clamp-2 mb-3">
                       {story.challenge?.description}
                     </p>
 
                     {/* Video Player or Simulated Frame */}
-                    <div className="rounded-xl overflow-hidden bg-black aspect-video flex items-center justify-center border border-[#E2E8E2]">
+                    <div className="rounded-2xl overflow-hidden bg-black aspect-video flex items-center justify-center border border-[rgba(255,255,255,0.08)]">
                       {story.media_url ? (
                         <video
                           src={story.media_url}
@@ -791,9 +792,9 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
                         />
                       ) : (
                         <div className="text-center p-4 text-white">
-                          <Video className="w-8 h-8 text-[#167D78] mx-auto mb-1" />
-                          <p className="text-xs font-semibold">Story Video</p>
-                          <p className="text-[10px] text-white/70">
+                          <Video className="w-8 h-8 text-[#39DFFF] mx-auto mb-1" />
+                          <p className="text-xs font-semibold text-[#F5F7FF]">Story Video</p>
+                          <p className="text-[10px] text-[#B8C3E0]">
                             Expires automatically in {hoursLeft} hours.
                           </p>
                         </div>
@@ -801,11 +802,11 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
                     </div>
                   </div>
 
-                  <div className="pt-2 border-t border-[#E2E8E2] flex items-center justify-between text-[11px] text-[#8E9B97]">
+                  <div className="pt-2 border-t border-[rgba(255,255,255,0.08)] flex items-center justify-between text-[11px] text-[#8E9B97]">
                     <span>24h Ephemeral Story</span>
                     <Link
                       href={`/play/rps/${story.match_id}`}
-                      className="text-[#167D78] hover:underline"
+                      className="text-[#39DFFF] hover:underline"
                     >
                       View Match
                     </Link>
@@ -824,10 +825,10 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
                 type="button"
                 onClick={() => setCatalogCategory("all")}
                 className={cn(
-                  "px-3 py-1.5 rounded-lg text-xs font-medium transition-all border",
+                  "px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all border",
                   catalogCategory === "all"
-                    ? "bg-[#167D78] text-white border-[#167D78] shadow-xs"
-                    : "bg-white text-[#65736F] border-[#E2E8E2] hover:text-[#203331] hover:bg-[#F7F8F4]"
+                    ? "bg-[#39DFFF] text-[#070B25] border-[#39DFFF] shadow-[0_0_10px_rgba(57,223,255,0.25)] font-bold"
+                    : "bg-[#101638] text-[#B8C3E0] border-[rgba(255,255,255,0.08)] hover:text-[#F5F7FF]"
                 )}
               >
                 {t("challenges.all_categories")}
@@ -840,10 +841,10 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
                     type="button"
                     onClick={() => setCatalogCategory(cat)}
                     className={cn(
-                      "px-3 py-1.5 rounded-lg text-xs font-medium transition-all border flex items-center gap-1.5",
+                      "px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all border flex items-center gap-1.5",
                       catalogCategory === cat
-                        ? "bg-[#167D78] text-white border-[#167D78] shadow-xs"
-                        : "bg-white text-[#65736F] border-[#E2E8E2] hover:text-[#203331] hover:bg-[#F7F8F4]"
+                        ? "bg-[#39DFFF] text-[#070B25] border-[#39DFFF] shadow-[0_0_10px_rgba(57,223,255,0.25)] font-bold"
+                        : "bg-[#101638] text-[#B8C3E0] border-[rgba(255,255,255,0.08)] hover:text-[#F5F7FF]"
                     )}
                   >
                     <span>{meta.emoji}</span>
@@ -860,40 +861,40 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
                 placeholder={t("challenges.search_placeholder")}
                 value={catalogSearch}
                 onChange={(e) => setCatalogSearch(e.target.value)}
-                className="w-full pl-9 pr-3 py-1.5 text-xs rounded-lg border border-[#E2E8E2] bg-white text-[#203331] placeholder-[#8E9B97] focus:outline-none focus:border-[#167D78]"
+                className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#070B25] text-[#F5F7FF] placeholder-[#8B98B5] focus:outline-hidden focus:border-[#39DFFF]"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {filteredCatalog.map((item) => {
               const meta = CATEGORY_META[item.category];
               return (
                 <div
                   key={item.id}
-                  className="evo-card p-5 border-[#E2E8E2] bg-white hover:border-[#167D78] shadow-card transition-all flex flex-col justify-between space-y-3"
+                  className="p-6 rounded-3xl border border-[rgba(255,255,255,0.08)] bg-[#101638] hover:border-[#39DFFF]/40 shadow-xl transition-all flex flex-col justify-between space-y-3"
                 >
-                  <div className="space-y-2">
+                  <div className="space-y-2.5">
                     <div className="flex items-start justify-between gap-2">
                       <span className="text-3xl" role="img" aria-label={meta.name}>
                         {item.emoji}
                       </span>
-                      <Badge variant="muted" className="text-xs uppercase">
+                      <Badge variant="muted" className="text-xs uppercase bg-[#070B25] border border-[rgba(255,255,255,0.08)] text-[#39DFFF]">
                         {meta.name}
                       </Badge>
                     </div>
-                    <h4 className="font-bold text-[#203331] text-sm leading-snug">
+                    <h4 className="font-bold text-[#F5F7FF] text-sm leading-snug">
                       {item.title}
                     </h4>
-                    <p className="text-xs text-[#65736F] leading-relaxed">
+                    <p className="text-xs text-[#B8C3E0] leading-relaxed">
                       {item.description}
                     </p>
                   </div>
-                  <div className="pt-2 border-t border-[#E2E8E2] flex items-center justify-between text-xs text-[#8E9B97]">
-                    <span className="flex items-center gap-1 font-mono">
+                  <div className="pt-2 border-t border-[rgba(255,255,255,0.08)] flex items-center justify-between text-xs text-[#8E9B97]">
+                    <span className="flex items-center gap-1 font-mono text-[#39DFFF]">
                       <Clock className="h-3 w-3" /> {item.durationSecs}s
                     </span>
-                    <span className="text-[#167D78] font-medium">Approved Dare</span>
+                    <span className="text-[#39DFFF] font-medium">Approved Dare</span>
                   </div>
                 </div>
               );

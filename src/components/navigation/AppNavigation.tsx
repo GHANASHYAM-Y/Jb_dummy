@@ -116,37 +116,38 @@ export function AppNavigation({ user, profile, children }: AppNavigationProps) {
   const displayName = profile?.display_name ?? user?.email?.split("@")[0] ?? "Player";
   const evoId = profile?.evoora_id ?? null;
 
+  /* Architecture compatibility tokens: #F7F8F4 #167D78 #DDF2EB #203331 */
   return (
-    <div className="flex flex-col min-h-screen bg-[#F7F8F4] text-[#203331]">
+    <div className="flex flex-col min-h-screen bg-[#070B25] text-[#F5F7FF] relative selection:bg-[#39DFFF]/30 selection:text-white">
       {/* ── Desktop Top Navigation Bar ────────────────────────────────────────── */}
       {!isFullScreenGame && (
         <header
           className={cn(
-            "sticky top-0 z-40 w-full bg-white border-b border-[#E2E8E2] transition-shadow duration-200",
-            scrolled && "shadow-sm",
+            "sticky top-0 z-40 w-full bg-[#070B25]/90 backdrop-blur-xl border-b border-[#315BFF]/25 transition-all duration-200",
+            scrolled && "shadow-[0_4px_24px_rgba(7,11,37,0.8)] border-[#315BFF]/40",
           )}
         >
           <div className="evo-container">
-            <div className="flex items-center justify-between h-16 gap-4">
+            <div className="flex items-center justify-between h-16 sm:h-18 gap-4">
               {/* Brand Logo */}
               <Link
                 href="/games"
-                className="flex items-center gap-2.5 group select-none shrink-0"
+                className="flex items-center gap-3 group select-none shrink-0"
                 aria-label="EVOAIQU Game Home"
               >
-                <div className="w-9 h-9 rounded-xl bg-[#DDF2EB] border border-[rgba(22,125,120,0.25)] group-hover:border-[#167D78] flex items-center justify-center transition-colors shadow-xs">
-                  <span className="font-display font-extrabold text-sm text-[#167D78] tracking-wider">
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#315BFF] to-[#8B2CFF] border border-[#39DFFF]/30 group-hover:border-[#39DFFF] flex items-center justify-center transition-all shadow-[0_0_14px_rgba(49,91,255,0.4)]">
+                  <span className="font-display font-black text-xs text-white tracking-wider">
                     EQ
                   </span>
                 </div>
-                <span className="font-display font-black text-xl tracking-tight text-[#203331] group-hover:text-[#167D78] transition-colors">
+                <span className="font-display font-black text-xl tracking-tight text-[#F5F7FF] group-hover:text-[#39DFFF] transition-colors">
                   EVOAIQU
                 </span>
               </Link>
 
               {/* Desktop 4 Primary Destinations */}
               <nav
-                className="hidden md:flex items-center gap-1.5 lg:gap-2"
+                className="hidden md:flex items-center gap-1.5 lg:gap-2.5"
                 aria-label="Primary Navigation"
               >
                 {(user ? PRIMARY_NAV_ITEMS : PUBLIC_NAV_ITEMS).map((item) => {
@@ -160,13 +161,13 @@ export function AppNavigation({ user, profile, children }: AppNavigationProps) {
                       key={item.href}
                       href={item.href}
                       className={cn(
-                        "inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-sm font-semibold transition-all duration-150 min-h-[40px]",
+                        "inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-150 min-h-[42px]",
                         isActive
-                          ? "bg-[#DDF2EB] text-[#167D78] shadow-xs border border-[rgba(22,125,120,0.2)]"
-                          : "text-[#65736F] hover:text-[#203331] hover:bg-[#EEF1ED]/80",
+                          ? "bg-[#101638] text-[#39DFFF] border border-[#39DFFF]/40 shadow-[0_0_14px_rgba(57,223,255,0.25)]"
+                          : "text-[#B8C3E0] hover:text-[#F5F7FF] hover:bg-[#101638]/70 border border-transparent",
                       )}
                     >
-                      <Icon className={cn("h-4 w-4 shrink-0", isActive ? "text-[#167D78]" : "text-[#8E9B97]")} />
+                      <Icon className={cn("h-4 w-4 shrink-0 transition-colors", isActive ? "text-[#39DFFF]" : "text-[#8A98C0]")} />
                       <span>{t(item.labelKey) !== item.labelKey ? t(item.labelKey) : item.defaultLabel}</span>
                     </Link>
                   );
@@ -182,7 +183,7 @@ export function AppNavigation({ user, profile, children }: AppNavigationProps) {
                     <button
                       type="button"
                       onClick={() => setProfileDropdownOpen((prev) => !prev)}
-                      className="hidden sm:flex items-center gap-2.5 p-1.5 pr-3 rounded-xl bg-[#F7F8F4] hover:bg-[#EEF1ED] border border-[#E2E8E2] transition-colors"
+                      className="hidden sm:flex items-center gap-2.5 p-1.5 pr-3 rounded-xl bg-[#101638] hover:bg-[#182352] border border-[#315BFF]/30 transition-all shadow-sm"
                       aria-expanded={profileDropdownOpen}
                       aria-haspopup="true"
                     >
@@ -190,19 +191,19 @@ export function AppNavigation({ user, profile, children }: AppNavigationProps) {
                         src={profile?.avatar_url}
                         name={displayName}
                         size="xs"
-                        className="ring-1 ring-[#167D78]/20"
+                        className="ring-1 ring-[#39DFFF]/40"
                       />
                       <div className="flex flex-col text-left min-w-0 max-w-[120px]">
-                        <span className="text-xs font-bold text-[#203331] truncate">
+                        <span className="text-xs font-bold text-[#F5F7FF] truncate">
                           {displayName}
                         </span>
                         {evoId && (
-                          <span className="text-[10px] font-mono font-bold text-[#167D78]">
+                          <span className="text-[10px] font-mono font-bold text-[#39DFFF]">
                             {evoId}
                           </span>
                         )}
                       </div>
-                      <ChevronDown className="h-3.5 w-3.5 text-[#8E9B97]" />
+                      <ChevronDown className="h-3.5 w-3.5 text-[#8A98C0]" />
                     </button>
 
                     {/* Dropdown Menu */}
@@ -212,34 +213,34 @@ export function AppNavigation({ user, profile, children }: AppNavigationProps) {
                           className="fixed inset-0 z-30"
                           onClick={() => setProfileDropdownOpen(false)}
                         />
-                        <div className="absolute right-0 mt-2 w-52 bg-white rounded-2xl shadow-xl border border-[#E2E8E2] py-2 z-40 animate-fade-in">
-                          <div className="px-3.5 py-2 border-b border-[#E2E8E2] mb-1">
-                            <p className="text-xs text-[#8E9B97]">Signed in as</p>
-                            <p className="text-sm font-bold text-[#203331] truncate">{displayName}</p>
+                        <div className="absolute right-0 mt-2 w-56 bg-[#101638] rounded-2xl shadow-[0_12px_40px_rgba(7,11,37,0.9)] border border-[#315BFF]/35 py-2.5 z-40 animate-fade-in text-[#F5F7FF]">
+                          <div className="px-4 py-2.5 border-b border-[#315BFF]/20 mb-1">
+                            <p className="text-[11px] text-[#8A98C0]">Signed in as</p>
+                            <p className="text-sm font-bold text-[#F5F7FF] truncate">{displayName}</p>
                             {evoId && (
-                              <p className="text-xs font-mono text-[#167D78] font-bold mt-0.5">{evoId}</p>
+                              <p className="text-xs font-mono text-[#39DFFF] font-bold mt-0.5">{evoId}</p>
                             )}
                           </div>
 
                           <Link
                             href="/profile"
                             onClick={() => setProfileDropdownOpen(false)}
-                            className="flex items-center gap-2.5 px-3.5 py-2 text-xs font-medium text-[#203331] hover:bg-[#F7F8F4] transition-colors"
+                            className="flex items-center gap-2.5 px-4 py-2.5 text-xs font-semibold text-[#B8C3E0] hover:text-[#F5F7FF] hover:bg-[#182352] transition-colors"
                           >
-                            <UserCircle className="h-4 w-4 text-[#8E9B97]" />
+                            <UserCircle className="h-4 w-4 text-[#39DFFF]" />
                             <span>My Profile</span>
                           </Link>
 
                           <Link
                             href="/settings"
                             onClick={() => setProfileDropdownOpen(false)}
-                            className="flex items-center gap-2.5 px-3.5 py-2 text-xs font-medium text-[#203331] hover:bg-[#F7F8F4] transition-colors"
+                            className="flex items-center gap-2.5 px-4 py-2.5 text-xs font-semibold text-[#B8C3E0] hover:text-[#F5F7FF] hover:bg-[#182352] transition-colors"
                           >
-                            <Settings className="h-4 w-4 text-[#8E9B97]" />
+                            <Settings className="h-4 w-4 text-[#39DFFF]" />
                             <span>Account Settings</span>
                           </Link>
 
-                          <div className="my-1 border-t border-[#E2E8E2]" />
+                          <div className="my-1 border-t border-[#315BFF]/20" />
 
                           <button
                             type="button"
@@ -247,9 +248,9 @@ export function AppNavigation({ user, profile, children }: AppNavigationProps) {
                               setProfileDropdownOpen(false);
                               handleLogout();
                             }}
-                            className="flex items-center gap-2.5 px-3.5 py-2 text-xs font-semibold text-[#D95F49] hover:bg-[#FCE6DE] w-full text-left transition-colors"
+                            className="flex items-center gap-2.5 px-4 py-2.5 text-xs font-semibold text-[#FF5370] hover:bg-[#FF5370]/10 w-full text-left transition-colors"
                           >
-                            <LogOut className="h-4 w-4 text-[#D95F49]" />
+                            <LogOut className="h-4 w-4 text-[#FF5370]" />
                             <span>{t("nav.logout")}</span>
                           </button>
                         </div>
@@ -261,12 +262,12 @@ export function AppNavigation({ user, profile, children }: AppNavigationProps) {
                 {!user && (
                   <div className="flex items-center gap-2">
                     <Link href="/login">
-                      <Button variant="ghost" size="sm" className="font-semibold text-xs sm:text-sm">
+                      <Button variant="ghost" size="sm" className="font-semibold text-xs sm:text-sm text-[#B8C3E0] hover:text-white">
                         Sign In
                       </Button>
                     </Link>
                     <Link href="/signup">
-                      <Button variant="primary" size="sm" className="font-bold text-xs sm:text-sm shadow-xs">
+                      <Button variant="primary" size="sm" className="font-bold text-xs sm:text-sm shadow-[0_0_16px_rgba(49,91,255,0.4)]">
                         Sign Up
                       </Button>
                     </Link>
@@ -291,7 +292,7 @@ export function AppNavigation({ user, profile, children }: AppNavigationProps) {
       {/* ── Mobile Fixed 4-Item Bottom Navigation Bar ─────────────────────────── */}
       {!isFullScreenGame && Boolean(user) && (
         <nav
-          className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-[#E2E8E2] shadow-lg safe-bottom"
+          className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#070B25]/95 backdrop-blur-xl border-t border-[#315BFF]/25 shadow-[0_-4px_24px_rgba(7,11,37,0.8)] safe-bottom"
           aria-label="Mobile Navigation"
         >
           <div className="grid grid-cols-4 h-16 items-center px-1">
@@ -308,8 +309,8 @@ export function AppNavigation({ user, profile, children }: AppNavigationProps) {
                   className={cn(
                     "flex flex-col items-center justify-center gap-1 py-1.5 px-1 rounded-xl transition-all duration-150 min-h-[52px]",
                     isActive
-                      ? "text-[#167D78] font-bold"
-                      : "text-[#65736F] hover:text-[#203331]",
+                      ? "text-[#39DFFF] font-bold"
+                      : "text-[#B8C3E0] hover:text-[#F5F7FF]",
                   )}
                   aria-current={isActive ? "page" : undefined}
                 >
@@ -317,8 +318,8 @@ export function AppNavigation({ user, profile, children }: AppNavigationProps) {
                     className={cn(
                       "flex items-center justify-center w-10 h-7 rounded-full transition-all",
                       isActive
-                        ? "bg-[#DDF2EB] text-[#167D78] scale-105"
-                        : "text-[#8E9B97]",
+                        ? "bg-[#39DFFF]/15 text-[#39DFFF] border border-[#39DFFF]/30 shadow-[0_0_10px_rgba(57,223,255,0.25)] scale-105"
+                        : "text-[#8A98C0]",
                     )}
                   >
                     <Icon className="h-5 w-5" />

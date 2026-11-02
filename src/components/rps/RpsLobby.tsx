@@ -150,18 +150,19 @@ export function RpsLobby({ friends }: { friends: FriendEntry[]; userId?: string 
 
       {/* ── Incoming invites ── */}
       {incoming.length > 0 && (
-        <section aria-labelledby="incoming-heading">
-          <h2 id="incoming-heading" className="text-sm font-bold text-[#167D78] uppercase tracking-wider mb-3">
+        <section aria-labelledby="incoming-heading" className="space-y-3">
+          <h2 id="incoming-heading" className="text-xs font-bold text-[#39DFFF] uppercase tracking-wider flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#39DFFF] animate-pulse" />
             {t("rps.incoming_invites")}
           </h2>
           <div className="space-y-3">
             {incoming.map(inv => (
-              <div key={inv.invite_id} className="evo-card p-4 flex items-center gap-4 bg-white border border-[#E2E8E2] shadow-xs animate-fade-in">
-                <Avatar src={inv.other_avatar} name={inv.other_name} size="md" />
+              <div key={inv.invite_id} className="rounded-2xl p-5 flex items-center gap-4 bg-[#101638]/90 backdrop-blur-md border border-[rgba(57,223,255,0.25)] shadow-[0_8px_32px_rgba(0,0,0,0.3)] animate-fade-in text-[#F5F7FF]">
+                <Avatar src={inv.other_avatar} name={inv.other_name} size="md" className="border border-[#39DFFF]/40" />
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-[#203331] truncate">{inv.other_name}</p>
-                  <EvoIdBadge id={inv.other_evoora_id} />
-                  <p className="text-xs text-[#8E9B97] mt-0.5">
+                  <p className="font-bold text-base text-[#F5F7FF] truncate">{inv.other_name}</p>
+                  <EvoIdBadge id={inv.other_evoora_id} className="mt-0.5" />
+                  <p className="text-xs text-[#8A98C0] mt-1">
                     {t("rps.expires_in")}: {timeAgo(inv.expires_at)}
                   </p>
                 </div>
@@ -173,8 +174,9 @@ export function RpsLobby({ friends }: { friends: FriendEntry[]; userId?: string 
                     loading={busyIds.has(inv.invite_id)}
                     aria-label={t("rps.accept")}
                     id={`accept-invite-${inv.invite_id}`}
+                    className="shadow-[0_0_16px_rgba(49,91,255,0.4)]"
                   >
-                    <Check className="h-4 w-4" />
+                    <Check className="h-4 w-4 mr-1" />
                     {t("rps.accept")}
                   </Button>
                   <Button
@@ -182,7 +184,7 @@ export function RpsLobby({ friends }: { friends: FriendEntry[]; userId?: string 
                     onClick={() => handleRespond(inv.invite_id, "decline")}
                     disabled={busyIds.has(inv.invite_id)}
                     aria-label={t("rps.decline")}
-                    className="text-[#D95F49] hover:bg-[#FCE6DE]"
+                    className="text-[#FF5370] hover:bg-[#FF5370]/15 border border-[#FF5370]/30"
                   >
                     <X className="h-4 w-4" />
                   </Button>
@@ -195,19 +197,20 @@ export function RpsLobby({ friends }: { friends: FriendEntry[]; userId?: string 
 
       {/* ── Outgoing invites ── */}
       {outgoing.length > 0 && (
-        <section aria-labelledby="outgoing-heading">
-          <h2 id="outgoing-heading" className="text-sm font-bold text-[#65736F] uppercase tracking-wider mb-3">
+        <section aria-labelledby="outgoing-heading" className="space-y-3">
+          <h2 id="outgoing-heading" className="text-xs font-bold text-[#8A98C0] uppercase tracking-wider flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#8A98C0]" />
             {t("rps.sent_invites")}
           </h2>
           <div className="space-y-3">
             {outgoing.map(inv => (
-              <div key={inv.invite_id} className="evo-card p-4 flex items-center gap-4 bg-white border border-[#E2E8E2] shadow-xs animate-fade-in">
-                <Avatar src={inv.other_avatar} name={inv.other_name} size="md" />
+              <div key={inv.invite_id} className="rounded-2xl p-5 flex items-center gap-4 bg-[#101638]/90 backdrop-blur-md border border-[#1C2758] shadow-[0_8px_32px_rgba(0,0,0,0.3)] animate-fade-in text-[#F5F7FF]">
+                <Avatar src={inv.other_avatar} name={inv.other_name} size="md" className="border border-[#1C2758]" />
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-[#203331] truncate">{inv.other_name}</p>
-                  <EvoIdBadge id={inv.other_evoora_id} />
-                  <p className="text-xs text-[#8E9B97] mt-0.5 flex items-center gap-1">
-                    <Clock className="h-3 w-3" />
+                  <p className="font-bold text-base text-[#F5F7FF] truncate">{inv.other_name}</p>
+                  <EvoIdBadge id={inv.other_evoora_id} className="mt-0.5" />
+                  <p className="text-xs text-[#8A98C0] mt-1 flex items-center gap-1.5">
+                    <Clock className="h-3 w-3 text-[#39DFFF]" />
                     {t("rps.waiting_response")}
                   </p>
                 </div>
@@ -217,7 +220,7 @@ export function RpsLobby({ friends }: { friends: FriendEntry[]; userId?: string 
                   disabled={busyIds.has(inv.invite_id)}
                   loading={busyIds.has(inv.invite_id)}
                   aria-label={t("rps.cancel_invite")}
-                  className="text-[#8E9B97] hover:text-[#D95F49] flex-shrink-0"
+                  className="text-[#8A98C0] hover:text-[#FF5370] hover:bg-[#FF5370]/15 border border-[#1C2758] flex-shrink-0"
                 >
                   <X className="h-4 w-4" />
                 </Button>
@@ -228,16 +231,16 @@ export function RpsLobby({ friends }: { friends: FriendEntry[]; userId?: string 
       )}
 
       {/* ── Challenge a friend ── */}
-      <section aria-labelledby="friends-heading">
-        <div className="flex items-center justify-between mb-3">
-          <h2 id="friends-heading" className="text-sm font-bold text-[#65736F] uppercase tracking-wider">
+      <section aria-labelledby="friends-heading" className="space-y-3">
+        <div className="flex items-center justify-between">
+          <h2 id="friends-heading" className="text-xs font-bold text-[#8A98C0] uppercase tracking-wider">
             {t("rps.challenge_friend")}
           </h2>
           <Button
             variant="ghost" size="sm"
             onClick={() => { setLoading(true); void loadInvites(); }}
             aria-label={t("common.retry")}
-            className="text-[#8E9B97]"
+            className="text-[#39DFFF] hover:bg-[#39DFFF]/10"
           >
             <RefreshCw className={cn("h-3.5 w-3.5", loading && "animate-spin")} />
           </Button>
@@ -251,25 +254,25 @@ export function RpsLobby({ friends }: { friends: FriendEntry[]; userId?: string 
 
         {loading ? (
           <div className="flex justify-center py-8">
-            <Spinner className="text-[#167D78]" />
+            <Spinner className="text-[#39DFFF]" />
           </div>
         ) : friends.length === 0 ? (
-          <div className="evo-card p-8 flex flex-col items-center text-center gap-3 bg-white border border-[#E2E8E2] shadow-sm">
-            <Users className="h-10 w-10 text-[#8E9B97]" />
-            <p className="text-[#65736F] text-sm">{t("rps.no_friends")}</p>
-            <Button variant="secondary" size="sm" onClick={() => router.push("/friends")}>
-              <UserPlus className="h-4 w-4" />
+          <div className="rounded-2xl p-8 flex flex-col items-center text-center gap-3 bg-[#101638]/90 border border-[#1C2758] shadow-sm text-[#F5F7FF]">
+            <Users className="h-10 w-10 text-[#8A98C0]" />
+            <p className="text-[#B8C3E0] text-sm leading-relaxed">{t("rps.no_friends")}</p>
+            <Button variant="secondary" size="sm" onClick={() => router.push("/friends")} className="bg-[#070B25] hover:bg-[#151D48] text-[#F5F7FF] border-[#1C2758]">
+              <UserPlus className="h-4 w-4 mr-2 text-[#39DFFF]" />
               {t("rps.add_friends")}
             </Button>
           </div>
         ) : (
           <div className="space-y-3">
             {friends.map(f => (
-              <div key={f.friend_id} className="evo-card p-4 flex items-center gap-4 bg-white border border-[#E2E8E2] shadow-xs animate-fade-in">
-                <Avatar src={f.avatar_url} name={f.display_name} size="md" />
+              <div key={f.friend_id} className="rounded-2xl p-4 sm:p-5 flex items-center gap-4 bg-[#101638]/90 backdrop-blur-md border border-[rgba(57,223,255,0.15)] hover:border-[#39DFFF]/40 shadow-[0_8px_32px_rgba(0,0,0,0.3)] transition-all animate-fade-in text-[#F5F7FF]">
+                <Avatar src={f.avatar_url} name={f.display_name} size="md" className="border border-[#39DFFF]/30" />
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-[#203331] truncate">{f.display_name}</p>
-                  <EvoIdBadge id={f.evoora_id} />
+                  <p className="font-bold text-base text-[#F5F7FF] truncate">{f.display_name}</p>
+                  <EvoIdBadge id={f.evoora_id} className="mt-0.5" />
                 </div>
                 <Button
                   variant="primary" size="sm"
@@ -278,8 +281,9 @@ export function RpsLobby({ friends }: { friends: FriendEntry[]; userId?: string 
                   disabled={sendingTo !== null || outgoing.some(o => o.other_id === f.friend_id)}
                   id={`challenge-${f.friend_id}`}
                   aria-label={`${t("rps.challenge")} ${f.display_name}`}
+                  className="shadow-[0_0_16px_rgba(49,91,255,0.4)]"
                 >
-                  <Gamepad2 className="h-4 w-4" />
+                  <Gamepad2 className="h-4 w-4 mr-1.5" />
                   {outgoing.some(o => o.other_id === f.friend_id) ? t("rps.invited") : t("rps.challenge")}
                 </Button>
               </div>
@@ -289,11 +293,11 @@ export function RpsLobby({ friends }: { friends: FriendEntry[]; userId?: string 
       </section>
 
       {/* History link */}
-      <div className="flex justify-center">
+      <div className="flex justify-center pt-2">
         <Button
           variant="ghost" size="sm"
           onClick={() => router.push("/history")}
-          className="text-[var(--evo-text-muted)] gap-2"
+          className="text-[#39DFFF] hover:bg-[#39DFFF]/10 gap-2 font-semibold"
         >
           <Trophy className="h-4 w-4" />
           {t("rps.view_history")}

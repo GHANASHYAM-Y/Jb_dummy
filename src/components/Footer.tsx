@@ -11,29 +11,34 @@ export function Footer() {
   const year = CURRENT_YEAR;
 
   return (
-    <footer className="border-t border-[#E2E8E2] bg-white mt-auto">
-      <div className="evo-container py-8">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+    <footer className="border-t border-[#315BFF]/25 bg-[#070B25] text-[#B8C3E0] mt-auto relative overflow-hidden">
+      {/* Top ambient glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 max-w-3xl h-px bg-gradient-to-r from-transparent via-[#39DFFF]/30 to-transparent pointer-events-none" />
+
+      <div className="evo-container py-10 sm:py-12">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 sm:gap-8">
 
           {/* Brand */}
-          <div className="flex flex-col items-center md:items-start gap-1">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded bg-[#DDF2EB] border border-[rgba(22,125,120,0.25)] flex items-center justify-center">
-                <span className="text-[#167D78] font-display font-extrabold text-[10px] tracking-wider">EQ</span>
+          <div className="flex flex-col items-center md:items-start gap-1.5 text-center md:text-left">
+            <Link href="/" className="flex items-center gap-2.5 group">
+              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#315BFF] to-[#8B2CFF] border border-[#39DFFF]/30 flex items-center justify-center">
+                <span className="text-white font-display font-black text-[10px] tracking-wider">EQ</span>
               </div>
-              <span className="font-display font-extrabold text-[#203331]">EVOAIQU</span>
-            </div>
-            <p className="text-[#65736F] text-xs">
+              <span className="font-display font-black text-[#F5F7FF] tracking-tight group-hover:text-[#39DFFF] transition-colors">
+                EVOAIQU
+              </span>
+            </Link>
+            <p className="text-[#8A98C0] text-xs">
               {t("brand.company")}
             </p>
-            <p className="text-[#8E9B97] text-xs">
+            <p className="text-[#65736F] text-xs">
               {t("brand.tagline")}
             </p>
           </div>
 
           {/* Links */}
           <nav aria-label="Footer navigation">
-            <ul className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+            <ul className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2.5">
               {[
                 { href: "/games",       label: t("nav.games") !== "nav.games" ? t("nav.games") : "Game" },
                 { href: "/how-to-play", label: "How to Play" },
@@ -44,7 +49,7 @@ export function Footer() {
                 <li key={href}>
                   <Link
                     href={href}
-                    className="text-sm text-[#65736F] hover:text-[#167D78] transition-colors"
+                    className="text-sm font-medium text-[#B8C3E0] hover:text-[#39DFFF] transition-colors"
                   >
                     {label}
                   </Link>
@@ -54,9 +59,9 @@ export function Footer() {
           </nav>
         </div>
 
-        <hr className="evo-divider mt-6 mb-4 border-[#E2E8E2]" />
+        <hr className="evo-divider mt-8 mb-5 border-[#315BFF]/20" />
 
-        <p className="text-center text-xs text-[#8E9B97]">
+        <p className="text-center text-xs text-[#8A98C0]">
           {t("footer.rights", { year })}
         </p>
       </div>

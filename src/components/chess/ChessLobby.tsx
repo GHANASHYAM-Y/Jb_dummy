@@ -81,32 +81,32 @@ export function ChessLobby({ friends, activeMatches = [] }: ChessLobbyProps) {
   };
 
   return (
-    <div className="flex flex-col gap-6 select-none">
+    <div className="flex flex-col gap-6 sm:gap-8 select-none">
       {/* ── 1. Resume Active Matches (Recovery / Reconnect) ──────────────────── */}
       {activeMatches.length > 0 && (
-        <div className="bg-white border border-[#E2E8E2] rounded-3xl p-5 shadow-card">
-          <div className="flex items-center gap-2 mb-3">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#167D78] animate-pulse" />
-            <h2 className="font-display font-bold text-base text-[#203331]">Active Matches in Progress</h2>
+        <div className="bg-[#101638] border border-[rgba(57,223,255,0.25)] rounded-3xl p-6 shadow-xl">
+          <div className="flex items-center gap-2.5 mb-4">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#39DFFF] animate-pulse shadow-[0_0_8px_#39DFFF]" />
+            <h2 className="font-display font-bold text-base text-[#F5F7FF]">Active Matches in Progress</h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
             {activeMatches.map((m) => (
               <div
                 key={m.id}
-                className="flex items-center justify-between p-3.5 bg-[#F7F8F4] border border-[#E2E8E2] rounded-2xl hover:border-[#167D78] transition-colors"
+                className="flex items-center justify-between p-4 bg-[#070B25]/80 border border-[rgba(255,255,255,0.08)] rounded-2xl hover:border-[#39DFFF]/40 transition-colors"
               >
                 <div>
-                  <p className="font-bold text-sm text-[#203331]">{m.opponent_name}</p>
-                  <p className="text-xs text-[#65736F]">
+                  <p className="font-bold text-sm text-[#F5F7FF]">{m.opponent_name}</p>
+                  <p className="text-xs text-[#B8C3E0] mt-0.5">
                     {m.is_my_turn ? (
-                      <span className="text-[#167D78] font-bold">Your turn to move</span>
+                      <span className="text-[#39DFFF] font-bold">Your turn to move</span>
                     ) : (
-                      "Opponent's turn"
+                      <span className="text-[#8B98B5]">Opponent&apos;s turn</span>
                     )}
                   </p>
                 </div>
                 <Link href={`/play/chess/${m.id}`}>
-                  <Button variant="primary" size="sm">
+                  <Button variant="primary" size="sm" className="font-bold">
                     Resume <ArrowRight className="w-3.5 h-3.5 ml-1" />
                   </Button>
                 </Link>
@@ -117,31 +117,31 @@ export function ChessLobby({ friends, activeMatches = [] }: ChessLobbyProps) {
       )}
 
       {/* ── 2. Match Settings (Time Control & Color) ─────────────────────────── */}
-      <div className="bg-white border border-[#E2E8E2] rounded-3xl p-6 shadow-sm space-y-6">
+      <div className="bg-[#101638] border border-[rgba(255,255,255,0.08)] rounded-3xl p-6 sm:p-7 shadow-xl space-y-6">
         <div>
-          <h2 className="font-display font-extrabold text-xl text-[#203331] mb-1">
+          <h2 className="font-display font-extrabold text-xl text-[#F5F7FF] mb-1">
             Game Settings
           </h2>
-          <p className="text-[#65736F] text-xs">
+          <p className="text-[#B8C3E0] text-xs sm:text-sm">
             Choose clock timing and piece color before issuing a challenge.
           </p>
         </div>
 
         {/* Time Control Buttons */}
         <div>
-          <label className="block text-xs font-bold uppercase tracking-wider text-[#65736F] mb-2">
+          <label className="block text-xs font-bold uppercase tracking-wider text-[#39DFFF] mb-3">
             Time Control
           </label>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {TIME_OPTIONS.map((opt) => (
               <button
                 key={opt.label}
                 type="button"
                 onClick={() => setTimeControl(opt)}
-                className={`flex items-center justify-center gap-2 p-3 rounded-2xl border text-sm font-bold transition-all ${
+                className={`flex items-center justify-center gap-2 p-3.5 rounded-2xl border text-sm font-bold transition-all ${
                   timeControl.label === opt.label
-                    ? "bg-[#DDF2EB] border-[#167D78] text-[#167D78] shadow-xs"
-                    : "bg-[#F7F8F4] border-[#E2E8E2] text-[#203331] hover:border-[#CBD5E1]"
+                    ? "bg-[#39DFFF]/15 border-[#39DFFF] text-[#39DFFF] shadow-[0_0_12px_rgba(57,223,255,0.2)]"
+                    : "bg-[#070B25] border-[rgba(255,255,255,0.08)] text-[#B8C3E0] hover:border-[rgba(57,223,255,0.3)] hover:text-[#F5F7FF]"
                 }`}
               >
                 <Clock className="w-4 h-4" />
@@ -153,10 +153,10 @@ export function ChessLobby({ friends, activeMatches = [] }: ChessLobbyProps) {
 
         {/* Color Preference */}
         <div>
-          <label className="block text-xs font-bold uppercase tracking-wider text-[#65736F] mb-2">
+          <label className="block text-xs font-bold uppercase tracking-wider text-[#39DFFF] mb-3">
             Color Preference
           </label>
-          <div className="grid grid-cols-3 gap-2.5">
+          <div className="grid grid-cols-3 gap-3">
             {[
               { val: "random", label: "Random 50/50" },
               { val: "white", label: "White Pieces" },
@@ -166,10 +166,10 @@ export function ChessLobby({ friends, activeMatches = [] }: ChessLobbyProps) {
                 key={c.val}
                 type="button"
                 onClick={() => setPreferredColor(c.val as "random" | "white" | "black")}
-                className={`p-2.5 rounded-2xl border text-xs font-bold transition-all ${
+                className={`p-3 rounded-2xl border text-xs font-bold transition-all text-center ${
                   preferredColor === c.val
-                    ? "bg-[#DDF2EB] border-[#167D78] text-[#167D78] shadow-xs"
-                    : "bg-[#F7F8F4] border-[#E2E8E2] text-[#203331] hover:border-[#CBD5E1]"
+                    ? "bg-[#39DFFF]/15 border-[#39DFFF] text-[#39DFFF] shadow-[0_0_12px_rgba(57,223,255,0.2)]"
+                    : "bg-[#070B25] border-[rgba(255,255,255,0.08)] text-[#B8C3E0] hover:border-[rgba(57,223,255,0.3)] hover:text-[#F5F7FF]"
                 }`}
               >
                 {c.label}
@@ -180,61 +180,61 @@ export function ChessLobby({ friends, activeMatches = [] }: ChessLobbyProps) {
       </div>
 
       {/* ── 3. Challenge a Friend List ───────────────────────────────────────── */}
-      <div className="bg-white border border-[#E2E8E2] rounded-3xl p-6 shadow-sm space-y-4">
+      <div className="bg-[#101638] border border-[rgba(255,255,255,0.08)] rounded-3xl p-6 sm:p-7 shadow-xl space-y-5">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="font-display font-extrabold text-xl text-[#203331]">
+            <h2 className="font-display font-extrabold text-xl text-[#F5F7FF]">
               Challenge a Friend
             </h2>
-            <p className="text-[#65736F] text-xs">
+            <p className="text-[#B8C3E0] text-xs sm:text-sm mt-0.5">
               Instant 1-on-1 Speed Chess duel with authoritative move validation.
             </p>
           </div>
           <Link href="/friends">
-            <Button variant="ghost" size="sm" className="text-xs text-[#167D78]">
+            <Button variant="ghost" size="sm" className="text-xs text-[#39DFFF] hover:text-[#39DFFF]/80">
               Find Friends <ArrowRight className="w-3.5 h-3.5 ml-1" />
             </Button>
           </Link>
         </div>
 
         {errorMsg && (
-          <div className="p-3 bg-[#FCE6DE] border border-[rgba(217,95,73,0.3)] rounded-2xl text-xs text-[#D95F49] font-medium">
+          <div className="p-3.5 bg-[rgba(255,83,112,0.1)] border border-[rgba(255,83,112,0.3)] rounded-2xl text-xs text-[#FF5370] font-medium">
             {errorMsg}
           </div>
         )}
 
         {friends.length === 0 ? (
-          <div className="p-8 text-center bg-[#F7F8F4] border border-dashed border-[#CBD5E1] rounded-2xl space-y-3">
-            <Users className="w-8 h-8 text-[#8E9B97] mx-auto" />
+          <div className="p-8 text-center bg-[#070B25]/60 border border-dashed border-[rgba(255,255,255,0.15)] rounded-2xl space-y-3">
+            <Users className="w-8 h-8 text-[#8B98B5] mx-auto" />
             <div>
-              <p className="font-bold text-sm text-[#203331]">No Friends Connected Yet</p>
-              <p className="text-xs text-[#65736F] mt-0.5">
-                Add friends using their Evoora ID to challenge them to Speed Chess.
+              <p className="font-bold text-sm text-[#F5F7FF]">No Friends Connected Yet</p>
+              <p className="text-xs text-[#B8C3E0] mt-1">
+                Add friends using their Evoora ID to challenge them to Speed Chess duels.
               </p>
             </div>
             <Link href="/friends">
-              <Button variant="primary" size="sm">
+              <Button variant="primary" size="sm" className="mt-2 font-bold">
                 Add Friends
               </Button>
             </Link>
           </div>
         ) : (
-          <div className="divide-y divide-[#E2E8E2]">
+          <div className="divide-y divide-[rgba(255,255,255,0.06)]">
             {friends.map((friend) => {
               const isChallenging = loadingFriendId === friend.friend_id;
               return (
-                <div key={friend.friend_id} className="py-3 flex items-center justify-between gap-3">
+                <div key={friend.friend_id} className="py-3.5 flex items-center justify-between gap-3">
                   <div className="flex items-center gap-3 min-w-0">
                     <Avatar
                       src={friend.avatar_url ?? undefined}
                       name={friend.display_name}
-                      className="w-10 h-10 border border-[#E2E8E2]"
+                      className="w-10 h-10 border border-[rgba(57,223,255,0.25)] shrink-0"
                     />
                     <div className="min-w-0">
-                      <p className="font-bold text-sm text-[#203331] truncate">
+                      <p className="font-bold text-sm text-[#F5F7FF] truncate">
                         {friend.display_name}
                       </p>
-                      <p className="text-[11px] font-mono text-[#65736F] truncate">
+                      <p className="text-[11px] font-mono text-[#39DFFF] truncate">
                         {friend.evoora_id ?? "EVO-ID"}
                       </p>
                     </div>

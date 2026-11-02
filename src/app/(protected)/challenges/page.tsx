@@ -26,12 +26,16 @@ export default async function ChallengesPage() {
       <div className="evo-container max-w-4xl">
         {/* Header */}
         <div className="mb-8 animate-fade-in">
-          <h1 className="font-display font-bold text-3xl text-[#203331] mb-1">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#101638] border border-[rgba(57,223,255,0.25)] text-[11px] font-mono font-semibold tracking-wider text-[#39DFFF] uppercase mb-3">
+            Dare Arena
+          </div>
+          <h1 className="font-display font-black text-3xl sm:text-4xl text-[#F5F7FF] tracking-tight mb-2">
             Challenges & Dares
           </h1>
-          <p className="text-[#65736F] text-sm font-medium">
+          <p className="text-[#B8C3E0] text-sm sm:text-base leading-relaxed">
             Win a match, pick a challenge. Lose a match, accept or submit your video dare!
           </p>
+          <hr className="evo-divider mt-6" />
         </div>
 
         {/* Client challenges hub */}

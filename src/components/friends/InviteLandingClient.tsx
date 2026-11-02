@@ -48,20 +48,20 @@ export function InviteLandingClient({
   if (!initialData.ok || !initialData.inviter) {
     return (
       <div className="w-full max-w-md mx-auto animate-scale-in">
-        <div className="evo-card p-8 text-center space-y-6 bg-white border border-[#E2E8E2] shadow-card">
-          <div className="w-16 h-16 rounded-2xl bg-[#FCE6DE] border border-[rgba(217,95,73,0.3)] flex items-center justify-center mx-auto text-[#D95F49]">
+        <div className="rounded-2xl p-8 text-center space-y-6 bg-[#101638]/90 backdrop-blur-xl border border-[rgba(255,83,112,0.3)] shadow-[0_16px_48px_rgba(0,0,0,0.5),0_0_30px_rgba(255,83,112,0.15)]">
+          <div className="w-16 h-16 rounded-2xl bg-[rgba(255,83,112,0.15)] border border-[#FF5370]/40 flex items-center justify-center mx-auto text-[#FF5370] shadow-[0_0_20px_rgba(255,83,112,0.3)]">
             <UserX className="h-8 w-8" />
           </div>
           <div>
-            <h1 className="font-display font-bold text-2xl text-[#203331] mb-2">
+            <h1 className="font-display font-black text-2xl text-[#F5F7FF] mb-2 tracking-tight">
               {t("invite.invalid_title")}
             </h1>
-            <p className="text-[#65736F] text-sm leading-relaxed">
+            <p className="text-[#B8C3E0] text-sm leading-relaxed">
               {t("invite.invalid_desc")}
             </p>
           </div>
           <Link href="/">
-            <Button variant="secondary" className="w-full">
+            <Button variant="secondary" className="w-full bg-[#070B25] hover:bg-[#151D48] text-[#F5F7FF] border-[#1C2758]">
               {t("invite.back_home")}
             </Button>
           </Link>
@@ -111,7 +111,7 @@ export function InviteLandingClient({
 
   return (
     <div className="w-full max-w-md mx-auto animate-scale-in">
-      <div className="evo-card p-8 space-y-6 bg-white border border-[#E2E8E2] shadow-card">
+      <div className="rounded-2xl p-8 space-y-7 bg-[#101638]/90 backdrop-blur-xl border border-[rgba(57,223,255,0.2)] shadow-[0_16px_48px_rgba(0,0,0,0.5),0_0_30px_rgba(49,91,255,0.15)]">
         {/* Inviter Profile Card */}
         <div className="text-center space-y-4">
           <div className="relative inline-block mx-auto">
@@ -119,23 +119,23 @@ export function InviteLandingClient({
               src={inviter.avatar_url}
               name={inviter.display_name}
               size="xl"
-              className="border-2 border-[#167D78] shadow-sm"
+              className="border-2 border-[#39DFFF] shadow-[0_0_20px_rgba(57,223,255,0.4)]"
             />
-            <div className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-[#167D78] flex items-center justify-center text-white border-2 border-white">
+            <div className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-gradient-to-br from-[#39DFFF] to-[#315BFF] flex items-center justify-center text-[#070B25] border-2 border-[#101638] shadow-md">
               <Sparkles className="h-3.5 w-3.5" />
             </div>
           </div>
 
           <div>
-            <h1 className="font-display font-bold text-2xl text-[#203331]">
+            <h1 className="font-display font-black text-2xl text-[#F5F7FF] tracking-tight">
               {inviter.display_name}
             </h1>
-            <div className="flex justify-center mt-1">
+            <div className="flex justify-center mt-2">
               <EvoIdBadge id={inviter.evoora_id} />
             </div>
           </div>
 
-          <p className="text-[#65736F] text-sm leading-relaxed">
+          <p className="text-[#B8C3E0] text-sm leading-relaxed">
             {t("invite.subtitle", { name: inviter.display_name })}
           </p>
         </div>
@@ -150,19 +150,19 @@ export function InviteLandingClient({
         {/* State 1: Successfully sent friend request in this session */}
         {sentSuccess ? (
           <div className="space-y-5 text-center pt-2">
-            <div className="w-14 h-14 rounded-2xl bg-[#DDF2EB] border border-[rgba(22,125,120,0.3)] flex items-center justify-center mx-auto text-[#167D78]">
+            <div className="w-14 h-14 rounded-2xl bg-[rgba(57,223,255,0.15)] border border-[#39DFFF]/40 flex items-center justify-center mx-auto text-[#39DFFF] shadow-[0_0_24px_rgba(57,223,255,0.3)]">
               <CheckCircle2 className="h-7 w-7" />
             </div>
             <div>
-              <p className="font-semibold text-[#203331] text-lg">
+              <p className="font-bold text-[#F5F7FF] text-lg">
                 {t("invite.request_sent")}
               </p>
-              <p className="text-[#65736F] text-xs mt-1 leading-relaxed">
+              <p className="text-[#B8C3E0] text-xs mt-1.5 leading-relaxed">
                 {t("invite.request_sent_desc", { name: inviter.display_name })}
               </p>
             </div>
             <Link href="/friends">
-              <Button variant="primary" className="w-full">
+              <Button variant="primary" className="w-full shadow-[0_0_24px_rgba(49,91,255,0.4)]">
                 {t("invite.view_friends")}
               </Button>
             </Link>
@@ -174,7 +174,7 @@ export function InviteLandingClient({
               {t("invite.self_invite")}
             </Alert>
             <Link href="/friends">
-              <Button variant="secondary" className="w-full">
+              <Button variant="secondary" className="w-full bg-[#070B25] text-[#F5F7FF] border-[#1C2758]">
                 {t("invite.view_friends")}
               </Button>
             </Link>
@@ -186,7 +186,7 @@ export function InviteLandingClient({
               {t("invite.already_friends", { name: inviter.display_name })}
             </Alert>
             <Link href="/play/rps">
-              <Button variant="primary" className="w-full">
+              <Button variant="primary" className="w-full shadow-[0_0_24px_rgba(49,91,255,0.4)]">
                 {t("invite.play_games")}
               </Button>
             </Link>
@@ -198,7 +198,7 @@ export function InviteLandingClient({
               {t("invite.pending_request", { name: inviter.display_name })}
             </Alert>
             <Link href="/friends">
-              <Button variant="secondary" className="w-full">
+              <Button variant="secondary" className="w-full bg-[#070B25] text-[#F5F7FF] border-[#1C2758]">
                 {t("invite.view_friends")}
               </Button>
             </Link>
@@ -210,39 +210,39 @@ export function InviteLandingClient({
               {t("invite.blocked")}
             </Alert>
             <Link href="/">
-              <Button variant="ghost" className="w-full">
+              <Button variant="ghost" className="w-full text-[#B8C3E0]">
                 {t("invite.back_home")}
               </Button>
             </Link>
           </div>
         ) : !isAuthenticated ? (
           /* State 6: Unauthenticated visitor — preserved return flow */
-          <div className="space-y-5">
-            <div className="p-4 rounded-xl bg-[#F7F8F4] border border-[#E2E8E2] space-y-3">
-              <div className="flex items-center gap-3 text-xs text-[#65736F]">
-                <Gamepad2 className="h-4 w-4 text-[#167D78] flex-shrink-0" />
+          <div className="space-y-6">
+            <div className="p-5 rounded-xl bg-[#070B25]/80 border border-[#1C2758] space-y-3.5">
+              <div className="flex items-center gap-3 text-xs text-[#B8C3E0]">
+                <Gamepad2 className="h-4 w-4 text-[#39DFFF] flex-shrink-0" />
                 <span>Play real-time multiplayer Rock, Paper, Scissors & Chess</span>
               </div>
-              <div className="flex items-center gap-3 text-xs text-[#65736F]">
-                <Sparkles className="h-4 w-4 text-[#D95F49] flex-shrink-0" />
+              <div className="flex items-center gap-3 text-xs text-[#B8C3E0]">
+                <Sparkles className="h-4 w-4 text-[#FF5370] flex-shrink-0" />
                 <span>Win matches and assign fun, safe video dares</span>
               </div>
-              <div className="flex items-center gap-3 text-xs text-[#65736F]">
-                <Trophy className="h-4 w-4 text-[#167D78] flex-shrink-0" />
+              <div className="flex items-center gap-3 text-xs text-[#B8C3E0]">
+                <Trophy className="h-4 w-4 text-[#39DFFF] flex-shrink-0" />
                 <span>Track head-to-head match histories with friends</span>
               </div>
             </div>
 
-            <div className="flex flex-col gap-2.5">
+            <div className="flex flex-col gap-3">
               <Link href={`/signup?next=${encodeURIComponent(`/invite/${token}`)}`}>
-                <Button variant="primary" size="lg" className="w-full justify-center">
+                <Button variant="primary" size="lg" className="w-full justify-center shadow-[0_0_24px_rgba(49,91,255,0.45)] font-bold text-base">
                   {t("invite.signup_to_connect")}
-                  <ArrowRight className="h-4 w-4 ml-1.5" />
+                  <ArrowRight className="h-4 w-4 ml-2" />
                 </Button>
               </Link>
 
               <Link href={`/login?next=${encodeURIComponent(`/invite/${token}`)}`}>
-                <Button variant="secondary" size="md" className="w-full justify-center">
+                <Button variant="secondary" size="md" className="w-full justify-center bg-[#070B25] hover:bg-[#151D48] text-[#F5F7FF] border-[#1C2758]">
                   {t("invite.login_to_connect")}
                 </Button>
               </Link>
@@ -256,7 +256,7 @@ export function InviteLandingClient({
               size="lg"
               loading={sending}
               onClick={handleSendFriendRequest}
-              className="w-full"
+              className="w-full shadow-[0_0_24px_rgba(49,91,255,0.45)] font-bold text-base"
             >
               <UserPlus className="h-4 w-4 mr-2" />
               {t("invite.send_request")}

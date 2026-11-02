@@ -17,7 +17,7 @@ const LOCALE_FULL: Record<Locale, string> = {
 
 export function LanguageSelector({
   compact = false,
-  variant = "default",
+  variant = "dark",
 }: {
   compact?: boolean;
   variant?: "default" | "dark";
