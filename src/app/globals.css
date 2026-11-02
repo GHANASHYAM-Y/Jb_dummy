@@ -677,6 +677,20 @@
 }
 
 /* ============================================================
+   CYBER DARK AUTOFILL
+   ============================================================ */
+
+.cyber-autofill:-webkit-autofill,
+.cyber-autofill:-webkit-autofill:hover,
+.cyber-autofill:-webkit-autofill:focus,
+.cyber-autofill:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #070B25 inset !important;
+  -webkit-text-fill-color: #F5F7FF !important;
+  caret-color: #39DFFF !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* ============================================================
    PREFERS REDUCED MOTION
    ============================================================ */
 
