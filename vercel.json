@@ -3,10 +3,6 @@
     {
       "path": "/api/challenges/stories/cleanup",
       "schedule": "0 3 * * *"
-    },
-    {
-      "path": "/api/games/timeout/cleanup",
-      "schedule": "* * * * *"
     }
   ]
 }

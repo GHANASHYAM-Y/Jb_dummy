@@ -783,10 +783,18 @@ describe("EVOAIQU Multiplayer Game Lifecycle and Timeout System", () => {
 
   // ── Static Architecture, Cron, and Security Audit Tests ───────────────────
   describe("Architecture & Cron Configuration Audit", () => {
-    it("configures Vercel Cron for automatic timeout cleanup", () => {
+    it("preserves Vercel Cron for stories while delegating 1-minute timeout cleanup to Supabase pg_cron", () => {
       const vercel = JSON.parse(vercelJson);
-      const cron = vercel.crons.find((c: { path: string }) => c.path === "/api/games/timeout/cleanup");
-      expect(cron).toBeDefined();
+      const storiesCron = vercel.crons.find((c: { path: string }) => c.path === "/api/challenges/stories/cleanup");
+      expect(storiesCron).toBeDefined();
+      expect(storiesCron.schedule).toBe("0 3 * * *");
+
+      // 1-minute cron is handled natively by Supabase pg_cron (Vercel Hobby plan restriction)
+      const timeoutCron = vercel.crons.find((c: { path: string }) => c.path === "/api/games/timeout/cleanup");
+      expect(timeoutCron).toBeUndefined();
+
+      // Migration defines cleanup_game_timeouts() executed by Supabase pg_cron
+      expect(migration).toContain("CREATE OR REPLACE FUNCTION public.cleanup_game_timeouts()");
     });
 
     it("cleanup route fails closed if CRON_SECRET is missing or empty", () => {
