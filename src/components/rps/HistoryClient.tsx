@@ -16,7 +16,10 @@ interface HistoryEntry {
   my_wins: number;
   opp_wins: number;
   winner_id: string | null;
+  loser_id?: string | null;
   is_draw: boolean;
+  phase?: string;
+  end_reason?: string | null;
   completed_at: string;
   started_at: string;
 }
@@ -83,7 +86,22 @@ export function HistoryClient({ userId }: { userId: string }) {
           >
             <Avatar src={entry.opponent_avatar} name={entry.opponent_name} size="md" className="border border-[#39DFFF]/30" />
             <div className="flex-1 min-w-0">
-              <p className="font-bold text-base text-[#F5F7FF] truncate">{entry.opponent_name}</p>
+              <div className="flex items-center gap-2">
+                <p className="font-bold text-base text-[#F5F7FF] truncate">{entry.opponent_name}</p>
+                {entry.end_reason && entry.end_reason !== "completed" && (
+                  <span className="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-[#070B25] text-[#9BA8D7] border border-[#315BFF]/30">
+                    {entry.end_reason === "forfeit"
+                      ? "Forfeit"
+                      : entry.end_reason === "disconnect_timeout"
+                      ? "DC Timeout"
+                      : entry.end_reason === "inactivity_timeout"
+                      ? "Inactivity"
+                      : entry.end_reason === "both_left"
+                      ? "Both Left"
+                      : entry.end_reason}
+                  </span>
+                )}
+              </div>
               <EvoIdBadge id={entry.opponent_evoora_id} className="mt-1" />
               <p className="text-xs text-[#8A98C0] mt-1">{timeAgo(entry.completed_at)}</p>
             </div>

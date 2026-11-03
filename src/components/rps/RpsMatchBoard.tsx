@@ -29,6 +29,8 @@ import { RoundTimer } from "@/components/rps/RoundTimer";
 import { ArenaDuelStage } from "@/components/rps/ArenaDuelStage";
 import { rpsAudio } from "@/components/rps/RpsAudio";
 import { RpsConfetti } from "@/components/rps/RpsConfetti";
+import { GameLifecycleBanner } from "@/components/games/GameLifecycleBanner";
+import type { MatchPhase, GameEndReason } from "@/types/database";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -43,7 +45,8 @@ interface MatchState {
   ok: boolean;
   match: {
     id: string;
-    phase: string;
+    phase: MatchPhase;
+    end_reason?: GameEndReason | null;
     game_type: string;
     player1_id: string;
     player2_id: string;
@@ -52,8 +55,17 @@ interface MatchState {
     current_round: number;
     target_wins?: number;
     winner_id: string | null;
+    loser_id?: string | null;
     is_draw: boolean;
     round_deadline?: string | null;
+    last_activity_at?: string | null;
+    game_started_at?: string | null;
+    player1_left_at?: string | null;
+    player2_left_at?: string | null;
+    player1_disconnected_at?: string | null;
+    player2_disconnected_at?: string | null;
+    player1_reconnect_deadline?: string | null;
+    player2_reconnect_deadline?: string | null;
     started_at: string;
     completed_at: string | null;
   };
@@ -422,6 +434,56 @@ export function RpsMatchBoard({
     // eslint-disable-next-line react-hooks/set-state-in-effect
     void fetchState();
   }, [fetchState, refreshKey]);
+
+  // ── Voluntary Departure (Leave Game) ───────────────────────────────────────
+  const handleLeaveGame = useCallback(async () => {
+    try {
+      const res = await fetch("/api/games/leave", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ match_id: matchId }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        await fetchState();
+      }
+    } catch (err) {
+      console.error("[RpsMatchBoard] Leave failed:", err);
+    }
+  }, [matchId, fetchState]);
+
+  // ── Disconnection & Reconnection Session Restoration ────────────────────────
+  useEffect(() => {
+    const handleOffline = () => {
+      fetch("/api/games/disconnect", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ match_id: matchId }),
+        keepalive: true,
+      }).catch(() => {});
+    };
+
+    const handleOnline = () => {
+      fetch("/api/games/reconnect", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ match_id: matchId }),
+      })
+        .then(() => fetchState())
+        .catch(() => {});
+    };
+
+    window.addEventListener("offline", handleOffline);
+    window.addEventListener("online", handleOnline);
+
+    // Initial reconnect handshake on mount/refresh
+    void handleOnline();
+
+    return () => {
+      window.removeEventListener("offline", handleOffline);
+      window.removeEventListener("online", handleOnline);
+    };
+  }, [matchId, fetchState]);
 
   // ── Realtime subscriptions ──────────────────────────────────────────────────
   useEffect(() => {
@@ -804,6 +866,35 @@ export function RpsMatchBoard({
           </span>
         </div>
       </header>
+
+      {/* ── Lifecycle & Timeout HUD Banner ── */}
+      {state?.match && (
+        <GameLifecycleBanner
+          matchId={matchId}
+          userId={userId}
+          phase={state.match.phase}
+          endReason={state.match.end_reason}
+          winnerId={state.match.winner_id}
+          loserId={state.match.loser_id}
+          lastActivityAt={state.match.last_activity_at}
+          reconnectDeadline={
+            myPerspective === 1
+              ? state.match.player2_reconnect_deadline
+              : state.match.player1_reconnect_deadline
+          }
+          opponentDisconnected={
+            myPerspective === 1
+              ? Boolean(state.match.player2_disconnected_at)
+              : Boolean(state.match.player1_disconnected_at)
+          }
+          serverNow={state.server_now}
+          onLeaveGame={
+            state.match.phase === "active" || state.match.phase === "reconnecting"
+              ? handleLeaveGame
+              : undefined
+          }
+        />
+      )}
 
       {/* ── Section B: Player and Match Information (Scoreboard & Versus HUD) ── */}
       <section

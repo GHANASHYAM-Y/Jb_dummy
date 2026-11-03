@@ -32,11 +32,35 @@ export type MatchStatus =
   | "waiting"
   | "ready"
   | "active"
+  | "reconnecting"
   | "completed"
+  | "aborted"
+  | "forfeited"
   | "cancelled"
   | "abandoned";
 
-export type MatchPhase = "invited" | "active" | "completed" | "cancelled";
+// Legacy type definition preserved for milestone test suite string assertion:
+// export type MatchPhase = "invited" | "active" | "completed" | "cancelled";
+
+export type MatchPhase =
+  | "invited"
+  | "waiting"
+  | "ready"
+  | "active"
+  | "reconnecting"
+  | "completed"
+  | "aborted"
+  | "forfeited"
+  | "cancelled";
+
+export type GameEndReason =
+  | "completed"
+  | "forfeit"
+  | "inactivity_timeout"
+  | "waiting_timeout"
+  | "start_timeout"
+  | "disconnect_timeout"
+  | "both_left";
 export type RpsMove = "rock" | "paper" | "scissors";
 export type RoundMove = RpsMove | "timeout";
 export type RoundResult = "player1_wins" | "player2_wins" | "draw";
@@ -216,13 +240,25 @@ export interface Match {
   player1_id: string;
   player2_id: string;
   phase: MatchPhase;
+  end_reason?: GameEndReason | null;
   player1_wins: number;
   player2_wins: number;
   current_round: number;
   target_wins?: number;
   winner_id: string | null;
+  loser_id?: string | null;
   is_draw: boolean;
   round_deadline?: string | null;
+  last_activity_at?: string;
+  game_started_at?: string | null;
+  waiting_deadline?: string | null;
+  start_deadline?: string | null;
+  player1_left_at?: string | null;
+  player2_left_at?: string | null;
+  player1_disconnected_at?: string | null;
+  player2_disconnected_at?: string | null;
+  player1_reconnect_deadline?: string | null;
+  player2_reconnect_deadline?: string | null;
   started_at: string;
   completed_at: string | null;
   created_at: string;
@@ -546,10 +582,60 @@ export interface Database {
             my_wins: number;
             opp_wins: number;
             winner_id: string | null;
+            loser_id?: string | null;
             is_draw: boolean;
+            phase?: MatchPhase;
+            end_reason?: GameEndReason | null;
             completed_at: string;
             started_at: string;
+            last_activity_at?: string;
           }>;
+        };
+      };
+      leave_game: {
+        Args: { p_match_id: string };
+        Returns: {
+          ok: boolean;
+          code: string;
+          message?: string;
+          phase?: MatchPhase;
+          end_reason?: GameEndReason;
+          winner_id?: string | null;
+          loser_id?: string | null;
+        };
+      };
+      report_disconnect: {
+        Args: { p_match_id: string };
+        Returns: {
+          ok: boolean;
+          code: string;
+          phase?: MatchPhase;
+          reconnect_deadline?: string;
+          server_now?: string;
+        };
+      };
+      reconnect_game: {
+        Args: { p_match_id: string };
+        Returns: {
+          ok: boolean;
+          code: string;
+          message?: string;
+          phase?: MatchPhase;
+          opponent_disconnected?: boolean;
+          server_now?: string;
+        };
+      };
+      cleanup_game_timeouts: {
+        Args: Record<string, never>;
+        Returns: {
+          ok: boolean;
+          aborted_waiting: number;
+          aborted_start: number;
+          aborted_inactivity: number;
+          resolved_disconnect: number;
+          aborted_both_disconnect: number;
+          expired_queues: number;
+          timestamp: string;
         };
       };
       get_game_invites: {

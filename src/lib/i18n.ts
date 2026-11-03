@@ -319,6 +319,24 @@ const translations: Record<Locale, TranslationMap> = {
     "rps.timeout_draw":          "Both players timed out — Draw!",
     "rps.time_expired":          "Time Expired",
 
+    /* Game Lifecycle & Timeout System */
+    "game.status.waiting_opponent": "Waiting for opponent.",
+    "game.status.waiting_start": "Waiting for game to start.",
+    "game.status.active": "Game active.",
+    "game.status.opponent_disconnected": "Opponent disconnected.",
+    "game.status.reconnecting": "Reconnecting...",
+    "game.status.reconnect_remaining": "60 seconds remaining to reconnect.",
+    "game.status.opponent_reconnected": "Opponent reconnected.",
+    "game.result.won_opponent_left": "You won because your opponent left.",
+    "game.result.lost_you_left": "You lost because you left.",
+    "game.result.won_opponent_timeout": "You won because your opponent failed to reconnect.",
+    "game.result.aborted_inactivity": "Game aborted because of inactivity.",
+    "game.result.aborted_opponent_no_join": "Game aborted because the opponent did not join.",
+    "game.result.aborted_neither_reconnected": "Game aborted because neither player reconnected.",
+    "game.action.leave": "Leave Game",
+    "game.action.leave_confirm": "Are you sure you want to leave? Your opponent will be awarded the victory.",
+    "game.inactivity_timer": "Inactivity Timer",
+
     /* Challenge system */
     "challenges.title":                   "Challenges",
     "challenges.subtitle":                "Win a match, pick a challenge. Lose a match, accept one.",
@@ -714,6 +732,24 @@ const translations: Record<Locale, TranslationMap> = {
     "rps.timeout_loss":          "நேரம் முடிந்தது — சுற்று தோல்வி!",
     "rps.timeout_draw":          "இருவரின் நேரமும் முடிந்தது — சமன் சுற்று!",
     "rps.time_expired":          "நேரம் முடிந்தது",
+
+    /* Game Lifecycle & Timeout System */
+    "game.status.waiting_opponent": "எதிராளிக்காகக் காத்திருக்கிறது.",
+    "game.status.waiting_start": "ஆட்டம் தொடங்கக் காத்திருக்கிறது.",
+    "game.status.active": "ஆட்டம் செயலில் உள்ளது.",
+    "game.status.opponent_disconnected": "எதிராளி துண்டிக்கப்பட்டார்.",
+    "game.status.reconnecting": "மீண்டும் இணைகிறது...",
+    "game.status.reconnect_remaining": "மீண்டும் இணைய 60 நொடிகள் உள்ளன.",
+    "game.status.opponent_reconnected": "எதிராளி மீண்டும் இணைந்தார்.",
+    "game.result.won_opponent_left": "எதிராளி வெளியேறியதால் நீங்கள் வென்றீர்கள்.",
+    "game.result.lost_you_left": "நீங்கள் வெளியேறியதால் தோல்வியடைந்தீர்கள்.",
+    "game.result.won_opponent_timeout": "எதிராளி மீண்டும் இணையாததால் நீங்கள் வென்றீர்கள்.",
+    "game.result.aborted_inactivity": "செயலின்மை காரணமாக ஆட்டம் ரத்து செய்யப்பட்டது.",
+    "game.result.aborted_opponent_no_join": "எதிராளி இணையாததால் ஆட்டம் ரத்து செய்யப்பட்டது.",
+    "game.result.aborted_neither_reconnected": "இருவரும் மீண்டும் இணையாததால் ஆட்டம் ரத்து செய்யப்பட்டது.",
+    "game.action.leave": "ஆட்டத்திலிருந்து வெளியேறு",
+    "game.action.leave_confirm": "நிச்சயமாக வெளியேற விரும்புகிறீர்களா? உங்கள் எதிராளிக்கு வெற்றி வழங்கப்படும்.",
+    "game.inactivity_timer": "செயலின்மை கடிகாரம்",
 
     /* Challenge system */
     "challenges.title":                   "சவால்கள்",
