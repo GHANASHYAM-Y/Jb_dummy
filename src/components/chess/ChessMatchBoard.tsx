@@ -19,6 +19,7 @@ import { chessSounds } from "@/lib/chess/sounds";
 import { Button, Badge, Avatar } from "@/components/ui";
 import { ChessColor, LegalMoveTarget, CapturedPieces } from "@/lib/chess/types";
 import { cn } from "@/lib/utils";
+import { GameLifecycleBanner } from "@/components/games/GameLifecycleBanner";
 
 interface PlayerInfo {
   id: string;
@@ -352,6 +353,57 @@ export const ChessMatchBoard: React.FC<ChessMatchBoardProps> = ({
     }
   };
 
+  // 10. Handle Voluntary Departure (Leave Game)
+  const handleLeaveGame = async () => {
+    try {
+      const res = await fetch("/api/games/leave", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ match_id: match.id }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setWinnerId(data.winner_id);
+        setWinReason("forfeit");
+        setShowVictoryModal(true);
+        await refreshMatchState();
+      }
+    } catch (err) {
+      console.error("[Chess] Leave game failed:", err);
+    }
+  };
+
+  // 11. Disconnection & Reconnection Session Restoration
+  useEffect(() => {
+    const handleOffline = () => {
+      fetch("/api/games/disconnect", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ match_id: match.id }),
+        keepalive: true,
+      }).catch(() => {});
+    };
+
+    const handleOnline = () => {
+      fetch("/api/games/reconnect", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ match_id: match.id }),
+      })
+        .then(() => refreshMatchState())
+        .catch(() => {});
+    };
+
+    window.addEventListener("offline", handleOffline);
+    window.addEventListener("online", handleOnline);
+    void handleOnline();
+
+    return () => {
+      window.removeEventListener("offline", handleOffline);
+      window.removeEventListener("online", handleOnline);
+    };
+  }, [match.id, refreshMatchState]);
+
   // Format clock mm:ss or mm:ss.d
   const formatTime = (ms: number): string => {
     const totalSecs = Math.max(0, Math.floor(ms / 1000));
@@ -410,6 +462,26 @@ export const ChessMatchBoard: React.FC<ChessMatchBoardProps> = ({
           {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
         </button>
       </div>
+
+      {/* ── Lifecycle & Timeout HUD Banner ── */}
+      <GameLifecycleBanner
+        matchId={match.id}
+        userId={viewer.userId}
+        phase={isGameActive ? "active" : "completed"}
+        endReason={
+          match.game_status === "timeout"
+            ? "disconnect_timeout"
+            : match.game_status === "resigned"
+            ? "forfeit"
+            : match.game_status === "abandoned"
+            ? "inactivity_timeout"
+            : "completed"
+        }
+        winnerId={winnerId}
+        lastActivityAt={match.last_move_at}
+        serverNow={new Date().toISOString()}
+        onLeaveGame={isGameActive ? handleLeaveGame : undefined}
+      />
 
       {/* ── Opponent Player Card ────────────────────────────────────────────── */}
       <div
