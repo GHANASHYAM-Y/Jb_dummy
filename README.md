@@ -2,7 +2,7 @@
 
 > **Play. Connect. Evolve.**
 
-A bold, futuristic social gaming platform where every match creates a story. Play Chess or Rock, Paper, Scissors against friends or random opponents — then dare the loser to a challenge.
+A bold, futuristic social gaming platform where every match creates a story. Play Chess, Rock, Paper, Scissors, Hand Cricket or Ludo against friends or random opponents — then dare the loser to a challenge.
 
 ---
 
@@ -32,6 +32,7 @@ A bold, futuristic social gaming platform where every match creates a story. Pla
 | 6 | 🔲 Next | Chess with chess.js |
 | 7 | 🔲 | Public challenge feed, submissions, moderation |
 | 8 | 🔲 | Testing, security, accessibility, deployment |
+| 9 | ✅ Complete | Ludo: me vs 1–3 bots in the browser (no login), online 1 vs 1 with a friend |
 
 ---
 
@@ -46,9 +47,11 @@ A bold, futuristic social gaming platform where every match creates a story. Pla
 
 ```bash
 git clone <your-repo>
-cd website
+cd <repo>/data
 npm install
 ```
+
+All app code lives in `data/`, so run every `npm`, `npx` and `supabase` command from there. On Vercel, set **Project Settings → General → Root Directory** to `data`.
 
 ### 2. Configure environment variables
 
@@ -79,6 +82,7 @@ Edit `.env.local` with your Supabase credentials:
 8. Run `supabase/migrations/0007_rps_first_to_five_and_timer.sql`
 9. Run `supabase/migrations/0008_challenge_lifecycle.sql`
 10. Run `supabase/migrations/0009_challenge_submissions_and_stories.sql`
+11. Run the remaining files in number order, `0010_chess.sql` through `0016_ludo.sql` (Ludo)
 
 **Option B — Supabase CLI:**
 
@@ -157,6 +161,14 @@ The trigger runs as `SECURITY DEFINER` so it can bypass RLS. Users can never:
 ## Project Structure
 
 ```
+data/      # The Next.js app: src/, public/, supabase/, package.json, configs, .env files
+support/   # Docs: reports, audits, Yet_To_Do notes, research
+others/    # Everything else: demo/ (layout concepts), backup/
+```
+
+Inside `data/`:
+
+```
 src/
 ├── app/
 │   ├── (auth)/          # Login, Signup pages
@@ -198,15 +210,21 @@ supabase/
     ├── 0002_friends.sql     # Friend requests table, DB functions, RLS
     ├── 0003_rps.sql         # RPS invites, matches, rounds, hidden moves, RPCs
     ├── 0004_challenges.sql  # Challenges table, RLS, assign/respond RPCs
-    └── 0005_matchmaking.sql # Matchmaking queue, user blocks, atomic pairing RPCs
+    ├── 0005_matchmaking.sql # Matchmaking queue, user blocks, atomic pairing RPCs
+    ├── ...
+    └── 0016_ludo.sql        # Ludo matches and online 1 vs 1 state
 ```
 
 ---
 
 ## Commands
 
+> **Which server to use:** `npm run dev` (port 3000) recompiles pages as you open them, so clicks take 0.5–4 s. Use it only while editing code. To just use or test the app, run `npm run prod` (builds, then serves on port 3001; clicks take about 0.2–0.5 s) or `npm run start:prod` to reuse the last build.
+
 ```bash
 npm run dev      # Start dev server (Turbopack)
+npm run prod         # Production build, then serve on port 3001
+npm run start:prod   # Serve the last production build on port 3001
 npm run build    # Production build
 npm run lint     # ESLint check
 npx tsc --noEmit # TypeScript type check
