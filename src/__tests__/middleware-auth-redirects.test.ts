@@ -206,7 +206,7 @@ describe("Middleware Authentication & Protected API Response Handling (SEC-03)",
   });
 
   // ── 7. Public Web Pages ───────────────────────────────────────────────────
-  it("allows unauthenticated visitors to access public web pages without redirection", async () => {
+  it("skips session lookup for session-independent public pages", async () => {
     mockGetUser.mockResolvedValue({
       data: { user: null },
       error: null,
@@ -216,13 +216,9 @@ describe("Middleware Authentication & Protected API Response Handling (SEC-03)",
       "/",
       "/about",
       "/how-to-play",
-      "/games",
-      "/challenges",
       "/privacy",
       "/terms",
       "/auth/callback",
-      "/auth/reset-password",
-      "/invite/sample-invite-token-12345",
     ];
 
     for (const pathname of publicPages) {
@@ -234,6 +230,34 @@ describe("Middleware Authentication & Protected API Response Handling (SEC-03)",
       expect(res.status).toBe(200);
       expect(res.headers.get("location")).toBeNull();
     }
+
+    expect(mockGetUser).not.toHaveBeenCalled();
+  });
+
+  it("refreshes sessions on public pages whose handlers read the current user", async () => {
+    mockGetUser.mockResolvedValue({
+      data: { user: null },
+      error: null,
+    });
+
+    const sessionAwarePublicPages = [
+      "/games",
+      "/challenges",
+      "/auth/reset-password",
+      "/invite/sample-invite-token-12345",
+    ];
+
+    for (const pathname of sessionAwarePublicPages) {
+      const req = new NextRequest(`http://localhost:3000${pathname}`, {
+        method: "GET",
+      });
+
+      const res = await middleware(req);
+      expect(res.status).toBe(200);
+      expect(res.headers.get("location")).toBeNull();
+    }
+
+    expect(mockGetUser).toHaveBeenCalledTimes(sessionAwarePublicPages.length);
   });
 
   // ── 8. Public / Route-Authoritative API Endpoints ─────────────────────────
@@ -245,7 +269,6 @@ describe("Middleware Authentication & Protected API Response Handling (SEC-03)",
 
     const publicApiEndpoints = [
       "/api/challenges/stories/cleanup",
-      "/api/friends/invite/resolve?token=test-token-12345",
       "/api/public/health",
     ];
 
@@ -258,6 +281,30 @@ describe("Middleware Authentication & Protected API Response Handling (SEC-03)",
       expect(res.status).toBe(200);
       expect(res.headers.get("location")).toBeNull();
     }
+
+    expect(mockGetUser).not.toHaveBeenCalled();
+  });
+
+  it("refreshes the session before the invite resolver uses caller identity", async () => {
+    mockGetUser.mockResolvedValueOnce({
+      data: {
+        user: {
+          id: "confirmed-user-uuid",
+          email: "confirmed@example.com",
+          email_confirmed_at: "2026-01-01T00:00:00Z",
+        },
+      },
+      error: null,
+    });
+
+    const req = new NextRequest(
+      "http://localhost:3000/api/friends/invite/resolve?token=test-token-12345",
+      { method: "GET" },
+    );
+
+    const res = await middleware(req);
+    expect(res.status).toBe(200);
+    expect(mockGetUser).toHaveBeenCalledTimes(1);
   });
 
   // ── 9. Cookie Preservation During Session Refresh ─────────────────────────

@@ -25,6 +25,15 @@ const PUBLIC_ROUTES = new Set([
  * Paths that are always public regardless of prefix matching.
  */
 const PUBLIC_PREFIXES = ["/api/public/", "/_next/", "/favicon", "/icons/", "/images/", "/invite/"];
+const SESSION_INDEPENDENT_ROUTES = new Set([
+  "/",
+  "/about",
+  "/how-to-play",
+  "/privacy",
+  "/terms",
+  "/auth/callback",
+  "/api/challenges/stories/cleanup",
+]);
 
 function isPublic(pathname: string): boolean {
   if (PUBLIC_ROUTES.has(pathname)) return true;
@@ -32,6 +41,17 @@ function isPublic(pathname: string): boolean {
 }
 
 export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // Keep the middleware session refresh on routes whose handlers read the
+  // current user; skip it only where the response is session-independent.
+  if (
+    SESSION_INDEPENDENT_ROUTES.has(pathname) ||
+    pathname.startsWith("/api/public/")
+  ) {
+    return NextResponse.next({ request });
+  }
+
   // ── Graceful degradation when Supabase credentials are not configured ──────
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey =
@@ -76,8 +96,6 @@ export async function middleware(request: NextRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
-  const { pathname } = request.nextUrl;
 
   // Unconfirmed email check: user exists with an email but has not confirmed it
   const isUnconfirmed = Boolean(user && user.email && !user.email_confirmed_at);

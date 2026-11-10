@@ -44,51 +44,59 @@ export default async function GamesPage() {
     if (authUser) {
       user = { id: authUser.id, email: authUser.email };
 
-      const { data: profileData } = await supabase
+      const profileQuery = supabase
         .from("profiles")
         .select("*")
         .eq("id", authUser.id)
         .maybeSingle();
-      profile = profileData as Profile | null;
 
-      // Recent matches
-      try {
-        const { data: matches } = await supabase
-          .from("rps_matches")
-          .select(
-            "id, status, player1_id, player2_id, player1_score, player2_score, winner_id, created_at, p1:profiles!rps_matches_player1_id_fkey(display_name, avatar_url), p2:profiles!rps_matches_player2_id_fkey(display_name, avatar_url)",
-          )
-          .or(`player1_id.eq.${authUser.id},player2_id.eq.${authUser.id}`)
-          .order("created_at", { ascending: false })
-          .limit(3);
-        if (matches) recentMatches = matches as unknown as RecentMatchQueryItem[];
-      } catch {
-        // Fallback if rps_matches view/fkey differs
-      }
+      const matchesQuery = supabase
+        .from("rps_matches")
+        .select(
+          "id, status, player1_id, player2_id, player1_score, player2_score, winner_id, created_at, p1:profiles!rps_matches_player1_id_fkey(display_name, avatar_url), p2:profiles!rps_matches_player2_id_fkey(display_name, avatar_url)",
+        )
+        .or(`player1_id.eq.${authUser.id},player2_id.eq.${authUser.id}`)
+        .order("created_at", { ascending: false })
+        .limit(3);
 
-      // Pending dares/challenges
-      try {
-        const { count } = await supabase
-          .from("challenges")
-          .select("id", { count: "exact", head: true })
-          .or(`winner_id.eq.${authUser.id},loser_id.eq.${authUser.id}`)
-          .in("status", ["pending", "accepted", "submitted", "retry_requested"]);
-        if (count) pendingChallengesCount = count;
-      } catch {
-        // Fallback
-      }
+      const challengesCountQuery = supabase
+        .from("challenges")
+        .select("id", { count: "exact", head: true })
+        .or(`winner_id.eq.${authUser.id},loser_id.eq.${authUser.id}`)
+        .in("status", ["pending", "accepted", "submitted", "retry_requested"]);
 
-      // Pending friend requests
-      try {
-        const { count } = await supabase
-          .from("friend_requests")
-          .select("id", { count: "exact", head: true })
-          .eq("receiver_id", authUser.id)
-          .eq("status", "pending");
-        if (count) pendingRequestsCount = count;
-      } catch {
-        // Fallback
+      const friendRequestsCountQuery = supabase
+        .from("friend_requests")
+        .select("id", { count: "exact", head: true })
+        .eq("receiver_id", authUser.id)
+        .eq("status", "pending");
+
+      const [profileResult, matchesResult, challengesResult, requestsResult] =
+        await Promise.all([
+          Promise.resolve(profileQuery).catch((error: unknown) => {
+            console.warn("[GamesPage] Profile query failed:", error);
+            return { data: null };
+          }),
+          Promise.resolve(matchesQuery).catch((error: unknown) => {
+            console.warn("[GamesPage] Recent matches query failed:", error);
+            return { data: null };
+          }),
+          Promise.resolve(challengesCountQuery).catch((error: unknown) => {
+            console.warn("[GamesPage] Pending challenges query failed:", error);
+            return { count: null };
+          }),
+          Promise.resolve(friendRequestsCountQuery).catch((error: unknown) => {
+            console.warn("[GamesPage] Pending friend requests query failed:", error);
+            return { count: null };
+          }),
+        ]);
+
+      profile = profileResult.data as Profile | null;
+      if (matchesResult.data) {
+        recentMatches = matchesResult.data as unknown as RecentMatchQueryItem[];
       }
+      pendingChallengesCount = challengesResult.count ?? 0;
+      pendingRequestsCount = requestsResult.count ?? 0;
     }
   } catch (err) {
     console.warn("[GamesPage] Session resolution fallback:", err);
