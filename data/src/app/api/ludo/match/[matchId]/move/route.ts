@@ -7,7 +7,7 @@ import {
   readJson,
   requireUser,
   UUID_RE,
-} from "@/features/ludo/server/server";
+} from "@/features/ludo/server";
 
 interface RouteContext {
   params: Promise<{ matchId: string }>;

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse, connection } from "next/server";
-import { requireUser, runMatchRpc, UUID_RE } from "@/features/hand-cricket/server/server";
+import { requireUser, runMatchRpc, UUID_RE } from "@/features/hand-cricket/server";
 
 interface RouteContext {
   params: Promise<{ matchId: string }>;

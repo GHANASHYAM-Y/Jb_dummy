@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse, connection } from "next/server";
-import { isValidThrow } from "@/features/hand-cricket/engine/engine";
-import { readJson, requireUser, runMatchRpc, UUID_RE } from "@/features/hand-cricket/server/server";
+import { isValidThrow } from "@/features/hand-cricket/server";
+import { readJson, requireUser, runMatchRpc, UUID_RE } from "@/features/hand-cricket/server";
 
 interface RouteContext {
   params: Promise<{ matchId: string }>;

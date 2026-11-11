@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse, connection } from "next/server";
 import { createServerSupabaseClient, createServiceRoleClient } from "@/core/supabase/server";
-import { canClaimDraw } from "@/features/chess/engine/engine";
+import { canClaimDraw } from "@/features/chess/server";
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 

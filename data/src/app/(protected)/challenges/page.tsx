@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Flame, LogIn } from "lucide-react";
 import { connection } from "next/server";
 import { getServerUser } from "@/core/supabase/server";
-import { ChallengesClient } from "@/features/dare-game/components/ChallengesClient";
+import { ChallengesClient } from "@/features/dare-game";
 import { Button } from "@/shared/ui";
 
 export const metadata: Metadata = {

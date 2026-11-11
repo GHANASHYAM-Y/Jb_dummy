@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { HandCricketSolo } from "@/features/hand-cricket/components/HandCricketSolo";
+import { HandCricketSolo } from "@/features/hand-cricket";
 
 export const metadata: Metadata = {
   title: "Hand Cricket: Me vs Bot — EVOAIQU",

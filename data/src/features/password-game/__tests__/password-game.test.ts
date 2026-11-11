@@ -116,7 +116,7 @@ describe("Password Game — CSS is scoped to .pw-game", () => {
 describe("Password Game — route and navigation", () => {
   it("has a page at /play/password-game", () => {
     const page = read("app/(protected)/play/password-game/page.tsx");
-    expect(page).toContain("@/features/password-game/components/PasswordGame");
+    expect(page).toContain("@/features/password-game");
     expect(page).toContain("export default function PasswordGamePage");
   });
 

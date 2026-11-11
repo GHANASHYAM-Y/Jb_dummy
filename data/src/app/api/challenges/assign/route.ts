@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/core/supabase/server";
-import { getChallengeById, isValidVisibility } from "@/features/dare-game/lib/challenges";
+import { getChallengeById, isValidVisibility } from "@/features/dare-game/server";
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 

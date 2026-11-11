@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { connection } from "next/server";
 import { createServerSupabaseClient, getServerUser } from "@/core/supabase/server";
-import { RpsMatchBoard } from "@/features/rock-paper-scissors/components/RpsMatchBoard";
+import { RpsMatchBoard } from "@/features/rock-paper-scissors";
 
 import Link from "next/link";
 import { AlertCircle, ShieldAlert, ArrowLeft } from "lucide-react";

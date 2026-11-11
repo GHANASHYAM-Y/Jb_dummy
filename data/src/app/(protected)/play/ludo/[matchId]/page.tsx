@@ -4,8 +4,8 @@ import { connection } from "next/server";
 import Link from "next/link";
 import { AlertCircle, ArrowLeft, ShieldAlert } from "lucide-react";
 import { createServerSupabaseClient, getServerUser } from "@/core/supabase/server";
-import { loadLudoMatch, UUID_RE } from "@/features/ludo/server/server";
-import { LudoMatchBoard } from "@/features/ludo/components/LudoMatchBoard";
+import { loadLudoMatch, UUID_RE } from "@/features/ludo/server";
+import { LudoMatchBoard } from "@/features/ludo";
 import { Button } from "@/shared/ui";
 
 export const metadata: Metadata = {

@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { connection } from "next/server";
 import { createServerSupabaseClient, getServerUser } from "@/core/supabase/server";
-import { HandCricketLobby } from "@/features/hand-cricket/components/HandCricketLobby";
+import { HandCricketLobby } from "@/features/hand-cricket";
 import type { FriendEntry, MatchPhase } from "@/core/supabase/database";
-import type { HandCricketOpenMatch } from "@/features/hand-cricket/types";
+import type { HandCricketOpenMatch } from "@/features/hand-cricket";
 
 export const metadata: Metadata = {
   title: "Hand Cricket — EVOAIQU",

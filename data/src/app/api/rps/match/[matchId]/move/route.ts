@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/core/supabase/server";
-import { isValidMove } from "@/features/rock-paper-scissors/engine/rps";
+import { isValidMove } from "@/features/rock-paper-scissors/server";
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 

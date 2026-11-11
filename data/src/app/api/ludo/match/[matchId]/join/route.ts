@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse, connection } from "next/server";
-import { errorResponse, requireUser, runRpc, UUID_RE } from "@/features/ludo/server/server";
+import { errorResponse, requireUser, runRpc, UUID_RE } from "@/features/ludo/server";
 
 interface RouteContext {
   params: Promise<{ matchId: string }>;

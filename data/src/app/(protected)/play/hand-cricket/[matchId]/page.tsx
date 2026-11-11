@@ -4,8 +4,8 @@ import { connection } from "next/server";
 import Link from "next/link";
 import { AlertCircle, ArrowLeft, ShieldAlert } from "lucide-react";
 import { createServerSupabaseClient, getServerUser } from "@/core/supabase/server";
-import { loadHandCricketMatch, UUID_RE } from "@/features/hand-cricket/server/server";
-import { HandCricketMatchBoard } from "@/features/hand-cricket/components/HandCricketMatchBoard";
+import { loadHandCricketMatch, UUID_RE } from "@/features/hand-cricket/server";
+import { HandCricketMatchBoard } from "@/features/hand-cricket";
 import { Button } from "@/shared/ui";
 
 export const metadata: Metadata = {
