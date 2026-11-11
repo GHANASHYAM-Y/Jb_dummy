@@ -27,56 +27,56 @@ import {
   WINS_REQUIRED,
   type RpsMove,
   type Round,
-} from "@/lib/rps";
+} from "@/features/rock-paper-scissors/engine/rps";
 
 // ── File paths for static security analysis ───────────────────────────────────
 
 const migrationPath = path.resolve(
   __dirname,
-  "../../supabase/migrations/0003_rps.sql",
+  "../../../../supabase/migrations/0003_rps.sql",
 );
 const migration = fs.readFileSync(migrationPath, "utf-8");
 
 const inviteRoutePath = path.resolve(
   __dirname,
-  "../app/api/rps/invite/route.ts",
+  "../../../app/api/rps/invite/route.ts",
 );
 const inviteRoute = fs.readFileSync(inviteRoutePath, "utf-8");
 
 const respondRoutePath = path.resolve(
   __dirname,
-  "../app/api/rps/invite/respond/route.ts",
+  "../../../app/api/rps/invite/respond/route.ts",
 );
 const respondRoute = fs.readFileSync(respondRoutePath, "utf-8");
 
 const cancelRoutePath = path.resolve(
   __dirname,
-  "../app/api/rps/invite/cancel/route.ts",
+  "../../../app/api/rps/invite/cancel/route.ts",
 );
 const cancelRoute = fs.readFileSync(cancelRoutePath, "utf-8");
 
 const moveRoutePath = path.resolve(
   __dirname,
-  "../app/api/rps/move/route.ts",
+  "../../../app/api/rps/move/route.ts",
 );
 const moveRoute = fs.readFileSync(moveRoutePath, "utf-8");
 
 const stateRoutePath = path.resolve(
   __dirname,
-  "../app/api/rps/state/route.ts",
+  "../../../app/api/rps/state/route.ts",
 );
 const stateRoute = fs.readFileSync(stateRoutePath, "utf-8");
 
 const historyRoutePath = path.resolve(
   __dirname,
-  "../app/api/rps/history/route.ts",
+  "../../../app/api/rps/history/route.ts",
 );
 const historyRoute = fs.readFileSync(historyRoutePath, "utf-8");
 
-const dbTypesPath = path.resolve(__dirname, "../core/supabase/database.ts");
+const dbTypesPath = path.resolve(__dirname, "../../../core/supabase/database.ts");
 const dbTypes = fs.readFileSync(dbTypesPath, "utf-8");
 
-const i18nPath = path.resolve(__dirname, "../core/i18n/translations.ts");
+const i18nPath = path.resolve(__dirname, "../../../core/i18n/translations.ts");
 const i18nSrc = fs.readFileSync(i18nPath, "utf-8");
 
 // ── 1. Pure Game Logic Tests ──────────────────────────────────────────────────

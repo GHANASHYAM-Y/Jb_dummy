@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { Sparkles, Shield, Lock, CheckCircle2 } from "lucide-react";
-import { HandGraphic } from "@/components/rps/HandGraphic";
-import { rpsAudio } from "@/components/rps/RpsAudio";
+import { HandGraphic } from "@/features/rock-paper-scissors/components/HandGraphic";
+import { rpsAudio } from "@/features/rock-paper-scissors/sound/RpsAudio";
 import {
   type RpsMove,
   type RoundMove,
@@ -12,7 +12,7 @@ import {
   MOVE_LABEL_EN,
   MOVE_LABEL_TA,
   roundOutcomeLabel,
-} from "@/lib/rps";
+} from "@/features/rock-paper-scissors/engine/rps";
 import { Button, Spinner } from "@/shared/ui";
 import { cn } from "@/shared/lib/utils";
 

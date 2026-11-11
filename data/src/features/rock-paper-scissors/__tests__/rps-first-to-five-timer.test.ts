@@ -11,31 +11,31 @@ import {
   isValidRoundMove,
   roundOutcomeLabel,
   type Round,
-} from "@/lib/rps";
+} from "@/features/rock-paper-scissors/engine/rps";
 
 // Read SQL migration and component sources for architectural verification
 const migration0007Src = fs.readFileSync(
-  path.resolve(__dirname, "../../supabase/migrations/0007_rps_first_to_five_and_timer.sql"),
+  path.resolve(__dirname, "../../../../supabase/migrations/0007_rps_first_to_five_and_timer.sql"),
   "utf-8"
 );
 const matchBoardSrc = fs.readFileSync(
-  path.resolve(__dirname, "../components/rps/RpsMatchBoard.tsx"),
+  path.resolve(__dirname, "../components/RpsMatchBoard.tsx"),
   "utf-8"
 );
 const roundTimerSrc = fs.readFileSync(
-  path.resolve(__dirname, "../components/rps/RoundTimer.tsx"),
+  path.resolve(__dirname, "../components/RoundTimer.tsx"),
   "utf-8"
 );
 const handGraphicSrc = fs.readFileSync(
-  path.resolve(__dirname, "../components/rps/HandGraphic.tsx"),
+  path.resolve(__dirname, "../components/HandGraphic.tsx"),
   "utf-8"
 );
 const timeoutRouteSrc = fs.readFileSync(
-  path.resolve(__dirname, "../app/api/rps/timeout/route.ts"),
+  path.resolve(__dirname, "../../../app/api/rps/timeout/route.ts"),
   "utf-8"
 );
 const stateRouteSrc = fs.readFileSync(
-  path.resolve(__dirname, "../app/api/rps/state/route.ts"),
+  path.resolve(__dirname, "../../../app/api/rps/state/route.ts"),
   "utf-8"
 );
 

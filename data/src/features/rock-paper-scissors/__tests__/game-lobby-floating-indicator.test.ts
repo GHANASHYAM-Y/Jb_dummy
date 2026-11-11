@@ -16,13 +16,13 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 
 describe("EVOAIQU Game Lobby (Stage C) — Matchmaking Floating Status Indicator", () => {
-  const indicatorPath = path.resolve(__dirname, "../components/matchmaking/MatchmakingFloatingIndicator.tsx");
+  const indicatorPath = path.resolve(__dirname, "../matchmaking/MatchmakingFloatingIndicator.tsx");
   const indicatorCode = fs.readFileSync(indicatorPath, "utf-8");
 
-  const mmCardPath = path.resolve(__dirname, "../components/matchmaking/RandomMatchmakingCard.tsx");
+  const mmCardPath = path.resolve(__dirname, "../matchmaking/RandomMatchmakingCard.tsx");
   const mmCardCode = fs.readFileSync(mmCardPath, "utf-8");
 
-  const lobbyPath = path.resolve(__dirname, "../core/home/GameSectionClient.tsx");
+  const lobbyPath = path.resolve(__dirname, "../../../core/home/GameSectionClient.tsx");
   const lobbyCode = fs.readFileSync(lobbyPath, "utf-8");
 
   describe("1. Queue State Visibility & Disappearance Lifecycle", () => {

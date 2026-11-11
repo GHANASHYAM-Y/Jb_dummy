@@ -31,35 +31,35 @@ import type { MatchmakingStatus } from "@/core/supabase/database";
 
 const migrationPath = path.resolve(
   __dirname,
-  "../../supabase/migrations/0005_matchmaking.sql"
+  "../../../../supabase/migrations/0005_matchmaking.sql"
 );
 const migration = fs.readFileSync(migrationPath, "utf-8");
 
 const joinRoutePath = path.resolve(
   __dirname,
-  "../app/api/matchmaking/join/route.ts"
+  "../../../app/api/matchmaking/join/route.ts"
 );
 const joinRoute = fs.readFileSync(joinRoutePath, "utf-8");
 
 const statusRoutePath = path.resolve(
   __dirname,
-  "../app/api/matchmaking/status/route.ts"
+  "../../../app/api/matchmaking/status/route.ts"
 );
 const statusRoute = fs.readFileSync(statusRoutePath, "utf-8");
 
 const cancelRoutePath = path.resolve(
   __dirname,
-  "../app/api/matchmaking/cancel/route.ts"
+  "../../../app/api/matchmaking/cancel/route.ts"
 );
 const cancelRoute = fs.readFileSync(cancelRoutePath, "utf-8");
 
 const blocksRoutePath = path.resolve(
   __dirname,
-  "../app/api/blocks/route.ts"
+  "../../../app/api/blocks/route.ts"
 );
 const blocksRoute = fs.readFileSync(blocksRoutePath, "utf-8");
 
-const dbTypesPath = path.resolve(__dirname, "../core/supabase/database.ts");
+const dbTypesPath = path.resolve(__dirname, "../../../core/supabase/database.ts");
 const dbTypes = fs.readFileSync(dbTypesPath, "utf-8");
 
 // ── 1. Migration 0005 — User Blocks Schema & Safety Audit ─────────────────────

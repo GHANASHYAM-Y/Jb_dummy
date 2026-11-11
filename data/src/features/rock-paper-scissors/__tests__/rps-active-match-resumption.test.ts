@@ -21,19 +21,19 @@ import fs from "fs";
 import path from "path";
 
 const inviteRouteSrc = fs.readFileSync(
-  path.resolve(__dirname, "../app/api/rps/invite/route.ts"),
+  path.resolve(__dirname, "../../../app/api/rps/invite/route.ts"),
   "utf-8"
 );
 const lobbySrc = fs.readFileSync(
-  path.resolve(__dirname, "../components/rps/RpsLobby.tsx"),
+  path.resolve(__dirname, "../components/RpsLobby.tsx"),
   "utf-8"
 );
 const matchBoardSrc = fs.readFileSync(
-  path.resolve(__dirname, "../components/rps/RpsMatchBoard.tsx"),
+  path.resolve(__dirname, "../components/RpsMatchBoard.tsx"),
   "utf-8"
 );
 const matchmakingStatusMigration = fs.readFileSync(
-  path.resolve(__dirname, "../../supabase/migrations/0005_matchmaking.sql"),
+  path.resolve(__dirname, "../../../../supabase/migrations/0005_matchmaking.sql"),
   "utf-8"
 );
 

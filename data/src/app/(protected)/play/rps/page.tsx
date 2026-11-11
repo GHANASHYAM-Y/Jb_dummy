@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { connection } from "next/server";
 import { createServerSupabaseClient, getServerUser } from "@/core/supabase/server";
-import { RpsLobby } from "@/components/rps/RpsLobby";
+import { RpsLobby } from "@/features/rock-paper-scissors/components/RpsLobby";
 import type { FriendEntry } from "@/core/supabase/database";
 
 export const metadata: Metadata = {

@@ -19,16 +19,16 @@ import {
   WINS_REQUIRED,
   MOVE_LABEL_EN,
   MOVE_LABEL_TA,
-} from "@/lib/rps";
+} from "@/features/rock-paper-scissors/engine/rps";
 import { cn } from "@/shared/lib/utils";
 import type { Challenge } from "@/core/supabase/database";
 import { ChallengeSelectionModal } from "@/components/challenges/ChallengeSelectionModal";
 import { MatchChallengeCard } from "@/components/challenges/MatchChallengeCard";
-import { HandGraphic } from "@/components/rps/HandGraphic";
-import { RoundTimer } from "@/components/rps/RoundTimer";
-import { ArenaDuelStage } from "@/components/rps/ArenaDuelStage";
-import { rpsAudio } from "@/components/rps/RpsAudio";
-import { RpsConfetti } from "@/components/rps/RpsConfetti";
+import { HandGraphic } from "@/features/rock-paper-scissors/components/HandGraphic";
+import { RoundTimer } from "@/features/rock-paper-scissors/components/RoundTimer";
+import { ArenaDuelStage } from "@/features/rock-paper-scissors/components/ArenaDuelStage";
+import { rpsAudio } from "@/features/rock-paper-scissors/sound/RpsAudio";
+import { RpsConfetti } from "@/features/rock-paper-scissors/components/RpsConfetti";
 import { GameLifecycleBanner } from "@/shared/game/GameLifecycleBanner";
 import type { MatchPhase, GameEndReason } from "@/core/supabase/database";
 

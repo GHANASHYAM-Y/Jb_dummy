@@ -54,7 +54,7 @@ describe("EVOAIQU Architecture Standard — Navigation & Layout", () => {
     expect(navCode).toContain('pathname.startsWith("/play/rps/") && pathname !== "/play/rps"');
     expect(navCode).toContain("isFullScreenGame");
 
-    const rpsBoardPath = path.resolve(__dirname, "../components/rps/RpsMatchBoard.tsx");
+    const rpsBoardPath = path.resolve(__dirname, "../features/rock-paper-scissors/components/RpsMatchBoard.tsx");
     const rpsBoardCode = fs.readFileSync(rpsBoardPath, "utf-8");
     expect(rpsBoardCode).toContain('id="exit-match-btn"');
     expect(rpsBoardCode).toContain('href="/play/rps"');

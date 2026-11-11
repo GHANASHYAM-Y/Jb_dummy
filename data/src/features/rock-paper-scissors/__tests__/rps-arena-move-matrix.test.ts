@@ -8,7 +8,7 @@ import {
   WINS_REQUIRED,
   type RpsMove,
   type Round,
-} from "@/lib/rps";
+} from "@/features/rock-paper-scissors/engine/rps";
 
 describe("RPS All 9 Move Combinations & Matrix Adjudication", () => {
   const MOVES: RpsMove[] = ["rock", "paper", "scissors"];

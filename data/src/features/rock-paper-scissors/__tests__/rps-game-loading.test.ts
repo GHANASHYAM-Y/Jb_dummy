@@ -4,23 +4,23 @@ import path from "path";
 
 // Inspect component and route sources to ensure contracts and patterns are respected
 const matchPageSrc = fs.readFileSync(
-  path.resolve(__dirname, "../app/(protected)/play/rps/[matchId]/page.tsx"),
+  path.resolve(__dirname, "../../../app/(protected)/play/rps/[matchId]/page.tsx"),
   "utf-8"
 );
 const matchBoardSrc = fs.readFileSync(
-  path.resolve(__dirname, "../components/rps/RpsMatchBoard.tsx"),
+  path.resolve(__dirname, "../components/RpsMatchBoard.tsx"),
   "utf-8"
 );
 const stateRouteSrc = fs.readFileSync(
-  path.resolve(__dirname, "../app/api/rps/state/route.ts"),
+  path.resolve(__dirname, "../../../app/api/rps/state/route.ts"),
   "utf-8"
 );
 const matchRouteSrc = fs.readFileSync(
-  path.resolve(__dirname, "../app/api/rps/match/[matchId]/route.ts"),
+  path.resolve(__dirname, "../../../app/api/rps/match/[matchId]/route.ts"),
   "utf-8"
 );
 const matchMoveRouteSrc = fs.readFileSync(
-  path.resolve(__dirname, "../app/api/rps/match/[matchId]/move/route.ts"),
+  path.resolve(__dirname, "../../../app/api/rps/match/[matchId]/move/route.ts"),
   "utf-8"
 );
 

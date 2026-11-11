@@ -19,26 +19,26 @@
 import { describe, it, expect } from "vitest";
 import fs from "fs";
 import path from "path";
-import { isValidMove, type Round } from "@/lib/rps";
+import { isValidMove, type Round } from "@/features/rock-paper-scissors/engine/rps";
 
 const arenaDuelStageSrc = fs.readFileSync(
-  path.resolve(__dirname, "../components/rps/ArenaDuelStage.tsx"),
+  path.resolve(__dirname, "../components/ArenaDuelStage.tsx"),
   "utf-8"
 );
 const roundTimerSrc = fs.readFileSync(
-  path.resolve(__dirname, "../components/rps/RoundTimer.tsx"),
+  path.resolve(__dirname, "../components/RoundTimer.tsx"),
   "utf-8"
 );
 const matchBoardSrc = fs.readFileSync(
-  path.resolve(__dirname, "../components/rps/RpsMatchBoard.tsx"),
+  path.resolve(__dirname, "../components/RpsMatchBoard.tsx"),
   "utf-8"
 );
 const stateRouteSrc = fs.readFileSync(
-  path.resolve(__dirname, "../app/api/rps/state/route.ts"),
+  path.resolve(__dirname, "../../../app/api/rps/state/route.ts"),
   "utf-8"
 );
 const moveRouteSrc = fs.readFileSync(
-  path.resolve(__dirname, "../app/api/rps/move/route.ts"),
+  path.resolve(__dirname, "../../../app/api/rps/move/route.ts"),
   "utf-8"
 );
 

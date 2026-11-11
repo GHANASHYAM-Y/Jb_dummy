@@ -19,7 +19,7 @@ import path from "path";
 const chatClientPath = path.resolve(__dirname, "../components/chat/ChatStoriesClient.tsx");
 const chatClientSrc = fs.readFileSync(chatClientPath, "utf-8");
 
-const rpsBoardPath = path.resolve(__dirname, "../components/rps/RpsMatchBoard.tsx");
+const rpsBoardPath = path.resolve(__dirname, "../features/rock-paper-scissors/components/RpsMatchBoard.tsx");
 const rpsBoardSrc = fs.readFileSync(rpsBoardPath, "utf-8");
 
 const chessBoardPath = path.resolve(__dirname, "../features/chess/components/ChessMatchBoard.tsx");

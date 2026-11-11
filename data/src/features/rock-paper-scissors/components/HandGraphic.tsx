@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import type { RoundMove } from "@/lib/rps";
+import type { RoundMove } from "@/features/rock-paper-scissors/engine/rps";
 import { cn } from "@/shared/lib/utils";
 
 interface HandGraphicProps {

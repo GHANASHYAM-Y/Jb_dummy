@@ -24,7 +24,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 import { Button, Avatar } from "@/shared/ui";
-import { RandomMatchmakingCard } from "@/components/matchmaking/RandomMatchmakingCard";
+import { RandomMatchmakingCard } from "@/features/rock-paper-scissors/matchmaking/RandomMatchmakingCard";
 import type { Profile } from "@/core/supabase/database";
 
 export interface RecentMatchItem {

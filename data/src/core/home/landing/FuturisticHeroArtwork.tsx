@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Zap, Swords, Trophy, Activity } from "lucide-react";
-import { HandGraphic } from "@/components/rps/HandGraphic";
+import { HandGraphic } from "@/features/rock-paper-scissors/components/HandGraphic";
 import { cn } from "@/shared/lib/utils";
 
 /**

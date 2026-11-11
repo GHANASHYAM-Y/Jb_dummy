@@ -25,7 +25,7 @@ describe("EVOAIQU Game Lobby (Stage A) — UX & Navigation Standards", () => {
   const lobbyPath = path.resolve(__dirname, "../GameSectionClient.tsx");
   const lobbyCode = fs.readFileSync(lobbyPath, "utf-8");
 
-  const mmCardPath = path.resolve(__dirname, "../../../components/matchmaking/RandomMatchmakingCard.tsx");
+  const mmCardPath = path.resolve(__dirname, "../../../features/rock-paper-scissors/matchmaking/RandomMatchmakingCard.tsx");
   const mmCardCode = fs.readFileSync(mmCardPath, "utf-8");
 
   const appNavPath = path.resolve(__dirname, "../../navigation/AppNavigation.tsx");

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { connection } from "next/server";
 import { getServerUser } from "@/core/supabase/server";
-import { RandomMatchmakingCard } from "@/components/matchmaking/RandomMatchmakingCard";
+import { RandomMatchmakingCard } from "@/features/rock-paper-scissors/matchmaking/RandomMatchmakingCard";
 
 export const metadata: Metadata = {
   title: "Random Matchmaking — EVOAIQU",
