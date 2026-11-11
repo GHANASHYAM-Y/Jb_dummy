@@ -12,7 +12,16 @@ export default defineConfig({
     coverage: {
       provider: "v8",
       reporter: ["text", "json-summary"],
-      include: ["src/lib/**", "src/app/api/**", "src/app/auth/**"],
+      include: [
+        "src/features/**/engine/**",
+        "src/features/**/server/**",
+        "src/features/**/server.ts",
+        "src/features/dare-game/lib/**",
+        "src/core/supabase/**",
+        "src/shared/lib/**",
+        "src/app/api/**",
+        "src/app/auth/**",
+      ],
       exclude: ["src/**/*.test.*"],
     },
   },

@@ -48,20 +48,19 @@ Run all commands here.
 ```
 data/
 ├── src/
-│   ├── app/                 Pages and API routes (Next.js App Router)
+│   ├── app/                 Routing only: pages and API routes (Next.js App Router)
 │   │   ├── (auth)/          login, signup
 │   │   ├── (protected)/     dashboard, friends, play/*, challenges, stories, profile, settings...
 │   │   ├── api/             The server endpoints, one folder per feature
 │   │   └── games, about, how-to-play, privacy, terms   public pages
-│   ├── components/          Screens and widgets, one folder per feature
-│   │   └── ui/              Shared buttons, badges, alerts
-│   ├── lib/                 Game rules and server helpers
-│   │   ├── rps.ts, challenges.ts, i18n.ts
-│   │   ├── chess/  hand-cricket/  ludo/     rules engine + server code per game
-│   │   └── supabase/        Browser and server database clients
+│   ├── features/            One self-contained module per game (each has a README.md)
+│   │   ├── hand-cricket/  rock-paper-scissors/  ludo/  chess/
+│   │   ├── password-game/   fully self-contained
+│   │   └── dare-game/       dares, videos, stories (used by the match games)
+│   ├── shared/              Building blocks used by several games: ui/, game/, lib/
+│   ├── core/                The platform: auth, navigation, i18n, supabase, friends, profile, home
 │   ├── middleware.ts        Decides which pages need a login
-│   ├── types/database.ts    Database types
-│   └── __tests__/           Automated tests
+│   └── __tests__/           Cross-cutting architecture tests (each module also has its own __tests__/)
 ├── supabase/migrations/     17 numbered SQL files that build the database
 ├── public/                  Static images
 ├── .env.example             Template for your secrets (copy to .env.local)
@@ -69,10 +68,13 @@ data/
 └── next.config.ts, tsconfig.json, vitest.config.mjs, eslint.config.mjs, vercel.json
 ```
 
+The rules for how these folders may import each other are in [support/architecture/ARCHITECTURE.md](support/architecture/ARCHITECTURE.md).
+
 ### `support/`: documents
 
 | File | What it is |
 |------|------------|
+| `architecture/ARCHITECTURE.md` | How `data/src/` is organised and the import rules between games. |
 | `Yet_To_Do/README.md` | Open tasks. Includes the signup "server error" investigation and Google sign-in. |
 | `production_readiness_report.md`, `post_remediation_release_gate_report.md` | Release checks. |
 | `ui_redesign_audit.md`, `ui_redesign_completion_report.md`, `post_redesign_acceptance_report.md` | The UI redesign history. |
@@ -109,7 +111,7 @@ Most multiplayer games follow the same safe pattern, so cheating from the browse
 
 1. **A player clicks** (roll, move, throw). The browser calls an API route such as `/api/ludo/match/<id>/move`.
 2. **The server checks the request**: who is logged in, whether it is their turn, whether the move is legal. Dice are rolled on the server.
-3. **The rules engine** (`src/lib/<game>/engine.ts`) works out the new board. Engines are plain functions with no database access, which makes them easy to test.
+3. **The rules engine** (`src/features/<game>/engine/`) works out the new board. Engines are plain functions with no database access, which makes them easy to test.
 4. **The result is saved** through a database function (RPC). Writes go through functions only. Players cannot edit game tables directly (row-level security blocks it).
 5. **Both players are updated live** through Supabase Realtime, with a short poll as a backup.
 6. **Timeouts and exits are shared by all games**: a turn clock, disconnect and reconnect handling, and a cleanup job (`/api/games/timeout/cleanup`) that ends abandoned matches. Ludo also forfeits a player who misses 3 turns in a row.
@@ -132,14 +134,16 @@ To make a new page public, add its path to `PUBLIC_ROUTES` there.
 
 | I want to... | Look in |
 |--------------|---------|
-| Change how a game's rules work | `data/src/lib/<game>/engine.ts` (or `rps.ts`) |
+| Understand one game | `data/src/features/<game>/README.md` |
+| Change how a game's rules work | `data/src/features/<game>/engine/` (Password Game: `rules/rules.js`) |
 | Change what an API does | `data/src/app/api/<feature>/.../route.ts` |
-| Change a screen | `data/src/components/<feature>/` and `data/src/app/(protected)/...` |
+| Change a screen | `data/src/features/<game>/components/` (platform screens: `data/src/core/`) |
 | Add or change a database table or function | A new file in `data/supabase/migrations/` |
-| Add a game card to the games page | `data/src/components/games/GameSectionClient.tsx` |
+| Add a game card to the games page | `data/src/core/home/GameSectionClient.tsx` |
+| Add a whole new game | `support/architecture/ARCHITECTURE.md`, section 6 |
 | Change colours or the theme | `data/src/app/globals.css` |
-| Change text or add a language | `data/src/lib/i18n.ts` |
-| See what the tests expect | `data/src/__tests__/` |
+| Change text or add a language | `data/src/core/i18n/translations.ts` |
+| See what the tests expect | `__tests__/` inside each module, plus `data/src/__tests__/` |
 
 ---
 
@@ -150,3 +154,4 @@ To make a new page public, add its path to `PUBLIC_ROUTES` there.
 - Online Ludo is friends only (no random matching) by design.
 - 8 older tests fail on a clean checkout (they check SQL text in migrations 0003 to 0009). They are unrelated to new work.
 - The generated database types do not yet include the Ludo and Hand Cricket tables, so those server calls are not type-checked.
+- Some code is duplicated across games (API helpers, connection wiring, sound setup). It is listed in `support/architecture/ARCHITECTURE.md`, section 7.

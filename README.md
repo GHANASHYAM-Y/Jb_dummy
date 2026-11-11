@@ -10,6 +10,7 @@ A bold, futuristic social gaming platform where every match creates a story. Pla
 |--------------|------|
 | Understand what this project is and what each folder holds | [ABOUT.md](ABOUT.md) |
 | Install and run it on a new laptop | [SETUP.md](SETUP.md) |
+| See how the code is organised (one module per game) | [support/architecture/ARCHITECTURE.md](support/architecture/ARCHITECTURE.md) |
 | Install in one command | `setup.ps1` (Windows) or `bash setup.sh` (macOS / Linux / Git Bash) |
 | See open tasks and reports | [`support/`](support/) |
 
@@ -145,44 +146,22 @@ ABOUT.md   # What each part is and how it fits together
 setup.ps1, setup.sh, start-servers.bat   # Setup and start helpers
 ```
 
-Inside `data/`:
+Inside `data/` (full rules in [support/architecture/ARCHITECTURE.md](support/architecture/ARCHITECTURE.md)):
 
 ```
 src/
-├── app/
-│   ├── (auth)/          # Login, Signup pages
-│   ├── (protected)/     # Dashboard, Profile, Friends, History, Play, Challenges, Matchmaking (requires auth)
-│   ├── api/
-│   │   ├── auth/        # Logout, Delete Account
-│   │   ├── friends/     # Send, Respond, Cancel, Remove
-│   │   ├── rps/         # Invite, Respond, Cancel, Move, State, History
-│   │   ├── challenges/  # Assign, Respond, Match, List
-│   │   └── matchmaking/ # Join, Status, Cancel
-│   ├── auth/callback/   # Email verification code exchange
-│   ├── games/           # Public games page
-│   └── globals.css      # EVOAIQU design system
-├── components/
-│   ├── auth/            # LoginForm, SignupForm
-│   ├── challenges/      # ChallengesClient, ChallengeSelectionModal, MatchChallengeCard
-│   ├── dashboard/       # DashboardClient
-│   ├── friends/         # FriendsClient (search, tabs, actions)
-│   ├── landing/         # LandingPage
-│   ├── matchmaking/     # RandomMatchmakingCard
-│   ├── profile/         # ProfileEditForm
-│   ├── rps/             # RpsMatchBoard, RpsInvitesList, ActiveGameLobby, RpsLobby
-│   ├── Navbar.tsx
-│   ├── Footer.tsx
-│   └── ui/              # Button, Spinner, Alert, Avatar, Badge, EvoIdBadge, …
-├── contexts/
-│   └── I18nContext.tsx  # EN / Tamil locale provider
-├── lib/
-│   ├── challenges.ts    # Curated challenge catalog, pure validators, metadata
-│   ├── rps.ts           # Pure RPS rules, adjudication, scoring
-│   ├── i18n.ts          # Translation strings (EN + Tamil)
-│   └── supabase/        # Browser and Server Supabase clients
-├── types/
-│   └── database.ts      # TypeScript schema & RPC definitions
-└── __tests__/           # Automated test suites (Vitest), one or more per feature
+├── app/                 # Routing only: pages, layouts and API routes (Next.js App Router)
+├── features/            # One module per game, each with components/, engine/, __tests__/ and a README.md
+│   ├── hand-cricket/
+│   ├── rock-paper-scissors/   # includes random matchmaking
+│   ├── dare-game/             # dares, video submissions, stories (used by the match games)
+│   ├── password-game/         # fully self-contained
+│   ├── ludo/
+│   └── chess/
+├── shared/              # ui/ (buttons, badges, sheet...), game/ (lifecycle banner), lib/ (cn helper)
+├── core/                # auth, navigation, i18n, supabase (+ database types), friends, profile, settings, dashboard, home
+├── middleware.ts        # Which pages need a login
+└── __tests__/           # Cross-cutting architecture tests
 supabase/
 └── migrations/
     ├── 0001_profiles.sql    # Profiles table, RLS, trigger, ID generator

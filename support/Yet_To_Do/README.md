@@ -2,6 +2,45 @@
 
 - Google sign-in (Google SSO): configure the Google OAuth provider and finish integration later.
 
+## Planned ideas
+
+Assumes the app already has chess, Hand Cricket and Ludo, plus challenges, blocking and accounts.
+
+### Games that suit a two-player, turn-based setup
+
+- **Tic-Tac-Toe** is the simplest to add and good for a first new game.
+- **Connect Four** has easy rules and works well for turn-based realtime play.
+- **Checkers (Draughts)** is similar to chess but simpler.
+- **Rock Paper Scissors** is very quick to build, and it's close to Hand Cricket.
+- **Snakes and Ladders** is a dice game like Ludo, so parts of its engine can be reused.
+- **Battleship** has hidden boards, so it needs careful handling of hidden state on the server.
+- **Dots and Boxes**, **Reversi (Othello)** and **Backgammon** are more options if you want more depth.
+- **Trivia or Quiz duels** are fast head-to-head rounds, and they're easy to add content to.
+- **Word games** like Hangman, or a two-player word guess, for something different.
+
+### Features beyond new games
+
+- **Leaderboards and ratings:** wins and losses, or Elo for chess.
+- **In-game chat and emoji reactions.**
+- **Friends list and invite links,** so you can challenge someone directly.
+- **Spectator mode,** so others can watch a live game.
+- **Rematch button** and **game history** with replays.
+- **Notifications** when it's your turn or you're challenged.
+- **Matchmaking queue** for playing random opponents.
+- **Profile avatars, achievements and badges.**
+- **Tournaments** with brackets.
+
+### Quality and polish
+
+- Tests for each game's rules. Vitest is already set up, with some Ludo tests.
+- A mobile-friendly layout and sound effects.
+- Dark mode and accessibility checks.
+- Rate limiting on the API routes, since the app handles accounts and real-time play.
+
+### Suggested first step
+
+Start with Tic-Tac-Toe or Connect Four. They're quick to build and would show how a new game plugs into the existing challenge and realtime flow.
+
 ## Fix signup database error
 
 ### Reported symptom
@@ -21,7 +60,7 @@ The browser's Supabase Auth signup request returned HTTP `500`:
 
 ### What is known
 
-- Signup calls Supabase Auth directly from `src/components/auth/SignupForm.tsx`; there is no application signup API route.
+- Signup calls Supabase Auth directly from `src/core/auth/SignupForm.tsx`; there is no application signup API route.
 - The error happens during Supabase user creation, before the page advances to the existing six-digit email OTP form.
 - The `auth.users` trigger in `supabase/migrations/0001_profiles.sql` creates a `public.profiles` row and generates an EVOAIQU ID.
 - The HTTP response does not identify which database operation failed. The exact cause is **not confirmed**; do not assume the profile trigger or change production SQL without checking logs.
