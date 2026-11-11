@@ -154,4 +154,4 @@ To make a new page public, add its path to `PUBLIC_ROUTES` there.
 - Online Ludo is friends only (no random matching) by design.
 - 8 older tests fail on a clean checkout (they check SQL text in migrations 0003 to 0009). They are unrelated to new work.
 - The generated database types do not yet include the Ludo and Hand Cricket tables, so those server calls are not type-checked.
-- Some code is duplicated across games (API helpers, connection wiring, sound setup). It is listed in `support/architecture/ARCHITECTURE.md`, section 7.
+- Identical code that several games copied has been merged; the similar-looking code that was kept separate, and why, is listed in `support/architecture/ARCHITECTURE.md`, section 7.

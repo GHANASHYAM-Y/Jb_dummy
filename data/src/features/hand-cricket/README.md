@@ -28,7 +28,8 @@ Everything else in this folder is internal. Other code imports only these entry 
 ## Working on this game
 
 - The solo game runs entirely in the browser, so engine changes affect solo and online play together.
-- The online board embeds the dare flow through `@/features/dare-game`.
+- The online board embeds the dare flow through `@/features/dare-game` (including `useMatchChallenge`).
+- Disconnect and reconnect reporting comes from `shared/game/useMatchConnection`, shared with Ludo and Hand Cricket.
 
 ## Tests
 

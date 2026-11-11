@@ -91,7 +91,12 @@ Only code that several games genuinely use:
 |------|------|---------|
 | `shared/ui/` | Buttons, badges, alerts, avatar, spinner, `sheet`, `dialog`, page loader | Everything |
 | `shared/game/GameLifecycleBanner.tsx` | Turn clock / disconnect / reconnect banner | Chess, Hand Cricket, Ludo, RPS |
+| `shared/game/useMatchConnection.ts` | Reports disconnects and reconnects for a live friend match | Hand Cricket, Ludo |
 | `shared/lib/utils.ts` | `cn()` class helper and small utilities | Everything |
+| `shared/lib/validation.ts` | `UUID_RE`, the one UUID check every route uses | API routes, match pages |
+| `shared/lib/http.ts` | `postJson` (client) and `readJson` (route handlers) | Hand Cricket, Ludo |
+
+The dare loading that games run after a match is not in `shared/`: it belongs to the dare system, so it is `useMatchChallenge`, exported by `@/features/dare-game`.
 
 The shared server-side lifecycle (disconnect, reconnect, leave, timeout cleanup) is in `app/api/games/*` and migration `0014_game_lifecycle_and_timeouts.sql`. Its tests live in `shared/game/__tests__/`.
 
@@ -135,17 +140,23 @@ Game-specific things stay in the game even when two games have something similar
 
 ---
 
-## 7. Known duplication (planned "Phase B", not done yet)
+## 7. Duplication: what was merged and what was kept on purpose
 
-The reorganisation only moved code. These duplicates were found and left alone on purpose, because removing them changes game code:
+"Phase B" merged only code that was genuinely identical, so behaviour stays the same. Each change has its own commit and test run.
 
-| Duplication | Where | Suggested home |
-|-------------|-------|----------------|
-| UUID regex copied into ~34 route files | `app/api/**` | `shared/lib/validation.ts` |
-| API helpers (`httpStatusForCode`, `requireUser`, `readJson`, `UUID_RE`) written twice | `features/ludo/server/server.ts`, `features/hand-cricket/server/server.ts` | `shared/server/` |
-| Disconnect / reconnect / polling wiring repeated | the four match boards | a `useMatchConnection` hook in `shared/game/` |
-| Dare loading glue repeated after a match | Ludo, Hand Cricket, RPS boards | a hook exported by `features/dare-game` |
-| Web Audio setup written twice | `chess/sound/sounds.ts`, `rock-paper-scissors/sound/RpsAudio.ts` | `shared/audio/` |
+| Duplication | Result |
+|-------------|--------|
+| UUID regex copied into 37 files (all identical) | **Merged** into `shared/lib/validation.ts` |
+| `postJson` in the Ludo and Hand Cricket boards (identical) | **Merged** into `shared/lib/http.ts` |
+| `readJson` in the Ludo and Hand Cricket server helpers (identical) | **Merged** into `shared/lib/http.ts` |
+| Disconnect / reconnect wiring in the Ludo and Hand Cricket boards (identical) | **Merged** into `shared/game/useMatchConnection.ts` |
+| Post-match dare loading in the Ludo and Hand Cricket boards (identical) | **Merged** into `useMatchChallenge` in `features/dare-game` |
+| Disconnect / reconnect wiring in Chess and RPS | **Kept.** RPS also reconnects on mount and Chess does not; merging would change one of them |
+| Dare loading in RPS | **Kept.** It does not poll for the loser and ignores a response without a `challenge` field |
+| Other server helpers in Ludo and Hand Cricket (`httpStatusForCode`, `requireUser`, the RPC wrapper) | **Kept.** Each game has its own error-code table and response shape; merging would change API responses |
+| Web Audio setup in Chess and RPS (~12 lines each) | **Kept.** Two short functions inside two different sound designs; a shared module would add more than it saves |
+
+Small issue noticed while comparing: RPS calls `void this.ctx.resume()` without a `.catch`, so a failed audio resume shows as an unhandled promise rejection in the console. Chess catches it. Not changed here.
 
 Unused code found and kept for now: `core/dashboard/DashboardClient.tsx` (only a source-text test reads it), `shared/ui/dialog.tsx`, and five default Next.js SVGs in `data/public/`.
 

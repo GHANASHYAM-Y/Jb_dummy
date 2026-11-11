@@ -15,10 +15,11 @@ After a match the winner picks a dare for the loser. The loser accepts or skips 
 |--------|----------|
 | `components/` | Challenge picker, per-match dare card, video recorder, winner review, challenges page, stories reel |
 | `lib/challenges.ts` | The curated dare catalog, validators and category metadata |
+| `hooks/useMatchChallenge.ts` | Loads a finished match's dare; the loser keeps checking every 5 seconds |
 
 ## Public entry points
 
-- `index.ts` (client-safe): `ChallengeSelectionModal`, `MatchChallengeCard` (used by the games), `ChallengesClient`, `ChatStoriesClient` (used by pages)
+- `index.ts` (client-safe): `ChallengeSelectionModal`, `MatchChallengeCard` and `useMatchChallenge` (used by the games), `ChallengesClient`, `ChatStoriesClient` (used by pages)
 - `server.ts`: `getChallengeById`, `isValidVisibility` (used by API routes)
 
 Everything else in this folder is internal. Other code imports only these entry points (enforced by `eslint.config.mjs` and `src/__tests__/architecture-boundaries.test.ts`).
