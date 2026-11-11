@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/core/supabase/server";
+import { UUID_RE } from "@/shared/lib/validation";
 
 /**
  * POST /api/friends/respond
@@ -40,7 +41,6 @@ export async function POST(request: NextRequest) {
     }
 
     // Basic UUID format check.
-    const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
     if (!UUID_RE.test(body.request_id)) {
       return NextResponse.json({ error: "Invalid request_id." }, { status: 400 });
     }

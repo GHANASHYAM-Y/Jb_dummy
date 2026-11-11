@@ -7,6 +7,7 @@ import { RpsMatchBoard } from "@/features/rock-paper-scissors";
 import Link from "next/link";
 import { AlertCircle, ShieldAlert, ArrowLeft } from "lucide-react";
 import { Button } from "@/shared/ui";
+import { UUID_RE } from "@/shared/lib/validation";
 
 export const metadata: Metadata = {
   title: "Match — EVOAIQU RPS",
@@ -17,7 +18,6 @@ interface Props {
   params: Promise<{ matchId: string }>;
 }
 
-const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export default async function RpsMatchPage({ params }: Props) {
   await connection();

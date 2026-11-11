@@ -8,6 +8,7 @@ import { ChessMatchBoard } from "@/features/chess";
 import { getCapturedPieces, getLegalMoves } from "@/features/chess/server";
 import { ChessMatchState } from "@/features/chess/server";
 import { Button } from "@/shared/ui";
+import { UUID_RE } from "@/shared/lib/validation";
 
 export const metadata: Metadata = {
   title: "Speed Chess — EVOAIQU",
@@ -18,7 +19,6 @@ interface Props {
   params: Promise<{ matchId: string }>;
 }
 
-const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export default async function ChessMatchPage({ params }: Props) {
   await connection();

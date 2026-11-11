@@ -2,8 +2,8 @@ import { NextRequest, NextResponse, connection } from "next/server";
 import { createServerSupabaseClient } from "@/core/supabase/server";
 import { calculateClocks, getCapturedPieces, getLegalMoves } from "@/features/chess/server";
 import { ChessMatchState } from "@/features/chess/server";
+import { UUID_RE } from "@/shared/lib/validation";
 
-const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 interface RouteContext {
   params: Promise<{ matchId: string }>;

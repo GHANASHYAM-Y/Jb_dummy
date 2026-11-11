@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse, connection } from "next/server";
 import { createServerSupabaseClient } from "@/core/supabase/server";
+import { UUID_RE } from "@/shared/lib/validation";
 
-const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 /**
  * GET /api/challenges/match?match_id=UUID

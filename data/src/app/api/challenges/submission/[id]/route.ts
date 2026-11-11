@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse, connection } from "next/server";
 import { createServerSupabaseClient, createServiceRoleClient } from "@/core/supabase/server";
 import { isValidVisibility } from "@/features/dare-game/server";
+import { UUID_RE } from "@/shared/lib/validation";
 
-const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 interface RouteParams {
   params: Promise<{ id: string }>;

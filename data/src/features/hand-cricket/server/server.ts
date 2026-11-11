@@ -9,7 +9,8 @@ import { NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/core/supabase/server";
 import type { HandCricketPlayer, HandCricketPlayers, HandCricketSnapshot } from "../types";
 
-export const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+import { UUID_RE } from "@/shared/lib/validation";
+export { UUID_RE };
 
 // The generated Database type does not include the hand cricket tables/RPCs yet,
 // so RPC calls go through an untyped client, matching the chess routes.

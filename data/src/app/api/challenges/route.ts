@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse, connection } from "next/server";
 import { createServerSupabaseClient } from "@/core/supabase/server";
+import { UUID_RE } from "@/shared/lib/validation";
 
 /**
  * GET /api/challenges?filter=received|sent|all
@@ -17,7 +18,6 @@ export async function GET(request: NextRequest) {
     }
 
     const matchId = request.nextUrl.searchParams.get("match_id");
-    const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
     if (matchId) {
       if (!UUID_RE.test(matchId)) {

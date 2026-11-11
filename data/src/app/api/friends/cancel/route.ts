@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/core/supabase/server";
+import { UUID_RE } from "@/shared/lib/validation";
 
 /**
  * POST /api/friends/cancel
@@ -25,7 +26,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
     }
 
-    const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
     if (!body.request_id || !UUID_RE.test(body.request_id)) {
       return NextResponse.json({ error: "Invalid request_id." }, { status: 400 });
     }

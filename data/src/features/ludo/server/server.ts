@@ -21,7 +21,8 @@ import {
 } from "../engine/engine";
 import { LUDO_TURN_MS, type LudoPlayerProfile, type LudoPlayers, type LudoSnapshot } from "../types";
 
-export const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+import { UUID_RE } from "@/shared/lib/validation";
+export { UUID_RE };
 
 /** Extra time allowed after turn_deadline before a timeout claim is accepted */
 export const TIMEOUT_TOLERANCE_MS = 1_000;
