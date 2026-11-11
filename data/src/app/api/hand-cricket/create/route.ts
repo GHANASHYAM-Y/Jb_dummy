@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse, connection } from "next/server";
-import { isOversOption } from "@/lib/hand-cricket/engine";
-import { readJson, requireUser, runMatchRpc, UUID_RE } from "@/lib/hand-cricket/server";
+import { isOversOption } from "@/features/hand-cricket/engine/engine";
+import { readJson, requireUser, runMatchRpc, UUID_RE } from "@/features/hand-cricket/server/server";
 
 /**
  * POST /api/hand-cricket/create

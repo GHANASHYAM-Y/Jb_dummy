@@ -38,14 +38,14 @@ import {
   resultSummary,
   type Side,
   type ThrowValue,
-} from "@/lib/hand-cricket/engine";
-import { clockOffsetMs, currentBallKey, sideOfPlayer, snapshotToState, squadsOf } from "@/lib/hand-cricket/snapshot";
+} from "@/features/hand-cricket/engine/engine";
+import { clockOffsetMs, currentBallKey, sideOfPlayer, snapshotToState, squadsOf } from "@/features/hand-cricket/engine/snapshot";
 import {
   isLivePhase,
   isTerminalPhase,
   type HandCricketPlayers,
   type HandCricketSnapshot,
-} from "@/lib/hand-cricket/types";
+} from "@/features/hand-cricket/types";
 import {
   Commentary,
   EditPlayersButton,

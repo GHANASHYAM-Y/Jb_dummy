@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse, connection } from "next/server";
-import { loadHandCricketMatch, requireUser, UUID_RE } from "@/lib/hand-cricket/server";
+import { loadHandCricketMatch, requireUser, UUID_RE } from "@/features/hand-cricket/server/server";
 
 interface RouteContext {
   params: Promise<{ matchId: string }>;

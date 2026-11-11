@@ -30,7 +30,7 @@ import {
   type OversOption,
   type Side,
   type ThrowValue,
-} from "@/lib/hand-cricket/engine";
+} from "@/features/hand-cricket/engine/engine";
 import {
   Commentary,
   EditPlayersButton,

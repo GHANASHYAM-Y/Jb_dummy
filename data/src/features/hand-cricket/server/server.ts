@@ -7,7 +7,7 @@
 
 import { NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/core/supabase/server";
-import type { HandCricketPlayer, HandCricketPlayers, HandCricketSnapshot } from "./types";
+import type { HandCricketPlayer, HandCricketPlayers, HandCricketSnapshot } from "../types";
 
 export const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 

@@ -19,7 +19,7 @@ import {
   type HandCricketState,
   type Side,
 } from "./engine";
-import type { HandCricketSnapshot } from "./types";
+import type { HandCricketSnapshot } from "../types";
 
 export function sideOfPlayer(snapshot: Pick<HandCricketSnapshot, "match">, playerId: string | null): Side | null {
   if (!playerId) return null;

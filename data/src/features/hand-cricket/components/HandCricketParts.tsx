@@ -27,7 +27,7 @@ import {
   type ChaseInfo,
   type InningsScore,
   type ThrowValue,
-} from "@/lib/hand-cricket/engine";
+} from "@/features/hand-cricket/engine/engine";
 
 // ── Hand tile ─────────────────────────────────────────────────────────────────
 

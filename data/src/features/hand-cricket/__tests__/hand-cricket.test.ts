@@ -50,9 +50,9 @@ import {
   throwLabel,
   type HandCricketState,
   type ThrowValue,
-} from "@/lib/hand-cricket/engine";
-import { snapshotToState, sideOfPlayer, clockOffsetMs, squadsOf } from "@/lib/hand-cricket/snapshot";
-import type { HandCricketSnapshot } from "@/lib/hand-cricket/types";
+} from "@/features/hand-cricket/engine/engine";
+import { snapshotToState, sideOfPlayer, clockOffsetMs, squadsOf } from "@/features/hand-cricket/engine/snapshot";
+import type { HandCricketSnapshot } from "@/features/hand-cricket/types";
 
 // ── Supabase mocks for the route tests ────────────────────────────────────────
 
@@ -540,7 +540,7 @@ describe("Hand cricket API routes", () => {
 // ── 7. Migration contract ─────────────────────────────────────────────────────
 
 describe("Migration 0015 — Hand Cricket", () => {
-  const sql = fs.readFileSync(path.resolve(__dirname, "../../supabase/migrations/0015_hand_cricket.sql"), "utf-8");
+  const sql = fs.readFileSync(path.resolve(__dirname, "../../../../supabase/migrations/0015_hand_cricket.sql"), "utf-8");
   // Code only (comments stripped), newline-agnostic: the repo may be checked out with CRLF
   const flat = sql.replace(/--[^\n]*/g, "").replace(/\s+/g, " ");
 

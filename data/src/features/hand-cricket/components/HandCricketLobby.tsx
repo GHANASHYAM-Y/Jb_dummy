@@ -6,10 +6,10 @@ import { useRouter } from "next/navigation";
 import { ArrowRight, Bot, LogIn, Play, Swords, Users } from "lucide-react";
 import { createClient } from "@/core/supabase/client";
 import { cn } from "@/shared/lib/utils";
-import { OVER_OPTIONS, type OversOption } from "@/lib/hand-cricket/engine";
+import { OVER_OPTIONS, type OversOption } from "@/features/hand-cricket/engine/engine";
 import { Avatar, Button, Spinner } from "@/shared/ui";
 import type { FriendEntry } from "@/core/supabase/database";
-import type { HandCricketOpenMatch } from "@/lib/hand-cricket/types";
+import type { HandCricketOpenMatch } from "@/features/hand-cricket/types";
 import { HandCricketRules } from "./HandCricketParts";
 
 interface HandCricketLobbyProps {
