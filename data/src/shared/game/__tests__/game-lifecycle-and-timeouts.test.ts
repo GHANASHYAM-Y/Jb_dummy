@@ -35,23 +35,23 @@ import type { MatchPhase, GameEndReason } from "@/types/database";
 
 const migrationPath = path.resolve(
   __dirname,
-  "../../supabase/migrations/0014_game_lifecycle_and_timeouts.sql"
+  "../../../../supabase/migrations/0014_game_lifecycle_and_timeouts.sql"
 );
 const migration = fs.readFileSync(migrationPath, "utf-8");
 
-const leaveRoutePath = path.resolve(__dirname, "../app/api/games/leave/route.ts");
+const leaveRoutePath = path.resolve(__dirname, "../../../app/api/games/leave/route.ts");
 const leaveRoute = fs.readFileSync(leaveRoutePath, "utf-8");
 
-const disconnectRoutePath = path.resolve(__dirname, "../app/api/games/disconnect/route.ts");
+const disconnectRoutePath = path.resolve(__dirname, "../../../app/api/games/disconnect/route.ts");
 const disconnectRoute = fs.readFileSync(disconnectRoutePath, "utf-8");
 
-const reconnectRoutePath = path.resolve(__dirname, "../app/api/games/reconnect/route.ts");
+const reconnectRoutePath = path.resolve(__dirname, "../../../app/api/games/reconnect/route.ts");
 const reconnectRoute = fs.readFileSync(reconnectRoutePath, "utf-8");
 
-const cleanupRoutePath = path.resolve(__dirname, "../app/api/games/timeout/cleanup/route.ts");
+const cleanupRoutePath = path.resolve(__dirname, "../../../app/api/games/timeout/cleanup/route.ts");
 const cleanupRoute = fs.readFileSync(cleanupRoutePath, "utf-8");
 
-const vercelJsonPath = path.resolve(__dirname, "../../vercel.json");
+const vercelJsonPath = path.resolve(__dirname, "../../../../vercel.json");
 const vercelJson = fs.readFileSync(vercelJsonPath, "utf-8");
 
 // ── In-Memory Simulation Engine for Authoritative State Transitions ──────────

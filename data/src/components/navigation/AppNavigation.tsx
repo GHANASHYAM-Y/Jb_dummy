@@ -14,9 +14,9 @@ import {
   HelpCircle,
   Info,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/lib/utils";
 import { useI18n } from "@/contexts/I18nContext";
-import { Avatar, Button } from "@/components/ui";
+import { Avatar, Button } from "@/shared/ui";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import type { Profile } from "@/types/database";
 

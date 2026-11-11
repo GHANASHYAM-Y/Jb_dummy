@@ -13,8 +13,8 @@ import {
   X,
   Sparkles,
 } from "lucide-react";
-import { Button, Alert, Spinner } from "@/components/ui";
-import { cn } from "@/lib/utils";
+import { Button, Alert, Spinner } from "@/shared/ui";
+import { cn } from "@/shared/lib/utils";
 
 interface VideoRecorderModalProps {
   isOpen: boolean;

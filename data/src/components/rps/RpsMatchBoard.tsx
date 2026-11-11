@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useI18n } from "@/contexts/I18nContext";
-import { Button, Alert, Avatar, Spinner } from "@/components/ui";
+import { Button, Alert, Avatar, Spinner } from "@/shared/ui";
 import {
   roundOutcomeLabel,
   type RpsMove,
@@ -20,7 +20,7 @@ import {
   MOVE_LABEL_EN,
   MOVE_LABEL_TA,
 } from "@/lib/rps";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/lib/utils";
 import type { Challenge } from "@/types/database";
 import { ChallengeSelectionModal } from "@/components/challenges/ChallengeSelectionModal";
 import { MatchChallengeCard } from "@/components/challenges/MatchChallengeCard";
@@ -29,7 +29,7 @@ import { RoundTimer } from "@/components/rps/RoundTimer";
 import { ArenaDuelStage } from "@/components/rps/ArenaDuelStage";
 import { rpsAudio } from "@/components/rps/RpsAudio";
 import { RpsConfetti } from "@/components/rps/RpsConfetti";
-import { GameLifecycleBanner } from "@/components/games/GameLifecycleBanner";
+import { GameLifecycleBanner } from "@/shared/game/GameLifecycleBanner";
 import type { MatchPhase, GameEndReason } from "@/types/database";
 
 // ── Types ─────────────────────────────────────────────────────────────────────

@@ -9,9 +9,9 @@ import {
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useI18n } from "@/contexts/I18nContext";
-import { Spinner } from "@/components/ui";
+import { Spinner } from "@/shared/ui";
 import { LanguageSelector } from "@/components/LanguageSelector";
-import { safeRedirectPath } from "@/lib/utils";
+import { safeRedirectPath } from "@/shared/lib/utils";
 
 export function LoginForm() {
   const { t } = useI18n();

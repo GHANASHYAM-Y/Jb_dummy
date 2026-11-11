@@ -8,8 +8,8 @@ import {
   Share2, MessageCircle, Trophy, ArrowRight,
 } from "lucide-react";
 import { useI18n } from "@/contexts/I18nContext";
-import { cn } from "@/lib/utils";
-import { Button, Avatar } from "@/components/ui";
+import { cn } from "@/shared/lib/utils";
+import { Button, Avatar } from "@/shared/ui";
 import type { Profile } from "@/types/database";
 
 interface RecentMatchItem {

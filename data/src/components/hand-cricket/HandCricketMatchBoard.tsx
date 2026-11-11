@@ -15,9 +15,9 @@ import {
   XCircle,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import { Avatar, Badge, Button, Spinner } from "@/components/ui";
-import { cn } from "@/lib/utils";
-import { GameLifecycleBanner } from "@/components/games/GameLifecycleBanner";
+import { Avatar, Badge, Button, Spinner } from "@/shared/ui";
+import { cn } from "@/shared/lib/utils";
+import { GameLifecycleBanner } from "@/shared/game/GameLifecycleBanner";
 import { ChallengeSelectionModal } from "@/components/challenges/ChallengeSelectionModal";
 import { MatchChallengeCard } from "@/components/challenges/MatchChallengeCard";
 import type { Challenge } from "@/types/database";

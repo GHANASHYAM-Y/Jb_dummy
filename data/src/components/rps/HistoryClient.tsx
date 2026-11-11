@@ -4,8 +4,8 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronRight, AlertCircle, Gamepad2 } from "lucide-react";
 import { useI18n } from "@/contexts/I18nContext";
-import { Avatar, Alert, Spinner, EvoIdBadge } from "@/components/ui";
-import { cn, timeAgo } from "@/lib/utils";
+import { Avatar, Alert, Spinner, EvoIdBadge } from "@/shared/ui";
+import { cn, timeAgo } from "@/shared/lib/utils";
 
 interface HistoryEntry {
   match_id: string;

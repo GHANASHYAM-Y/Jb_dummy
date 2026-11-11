@@ -7,7 +7,7 @@ import { createServerSupabaseClient, getServerUser } from "@/lib/supabase/server
 import { ChessMatchBoard } from "@/components/chess/ChessMatchBoard";
 import { getCapturedPieces, getLegalMoves } from "@/lib/chess/engine";
 import { ChessMatchState } from "@/lib/chess/types";
-import { Button } from "@/components/ui";
+import { Button } from "@/shared/ui";
 
 export const metadata: Metadata = {
   title: "Speed Chess — EVOAIQU",

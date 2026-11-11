@@ -2,8 +2,8 @@
 
 import React from "react";
 import { Clock, X } from "lucide-react";
-import { Button, Spinner } from "@/components/ui";
-import { cn } from "@/lib/utils";
+import { Button, Spinner } from "@/shared/ui";
+import { cn } from "@/shared/lib/utils";
 
 export interface MatchmakingFloatingIndicatorProps {
   state: "searching" | "cancelling";

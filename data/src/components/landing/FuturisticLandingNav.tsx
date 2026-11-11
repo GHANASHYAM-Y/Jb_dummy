@@ -5,8 +5,8 @@ import Link from "next/link";
 import {
   Menu, X, ArrowRight, UserCircle, LogIn
 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui";
+import { cn } from "@/shared/lib/utils";
+import { Button } from "@/shared/ui";
 import { createClient } from "@/lib/supabase/client";
 
 interface FuturisticLandingNavProps {

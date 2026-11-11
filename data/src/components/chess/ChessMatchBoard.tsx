@@ -16,10 +16,10 @@ import { ChessBoard } from "./ChessBoard";
 import { ChessPieceSvg } from "./ChessPieceSvg";
 import { ChessVictoryModal } from "./ChessVictoryModal";
 import { chessSounds } from "@/lib/chess/sounds";
-import { Button, Badge, Avatar } from "@/components/ui";
+import { Button, Badge, Avatar } from "@/shared/ui";
 import { ChessColor, LegalMoveTarget, CapturedPieces } from "@/lib/chess/types";
-import { cn } from "@/lib/utils";
-import { GameLifecycleBanner } from "@/components/games/GameLifecycleBanner";
+import { cn } from "@/shared/lib/utils";
+import { GameLifecycleBanner } from "@/shared/game/GameLifecycleBanner";
 
 interface PlayerInfo {
   id: string;

@@ -6,7 +6,7 @@ import { AlertCircle, ArrowLeft, ShieldAlert } from "lucide-react";
 import { createServerSupabaseClient, getServerUser } from "@/lib/supabase/server";
 import { loadHandCricketMatch, UUID_RE } from "@/lib/hand-cricket/server";
 import { HandCricketMatchBoard } from "@/components/hand-cricket/HandCricketMatchBoard";
-import { Button } from "@/components/ui";
+import { Button } from "@/shared/ui";
 
 export const metadata: Metadata = {
   title: "Hand Cricket — EVOAIQU",

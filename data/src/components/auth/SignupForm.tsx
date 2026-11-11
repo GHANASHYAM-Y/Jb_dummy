@@ -16,9 +16,9 @@ import {
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useI18n } from "@/contexts/I18nContext";
-import { Button, Input, Alert, Divider } from "@/components/ui";
+import { Button, Input, Alert, Divider } from "@/shared/ui";
 import { LanguageSelector } from "@/components/LanguageSelector";
-import { safeRedirectPath, cn } from "@/lib/utils";
+import { safeRedirectPath, cn } from "@/shared/lib/utils";
 
 // Password strength helper
 function passwordStrength(pw: string): { score: number; label: string; color: string } {

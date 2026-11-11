@@ -34,8 +34,8 @@ import {
   Badge,
   EvoIdBadge,
   Spinner,
-} from "@/components/ui";
-import { cn, isValidEvoId } from "@/lib/utils";
+} from "@/shared/ui";
+import { cn, isValidEvoId } from "@/shared/lib/utils";
 import type { FriendRequest } from "@/types/database";
 
 // ── Types ─────────────────────────────────────────────────────────────────────

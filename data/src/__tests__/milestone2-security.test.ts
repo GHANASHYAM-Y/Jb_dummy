@@ -10,7 +10,7 @@
 import { describe, it, expect } from "vitest";
 
 // â”€â”€ 1. safeRedirectPath â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-import { safeRedirectPath, isValidEvoId } from "@/lib/utils";
+import { safeRedirectPath, isValidEvoId } from "@/shared/lib/utils";
 
 describe("safeRedirectPath â€” open redirect prevention", () => {
   it("returns /dashboard when input is null", () => {
@@ -356,8 +356,8 @@ describe("Auth callback â€” open redirect prevention", () => {
     "utf-8",
   );
 
-  it("imports safeRedirectPath from @/lib/utils", () => {
-    expect(callbackSrc).toContain('from "@/lib/utils"');
+  it("imports safeRedirectPath from @/shared/lib/utils", () => {
+    expect(callbackSrc).toContain('from "@/shared/lib/utils"');
     expect(callbackSrc).toContain("safeRedirectPath");
   });
 

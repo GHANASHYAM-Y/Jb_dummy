@@ -7,8 +7,8 @@ import {
   ChevronRight, Trophy, Users,
 } from "lucide-react";
 import { useI18n } from "@/contexts/I18nContext";
-import { Button, Avatar, Alert, Spinner, EvoIdBadge } from "@/components/ui";
-import { cn, timeAgo } from "@/lib/utils";
+import { Button, Avatar, Alert, Spinner, EvoIdBadge } from "@/shared/ui";
+import { cn, timeAgo } from "@/shared/lib/utils";
 import type { FriendEntry } from "@/types/database";
 import { RandomMatchmakingCard } from "@/components/matchmaking/RandomMatchmakingCard";
 

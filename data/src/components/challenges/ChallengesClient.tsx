@@ -22,7 +22,7 @@ import {
   Lock,
 } from "lucide-react";
 import { useI18n } from "@/contexts/I18nContext";
-import { Button, Alert, Badge, Spinner, Avatar } from "@/components/ui";
+import { Button, Alert, Badge, Spinner, Avatar } from "@/shared/ui";
 import {
   CHALLENGE_CATALOG,
   CATEGORY_META,
@@ -32,7 +32,7 @@ import type {
   ChallengeCategory,
   ChallengeStatus,
 } from "@/types/database";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/lib/utils";
 import { VideoRecorderModal } from "@/components/challenges/VideoRecorderModal";
 import { WinnerReviewModal } from "@/components/challenges/WinnerReviewModal";
 

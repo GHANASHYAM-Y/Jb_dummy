@@ -12,7 +12,7 @@ import {
   Clock,
   Info,
 } from "lucide-react";
-import { Button, Alert, Spinner } from "@/components/ui";
+import { Button, Alert, Spinner } from "@/shared/ui";
 
 interface WinnerReviewModalProps {
   isOpen: boolean;

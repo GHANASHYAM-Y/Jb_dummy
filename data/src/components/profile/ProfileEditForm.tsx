@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 import { User, Globe, Eye, EyeOff, Save, Check, AlertCircle, Copy } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useI18n } from "@/contexts/I18nContext";
-import { Button, Alert, Avatar } from "@/components/ui";
-import { cn } from "@/lib/utils";
+import { Button, Alert, Avatar } from "@/shared/ui";
+import { cn } from "@/shared/lib/utils";
 import type { Profile, ProfileUpdate, Locale } from "@/types/database";
 
 interface ProfileEditFormProps {

@@ -18,7 +18,7 @@
 import { describe, it, expect } from "vitest";
 import * as fs from "fs";
 import * as path from "path";
-import { isValidEvoId, safeRedirectPath } from "@/lib/utils";
+import { isValidEvoId, safeRedirectPath } from "@/shared/lib/utils";
 import { adjudicateRound, getMatchOutcome } from "@/lib/rps";
 import { CHALLENGE_CATALOG, getChallengeById, isValidCategory, isValidStatus, isValidVisibility } from "@/lib/challenges";
 import { translations } from "@/lib/i18n";

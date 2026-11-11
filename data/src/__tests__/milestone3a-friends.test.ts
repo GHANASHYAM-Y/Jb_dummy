@@ -486,7 +486,7 @@ describe("database.ts — friend system types", () => {
 
 // ── 6. safeRedirectPath — still passing after refactor ────────────────────────
 
-import { safeRedirectPath, isValidEvoId } from "@/lib/utils";
+import { safeRedirectPath, isValidEvoId } from "@/shared/lib/utils";
 
 describe("isValidEvoId — Evoora ID validation for friend search", () => {
   it("accepts EVO-A1B2C3", () => expect(isValidEvoId("EVO-A1B2C3")).toBe(true));

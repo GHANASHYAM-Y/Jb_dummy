@@ -4,7 +4,7 @@ import { Flame, LogIn } from "lucide-react";
 import { connection } from "next/server";
 import { getServerUser } from "@/lib/supabase/server";
 import { ChallengesClient } from "@/components/challenges/ChallengesClient";
-import { Button } from "@/components/ui";
+import { Button } from "@/shared/ui";
 
 export const metadata: Metadata = {
   title: "Challenges & Dares — EVOAIQU",

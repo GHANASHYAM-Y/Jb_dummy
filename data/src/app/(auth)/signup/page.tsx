@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { SignupForm } from "@/components/auth/SignupForm";
-import { Spinner } from "@/components/ui";
+import { Spinner } from "@/shared/ui";
 
 export const metadata: Metadata = {
   title: "Create Account",

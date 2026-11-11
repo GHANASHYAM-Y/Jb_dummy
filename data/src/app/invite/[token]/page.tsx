@@ -5,7 +5,7 @@ import { createServerSupabaseClient, getServerUser } from "@/lib/supabase/server
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { InviteLandingClient } from "@/components/friends/InviteLandingClient";
-import { Spinner } from "@/components/ui";
+import { Spinner } from "@/shared/ui";
 import type { Profile } from "@/types/database";
 
 

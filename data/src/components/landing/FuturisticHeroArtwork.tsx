@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Zap, Swords, Trophy, Activity } from "lucide-react";
 import { HandGraphic } from "@/components/rps/HandGraphic";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/lib/utils";
 
 /**
  * EVOAIQU Futuristic Holographic Hero Arena Artwork

@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import * as fs from "node:fs";
 import * as path from "node:path";
-import * as SheetComponents from "@/components/ui/sheet";
+import * as SheetComponents from "@/shared/ui/sheet";
 
 describe("shadcn/ui Sheet Primitive & Navbar Integration", () => {
   it("exports all expected Sheet primitive components", () => {
@@ -22,7 +22,7 @@ describe("shadcn/ui Sheet Primitive & Navbar Integration", () => {
     const navbarSource = fs.readFileSync(navbarPath, "utf-8");
 
     // Confirms Sheet components imported and used
-    expect(navbarSource).toContain("from \"@/components/ui/sheet\"");
+    expect(navbarSource).toContain("from \"@/shared/ui/sheet\"");
     expect(navbarSource).toContain("<Sheet open={mobileOpen} onOpenChange={setMobileOpen}>");
     expect(navbarSource).toContain("<SheetTrigger asChild>");
     expect(navbarSource).toContain("<SheetContent side=\"right\"");

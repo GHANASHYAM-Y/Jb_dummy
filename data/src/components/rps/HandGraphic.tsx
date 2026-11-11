@@ -2,7 +2,7 @@
 
 import React from "react";
 import type { RoundMove } from "@/lib/rps";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/lib/utils";
 
 interface HandGraphicProps {
   move: RoundMove;

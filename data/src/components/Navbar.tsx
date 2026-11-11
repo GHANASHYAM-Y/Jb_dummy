@@ -4,9 +4,9 @@ import React, { useState, useEffect, startTransition } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, Gamepad2, Users, Settings, MessageCircle, UserCircle, HelpCircle, Info } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/lib/utils";
 import { useI18n } from "@/contexts/I18nContext";
-import { Button, Avatar } from "@/components/ui";
+import { Button, Avatar } from "@/shared/ui";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import {
   Sheet,
@@ -15,7 +15,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetDescription,
-} from "@/components/ui/sheet";
+} from "@/shared/ui/sheet";
 import type { Profile } from "@/types/database";
 
 // ── Types ─────────────────────────────────────────────────────────────────────

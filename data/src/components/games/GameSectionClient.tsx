@@ -22,8 +22,8 @@ import {
   ArrowRight,
   ExternalLink,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button, Avatar } from "@/components/ui";
+import { cn } from "@/shared/lib/utils";
+import { Button, Avatar } from "@/shared/ui";
 import { RandomMatchmakingCard } from "@/components/matchmaking/RandomMatchmakingCard";
 import type { Profile } from "@/types/database";
 

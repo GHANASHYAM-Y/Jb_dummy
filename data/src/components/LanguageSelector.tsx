@@ -3,7 +3,7 @@
 import { Globe } from "lucide-react";
 import { useI18n } from "@/contexts/I18nContext";
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/lib/utils";
 
 const LOCALE_LABELS: Record<Locale, string> = {
   en: "EN",

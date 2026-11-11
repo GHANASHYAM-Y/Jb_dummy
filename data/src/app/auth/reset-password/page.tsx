@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, Lock, CheckCircle2, AlertCircle } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import { Button, Input, Alert } from "@/components/ui";
+import { Button, Input, Alert } from "@/shared/ui";
 import { LanguageSelector } from "@/components/LanguageSelector";
 
 export default function ResetPasswordPage() {

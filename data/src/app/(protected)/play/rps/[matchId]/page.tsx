@@ -6,7 +6,7 @@ import { RpsMatchBoard } from "@/components/rps/RpsMatchBoard";
 
 import Link from "next/link";
 import { AlertCircle, ShieldAlert, ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui";
+import { Button } from "@/shared/ui";
 
 export const metadata: Metadata = {
   title: "Match — EVOAIQU RPS",

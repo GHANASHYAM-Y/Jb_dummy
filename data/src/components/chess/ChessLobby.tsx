@@ -9,7 +9,7 @@ import {
   Play,
   ArrowRight,
 } from "lucide-react";
-import { Button, Avatar, Spinner } from "@/components/ui";
+import { Button, Avatar, Spinner } from "@/shared/ui";
 import type { FriendEntry } from "@/types/database";
 
 interface ActiveChessMatch {

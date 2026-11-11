@@ -17,8 +17,8 @@ import {
   Video,
   Clock,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Avatar, Button, EvoIdBadge, Spinner } from "@/components/ui";
+import { cn } from "@/shared/lib/utils";
+import { Avatar, Button, EvoIdBadge, Spinner } from "@/shared/ui";
 import { VideoRecorderModal } from "@/components/challenges/VideoRecorderModal";
 import { WinnerReviewModal } from "@/components/challenges/WinnerReviewModal";
 import type { Challenge, FriendEntry } from "@/types/database";

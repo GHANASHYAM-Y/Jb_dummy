@@ -17,7 +17,7 @@ import {
   Video,
 } from "lucide-react";
 import { useI18n } from "@/contexts/I18nContext";
-import { Button, Alert, Badge } from "@/components/ui";
+import { Button, Alert, Badge } from "@/shared/ui";
 import { CATEGORY_META } from "@/lib/challenges";
 import type { Challenge, ChallengeStatus } from "@/types/database";
 import { VideoRecorderModal } from "@/components/challenges/VideoRecorderModal";

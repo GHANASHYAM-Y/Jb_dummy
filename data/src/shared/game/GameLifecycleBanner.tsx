@@ -13,8 +13,8 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { useI18n } from "@/contexts/I18nContext";
-import { Button } from "@/components/ui";
-import { cn } from "@/lib/utils";
+import { Button } from "@/shared/ui";
+import { cn } from "@/shared/lib/utils";
 import type { MatchPhase, GameEndReason } from "@/types/database";
 
 interface GameLifecycleBannerProps {

@@ -14,8 +14,8 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { useI18n } from "@/contexts/I18nContext";
-import { Button, Alert, Spinner } from "@/components/ui";
-import { cn } from "@/lib/utils";
+import { Button, Alert, Spinner } from "@/shared/ui";
+import { cn } from "@/shared/lib/utils";
 import { MatchmakingFloatingIndicator } from "./MatchmakingFloatingIndicator";
 
 type MatchmakingUIState =

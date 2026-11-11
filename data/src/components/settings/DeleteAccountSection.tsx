@@ -4,8 +4,8 @@ import React, { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { AlertTriangle, Trash2, X } from "lucide-react";
 import { useI18n } from "@/contexts/I18nContext";
-import { Button, Alert } from "@/components/ui";
-import { cn } from "@/lib/utils";
+import { Button, Alert } from "@/shared/ui";
+import { cn } from "@/shared/lib/utils";
 
 /**
  * DeleteAccountSection

@@ -6,7 +6,7 @@ import { AlertCircle, ArrowLeft, ShieldAlert } from "lucide-react";
 import { createServerSupabaseClient, getServerUser } from "@/lib/supabase/server";
 import { loadLudoMatch, UUID_RE } from "@/lib/ludo/server";
 import { LudoMatchBoard } from "@/components/ludo/LudoMatchBoard";
-import { Button } from "@/components/ui";
+import { Button } from "@/shared/ui";
 
 export const metadata: Metadata = {
   title: "Ludo — EVOAIQU",

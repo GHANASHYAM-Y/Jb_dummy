@@ -3,8 +3,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Bot, Play, RotateCcw, Settings2, Trophy, XCircle } from "lucide-react";
-import { Badge, Button } from "@/components/ui";
-import { cn } from "@/lib/utils";
+import { Badge, Button } from "@/shared/ui";
+import { cn } from "@/shared/lib/utils";
 import {
   applyMove,
   applyRoll,

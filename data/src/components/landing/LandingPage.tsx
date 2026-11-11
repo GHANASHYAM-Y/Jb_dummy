@@ -6,7 +6,7 @@ import {
   Trophy, Users, Swords, Shield, ArrowRight,
   Share2, Sparkles, Clock, Flame, Crown, Award, CheckCircle2
 } from "lucide-react";
-import { Button } from "@/components/ui";
+import { Button } from "@/shared/ui";
 import { FuturisticLandingNav } from "@/components/landing/FuturisticLandingNav";
 import { FuturisticHeroArtwork } from "@/components/landing/FuturisticHeroArtwork";
 import { FuturisticFooter } from "@/components/landing/FuturisticFooter";

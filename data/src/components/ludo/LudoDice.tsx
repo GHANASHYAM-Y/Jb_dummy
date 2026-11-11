@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Dices } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/lib/utils";
 import type { Color } from "@/lib/ludo/engine";
 import { COLOR_HEX } from "./LudoBoard";
 

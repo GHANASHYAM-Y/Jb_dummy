@@ -13,8 +13,8 @@ import {
   MOVE_LABEL_TA,
   roundOutcomeLabel,
 } from "@/lib/rps";
-import { Button, Spinner } from "@/components/ui";
-import { cn } from "@/lib/utils";
+import { Button, Spinner } from "@/shared/ui";
+import { cn } from "@/shared/lib/utils";
 
 interface ArenaDuelStageProps {
   myMoveThisRound: RpsMove | null;

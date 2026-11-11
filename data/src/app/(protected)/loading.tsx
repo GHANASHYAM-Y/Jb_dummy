@@ -1,4 +1,4 @@
-import { PageLoading } from "@/components/ui/PageLoading";
+import { PageLoading } from "@/shared/ui/PageLoading";
 
 // Shown inside the shared app navigation while a protected page loads.
 export default function Loading() {

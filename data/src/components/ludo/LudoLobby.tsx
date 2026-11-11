@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Bot, LogIn, Play, Swords, Users } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import { Avatar, Button, Spinner } from "@/components/ui";
+import { Avatar, Button, Spinner } from "@/shared/ui";
 import type { FriendEntry } from "@/types/database";
 import type { LudoOpenMatch } from "@/lib/ludo/types";
 

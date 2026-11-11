@@ -3,8 +3,8 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Award, Bot, Coins, RotateCcw, Trophy, Users, XCircle } from "lucide-react";
-import { Button, Badge } from "@/components/ui";
-import { cn } from "@/lib/utils";
+import { Button, Badge } from "@/shared/ui";
+import { cn } from "@/shared/lib/utils";
 import {
   BOT_SQUAD,
   OVER_OPTIONS,

@@ -8,8 +8,8 @@
 
 import React, { useEffect, useState } from "react";
 import { Hand, Pencil, Timer, X } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui";
+import { cn } from "@/shared/lib/utils";
+import { Button } from "@/shared/ui";
 import {
   BALLS_PER_INNINGS,
   DOK,

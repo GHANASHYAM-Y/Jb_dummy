@@ -3,14 +3,14 @@
 import React, { useState, useEffect } from "react";
 import { X, Sparkles, Shield, AlertCircle, CheckCircle2 } from "lucide-react";
 import { useI18n } from "@/contexts/I18nContext";
-import { Button, Alert, Badge } from "@/components/ui";
+import { Button, Alert, Badge } from "@/shared/ui";
 import {
   CHALLENGE_CATALOG,
   CATEGORY_META,
   type ChallengeItem,
 } from "@/lib/challenges";
 import type { ChallengeCategory, ChallengeVisibility, Challenge } from "@/types/database";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/lib/utils";
 
 interface ChallengeSelectionModalProps {
   matchId: string;

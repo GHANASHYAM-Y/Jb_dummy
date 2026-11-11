@@ -17,8 +17,8 @@ import {
   ChevronRight,
   Film,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Avatar, Button } from "@/components/ui";
+import { cn } from "@/shared/lib/utils";
+import { Avatar, Button } from "@/shared/ui";
 import { ProfileEditForm } from "@/components/profile/ProfileEditForm";
 import type { Profile } from "@/types/database";
 

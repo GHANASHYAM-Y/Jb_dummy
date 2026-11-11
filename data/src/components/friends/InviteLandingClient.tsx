@@ -15,7 +15,7 @@ import {
   ShieldAlert,
 } from "lucide-react";
 import { useI18n } from "@/contexts/I18nContext";
-import { Button, Alert, Avatar, EvoIdBadge } from "@/components/ui";
+import { Button, Alert, Avatar, EvoIdBadge } from "@/shared/ui";
 
 interface InviteLandingClientProps {
   token: string;

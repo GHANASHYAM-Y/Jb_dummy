@@ -13,7 +13,7 @@ import {
   Award,
   X,
 } from "lucide-react";
-import { Button, Badge } from "@/components/ui";
+import { Button, Badge } from "@/shared/ui";
 import { ChallengeSelectionModal } from "@/components/challenges/ChallengeSelectionModal";
 import { MatchChallengeCard } from "@/components/challenges/MatchChallengeCard";
 import type { Challenge } from "@/types/database";
