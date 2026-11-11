@@ -2,7 +2,18 @@
 
 > **Play. Connect. Evolve.**
 
-A bold, futuristic social gaming platform where every match creates a story. Play Chess, Rock, Paper, Scissors, Hand Cricket or Ludo against friends or random opponents — then dare the loser to a challenge.
+A bold, futuristic social gaming platform where every match creates a story. Play Chess, Rock, Paper, Scissors, Hand Cricket or Ludo against friends or random opponents — then dare the loser to a challenge. There is also a solo Password Game.
+
+## Start here
+
+| I want to... | Read |
+|--------------|------|
+| Understand what this project is and what each folder holds | [ABOUT.md](ABOUT.md) |
+| Install and run it on a new laptop | [SETUP.md](SETUP.md) |
+| Install in one command | `setup.ps1` (Windows) or `bash setup.sh` (macOS / Linux / Git Bash) |
+| See open tasks and reports | [`support/`](support/) |
+
+> The app lives in `data/`. Run every `npm` command from there.
 
 ---
 
@@ -10,10 +21,12 @@ A bold, futuristic social gaming platform where every match creates a story. Pla
 
 | Layer | Technology |
 |-------|-----------|
-| Framework | Next.js 16.4 (App Router, Turbopack) |
+| Framework | Next.js 16.4 (App Router, Turbopack), React 19 |
 | Language | TypeScript 5 (strict mode) |
 | Styling | Tailwind CSS v4 |
-| Backend / DB | Supabase (PostgreSQL + Auth + SSR) |
+| Backend / DB | Supabase (PostgreSQL + Auth + Realtime + Storage, SSR) |
+| Chess rules | chess.js |
+| Tests | Vitest |
 | Icons | Lucide React |
 
 ---
@@ -29,37 +42,31 @@ A bold, futuristic social gaming platform where every match creates a story. Pla
 | 4 | ✅ Complete | Secure challenge assignment system integrated with completed RPS matches |
 | 5 | ✅ Complete | Secure random matchmaking for RPS, atomic pairing, reconnect handling, user blocks |
 | 5.5 | ✅ Complete | 24-hour challenge video submissions, stories reel, one-time winner review, media retention cleanup |
-| 6 | 🔲 Next | Chess with chess.js |
+| 6 | ✅ Complete | Chess with chess.js: online vs a friend, server-checked moves, clocks |
 | 7 | 🔲 | Public challenge feed, submissions, moderation |
 | 8 | 🔲 | Testing, security, accessibility, deployment |
-| 9 | ✅ Complete | Ludo: me vs 1–3 bots in the browser (no login), online 1 vs 1 with a friend |
+| 8.5 | ✅ Complete | Hand Cricket: online vs a friend, or solo vs the computer |
+| 9 | ✅ Complete | Ludo: me vs 1–3 bots in the browser (no login), online 1 vs 1 with a friend, forfeit after 3 missed turns |
+| 10 | ✅ Complete | Password Game: solo puzzle with 26 rules and fire, water, lightning and ice chaos events (no login, `/play/password-game`) |
 
 ---
 
 ## Local Development Setup
 
-### Prerequisites
-
-- Node.js 20+
-- A free [Supabase](https://supabase.com) account
-
-### 1. Clone and install
+The full step-by-step guide, with a checklist and troubleshooting, is in **[SETUP.md](SETUP.md)**. The short version:
 
 ```bash
-git clone <your-repo>
-cd <repo>/data
-npm install
+git clone https://github.com/GHANASHYAM-Y/Jb_dummy.git
+cd Jb_dummy
+bash setup.sh                  # Windows: powershell -ExecutionPolicy Bypass -File .\setup.ps1
+# then fill in data/.env.local and run the SQL migrations (SETUP.md steps 4 to 7)
+cd data
+npm run dev                    # http://localhost:3000
 ```
 
-All app code lives in `data/`, so run every `npm`, `npx` and `supabase` command from there. On Vercel, set **Project Settings → General → Root Directory** to `data`.
+Needs Node.js 20.9+ and a free [Supabase](https://supabase.com) project. On Vercel, set **Project Settings → General → Root Directory** to `data`.
 
-### 2. Configure environment variables
-
-```bash
-cp .env.example .env.local
-```
-
-Edit `.env.local` with your Supabase credentials:
+### Environment variables (`data/.env.local`)
 
 | Variable | Where to find it |
 |----------|-----------------|
@@ -67,47 +74,15 @@ Edit `.env.local` with your Supabase credentials:
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase Dashboard → API → anon / public |
 | `SUPABASE_SERVICE_ROLE_KEY` | Supabase Dashboard → API → service_role (**server-only, never expose**) |
 | `NEXT_PUBLIC_APP_URL` | `http://localhost:3000` for local dev |
+| `CRON_SECRET` | Any long random string. Protects the cleanup endpoints. |
 
-### 3. Apply database migrations
+### Database migrations
 
-**Option A — Supabase Dashboard SQL Editor (quickest):**
+Run the 17 files in `data/supabase/migrations/` in number order, `0001_profiles.sql` through `0017_ludo_forfeit_and_cleanup.sql`, either in the Supabase SQL Editor or with `npx supabase db push` (details and the full list are in SETUP.md step 6).
 
-1. Go to your Supabase project → SQL Editor
-2. Run `supabase/migrations/0001_profiles.sql`
-3. Run `supabase/migrations/0002_friends.sql`
-4. Run `supabase/migrations/0003_rps.sql`
-5. Run `supabase/migrations/0004_challenges.sql`
-6. Run `supabase/migrations/0005_matchmaking.sql`
-7. Run `supabase/migrations/0006_friend_invites.sql`
-8. Run `supabase/migrations/0007_rps_first_to_five_and_timer.sql`
-9. Run `supabase/migrations/0008_challenge_lifecycle.sql`
-10. Run `supabase/migrations/0009_challenge_submissions_and_stories.sql`
-11. Run the remaining files in number order, `0010_chess.sql` through `0016_ludo.sql` (Ludo)
+### Auth redirects
 
-**Option B — Supabase CLI:**
-
-```bash
-npx supabase login
-npx supabase link --project-ref <your-project-ref>
-npx supabase db push
-```
-
-### 4. Configure Auth redirects
-
-In Supabase Dashboard → **Authentication → URL Configuration**:
-
-- **Site URL**: `http://localhost:3000`
-- **Redirect URLs**: add `http://localhost:3000/auth/callback`
-
-For email confirmation to work, Supabase must redirect to `/auth/callback` after the user clicks the link.
-
-### 5. Start the dev server
-
-```bash
-npm run dev
-```
-
-Visit [http://localhost:3000](http://localhost:3000).
+In Supabase → **Authentication → URL Configuration**, set **Site URL** to `http://localhost:3000` and add `http://localhost:3000/auth/callback` to **Redirect URLs**.
 
 ---
 
@@ -164,6 +139,10 @@ The trigger runs as `SECURITY DEFINER` so it can bypass RLS. Users can never:
 data/      # The Next.js app: src/, public/, supabase/, package.json, configs, .env files
 support/   # Docs: reports, audits, Yet_To_Do notes, research
 others/    # Everything else: demo/ (layout concepts), backup/
+README.md  # This overview
+SETUP.md   # Install and run guide
+ABOUT.md   # What each part is and how it fits together
+setup.ps1, setup.sh, start-servers.bat   # Setup and start helpers
 ```
 
 Inside `data/`:
@@ -203,7 +182,7 @@ src/
 │   └── supabase/        # Browser and Server Supabase clients
 ├── types/
 │   └── database.ts      # TypeScript schema & RPC definitions
-└── __tests__/           # Milestone 2, 3A, 3B, 4, 5 automated test suites (300 passing tests)
+└── __tests__/           # Automated test suites (Vitest), one or more per feature
 supabase/
 └── migrations/
     ├── 0001_profiles.sql    # Profiles table, RLS, trigger, ID generator
@@ -211,8 +190,10 @@ supabase/
     ├── 0003_rps.sql         # RPS invites, matches, rounds, hidden moves, RPCs
     ├── 0004_challenges.sql  # Challenges table, RLS, assign/respond RPCs
     ├── 0005_matchmaking.sql # Matchmaking queue, user blocks, atomic pairing RPCs
-    ├── ...
-    └── 0016_ludo.sql        # Ludo matches and online 1 vs 1 state
+    ├── ...                  # 0006 to 0014: invites, RPS timer, dares, stories, chess, lifecycle
+    ├── 0015_hand_cricket.sql
+    ├── 0016_ludo.sql        # Ludo matches and online 1 vs 1 state
+    └── 0017_ludo_forfeit_and_cleanup.sql   # Ludo forfeit after 3 missed turns, cleanup trigger
 ```
 
 ---
@@ -226,6 +207,7 @@ npm run dev      # Start dev server (Turbopack)
 npm run prod         # Production build, then serve on port 3001
 npm run start:prod   # Serve the last production build on port 3001
 npm run build    # Production build
+npm test         # Run the automated tests once
 npm run lint     # ESLint check
 npx tsc --noEmit # TypeScript type check
 ```
@@ -243,3 +225,4 @@ The app runs in "no-auth" mode:
 ---
 
 *Built with ❤️ by JE Labs*
+localhos
