@@ -1,0 +1,212 @@
+.pw-game .fire-field-wrap { position: relative; }
+.pw-game .fire-field-wrap .password-input { position: relative; z-index: 1; }
+.pw-game .fire-field-wrap.is-burning .password-input { border-color: #ff8a24; box-shadow: 0 0 18px #ff4c0a66, inset 0 1px #ffffff22; }
+.pw-game .fire-status { margin-top: 14px; padding: 13px 16px; border: 1px solid rgba(251, 146, 60, .7); border-radius: 14px; background: rgba(95, 25, 10, .42); box-shadow: inset 0 0 24px rgba(251, 86, 20, .16), 0 0 20px rgba(251, 86, 20, .16); }
+.pw-game .fire-complete { border-color: rgba(74, 222, 128, .65); background: rgba(20, 83, 45, .3); box-shadow: inset 0 0 24px rgba(34, 197, 94, .12); }
+.pw-game .fire-complete .fire-status-label { color: #bbf7d0; }
+.pw-game .fire-status-label { display: block; margin-bottom: 8px; color: #fed7aa; font-size: .9rem; font-weight: 700; }
+.pw-game .fire-password-preview { overflow-x: auto; font-family: "JetBrains Mono", Consolas, monospace; font-size: clamp(1.1rem, 3vw, 1.55rem); letter-spacing: .04em; white-space: nowrap; }
+.pw-game .safe-character { color: #f8fafc; }
+.pw-game .burning-character { display: inline-block; filter: drop-shadow(0 0 7px #fb5b16); animation: pw-fire-flicker .65s ease-in-out infinite alternate; }
+.pw-game .fire-destruction-scene {
+  --scene-fire: #ff5a12;
+  position: fixed;
+  inset: 0;
+  z-index: 1001;
+  isolation: isolate;
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: 56px 24px 90px;
+  overflow: hidden;
+  color: #f7e5d0;
+  background:
+    radial-gradient(ellipse at 50% 68%, rgba(153, 48, 8, .36), transparent 36%),
+    radial-gradient(ellipse at 50% 100%, rgba(255, 91, 12, .18), transparent 40%),
+    linear-gradient(180deg, #080706 0%, #120c09 55%, #080706 100%);
+  font-family: Georgia, "Times New Roman", serif;
+}
+.pw-game .fire-destruction-scene::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: repeating-linear-gradient(112deg, transparent 0 9px, rgba(255, 255, 255, .012) 10px, transparent 11px 21px);
+  content: "";
+  pointer-events: none;
+}
+.pw-game .fire-destruction-content {
+  position: relative;
+  z-index: 2;
+  width: min(1180px, 100%);
+  text-align: center;
+}
+.pw-game .fire-ornament {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  width: min(760px, 90%);
+  margin: 0 auto 18px;
+  color: #8d4927;
+}
+.pw-game .fire-ornament::before, .pw-game .fire-ornament::after {
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(90deg, transparent, #a84b20, transparent);
+  box-shadow: 0 0 8px #a83b14;
+  content: "";
+}
+.pw-game .fire-ornament span {
+  font-size: 58px;
+  line-height: 1;
+  filter: sepia(.6) drop-shadow(0 4px 10px #000);
+  opacity: .9;
+}
+.pw-game .fire-destruction-content h1 {
+  margin: 0;
+  color: #ff8b3d;
+  font-size: clamp(38px, 7.2vw, 88px);
+  font-weight: 900;
+  letter-spacing: .045em;
+  line-height: 1.04;
+  text-shadow: 0 0 5px #ff6b1c, 0 0 18px rgba(255, 77, 13, .85), 0 5px 2px #3d1207;
+  text-transform: uppercase;
+  -webkit-text-stroke: 1px rgba(255, 193, 120, .16);
+}
+.pw-game .fire-destruction-subtitle {
+  margin: 18px 0 48px;
+  color: #c77d4b;
+  font-size: clamp(10px, 1.35vw, 15px);
+  letter-spacing: .34em;
+  text-transform: uppercase;
+}
+.pw-game .fire-ashes {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: min(1000px, 100%);
+  min-height: 150px;
+  margin: 0 auto;
+  padding: 24px 48px;
+  overflow: hidden;
+  transform: rotate(-.3deg);
+  border: 3px solid #39251a;
+  border-radius: 8px;
+  background: linear-gradient(105deg, rgba(111, 76, 49, .96), rgba(166, 123, 79, .94) 45%, rgba(70, 45, 29, .96));
+  box-shadow: 0 0 0 2px rgba(201, 117, 55, .22), 0 0 32px rgba(255, 74, 8, .35), inset 0 0 45px rgba(0, 0, 0, .72);
+  animation: pw-ashes-arrive .8s ease-out;
+}
+.pw-game .fire-ashes::before {
+  position: absolute;
+  inset: 7px;
+  border: 1px solid rgba(255, 198, 130, .25);
+  content: "";
+  pointer-events: none;
+}
+.pw-game .fire-ashes strong {
+  position: relative;
+  z-index: 1;
+  color: #21140d;
+  font-size: clamp(21px, 3.3vw, 43px);
+  letter-spacing: .035em;
+  text-shadow: 0 1px rgba(255, 207, 151, .35);
+}
+.pw-game .fire-ashes strong::after {
+  content: "...";
+}
+.pw-game .fire-destruction-scene ~ .fire-retry {
+  position: fixed;
+  bottom: max(36px, 8vh);
+  left: 50%;
+  z-index: 1002;
+  width: auto;
+  min-width: 150px;
+  margin: 0;
+  transform: translateX(-50%);
+  border: 1px solid rgba(255, 130, 58, .45);
+  border-radius: 3px;
+  color: #e8a16e;
+  background: rgba(20, 12, 8, .8);
+  font: 12px Georgia, serif;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.pw-game .fire-destruction-scene ~ .fire-retry:hover, .pw-game .fire-destruction-scene ~ .fire-retry:focus-visible {
+  background: rgba(115, 39, 12, .6);
+  box-shadow: 0 0 18px rgba(255, 75, 12, .2);
+}
+.pw-game .fire-smoke {
+  position: absolute;
+  bottom: -18%;
+  z-index: 0;
+  width: 38vw;
+  height: 65vh;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(116, 105, 99, .18), rgba(63, 56, 52, .09) 35%, transparent 70%);
+  filter: blur(34px);
+  animation: pw-smoke-drift 10s ease-in-out infinite alternate;
+}
+.pw-game .fire-smoke-one { left: -10%; }
+.pw-game .fire-smoke-two { right: -12%; animation-delay: -4s; transform: scale(1.2); }
+.pw-game .fire-ash-particle {
+  position: absolute;
+  top: var(--ash-y);
+  left: var(--ash-x);
+  z-index: 3;
+  width: var(--ash-size);
+  height: var(--ash-size);
+  border-radius: 2px;
+  background: #ff9b42;
+  box-shadow: 0 0 9px #ff5b16;
+  opacity: 0;
+  pointer-events: none;
+  animation: pw-ash-fly var(--ash-duration) ease-out var(--ash-delay) infinite;
+}
+.pw-game .fire-ash-particle:nth-of-type(3n) { background: #4d4945; box-shadow: none; }
+.pw-game .fire-floor {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  height: 15vh;
+  border-top: 1px solid rgba(255, 102, 22, .12);
+  background: linear-gradient(0deg, #050403 0%, rgba(36, 18, 10, .8) 35%, transparent 100%);
+}
+.pw-game .fire-floor::before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #a64216, transparent);
+  box-shadow: 0 0 20px #b63c0d;
+  content: "";
+}
+.pw-game .fire-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  box-shadow: inset 0 0 180px 55px #000;
+  pointer-events: none;
+}
+@keyframes pw-fire-flicker { to { transform: translateY(-2px) scale(1.08) rotate(3deg); } }
+@keyframes pw-emoji-flicker { from { transform: translateY(-50%) rotate(-4deg) scale(.97); } to { transform: translateY(-62%) rotate(4deg) scale(1.04); } }
+@keyframes pw-ashes-arrive { from { opacity: 0; transform: scale(.92); } to { opacity: 1; transform: scale(1); } }
+@keyframes pw-smoke-drift { from { transform: translate3d(0, 0, 0) scale(.9); opacity: .35; } to { transform: translate3d(8vw, -8vh, 0) scale(1.25); opacity: .7; } }
+@keyframes pw-ash-fly { 0% { opacity: 0; transform: translate(0, 0) rotate(0) scale(.5); } 12% { opacity: .95; } 100% { opacity: 0; transform: translate(90px, -220px) rotate(260deg) scale(.15); } }
+@media (prefers-reduced-motion: reduce) {
+.pw-game .burning-character, .pw-game .fire-ashes, .pw-game .fire-smoke, .pw-game .fire-ash-particle { animation: none; }
+
+
+}
+@media (max-width: 600px) {
+.pw-game .fire-destruction-scene { padding: 44px 16px 70px; }
+.pw-game .fire-ornament span { font-size: 42px; }
+.pw-game .fire-destruction-subtitle { margin-bottom: 36px; letter-spacing: .18em; }
+.pw-game .fire-ashes { min-height: 130px; padding: 22px 20px; }
+
+
+}
+

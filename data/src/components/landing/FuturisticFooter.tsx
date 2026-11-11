@@ -15,6 +15,7 @@ export function FuturisticFooter() {
     { href: "/play/chess", label: "Speed Chess" },
     { href: "/play/hand-cricket", label: "Hand Cricket" },
     { href: "/play/ludo", label: "Ludo" },
+    { href: "/play/password-game", label: "Password Game" },
     { href: "/challenges", label: "Dare Challenges & Stories" },
     { href: "/games", label: "All Game Arenas" },
   ];

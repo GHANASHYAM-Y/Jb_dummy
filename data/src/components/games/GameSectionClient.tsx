@@ -534,6 +534,57 @@ export function GameSectionClient({
               </div>
             </article>
 
+            {/* Game Card 5: Password Game */}
+            <article className="rounded-3xl border border-[rgba(57,223,255,0.2)] bg-[#101638]/90 backdrop-blur-xl p-6 sm:p-7 shadow-[0_16px_48px_rgba(0,0,0,0.45)] hover:border-[#39DFFF]/60 hover:shadow-[0_20px_50px_rgba(57,223,255,0.2)] focus-within:ring-2 focus-within:ring-[#167D78] focus-within:border-[#167D78] transition-all flex flex-col justify-between group h-full">
+              <div className="flex flex-col flex-grow">
+                {/* Header Icon + Availability Badge */}
+                <div className="flex items-start justify-between gap-3 mb-5">
+                  <div className="w-13 h-13 rounded-2xl bg-gradient-to-br from-[#8B2CFF]/20 to-[#39DFFF]/30 border border-[#8B2CFF]/40 flex items-center justify-center text-[#C4A5FF] group-hover:scale-105 transition-transform shadow-[0_0_16px_rgba(139,44,255,0.25)]">
+                    <Shield className="h-7 w-7" />
+                  </div>
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#39DFFF]/15 border border-[#39DFFF]/30 text-xs font-bold text-[#39DFFF] shadow-[0_0_12px_rgba(57,223,255,0.2)]">
+                    <Zap className="h-3.5 w-3.5" />
+                    New
+                  </span>
+                </div>
+
+                {/* Title & Description */}
+                <h3 className="font-display font-black text-xl text-[#F5F7FF] mb-2 tracking-tight leading-snug">
+                  Password Game
+                </h3>
+                <p className="text-[#52605C] dark:text-[#B8C3E0] text-sm leading-relaxed mb-4">
+                  Build one password that survives 26 ever-harder rules while fire, water, lightning and ice try to wreck it.
+                </p>
+
+                {/* Feature Tags */}
+                <div className="mt-auto pt-3 mb-6 flex flex-wrap gap-2">
+                  <span className="px-3 py-1 rounded-lg bg-[#39DFFF]/15 text-[#39DFFF] text-xs font-mono font-bold border border-[#39DFFF]/30">
+                    Solo
+                  </span>
+                  <span className="px-3 py-1 rounded-lg bg-[#070B25] text-[#52605C] dark:text-[#B8C3E0] text-xs font-semibold border border-[#1C2758]">
+                    26 Rules
+                  </span>
+                  <span className="px-3 py-1 rounded-lg bg-[rgba(255,83,112,0.15)] text-[#FF8599] text-xs font-bold border border-[#FF5370]/30">
+                    Chaos Events
+                  </span>
+                </div>
+              </div>
+
+              {/* Action Button */}
+              <div className="pt-4 border-t border-[#1C2758] mt-auto">
+                <Link href="/play/password-game" className="block w-full">
+                  <Button
+                    variant="primary"
+                    size="md"
+                    className="w-full font-bold justify-center min-h-[44px] shadow-[0_0_20px_rgba(49,91,255,0.4)] hover:shadow-[0_0_28px_rgba(57,223,255,0.6)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78] focus-visible:ring-offset-2"
+                  >
+                    <Play className="h-4 w-4 mr-2 fill-current" />
+                    Play Password Game
+                  </Button>
+                </Link>
+              </div>
+            </article>
+
             {/* Game Card 3: Mystery Dare Duel (Upcoming) */}
             <article className="rounded-3xl border border-[rgba(139,44,255,0.25)] bg-[#101638]/70 backdrop-blur-xl p-6 sm:p-7 shadow-[0_16px_48px_rgba(0,0,0,0.45)] flex flex-col justify-between h-full">
               <div className="flex flex-col flex-grow">

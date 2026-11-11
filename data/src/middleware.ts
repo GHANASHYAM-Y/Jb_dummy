@@ -25,6 +25,8 @@ const PUBLIC_ROUTES = new Set([
   // Ludo lobby and bot games work without an account
   "/play/ludo",
   "/play/ludo/bots",
+  // Password Game is a solo puzzle that runs in the browser
+  "/play/password-game",
 ]);
 
 /**

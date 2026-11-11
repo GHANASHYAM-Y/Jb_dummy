@@ -1,0 +1,16 @@
+.pw-game .lightning-event, .pw-game .lightning-waiting { margin-top: 14px; padding: 14px 16px; border: 1px solid rgba(250, 204, 21, .8); border-radius: 16px; color: #fefce8; background: radial-gradient(circle at top, rgba(250, 204, 21, .26), rgba(51, 37, 10, .75)); box-shadow: 0 0 28px rgba(250, 204, 21, .24); }
+.pw-game .lightning-alert { margin: 0 0 8px; color: #fef08a; font-weight: 900; letter-spacing: .05em; }
+.pw-game .lightning-password-preview { display: inline-grid; grid-template-rows: auto auto; grid-auto-columns: max-content; overflow-x: auto; padding: 4px 8px; font-family: "JetBrains Mono", Consolas, monospace; font-size: clamp(1.1rem, 3vw, 1.55rem); letter-spacing: .04em; }
+.pw-game .lightning-safe, .pw-game .lightning-target { grid-row: 1; color: #f8fafc; }
+.pw-game .lightning-target { color: #fef08a; text-shadow: 0 0 9px #facc15; animation: pw-lightning-target-pulse .45s ease-in-out infinite alternate; }
+.pw-game .lightning-bolt { grid-row: 2; color: #fde047; filter: drop-shadow(0 0 7px #facc15); animation: pw-lightning-flicker .25s steps(2) infinite; }
+.pw-game .lightning-timer { margin: 7px 0 0; color: #fef9c3; font-variant-numeric: tabular-nums; }
+.pw-game .lightning-waiting { color: #fef08a; animation: pw-lightning-impact .35s ease-out; }
+@keyframes pw-lightning-target-pulse { to { text-shadow: 0 0 18px #fef08a; } }
+@keyframes pw-lightning-flicker { 50% { opacity: .45; transform: translateY(2px); } }
+@keyframes pw-lightning-impact { from { transform: translateX(6px); } to { transform: translateX(0); } }
+@media (prefers-reduced-motion: reduce) {
+.pw-game .lightning-target, .pw-game .lightning-bolt, .pw-game .lightning-waiting { animation: none; }
+ 
+}
+
