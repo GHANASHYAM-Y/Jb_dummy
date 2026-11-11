@@ -8,6 +8,8 @@ import { createClient } from "@/core/supabase/client";
 import { Avatar, Badge, Button, Spinner } from "@/shared/ui";
 import { cn } from "@/shared/lib/utils";
 import { GameLifecycleBanner } from "@/shared/game/GameLifecycleBanner";
+import { useMatchConnection } from "@/shared/game/useMatchConnection";
+import { postJson } from "@/shared/lib/http";
 import { ChallengeSelectionModal } from "@/features/dare-game";
 import { MatchChallengeCard } from "@/features/dare-game";
 import type { Challenge, MatchPhase } from "@/core/supabase/database";
@@ -47,15 +49,6 @@ function useTicker(active: boolean, intervalMs = 250): number {
   return now;
 }
 
-function postJson(url: string, body?: unknown, keepalive = false) {
-  return fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: body === undefined ? undefined : JSON.stringify(body),
-    keepalive,
-  });
-}
-
 function clockOffsetMs(serverNowIso: string): number {
   const serverMs = Date.parse(serverNowIso);
   return Number.isNaN(serverMs) ? 0 : serverMs - Date.now();
@@ -81,7 +74,6 @@ export function LudoMatchBoard({ matchId, viewerId, players, initialSnapshot }: 
   const autoMovedRef = useRef<number | null>(null);
   const joinedRef = useRef(false);
   const phaseRef = useRef(initialSnapshot.match.phase);
-  const reconnectedForRef = useRef<string | null>(null);
 
   const { match, game } = snapshot;
   const state = game.state;
@@ -171,40 +163,9 @@ export function LudoMatchBoard({ matchId, viewerId, players, initialSnapshot }: 
     return () => clearInterval(id);
   }, [terminal, refresh]);
 
-  // Network drops: report a disconnect, and reconnect when back online
-  useEffect(() => {
-    const handleOffline = () => {
-      if (LIVE_PHASES.includes(phaseRef.current)) {
-        void postJson("/api/games/disconnect", { match_id: matchId }, true).catch(() => null);
-      }
-    };
-    const handleOnline = () => {
-      const request = LIVE_PHASES.includes(phaseRef.current)
-        ? postJson("/api/games/reconnect", { match_id: matchId }).catch(() => null)
-        : Promise.resolve(null);
-      void request.finally(() => {
-        void refresh();
-      });
-    };
-    window.addEventListener("offline", handleOffline);
-    window.addEventListener("online", handleOnline);
-    return () => {
-      window.removeEventListener("offline", handleOffline);
-      window.removeEventListener("online", handleOnline);
-    };
-  }, [matchId, refresh]);
-
-  // If the server still thinks *we* are disconnected (e.g. after a refresh), reconnect
+  // Network drops and refreshes: report disconnects, reconnect when back
   const myDisconnectedAt = iAmP1 ? match.player1_disconnected_at : match.player2_disconnected_at;
-  useEffect(() => {
-    if (!live || !myDisconnectedAt || reconnectedForRef.current === myDisconnectedAt) return;
-    reconnectedForRef.current = myDisconnectedAt;
-    postJson("/api/games/reconnect", { match_id: matchId })
-      .catch(() => null)
-      .finally(() => {
-        void refresh();
-      });
-  }, [live, myDisconnectedAt, matchId, refresh]);
+  useMatchConnection({ matchId, phaseRef, live, myDisconnectedAt, refresh });
 
   // ── Turn state ──────────────────────────────────────────────────────────────
 

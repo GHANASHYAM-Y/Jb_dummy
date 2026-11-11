@@ -100,13 +100,7 @@ export async function runMatchRpc(
 }
 
 /** Parses a JSON body, returning null when the body is missing or invalid. */
-export async function readJson<T>(request: Request): Promise<T | null> {
-  try {
-    return (await request.json()) as T;
-  } catch {
-    return null;
-  }
-}
+export { readJson } from "@/shared/lib/http";
 
 function fallbackPlayer(id: string, label: string): HandCricketPlayer {
   return { id, display_name: label, evoora_id: null, avatar_url: null };

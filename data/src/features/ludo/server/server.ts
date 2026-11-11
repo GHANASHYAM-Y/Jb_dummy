@@ -126,13 +126,7 @@ export async function runRpc(
 }
 
 /** Parses a JSON body, returning null when the body is missing or invalid. */
-export async function readJson<T>(request: Request): Promise<T | null> {
-  try {
-    return (await request.json()) as T;
-  } catch {
-    return null;
-  }
-}
+export { readJson } from "@/shared/lib/http";
 
 export function isVersion(v: unknown): v is number {
   return typeof v === "number" && Number.isInteger(v) && v >= 0;
