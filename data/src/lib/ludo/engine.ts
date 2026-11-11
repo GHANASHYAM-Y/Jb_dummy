@@ -56,6 +56,8 @@ export interface LudoState {
   winner: Color | null;
   moveCount: number;
   lastEvent: LudoEvent | null;
+  /** Online games: turns each colour has let the clock run out on, in a row. */
+  missedTurns?: Partial<Record<Color, number>>;
 }
 
 export function seatColors(count: 2 | 3 | 4): Color[] {

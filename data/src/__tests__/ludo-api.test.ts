@@ -50,7 +50,7 @@ import { POST as cancelPOST } from "@/app/api/ludo/match/[matchId]/cancel/route"
 import { POST as rollPOST } from "@/app/api/ludo/match/[matchId]/roll/route";
 import { POST as movePOST } from "@/app/api/ludo/match/[matchId]/move/route";
 import { POST as timeoutPOST } from "@/app/api/ludo/match/[matchId]/timeout/route";
-import { httpStatusForCode, planLudoAction } from "@/lib/ludo/server";
+import { httpStatusForCode, planLudoAction, winnerUserId } from "@/lib/ludo/server";
 
 // ── Fixtures ─────────────────────────────────────────────────────────────────
 
@@ -442,6 +442,42 @@ describe("Ludo API — timeout", () => {
     expect(noMoves.ok && noMoves.state.turn).toBe(1);
   });
 
+  it("counts missed turns and forfeits on the third in a row", () => {
+    const now = Date.now();
+    const g = { ...onlineGame(), dice: 3 };
+    const snap = (missed: number) =>
+      snapshot({ ...g, missedTurns: { red: missed } }, { deadlineMs: now - 5_000, nowMs: now });
+
+    const second = planLudoAction(snap(1), P2, { kind: "timeout" }, now, () => 3);
+    expect(second.ok && second.state.missedTurns?.red).toBe(2);
+    expect(second.ok && second.state.status).toBe("playing");
+    expect(second.ok && second.endReason).toBeUndefined();
+
+    const third = planLudoAction(snap(2), P2, { kind: "timeout" }, now, () => 3);
+    expect(third.ok).toBe(true);
+    if (!third.ok) return;
+    expect(third.endReason).toBe("forfeit");
+    expect(third.state).toMatchObject({ status: "finished", winner: "yellow" });
+    expect(winnerUserId(third.state)).toBe(P2);
+  });
+
+  it("a real move by the player resets their missed-turn count", () => {
+    const g = { ...onlineGame(), dice: 6, missedTurns: { red: 2 } };
+    const snap = snapshot(g, { deadlineMs: Date.now() + 10_000 });
+    const moved = planLudoAction(snap, P1, { kind: "move", version: 4, token: 0 }, Date.now());
+    expect(moved.ok && moved.state.missedTurns?.red).toBe(0);
+  });
+
+  it("saves a forfeit with end reason forfeit", async () => {
+    mockGetUser.mockResolvedValue({ data: { user: { id: P2 } }, error: null });
+    const g = { ...onlineGame(), dice: 3, missedTurns: { red: 2 } };
+    serveState(snapshot(g, { deadlineMs: Date.now() - 5_000 }));
+    adminOk(5);
+    const res = await timeoutPOST(req(`/api/ludo/match/${MATCH_ID}/timeout`), params);
+    expect(res.status).toBe(200);
+    expect(lastApplyArgs()).toMatchObject({ p_winner_id: P2, p_end_reason: "forfeit", p_turn_deadline: null });
+  });
+
   it("returns 503 without a service role key", async () => {
     serviceKey.present = false;
     const res = await timeoutPOST(req(`/api/ludo/match/${MATCH_ID}/timeout`), params);
@@ -451,6 +487,30 @@ describe("Ludo API — timeout", () => {
   it("refuses non-participants", () => {
     const planned = planLudoAction(snapshot(onlineGame()), "44444444-4444-4444-8444-444444444444", { kind: "roll", version: 4 }, Date.now());
     expect(planned).toMatchObject({ ok: false, code: "forbidden" });
+  });
+});
+
+describe("Migration 0017 — Ludo forfeit and cleanup", () => {
+  const sql = fs.readFileSync(
+    path.resolve(__dirname, "../../supabase/migrations/0017_ludo_forfeit_and_cleanup.sql"),
+    "utf-8",
+  );
+  const flat = sql.replace(/--[^\r\n]*/g, "").replace(/\s+/g, " ");
+
+  it("replaces apply_ludo_state with an end-reason version, service role only", () => {
+    const sig = "public.apply_ludo_state(UUID, UUID, INT, JSONB, TIMESTAMPTZ, UUID, TEXT)";
+    expect(flat).toContain("DROP FUNCTION IF EXISTS public.apply_ludo_state(UUID, UUID, INT, JSONB, TIMESTAMPTZ, UUID)");
+    expect(flat).toContain(`REVOKE ALL ON FUNCTION ${sig} FROM PUBLIC, anon, authenticated`);
+    expect(flat).toContain(`GRANT EXECUTE ON FUNCTION ${sig} TO service_role;`);
+    expect(flat).toContain("p_end_reason NOT IN ('completed', 'forfeit')");
+    expect(flat).toContain("end_reason = p_end_reason");
+  });
+
+  it("marks the game row finished when the shared lifecycle ends the match", () => {
+    expect(flat).toContain("AFTER UPDATE OF phase ON public.matches");
+    expect(flat).toContain("NEW.phase IN ('completed', 'aborted', 'forfeited', 'cancelled')");
+    expect(flat).toContain("SET status = 'finished', turn_deadline = NULL");
+    expect(flat).toContain("SECURITY DEFINER SET search_path = public, pg_catalog");
   });
 });
 

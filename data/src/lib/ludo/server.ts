@@ -26,6 +26,9 @@ export const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f
 /** Extra time allowed after turn_deadline before a timeout claim is accepted */
 export const TIMEOUT_TOLERANCE_MS = 1_000;
 
+/** A player who lets the clock run out this many turns in a row forfeits. */
+export const MAX_MISSED_TURNS = 3;
+
 // The generated Database type does not include the ludo tables/RPCs yet.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type UntypedSupabase = any;
@@ -217,8 +220,15 @@ export function serverRollDie(): number {
 }
 
 type Planned =
-  | { ok: true; state: LudoState; events: LudoEvent[] }
+  | { ok: true; state: LudoState; events: LudoEvent[]; endReason?: "forfeit" }
   | { ok: false; code: string; error: string; extra?: Record<string, unknown> };
+
+/** A real roll or move by the player resets their missed-turn count. */
+function clearMissed(state: LudoState, userId: string): LudoState {
+  const color = state.players.find((p) => p.userId === userId)?.color;
+  if (!color || !state.missedTurns?.[color]) return state;
+  return { ...state, missedTurns: { ...state.missedTurns, [color]: 0 } };
+}
 
 /** Pure planning step: validates the action against the snapshot and runs the engine. */
 export function planLudoAction(
@@ -266,7 +276,28 @@ export function planLudoAction(
         state = step.state;
         events.push(step.event);
       }
-      return { ok: true, state, events };
+      if (state.status === "finished") return { ok: true, state, events };
+
+      // Count the missed turn; too many in a row ends the match for them
+      const missed = (state.missedTurns?.[turnColor] ?? 0) + 1;
+      if (missed >= MAX_MISSED_TURNS) {
+        const winner = state.players.find((p) => p.color !== turnColor);
+        if (winner) {
+          return {
+            ok: true,
+            events,
+            endReason: "forfeit",
+            state: {
+              ...state,
+              status: "finished",
+              winner: winner.color,
+              dice: null,
+              missedTurns: { ...state.missedTurns, [turnColor]: missed },
+            },
+          };
+        }
+      }
+      return { ok: true, state: { ...state, missedTurns: { ...state.missedTurns, [turnColor]: missed } }, events };
     }
 
     if (currentPlayer(state).userId !== userId) {
@@ -278,7 +309,7 @@ export function planLudoAction(
         return { ok: false, code: "dice_pending", error: "Move a token with your roll first." };
       }
       const rolled = applyRoll(state, rollDie());
-      return { ok: true, state: rolled.state, events: [rolled.event] };
+      return { ok: true, state: clearMissed(rolled.state, userId), events: [rolled.event] };
     }
 
     if (state.dice === null) {
@@ -288,7 +319,7 @@ export function planLudoAction(
       return { ok: false, code: "illegal_move", error: "That token cannot move." };
     }
     const moved = applyMove(state, action.token);
-    return { ok: true, state: moved.state, events: [moved.event] };
+    return { ok: true, state: clearMissed(moved.state, userId), events: [moved.event] };
   } catch (err) {
     return { ok: false, code: "illegal_move", error: err instanceof Error ? err.message : "Illegal move." };
   }
@@ -341,6 +372,7 @@ export async function performLudoAction(
     p_state: plan.state,
     p_turn_deadline: winnerId ? null : new Date(dbNow + LUDO_TURN_MS).toISOString(),
     p_winner_id: winnerId,
+    p_end_reason: plan.endReason ?? "completed",
   });
 
   if (error) {
