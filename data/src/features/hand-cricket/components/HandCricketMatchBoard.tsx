@@ -20,9 +20,8 @@ import { cn } from "@/shared/lib/utils";
 import { GameLifecycleBanner } from "@/shared/game/GameLifecycleBanner";
 import { useMatchConnection } from "@/shared/game/useMatchConnection";
 import { postJson } from "@/shared/lib/http";
-import { ChallengeSelectionModal } from "@/features/dare-game";
+import { ChallengeSelectionModal, useMatchChallenge } from "@/features/dare-game";
 import { MatchChallengeCard } from "@/features/dare-game";
-import type { Challenge } from "@/core/supabase/database";
 import {
   DEADLINE_TOLERANCE_MS,
   SHOT_CLOCK_MS,
@@ -95,7 +94,6 @@ export function HandCricketMatchBoard({ matchId, viewerId, players, initialSnaps
   const [pending, setPending] = useState<{ key: string; value: number } | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
-  const [challenge, setChallenge] = useState<Challenge | null>(null);
   const [dareOpen, setDareOpen] = useState(false);
   const [rematching, setRematching] = useState(false);
 
@@ -252,25 +250,11 @@ export function HandCricketMatchBoard({ matchId, viewerId, players, initialSnaps
   // Load (and, for the loser, keep checking for) the dare once the match is decided
   const iWon = match.winner_id === viewerId;
   const iLost = match.loser_id === viewerId;
-  useEffect(() => {
-    if (phase !== "completed" || match.is_draw) return;
-    let active = true;
-
-    const load = () =>
-      fetch(`/api/challenges/match?match_id=${encodeURIComponent(matchId)}`, { cache: "no-store" })
-        .then((res) => (res.ok ? res.json() : null))
-        .then((data) => {
-          if (active && data?.ok) setChallenge(data.challenge ?? null);
-        })
-        .catch(() => {});
-
-    void load();
-    const id = iLost ? setInterval(load, 5_000) : null;
-    return () => {
-      active = false;
-      if (id) clearInterval(id);
-    };
-  }, [phase, match.is_draw, matchId, iLost]);
+  const [challenge, setChallenge] = useMatchChallenge({
+    matchId,
+    decided: phase === "completed" && !match.is_draw,
+    pollWhileWaiting: iLost,
+  });
 
   // ── Actions ─────────────────────────────────────────────────────────────────
 

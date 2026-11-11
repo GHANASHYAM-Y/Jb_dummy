@@ -9,3 +9,4 @@ export { ChallengeSelectionModal } from "./components/ChallengeSelectionModal";
 export { ChallengesClient } from "./components/ChallengesClient";
 export { ChatStoriesClient } from "./components/ChatStoriesClient";
 export { MatchChallengeCard } from "./components/MatchChallengeCard";
+export { useMatchChallenge } from "./hooks/useMatchChallenge";
