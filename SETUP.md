@@ -143,7 +143,7 @@ npm run dev
 
 Open http://localhost:3000.
 
-There is also a Windows helper, `start-servers.bat` in the repo root. It installs packages if needed, then opens a dev server (port 3000) and a production-style server (port 3001) in two windows.
+There is also a Windows helper, `start-servers.bat` in the repo root. It installs packages if needed, then runs a dev server (port 3000) and a production-style server (port 3001, which builds first and takes a couple of minutes) together in one window. Press Ctrl+C to stop both.
 
 | Command | What it does |
 |---------|--------------|
@@ -184,7 +184,7 @@ You will see "Missing Supabase environment variables" warnings in the terminal. 
 | `npm install` fails on an old Node | Run `node -v`. You need 20.9 or newer. |
 | `ENOENT package.json` | You are in the repo root. Run `cd data` first. |
 | "Missing Supabase environment variables" | `data/.env.local` is missing, misspelled, or the dev server was not restarted after you edited it. Restart `npm run dev`. |
-| Signup says "Unable to complete account registration due to a server error" | Migration `0001_profiles.sql` did not run, or ran with an error. See `support/Yet_To_Do/README.md` for the investigation notes on this exact error. |
+| Signup says "Unable to complete account registration due to a server error" | Migration `0001_profiles.sql` did not run, or ran with an error. See `support/Yet_To_Do/Yet_to_do.md` for the investigation notes on this exact error. |
 | Confirmation email link goes to the wrong place | Step 7: Site URL and Redirect URLs. |
 | Online Ludo says "not available right now" | `SUPABASE_SERVICE_ROLE_KEY` is missing or wrong. |
 | "function ... does not exist" in a game | A migration was skipped. Re-check step 6 in order, including 0017. |

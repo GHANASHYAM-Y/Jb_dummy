@@ -75,7 +75,7 @@ The rules for how these folders may import each other are in [support/architectu
 | File | What it is |
 |------|------------|
 | `architecture/ARCHITECTURE.md` | How `data/src/` is organised and the import rules between games. |
-| `Yet_To_Do/README.md` | Open tasks. Includes the signup "server error" investigation and Google sign-in. |
+| `Yet_To_Do/Yet_to_do.md` | Open tasks. Includes the signup "server error" investigation and Google sign-in. |
 | `production_readiness_report.md`, `post_remediation_release_gate_report.md` | Release checks. |
 | `ui_redesign_audit.md`, `ui_redesign_completion_report.md`, `post_redesign_acceptance_report.md` | The UI redesign history. |
 | `rps_arena_*`, `two_browser_uat_report.md` | RPS build and two-browser test reports. |
@@ -150,7 +150,7 @@ To make a new page public, add its path to `PUBLIC_ROUTES` there.
 ## 7. Known open items
 
 - Google sign-in is not set up yet.
-- The signup "Database error saving new user" issue is documented but its cause is unconfirmed (`support/Yet_To_Do/README.md`).
+- The signup "Database error saving new user" issue is documented but its cause is unconfirmed (`support/Yet_To_Do/Yet_to_do.md`).
 - Online Ludo is friends only (no random matching) by design.
 - 8 older tests fail on a clean checkout (they check SQL text in migrations 0003 to 0009). They are unrelated to new work.
 - The generated database types do not yet include the Ludo and Hand Cricket tables, so those server calls are not type-checked.
