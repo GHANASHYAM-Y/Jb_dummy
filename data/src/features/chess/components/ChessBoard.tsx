@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, useCallback } from "react";
 import { ChessPieceSvg } from "./ChessPieceSvg";
-import { ChessColor, LegalMoveTarget } from "@/lib/chess/types";
+import { ChessColor, LegalMoveTarget } from "@/features/chess/types";
 import { cn } from "@/shared/lib/utils";
 
 interface ChessBoardProps {

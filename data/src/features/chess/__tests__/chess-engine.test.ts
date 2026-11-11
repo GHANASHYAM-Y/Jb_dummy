@@ -16,7 +16,7 @@ import {
   getLegalMoves,
   canClaimDraw,
   STARTING_FEN,
-} from "@/lib/chess/engine";
+} from "@/features/chess/engine/engine";
 
 const P1_WHITE = "11111111-1111-1111-1111-111111111111";
 const P2_BLACK = "22222222-2222-2222-2222-222222222222";

@@ -34,7 +34,7 @@ describe("EVOAIQU Game Lobby (Stage A) — UX & Navigation Standards", () => {
   const globalsCssPath = path.resolve(__dirname, "../../../app/globals.css");
   const globalsCssCode = fs.readFileSync(globalsCssPath, "utf-8");
 
-  const chessMatchPath = path.resolve(__dirname, "../../../components/chess/ChessMatchBoard.tsx");
+  const chessMatchPath = path.resolve(__dirname, "../../../features/chess/components/ChessMatchBoard.tsx");
   const chessMatchCode = fs.readFileSync(chessMatchPath, "utf-8");
 
   const chatStoriesPath = path.resolve(__dirname, "../../../components/chat/ChatStoriesClient.tsx");

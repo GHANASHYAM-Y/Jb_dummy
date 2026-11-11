@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse, connection } from "next/server";
 import { createServerSupabaseClient } from "@/core/supabase/server";
-import { calculateClocks, getCapturedPieces, getLegalMoves } from "@/lib/chess/engine";
-import { ChessMatchState } from "@/lib/chess/types";
+import { calculateClocks, getCapturedPieces, getLegalMoves } from "@/features/chess/engine/engine";
+import { ChessMatchState } from "@/features/chess/types";
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 

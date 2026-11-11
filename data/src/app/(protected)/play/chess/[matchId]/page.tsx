@@ -4,9 +4,9 @@ import { connection } from "next/server";
 import Link from "next/link";
 import { AlertCircle, ShieldAlert, ArrowLeft } from "lucide-react";
 import { createServerSupabaseClient, getServerUser } from "@/core/supabase/server";
-import { ChessMatchBoard } from "@/components/chess/ChessMatchBoard";
-import { getCapturedPieces, getLegalMoves } from "@/lib/chess/engine";
-import { ChessMatchState } from "@/lib/chess/types";
+import { ChessMatchBoard } from "@/features/chess/components/ChessMatchBoard";
+import { getCapturedPieces, getLegalMoves } from "@/features/chess/engine/engine";
+import { ChessMatchState } from "@/features/chess/types";
 import { Button } from "@/shared/ui";
 
 export const metadata: Metadata = {

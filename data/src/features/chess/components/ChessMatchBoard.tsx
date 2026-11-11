@@ -15,9 +15,9 @@ import { createClient } from "@/core/supabase/client";
 import { ChessBoard } from "./ChessBoard";
 import { ChessPieceSvg } from "./ChessPieceSvg";
 import { ChessVictoryModal } from "./ChessVictoryModal";
-import { chessSounds } from "@/lib/chess/sounds";
+import { chessSounds } from "@/features/chess/sound/sounds";
 import { Button, Badge, Avatar } from "@/shared/ui";
-import { ChessColor, LegalMoveTarget, CapturedPieces } from "@/lib/chess/types";
+import { ChessColor, LegalMoveTarget, CapturedPieces } from "@/features/chess/types";
 import { cn } from "@/shared/lib/utils";
 import { GameLifecycleBanner } from "@/shared/game/GameLifecycleBanner";
 

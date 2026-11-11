@@ -22,36 +22,36 @@ import {
   handleTimeout,
   getCapturedPieces,
   getLegalMoves,
-} from "@/lib/chess/engine";
-import { ChessMatchState } from "@/lib/chess/types";
+} from "@/features/chess/engine/engine";
+import { ChessMatchState } from "@/features/chess/types";
 
 // ── File Paths for Static Security Audits ───────────────────────────────────
 
-const migration0010Path = path.resolve(__dirname, "../../supabase/migrations/0010_chess.sql");
+const migration0010Path = path.resolve(__dirname, "../../../../supabase/migrations/0010_chess.sql");
 const migration0010 = fs.readFileSync(migration0010Path, "utf-8");
 
-const migration0011Path = path.resolve(__dirname, "../../supabase/migrations/0011_chess_rpcs.sql");
+const migration0011Path = path.resolve(__dirname, "../../../../supabase/migrations/0011_chess_rpcs.sql");
 const migration0011 = fs.readFileSync(migration0011Path, "utf-8");
 
-const migration0012Path = path.resolve(__dirname, "../../supabase/migrations/0012_chess_rpc_security.sql");
+const migration0012Path = path.resolve(__dirname, "../../../../supabase/migrations/0012_chess_rpc_security.sql");
 const migration0012 = fs.readFileSync(migration0012Path, "utf-8");
 
-const createRoutePath = path.resolve(__dirname, "../app/api/chess/create/route.ts");
+const createRoutePath = path.resolve(__dirname, "../../../app/api/chess/create/route.ts");
 const createRoute = fs.readFileSync(createRoutePath, "utf-8");
 
-const getMatchRoutePath = path.resolve(__dirname, "../app/api/chess/match/[matchId]/route.ts");
+const getMatchRoutePath = path.resolve(__dirname, "../../../app/api/chess/match/[matchId]/route.ts");
 const getMatchRoute = fs.readFileSync(getMatchRoutePath, "utf-8");
 
-const moveRoutePath = path.resolve(__dirname, "../app/api/chess/match/[matchId]/move/route.ts");
+const moveRoutePath = path.resolve(__dirname, "../../../app/api/chess/match/[matchId]/move/route.ts");
 const moveRoute = fs.readFileSync(moveRoutePath, "utf-8");
 
-const resignRoutePath = path.resolve(__dirname, "../app/api/chess/match/[matchId]/resign/route.ts");
+const resignRoutePath = path.resolve(__dirname, "../../../app/api/chess/match/[matchId]/resign/route.ts");
 const resignRoute = fs.readFileSync(resignRoutePath, "utf-8");
 
-const drawRoutePath = path.resolve(__dirname, "../app/api/chess/match/[matchId]/draw/route.ts");
+const drawRoutePath = path.resolve(__dirname, "../../../app/api/chess/match/[matchId]/draw/route.ts");
 const drawRoute = fs.readFileSync(drawRoutePath, "utf-8");
 
-const timeoutRoutePath = path.resolve(__dirname, "../app/api/chess/match/[matchId]/timeout/route.ts");
+const timeoutRoutePath = path.resolve(__dirname, "../../../app/api/chess/match/[matchId]/timeout/route.ts");
 const timeoutRoute = fs.readFileSync(timeoutRoutePath, "utf-8");
 
 // ── 1. Database Migrations 0010 & 0011 Audits ───────────────────────────────

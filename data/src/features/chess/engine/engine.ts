@@ -12,7 +12,7 @@ import {
   ChessMoveInput,
   CapturedPieces,
   LegalMoveTarget,
-} from "./types";
+} from "../types";
 
 export const STARTING_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 export const DEFAULT_TIME_CONTROL_SECONDS = 300; // 5 minutes

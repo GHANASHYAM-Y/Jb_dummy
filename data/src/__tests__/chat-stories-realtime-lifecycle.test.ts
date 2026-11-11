@@ -22,7 +22,7 @@ const chatClientSrc = fs.readFileSync(chatClientPath, "utf-8");
 const rpsBoardPath = path.resolve(__dirname, "../components/rps/RpsMatchBoard.tsx");
 const rpsBoardSrc = fs.readFileSync(rpsBoardPath, "utf-8");
 
-const chessBoardPath = path.resolve(__dirname, "../components/chess/ChessMatchBoard.tsx");
+const chessBoardPath = path.resolve(__dirname, "../features/chess/components/ChessMatchBoard.tsx");
 const chessBoardSrc = fs.readFileSync(chessBoardPath, "utf-8");
 
 describe("ChatStoriesClient Realtime Channel Audit (Step 1 & Step 2)", () => {
