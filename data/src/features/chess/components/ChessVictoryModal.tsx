@@ -14,8 +14,8 @@ import {
   X,
 } from "lucide-react";
 import { Button, Badge } from "@/shared/ui";
-import { ChallengeSelectionModal } from "@/components/challenges/ChallengeSelectionModal";
-import { MatchChallengeCard } from "@/components/challenges/MatchChallengeCard";
+import { ChallengeSelectionModal } from "@/features/dare-game/components/ChallengeSelectionModal";
+import { MatchChallengeCard } from "@/features/dare-game/components/MatchChallengeCard";
 import type { Challenge } from "@/core/supabase/database";
 
 interface ChessVictoryModalProps {

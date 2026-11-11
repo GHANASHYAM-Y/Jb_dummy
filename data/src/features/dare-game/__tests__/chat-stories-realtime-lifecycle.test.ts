@@ -16,13 +16,13 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import fs from "fs";
 import path from "path";
 
-const chatClientPath = path.resolve(__dirname, "../components/chat/ChatStoriesClient.tsx");
+const chatClientPath = path.resolve(__dirname, "../components/ChatStoriesClient.tsx");
 const chatClientSrc = fs.readFileSync(chatClientPath, "utf-8");
 
-const rpsBoardPath = path.resolve(__dirname, "../features/rock-paper-scissors/components/RpsMatchBoard.tsx");
+const rpsBoardPath = path.resolve(__dirname, "../../rock-paper-scissors/components/RpsMatchBoard.tsx");
 const rpsBoardSrc = fs.readFileSync(rpsBoardPath, "utf-8");
 
-const chessBoardPath = path.resolve(__dirname, "../features/chess/components/ChessMatchBoard.tsx");
+const chessBoardPath = path.resolve(__dirname, "../../chess/components/ChessMatchBoard.tsx");
 const chessBoardSrc = fs.readFileSync(chessBoardPath, "utf-8");
 
 describe("ChatStoriesClient Realtime Channel Audit (Step 1 & Step 2)", () => {

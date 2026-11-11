@@ -16,43 +16,43 @@
 import { describe, it, expect } from "vitest";
 import fs from "fs";
 import path from "path";
-import { isValidStatus, isValidVisibility } from "@/lib/challenges";
+import { isValidStatus, isValidVisibility } from "@/features/dare-game/lib/challenges";
 
 // Read migration SQL and component/route sources for static security and contract auditing
 const migration0009 = fs.readFileSync(
-  path.resolve(__dirname, "../../supabase/migrations/0009_challenge_submissions_and_stories.sql"),
+  path.resolve(__dirname, "../../../../supabase/migrations/0009_challenge_submissions_and_stories.sql"),
   "utf-8"
 );
 const submitRouteSrc = fs.readFileSync(
-  path.resolve(__dirname, "../app/api/challenges/submit/route.ts"),
+  path.resolve(__dirname, "../../../app/api/challenges/submit/route.ts"),
   "utf-8"
 );
 const viewSessionRouteSrc = fs.readFileSync(
-  path.resolve(__dirname, "../app/api/challenges/submission/view-session/route.ts"),
+  path.resolve(__dirname, "../../../app/api/challenges/submission/view-session/route.ts"),
   "utf-8"
 );
 const reviewRouteSrc = fs.readFileSync(
-  path.resolve(__dirname, "../app/api/challenges/submission/review/route.ts"),
+  path.resolve(__dirname, "../../../app/api/challenges/submission/review/route.ts"),
   "utf-8"
 );
 const patchRouteSrc = fs.readFileSync(
-  path.resolve(__dirname, "../app/api/challenges/submission/[id]/route.ts"),
+  path.resolve(__dirname, "../../../app/api/challenges/submission/[id]/route.ts"),
   "utf-8"
 );
 const cleanupRouteSrc = fs.readFileSync(
-  path.resolve(__dirname, "../app/api/challenges/stories/cleanup/route.ts"),
+  path.resolve(__dirname, "../../../app/api/challenges/stories/cleanup/route.ts"),
   "utf-8"
 );
 const storiesRouteSrc = fs.readFileSync(
-  path.resolve(__dirname, "../app/api/challenges/stories/route.ts"),
+  path.resolve(__dirname, "../../../app/api/challenges/stories/route.ts"),
   "utf-8"
 );
 const recorderModalSrc = fs.readFileSync(
-  path.resolve(__dirname, "../components/challenges/VideoRecorderModal.tsx"),
+  path.resolve(__dirname, "../components/VideoRecorderModal.tsx"),
   "utf-8"
 );
 const reviewModalSrc = fs.readFileSync(
-  path.resolve(__dirname, "../components/challenges/WinnerReviewModal.tsx"),
+  path.resolve(__dirname, "../components/WinnerReviewModal.tsx"),
   "utf-8"
 );
 
@@ -210,7 +210,7 @@ describe("24-Hour Expiry & Retention Cleanup Audit", () => {
 
   it("schedules expired story cleanup daily at 3 AM UTC for Vercel Hobby compatibility", () => {
     const vercelConfig = JSON.parse(
-      fs.readFileSync(path.resolve(__dirname, "../../vercel.json"), "utf-8")
+      fs.readFileSync(path.resolve(__dirname, "../../../../vercel.json"), "utf-8")
     );
     expect(vercelConfig.crons).toBeDefined();
     const cleanupCron = vercelConfig.crons.find(

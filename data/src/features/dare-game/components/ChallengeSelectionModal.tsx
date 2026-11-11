@@ -8,7 +8,7 @@ import {
   CHALLENGE_CATALOG,
   CATEGORY_META,
   type ChallengeItem,
-} from "@/lib/challenges";
+} from "@/features/dare-game/lib/challenges";
 import type { ChallengeCategory, ChallengeVisibility, Challenge } from "@/core/supabase/database";
 import { cn } from "@/shared/lib/utils";
 

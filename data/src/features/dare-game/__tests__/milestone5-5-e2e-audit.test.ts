@@ -20,22 +20,22 @@ import * as fs from "fs";
 import * as path from "path";
 import { isValidEvoId, safeRedirectPath } from "@/shared/lib/utils";
 import { adjudicateRound, getMatchOutcome } from "@/features/rock-paper-scissors/engine/rps";
-import { CHALLENGE_CATALOG, getChallengeById, isValidCategory, isValidStatus, isValidVisibility } from "@/lib/challenges";
+import { CHALLENGE_CATALOG, getChallengeById, isValidCategory, isValidStatus, isValidVisibility } from "@/features/dare-game/lib/challenges";
 import { translations } from "@/core/i18n/translations";
 
 // Load all 5 SQL migrations for structural audit
-const m1 = fs.readFileSync(path.resolve(__dirname, "../../supabase/migrations/0001_profiles.sql"), "utf-8");
-const m2 = fs.readFileSync(path.resolve(__dirname, "../../supabase/migrations/0002_friends.sql"), "utf-8");
-const m3 = fs.readFileSync(path.resolve(__dirname, "../../supabase/migrations/0003_rps.sql"), "utf-8");
-const m4 = fs.readFileSync(path.resolve(__dirname, "../../supabase/migrations/0004_challenges.sql"), "utf-8");
-const m5 = fs.readFileSync(path.resolve(__dirname, "../../supabase/migrations/0005_matchmaking.sql"), "utf-8");
+const m1 = fs.readFileSync(path.resolve(__dirname, "../../../../supabase/migrations/0001_profiles.sql"), "utf-8");
+const m2 = fs.readFileSync(path.resolve(__dirname, "../../../../supabase/migrations/0002_friends.sql"), "utf-8");
+const m3 = fs.readFileSync(path.resolve(__dirname, "../../../../supabase/migrations/0003_rps.sql"), "utf-8");
+const m4 = fs.readFileSync(path.resolve(__dirname, "../../../../supabase/migrations/0004_challenges.sql"), "utf-8");
+const m5 = fs.readFileSync(path.resolve(__dirname, "../../../../supabase/migrations/0005_matchmaking.sql"), "utf-8");
 
 // Load API route source files for static verification
-const joinRoute = fs.readFileSync(path.resolve(__dirname, "../app/api/matchmaking/join/route.ts"), "utf-8");
-const moveRoute = fs.readFileSync(path.resolve(__dirname, "../app/api/rps/move/route.ts"), "utf-8");
-const assignRoute = fs.readFileSync(path.resolve(__dirname, "../app/api/challenges/assign/route.ts"), "utf-8");
-const callbackRoute = fs.readFileSync(path.resolve(__dirname, "../app/auth/callback/route.ts"), "utf-8");
-const logoutRoute = fs.readFileSync(path.resolve(__dirname, "../app/api/auth/logout/route.ts"), "utf-8");
+const joinRoute = fs.readFileSync(path.resolve(__dirname, "../../../app/api/matchmaking/join/route.ts"), "utf-8");
+const moveRoute = fs.readFileSync(path.resolve(__dirname, "../../../app/api/rps/move/route.ts"), "utf-8");
+const assignRoute = fs.readFileSync(path.resolve(__dirname, "../../../app/api/challenges/assign/route.ts"), "utf-8");
+const callbackRoute = fs.readFileSync(path.resolve(__dirname, "../../../app/auth/callback/route.ts"), "utf-8");
+const logoutRoute = fs.readFileSync(path.resolve(__dirname, "../../../app/api/auth/logout/route.ts"), "utf-8");
 
 // ── 1. User Provisioning & Immutable Identity Audit ──────────────────────────
 

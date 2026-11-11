@@ -37,7 +37,7 @@ describe("EVOAIQU Game Lobby (Stage A) — UX & Navigation Standards", () => {
   const chessMatchPath = path.resolve(__dirname, "../../../features/chess/components/ChessMatchBoard.tsx");
   const chessMatchCode = fs.readFileSync(chessMatchPath, "utf-8");
 
-  const chatStoriesPath = path.resolve(__dirname, "../../../components/chat/ChatStoriesClient.tsx");
+  const chatStoriesPath = path.resolve(__dirname, "../../../features/dare-game/components/ChatStoriesClient.tsx");
   const chatStoriesCode = fs.readFileSync(chatStoriesPath, "utf-8");
 
   describe("1. Game Selection Cards & Specific Entry Points", () => {

@@ -18,10 +18,10 @@ import {
 } from "lucide-react";
 import { useI18n } from "@/core/i18n/I18nContext";
 import { Button, Alert, Badge } from "@/shared/ui";
-import { CATEGORY_META } from "@/lib/challenges";
+import { CATEGORY_META } from "@/features/dare-game/lib/challenges";
 import type { Challenge, ChallengeStatus } from "@/core/supabase/database";
-import { VideoRecorderModal } from "@/components/challenges/VideoRecorderModal";
-import { WinnerReviewModal } from "@/components/challenges/WinnerReviewModal";
+import { VideoRecorderModal } from "@/features/dare-game/components/VideoRecorderModal";
+import { WinnerReviewModal } from "@/features/dare-game/components/WinnerReviewModal";
 
 interface MatchChallengeCardProps {
   challenge: Challenge;

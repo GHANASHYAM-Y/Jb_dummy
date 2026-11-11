@@ -19,8 +19,8 @@ import {
 } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 import { Avatar, Button, EvoIdBadge, Spinner } from "@/shared/ui";
-import { VideoRecorderModal } from "@/components/challenges/VideoRecorderModal";
-import { WinnerReviewModal } from "@/components/challenges/WinnerReviewModal";
+import { VideoRecorderModal } from "@/features/dare-game/components/VideoRecorderModal";
+import { WinnerReviewModal } from "@/features/dare-game/components/WinnerReviewModal";
 import type { Challenge, FriendEntry } from "@/core/supabase/database";
 
 interface StoryItem {

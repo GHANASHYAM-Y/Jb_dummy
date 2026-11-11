@@ -22,8 +22,8 @@ import {
 } from "@/features/rock-paper-scissors/engine/rps";
 import { cn } from "@/shared/lib/utils";
 import type { Challenge } from "@/core/supabase/database";
-import { ChallengeSelectionModal } from "@/components/challenges/ChallengeSelectionModal";
-import { MatchChallengeCard } from "@/components/challenges/MatchChallengeCard";
+import { ChallengeSelectionModal } from "@/features/dare-game/components/ChallengeSelectionModal";
+import { MatchChallengeCard } from "@/features/dare-game/components/MatchChallengeCard";
 import { HandGraphic } from "@/features/rock-paper-scissors/components/HandGraphic";
 import { RoundTimer } from "@/features/rock-paper-scissors/components/RoundTimer";
 import { ArenaDuelStage } from "@/features/rock-paper-scissors/components/ArenaDuelStage";

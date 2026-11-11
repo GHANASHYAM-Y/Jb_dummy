@@ -107,7 +107,7 @@ describe("EVOAIQU Architecture Standard — Four Primary Sections & Features", (
     const chatCode = fs.readFileSync(chatPagePath, "utf-8");
     expect(chatCode).toContain("ChatStoriesClient");
 
-    const chatClientPath = path.resolve(__dirname, "../components/chat/ChatStoriesClient.tsx");
+    const chatClientPath = path.resolve(__dirname, "../features/dare-game/components/ChatStoriesClient.tsx");
     const chatClientCode = fs.readFileSync(chatClientPath, "utf-8");
     expect(chatClientCode).toContain("VideoRecorderModal");
     expect(chatClientCode).toContain("WinnerReviewModal");

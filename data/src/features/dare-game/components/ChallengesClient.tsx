@@ -26,15 +26,15 @@ import { Button, Alert, Badge, Spinner, Avatar } from "@/shared/ui";
 import {
   CHALLENGE_CATALOG,
   CATEGORY_META,
-} from "@/lib/challenges";
+} from "@/features/dare-game/lib/challenges";
 import type {
   Challenge,
   ChallengeCategory,
   ChallengeStatus,
 } from "@/core/supabase/database";
 import { cn } from "@/shared/lib/utils";
-import { VideoRecorderModal } from "@/components/challenges/VideoRecorderModal";
-import { WinnerReviewModal } from "@/components/challenges/WinnerReviewModal";
+import { VideoRecorderModal } from "@/features/dare-game/components/VideoRecorderModal";
+import { WinnerReviewModal } from "@/features/dare-game/components/WinnerReviewModal";
 
 interface ChallengesClientProps {
   userId: string;

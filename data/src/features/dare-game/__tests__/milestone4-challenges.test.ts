@@ -30,42 +30,42 @@ import {
   isValidCategory,
   isValidVisibility,
   isValidStatus,
-} from "@/lib/challenges";
+} from "@/features/dare-game/lib/challenges";
 import { translations } from "@/core/i18n/translations";
 
 // ── File paths for static security and schema audit ──────────────────────────
 
 const migrationPath = path.resolve(
   __dirname,
-  "../../supabase/migrations/0004_challenges.sql"
+  "../../../../supabase/migrations/0004_challenges.sql"
 );
 const migration = fs.readFileSync(migrationPath, "utf-8");
 
 const assignRoutePath = path.resolve(
   __dirname,
-  "../app/api/challenges/assign/route.ts"
+  "../../../app/api/challenges/assign/route.ts"
 );
 const assignRoute = fs.readFileSync(assignRoutePath, "utf-8");
 
 const respondRoutePath = path.resolve(
   __dirname,
-  "../app/api/challenges/respond/route.ts"
+  "../../../app/api/challenges/respond/route.ts"
 );
 const respondRoute = fs.readFileSync(respondRoutePath, "utf-8");
 
 const matchRoutePath = path.resolve(
   __dirname,
-  "../app/api/challenges/match/route.ts"
+  "../../../app/api/challenges/match/route.ts"
 );
 const matchRoute = fs.readFileSync(matchRoutePath, "utf-8");
 
 const listRoutePath = path.resolve(
   __dirname,
-  "../app/api/challenges/route.ts"
+  "../../../app/api/challenges/route.ts"
 );
 const listRoute = fs.readFileSync(listRoutePath, "utf-8");
 
-const dbTypesPath = path.resolve(__dirname, "../core/supabase/database.ts");
+const dbTypesPath = path.resolve(__dirname, "../../../core/supabase/database.ts");
 const dbTypes = fs.readFileSync(dbTypesPath, "utf-8");
 
 // ── 1. Pure Challenge Catalog & Safety Tests ──────────────────────────────────

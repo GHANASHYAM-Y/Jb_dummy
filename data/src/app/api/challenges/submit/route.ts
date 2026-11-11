@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse, connection } from "next/server";
 import { createServerSupabaseClient, createServiceRoleClient } from "@/core/supabase/server";
-import { isValidVisibility } from "@/lib/challenges";
+import { isValidVisibility } from "@/features/dare-game/lib/challenges";
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const STORAGE_PATH_RE =
