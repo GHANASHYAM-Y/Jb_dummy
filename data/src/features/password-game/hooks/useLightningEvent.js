@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { reconcileTargetPosition } from "./fireUtils";
+import { reconcileTargetPosition } from "../utils/fireUtils";
 
 const REACTION_WINDOW = 2000;
 const NEXT_STRIKE_DELAY = 3000;

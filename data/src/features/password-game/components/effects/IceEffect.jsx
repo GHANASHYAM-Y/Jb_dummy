@@ -1,4 +1,4 @@
-import "./IceEffect.css";
+import "../../styles/IceEffect.css";
 
 export default function IceEffect({ password, phase, targetIndex, remainingMs }) {
   if (["idle", "armed", "cleared", "ended"].includes(phase)) return null;

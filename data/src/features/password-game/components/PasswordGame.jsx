@@ -1,17 +1,17 @@
 "use client";
 
-import { rules } from "./data/rules";
+import { rules } from "../rules/rules";
 import { useEffect, useMemo, useState } from "react";
-import FireEffect from "./ChaosEffects/FireEffect";
-import { useFireEvent } from "./ChaosEffects/useFireEvent";
-import WaterEffect from "./ChaosEffects/WaterEffect";
-import { useWaterEvent } from "./ChaosEffects/useWaterEvent";
-import LightningEffect from "./ChaosEffects/LightningEffect";
-import { useLightningEvent } from "./ChaosEffects/useLightningEvent";
-import IceEffect from "./ChaosEffects/IceEffect";
-import { useIceEvent } from "./ChaosEffects/useIceEvent";
-import { getRuleProgress } from "./utils/ruleProgress";
-import "./password-game.css";
+import FireEffect from "./effects/FireEffect";
+import { useFireEvent } from "../hooks/useFireEvent";
+import WaterEffect from "./effects/WaterEffect";
+import { useWaterEvent } from "../hooks/useWaterEvent";
+import LightningEffect from "./effects/LightningEffect";
+import { useLightningEvent } from "../hooks/useLightningEvent";
+import IceEffect from "./effects/IceEffect";
+import { useIceEvent } from "../hooks/useIceEvent";
+import { getRuleProgress } from "../utils/ruleProgress";
+import "../styles/password-game.css";
 
 export default function PasswordGame() {
   const [password, setPassword] = useState("");
@@ -81,7 +81,7 @@ export default function PasswordGame() {
     }
 
     let active = true;
-    import("./data/wordCollision")
+    import("../rules/wordCollision")
       .then(({ hasWordCollision }) => {
         if (!active) return;
 
@@ -112,7 +112,7 @@ export default function PasswordGame() {
     }
 
     const controller = new AbortController();
-    import("./data/signalFlags")
+    import("../rules/signalFlags")
       .then(({ fetchSignalFlagMatcher }) =>
         fetchSignalFlagMatcher(controller.signal),
       )
@@ -144,7 +144,7 @@ export default function PasswordGame() {
     }
 
     const controller = new AbortController();
-    import("./data/morseCode")
+    import("../rules/morseCode")
       .then(({ fetchSingleElementLetterMatcher }) =>
         fetchSingleElementLetterMatcher(controller.signal),
       )
@@ -176,7 +176,7 @@ export default function PasswordGame() {
     }
 
     const controller = new AbortController();
-    import("./data/natoPhonetic")
+    import("../rules/natoPhonetic")
       .then(({ fetchNatoCodewordMatcher }) =>
         fetchNatoCodewordMatcher(controller.signal),
       )
@@ -208,7 +208,7 @@ export default function PasswordGame() {
     }
 
     const controller = new AbortController();
-    import("./data/greekEnglishWords")
+    import("../rules/greekEnglishWords")
       .then(({ fetchGreekEnglishWordMatcher }) =>
         fetchGreekEnglishWordMatcher(controller.signal),
       )

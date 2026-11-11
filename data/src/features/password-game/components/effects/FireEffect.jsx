@@ -1,4 +1,4 @@
-import "./ChaosEffects.css";
+import "../../styles/ChaosEffects.css";
 
 export default function FireEffect({ flameCount, phase }) {
   if (phase === "idle") return null;

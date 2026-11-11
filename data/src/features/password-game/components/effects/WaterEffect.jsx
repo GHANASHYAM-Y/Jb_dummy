@@ -1,4 +1,4 @@
-import "./WaterEffect.css";
+import "../../styles/WaterEffect.css";
 
 export default function WaterEffect({ password, phase, sweptCount, drainCommand, onDrainChange }) {
   if (phase === "idle" || phase === "armed" || phase === "cleared") return null;

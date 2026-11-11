@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import PasswordGame from "@/components/password-game/PasswordGame";
+import PasswordGame from "@/features/password-game/components/PasswordGame";
 
 export const metadata: Metadata = {
   title: "Password Game — EVOAIQU",

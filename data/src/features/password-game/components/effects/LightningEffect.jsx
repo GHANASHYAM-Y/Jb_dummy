@@ -1,4 +1,4 @@
-import "./LightningEffect.css";
+import "../../styles/LightningEffect.css";
 
 export default function LightningEffect({ password, phase, targetIndex, remainingMs, strikeCount }) {
   if (["idle", "armed", "cleared", "ended"].includes(phase)) return null;

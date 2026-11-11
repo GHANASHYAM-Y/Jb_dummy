@@ -11,11 +11,11 @@
 import { describe, it, expect } from "vitest";
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { rules } from "@/components/password-game/data/rules";
-import { getRuleProgress } from "@/components/password-game/utils/ruleProgress";
+import { rules } from "@/features/password-game/rules/rules";
+import { getRuleProgress } from "@/features/password-game/utils/ruleProgress";
 
-const root = path.resolve(__dirname, "..");
-const gameDir = path.join(root, "components/password-game");
+const root = path.resolve(__dirname, "../../..");
+const gameDir = path.join(root, "features/password-game");
 const read = (...p: string[]) => fs.readFileSync(path.join(root, ...p), "utf-8");
 
 // ── 1. Rule engine ───────────────────────────────────────────────────────────
@@ -59,11 +59,11 @@ describe("Password Game — rule engine", () => {
 
 describe("Password Game — CSS is scoped to .pw-game", () => {
   const cssFiles = [
-    "password-game.css",
-    "ChaosEffects/ChaosEffects.css",
-    "ChaosEffects/IceEffect.css",
-    "ChaosEffects/LightningEffect.css",
-    "ChaosEffects/WaterEffect.css",
+    "styles/password-game.css",
+    "styles/ChaosEffects.css",
+    "styles/IceEffect.css",
+    "styles/LightningEffect.css",
+    "styles/WaterEffect.css",
   ];
 
   /** Selectors of every top-level (or @media-nested) style rule. */
@@ -105,7 +105,7 @@ describe("Password Game — CSS is scoped to .pw-game", () => {
   });
 
   it("renders everything inside a .pw-game wrapper", () => {
-    const tsx = fs.readFileSync(path.join(gameDir, "PasswordGame.jsx"), "utf-8");
+    const tsx = fs.readFileSync(path.join(gameDir, "components/PasswordGame.jsx"), "utf-8");
     expect(tsx.startsWith('"use client";')).toBe(true);
     expect(tsx).toContain('<div className="pw-game">');
   });
@@ -116,7 +116,7 @@ describe("Password Game — CSS is scoped to .pw-game", () => {
 describe("Password Game — route and navigation", () => {
   it("has a page at /play/password-game", () => {
     const page = read("app/(protected)/play/password-game/page.tsx");
-    expect(page).toContain("@/components/password-game/PasswordGame");
+    expect(page).toContain("@/features/password-game/components/PasswordGame");
     expect(page).toContain("export default function PasswordGamePage");
   });
 
@@ -132,8 +132,8 @@ describe("Password Game — route and navigation", () => {
   });
 
   it("loads its dictionary lazily instead of in the main bundle", () => {
-    const tsx = fs.readFileSync(path.join(gameDir, "PasswordGame.jsx"), "utf-8");
-    expect(tsx).toContain('import("./data/wordCollision")');
+    const tsx = fs.readFileSync(path.join(gameDir, "components/PasswordGame.jsx"), "utf-8");
+    expect(tsx).toContain('import("../rules/wordCollision")');
     expect(tsx).not.toMatch(/^import .*wordCollision/m);
   });
 });
