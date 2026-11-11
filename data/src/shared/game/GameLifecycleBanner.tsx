@@ -12,10 +12,10 @@ import {
   Hourglass,
   RefreshCw,
 } from "lucide-react";
-import { useI18n } from "@/contexts/I18nContext";
+import { useI18n } from "@/core/i18n/I18nContext";
 import { Button } from "@/shared/ui";
 import { cn } from "@/shared/lib/utils";
-import type { MatchPhase, GameEndReason } from "@/types/database";
+import type { MatchPhase, GameEndReason } from "@/core/supabase/database";
 
 interface GameLifecycleBannerProps {
   matchId: string;

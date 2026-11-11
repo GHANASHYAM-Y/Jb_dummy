@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { connection } from "next/server";
-import { createServerSupabaseClient, getServerUser } from "@/lib/supabase/server";
-import { AppNavigation } from "@/components/navigation/AppNavigation";
-import { GameSectionClient } from "@/components/games/GameSectionClient";
-import type { Profile } from "@/types/database";
+import { createServerSupabaseClient, getServerUser } from "@/core/supabase/server";
+import { AppNavigation } from "@/core/navigation/AppNavigation";
+import { GameSectionClient } from "@/core/home/GameSectionClient";
+import type { Profile } from "@/core/supabase/database";
 
 export const metadata: Metadata = {
   title: "Game — EVOAIQU",

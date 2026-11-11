@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { connection } from "next/server";
-import { createServerSupabaseClient, getServerUser } from "@/lib/supabase/server";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
-import { InviteLandingClient } from "@/components/friends/InviteLandingClient";
+import { createServerSupabaseClient, getServerUser } from "@/core/supabase/server";
+import { Navbar } from "@/core/navigation/Navbar";
+import { Footer } from "@/core/navigation/Footer";
+import { InviteLandingClient } from "@/core/friends/InviteLandingClient";
 import { Spinner } from "@/shared/ui";
-import type { Profile } from "@/types/database";
+import type { Profile } from "@/core/supabase/database";
 
 
 interface PageProps {

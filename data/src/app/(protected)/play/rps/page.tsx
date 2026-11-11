@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { connection } from "next/server";
-import { createServerSupabaseClient, getServerUser } from "@/lib/supabase/server";
+import { createServerSupabaseClient, getServerUser } from "@/core/supabase/server";
 import { RpsLobby } from "@/components/rps/RpsLobby";
-import type { FriendEntry } from "@/types/database";
+import type { FriendEntry } from "@/core/supabase/database";
 
 export const metadata: Metadata = {
   title: "Rock, Paper, Scissors — EVOAIQU",

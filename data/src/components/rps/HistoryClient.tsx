@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronRight, AlertCircle, Gamepad2 } from "lucide-react";
-import { useI18n } from "@/contexts/I18nContext";
+import { useI18n } from "@/core/i18n/I18nContext";
 import { Avatar, Alert, Spinner, EvoIdBadge } from "@/shared/ui";
 import { cn, timeAgo } from "@/shared/lib/utils";
 

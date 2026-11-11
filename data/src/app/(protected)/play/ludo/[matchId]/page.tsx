@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { connection } from "next/server";
 import Link from "next/link";
 import { AlertCircle, ArrowLeft, ShieldAlert } from "lucide-react";
-import { createServerSupabaseClient, getServerUser } from "@/lib/supabase/server";
+import { createServerSupabaseClient, getServerUser } from "@/core/supabase/server";
 import { loadLudoMatch, UUID_RE } from "@/lib/ludo/server";
 import { LudoMatchBoard } from "@/components/ludo/LudoMatchBoard";
 import { Button } from "@/shared/ui";

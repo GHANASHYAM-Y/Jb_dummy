@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { LoginForm } from "@/components/auth/LoginForm";
+import { LoginForm } from "@/core/auth/LoginForm";
 import { Spinner } from "@/shared/ui";
 
 export const metadata: Metadata = {

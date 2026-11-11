@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { connection } from "next/server";
-import { getServerUser } from "@/lib/supabase/server";
-import { FriendsClient } from "@/components/friends/FriendsClient";
+import { getServerUser } from "@/core/supabase/server";
+import { FriendsClient } from "@/core/friends/FriendsClient";
 
 export const metadata: Metadata = {
   title: "Find Friends — EVOAIQU",

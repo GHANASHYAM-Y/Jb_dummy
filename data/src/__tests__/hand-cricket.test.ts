@@ -59,7 +59,7 @@ import type { HandCricketSnapshot } from "@/lib/hand-cricket/types";
 const mockGetUser = vi.fn();
 const mockRpc = vi.fn();
 
-vi.mock("@/lib/supabase/server", () => ({
+vi.mock("@/core/supabase/server", () => ({
   createServerSupabaseClient: vi.fn(() => Promise.resolve({ auth: { getUser: mockGetUser }, rpc: mockRpc })),
 }));
 

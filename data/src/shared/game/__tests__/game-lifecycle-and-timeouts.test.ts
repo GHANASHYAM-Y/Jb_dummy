@@ -29,7 +29,7 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import * as fs from "fs";
 import * as path from "path";
-import type { MatchPhase, GameEndReason } from "@/types/database";
+import type { MatchPhase, GameEndReason } from "@/core/supabase/database";
 
 // ── Read Migration & Route Source Files for Static Schema & Security Audits ──
 

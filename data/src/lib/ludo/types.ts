@@ -4,7 +4,7 @@
  * Online games are 1 vs 1: player1 is red, player2 is yellow; red moves first.
  */
 
-import type { GameEndReason, MatchPhase } from "@/types/database";
+import type { GameEndReason, MatchPhase } from "@/core/supabase/database";
 import type { LudoState } from "./engine";
 
 export interface LudoMatchInfo {

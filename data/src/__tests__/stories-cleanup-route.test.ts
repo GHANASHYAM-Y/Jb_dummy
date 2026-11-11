@@ -27,7 +27,7 @@ const mockCreateServiceRoleClient = vi.fn(() => ({
   },
 }));
 
-vi.mock("@/lib/supabase/server", () => ({
+vi.mock("@/core/supabase/server", () => ({
   createServiceRoleClient: () => mockCreateServiceRoleClient(),
 }));
 

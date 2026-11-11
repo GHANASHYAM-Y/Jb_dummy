@@ -24,8 +24,8 @@
 import { describe, it, expect } from "vitest";
 import * as fs from "fs";
 import * as path from "path";
-import { translations } from "@/lib/i18n";
-import type { MatchmakingStatus } from "@/types/database";
+import { translations } from "@/core/i18n/translations";
+import type { MatchmakingStatus } from "@/core/supabase/database";
 
 // ── File paths for static security and schema audit ──────────────────────────
 
@@ -59,7 +59,7 @@ const blocksRoutePath = path.resolve(
 );
 const blocksRoute = fs.readFileSync(blocksRoutePath, "utf-8");
 
-const dbTypesPath = path.resolve(__dirname, "../types/database.ts");
+const dbTypesPath = path.resolve(__dirname, "../core/supabase/database.ts");
 const dbTypes = fs.readFileSync(dbTypesPath, "utf-8");
 
 // ── 1. Migration 0005 — User Blocks Schema & Safety Audit ─────────────────────

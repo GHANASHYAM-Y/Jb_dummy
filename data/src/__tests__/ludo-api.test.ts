@@ -24,7 +24,7 @@ const mockAdminRpc = vi.fn();
 const mockProfilesIn = vi.fn();
 const serviceKey = { present: true };
 
-vi.mock("@/lib/supabase/server", () => ({
+vi.mock("@/core/supabase/server", () => ({
   createServerSupabaseClient: vi.fn(() =>
     Promise.resolve({
       auth: { getUser: mockGetUser },

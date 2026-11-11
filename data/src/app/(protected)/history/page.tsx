@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { connection } from "next/server";
-import { getServerUser } from "@/lib/supabase/server";
+import { getServerUser } from "@/core/supabase/server";
 import { HistoryClient } from "@/components/rps/HistoryClient";
 
 export const metadata: Metadata = {

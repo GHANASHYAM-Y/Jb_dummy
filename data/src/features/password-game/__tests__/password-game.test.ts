@@ -125,10 +125,10 @@ describe("Password Game — route and navigation", () => {
   });
 
   it("appears on the games page and in the footer", () => {
-    const games = read("components/games/GameSectionClient.tsx");
+    const games = read("core/home/GameSectionClient.tsx");
     expect(games).toContain('href="/play/password-game"');
     expect(games).toContain("Play Password Game");
-    expect(read("components/landing/FuturisticFooter.tsx")).toContain('href: "/play/password-game"');
+    expect(read("core/home/landing/FuturisticFooter.tsx")).toContain('href: "/play/password-game"');
   });
 
   it("loads its dictionary lazily instead of in the main bundle", () => {

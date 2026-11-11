@@ -20,7 +20,7 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 
 describe("EVOAIQU Architecture Standard — Navigation & Layout", () => {
-  const navPath = path.resolve(__dirname, "../components/navigation/AppNavigation.tsx");
+  const navPath = path.resolve(__dirname, "../core/navigation/AppNavigation.tsx");
   const navCode = fs.readFileSync(navPath, "utf-8");
 
   const layoutPath = path.resolve(__dirname, "../app/(protected)/layout.tsx");
@@ -70,10 +70,10 @@ describe("EVOAIQU Architecture Standard — Route Protection & Auth Redirects", 
   const middlewarePath = path.resolve(__dirname, "../middleware.ts");
   const middlewareCode = fs.readFileSync(middlewarePath, "utf-8");
 
-  const loginPath = path.resolve(__dirname, "../components/auth/LoginForm.tsx");
+  const loginPath = path.resolve(__dirname, "../core/auth/LoginForm.tsx");
   const loginCode = fs.readFileSync(loginPath, "utf-8");
 
-  const signupPath = path.resolve(__dirname, "../components/auth/SignupForm.tsx");
+  const signupPath = path.resolve(__dirname, "../core/auth/SignupForm.tsx");
   const signupCode = fs.readFileSync(signupPath, "utf-8");
 
   const dashboardPath = path.resolve(__dirname, "../app/(protected)/dashboard/page.tsx");
@@ -120,7 +120,7 @@ describe("EVOAIQU Architecture Standard — Four Primary Sections & Features", (
     const profileCode = fs.readFileSync(profilePagePath, "utf-8");
     expect(profileCode).toContain("ProfileViewClient");
 
-    const profileClientPath = path.resolve(__dirname, "../components/profile/ProfileViewClient.tsx");
+    const profileClientPath = path.resolve(__dirname, "../core/profile/ProfileViewClient.tsx");
     const profileClientCode = fs.readFileSync(profileClientPath, "utf-8");
     expect(profileClientCode).toContain("evoora_id");
     expect(profileClientCode).toContain("totalMatches");
@@ -145,7 +145,7 @@ describe("EVOAIQU Architecture Standard — Public Website & Unauthenticated Acc
   const middlewarePath = path.resolve(__dirname, "../middleware.ts");
   const middlewareCode = fs.readFileSync(middlewarePath, "utf-8");
 
-  const navPath = path.resolve(__dirname, "../components/navigation/AppNavigation.tsx");
+  const navPath = path.resolve(__dirname, "../core/navigation/AppNavigation.tsx");
   const navCode = fs.readFileSync(navPath, "utf-8");
 
   it("provides public /about page explaining social gaming and dare stories", () => {
@@ -177,7 +177,7 @@ describe("EVOAIQU Architecture Standard — Public Website & Unauthenticated Acc
 });
 
 describe("EVOAIQU Architecture Standard — Coastal Modern Design System", () => {
-  const navPath = path.resolve(__dirname, "../components/navigation/AppNavigation.tsx");
+  const navPath = path.resolve(__dirname, "../core/navigation/AppNavigation.tsx");
   const navCode = fs.readFileSync(navPath, "utf-8");
 
   it("utilizes EVOAIQU Coastal Modern palette tokens", () => {

@@ -4,9 +4,9 @@ import React, { useState, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, Lock, CheckCircle2, AlertCircle } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@/core/supabase/client";
 import { Button, Input, Alert } from "@/shared/ui";
-import { LanguageSelector } from "@/components/LanguageSelector";
+import { LanguageSelector } from "@/core/i18n/LanguageSelector";
 
 export default function ResetPasswordPage() {
   const router = useRouter();

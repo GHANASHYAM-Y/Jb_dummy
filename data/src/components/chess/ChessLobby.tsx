@@ -10,7 +10,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { Button, Avatar, Spinner } from "@/shared/ui";
-import type { FriendEntry } from "@/types/database";
+import type { FriendEntry } from "@/core/supabase/database";
 
 interface ActiveChessMatch {
   id: string;

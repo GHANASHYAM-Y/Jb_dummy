@@ -21,7 +21,7 @@ import * as path from "path";
 import { isValidEvoId, safeRedirectPath } from "@/shared/lib/utils";
 import { adjudicateRound, getMatchOutcome } from "@/lib/rps";
 import { CHALLENGE_CATALOG, getChallengeById, isValidCategory, isValidStatus, isValidVisibility } from "@/lib/challenges";
-import { translations } from "@/lib/i18n";
+import { translations } from "@/core/i18n/translations";
 
 // Load all 5 SQL migrations for structural audit
 const m1 = fs.readFileSync(path.resolve(__dirname, "../../supabase/migrations/0001_profiles.sql"), "utf-8");

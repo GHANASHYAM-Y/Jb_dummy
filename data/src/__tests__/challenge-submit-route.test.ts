@@ -51,7 +51,7 @@ const mockAdminStorage = {
   },
 };
 
-vi.mock("@/lib/supabase/server", () => ({
+vi.mock("@/core/supabase/server", () => ({
   createServerSupabaseClient: vi.fn(() => Promise.resolve(mockSupabase)),
   createServiceRoleClient: vi.fn(() => mockAdminStorage),
 }));

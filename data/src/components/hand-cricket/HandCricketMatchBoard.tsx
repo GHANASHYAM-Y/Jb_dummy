@@ -14,13 +14,13 @@ import {
   Trophy,
   XCircle,
 } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@/core/supabase/client";
 import { Avatar, Badge, Button, Spinner } from "@/shared/ui";
 import { cn } from "@/shared/lib/utils";
 import { GameLifecycleBanner } from "@/shared/game/GameLifecycleBanner";
 import { ChallengeSelectionModal } from "@/components/challenges/ChallengeSelectionModal";
 import { MatchChallengeCard } from "@/components/challenges/MatchChallengeCard";
-import type { Challenge } from "@/types/database";
+import type { Challenge } from "@/core/supabase/database";
 import {
   DEADLINE_TOLERANCE_MS,
   SHOT_CLOCK_MS,

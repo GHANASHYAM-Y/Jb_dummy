@@ -1,5 +1,5 @@
 import { NextResponse, connection } from "next/server";
-import { createServiceRoleClient } from "@/lib/supabase/server";
+import { createServiceRoleClient } from "@/core/supabase/server";
 
 /**
  * GET / POST /api/games/timeout/cleanup

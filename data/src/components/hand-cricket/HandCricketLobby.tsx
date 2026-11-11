@@ -4,11 +4,11 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Bot, LogIn, Play, Swords, Users } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@/core/supabase/client";
 import { cn } from "@/shared/lib/utils";
 import { OVER_OPTIONS, type OversOption } from "@/lib/hand-cricket/engine";
 import { Avatar, Button, Spinner } from "@/shared/ui";
-import type { FriendEntry } from "@/types/database";
+import type { FriendEntry } from "@/core/supabase/database";
 import type { HandCricketOpenMatch } from "@/lib/hand-cricket/types";
 import { HandCricketRules } from "./HandCricketParts";
 

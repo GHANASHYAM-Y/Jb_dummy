@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
+import { Navbar } from "@/core/navigation/Navbar";
+import { Footer } from "@/core/navigation/Footer";
 import { Button } from "@/shared/ui";
 import {
   Gamepad2,

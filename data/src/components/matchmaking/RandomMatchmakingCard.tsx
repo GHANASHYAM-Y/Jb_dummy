@@ -13,7 +13,7 @@ import {
   Play,
   ArrowRight,
 } from "lucide-react";
-import { useI18n } from "@/contexts/I18nContext";
+import { useI18n } from "@/core/i18n/I18nContext";
 import { Button, Alert, Spinner } from "@/shared/ui";
 import { cn } from "@/shared/lib/utils";
 import { MatchmakingFloatingIndicator } from "./MatchmakingFloatingIndicator";

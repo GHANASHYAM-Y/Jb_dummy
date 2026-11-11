@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createServerSupabaseClient } from "@/lib/supabase/server";
-import { createServiceRoleClient } from "@/lib/supabase/server";
+import { createServerSupabaseClient } from "@/core/supabase/server";
+import { createServiceRoleClient } from "@/core/supabase/server";
 
 /**
  * DELETE /api/auth/delete-account

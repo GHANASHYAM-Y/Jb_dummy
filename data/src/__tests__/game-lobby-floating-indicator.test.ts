@@ -22,7 +22,7 @@ describe("EVOAIQU Game Lobby (Stage C) — Matchmaking Floating Status Indicator
   const mmCardPath = path.resolve(__dirname, "../components/matchmaking/RandomMatchmakingCard.tsx");
   const mmCardCode = fs.readFileSync(mmCardPath, "utf-8");
 
-  const lobbyPath = path.resolve(__dirname, "../components/games/GameSectionClient.tsx");
+  const lobbyPath = path.resolve(__dirname, "../core/home/GameSectionClient.tsx");
   const lobbyCode = fs.readFileSync(lobbyPath, "utf-8");
 
   describe("1. Queue State Visibility & Disappearance Lifecycle", () => {

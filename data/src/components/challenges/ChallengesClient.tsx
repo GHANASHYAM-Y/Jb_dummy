@@ -21,7 +21,7 @@ import {
   Globe,
   Lock,
 } from "lucide-react";
-import { useI18n } from "@/contexts/I18nContext";
+import { useI18n } from "@/core/i18n/I18nContext";
 import { Button, Alert, Badge, Spinner, Avatar } from "@/shared/ui";
 import {
   CHALLENGE_CATALOG,
@@ -31,7 +31,7 @@ import type {
   Challenge,
   ChallengeCategory,
   ChallengeStatus,
-} from "@/types/database";
+} from "@/core/supabase/database";
 import { cn } from "@/shared/lib/utils";
 import { VideoRecorderModal } from "@/components/challenges/VideoRecorderModal";
 import { WinnerReviewModal } from "@/components/challenges/WinnerReviewModal";

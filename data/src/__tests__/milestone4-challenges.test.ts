@@ -31,7 +31,7 @@ import {
   isValidVisibility,
   isValidStatus,
 } from "@/lib/challenges";
-import { translations } from "@/lib/i18n";
+import { translations } from "@/core/i18n/translations";
 
 // ── File paths for static security and schema audit ──────────────────────────
 
@@ -65,7 +65,7 @@ const listRoutePath = path.resolve(
 );
 const listRoute = fs.readFileSync(listRoutePath, "utf-8");
 
-const dbTypesPath = path.resolve(__dirname, "../types/database.ts");
+const dbTypesPath = path.resolve(__dirname, "../core/supabase/database.ts");
 const dbTypes = fs.readFileSync(dbTypesPath, "utf-8");
 
 // ── 1. Pure Challenge Catalog & Safety Tests ──────────────────────────────────

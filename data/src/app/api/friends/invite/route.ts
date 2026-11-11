@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse, connection } from "next/server";
-import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { createServerSupabaseClient } from "@/core/supabase/server";
 
 function getAppOrigin(request: NextRequest): string {
   const host = request.headers.get("x-forwarded-host") || request.headers.get("host");

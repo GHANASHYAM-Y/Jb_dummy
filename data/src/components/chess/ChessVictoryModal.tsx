@@ -16,7 +16,7 @@ import {
 import { Button, Badge } from "@/shared/ui";
 import { ChallengeSelectionModal } from "@/components/challenges/ChallengeSelectionModal";
 import { MatchChallengeCard } from "@/components/challenges/MatchChallengeCard";
-import type { Challenge } from "@/types/database";
+import type { Challenge } from "@/core/supabase/database";
 
 interface ChessVictoryModalProps {
   isOpen: boolean;

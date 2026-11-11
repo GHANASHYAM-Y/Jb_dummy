@@ -6,10 +6,10 @@ import {
   Gamepad2, UserPlus, Clock, Check, X, RefreshCw, AlertCircle,
   ChevronRight, Trophy, Users,
 } from "lucide-react";
-import { useI18n } from "@/contexts/I18nContext";
+import { useI18n } from "@/core/i18n/I18nContext";
 import { Button, Avatar, Alert, Spinner, EvoIdBadge } from "@/shared/ui";
 import { cn, timeAgo } from "@/shared/lib/utils";
-import type { FriendEntry } from "@/types/database";
+import type { FriendEntry } from "@/core/supabase/database";
 import { RandomMatchmakingCard } from "@/components/matchmaking/RandomMatchmakingCard";
 
 // ── Types ─────────────────────────────────────────────────────────────────────

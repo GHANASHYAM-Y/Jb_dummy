@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { connection } from "next/server";
-import { createServerSupabaseClient, getServerUser } from "@/lib/supabase/server";
+import { createServerSupabaseClient, getServerUser } from "@/core/supabase/server";
 import { RpsMatchBoard } from "@/components/rps/RpsMatchBoard";
 
 import Link from "next/link";

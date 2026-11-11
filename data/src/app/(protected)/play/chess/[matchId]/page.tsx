@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { connection } from "next/server";
 import Link from "next/link";
 import { AlertCircle, ShieldAlert, ArrowLeft } from "lucide-react";
-import { createServerSupabaseClient, getServerUser } from "@/lib/supabase/server";
+import { createServerSupabaseClient, getServerUser } from "@/core/supabase/server";
 import { ChessMatchBoard } from "@/components/chess/ChessMatchBoard";
 import { getCapturedPieces, getLegalMoves } from "@/lib/chess/engine";
 import { ChessMatchState } from "@/lib/chess/types";

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connection } from "next/server";
-import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { createServerSupabaseClient } from "@/core/supabase/server";
 
 interface UserSearchResult {
   id: string;

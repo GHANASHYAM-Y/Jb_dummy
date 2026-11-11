@@ -16,10 +16,10 @@ import {
   Trash2,
   Video,
 } from "lucide-react";
-import { useI18n } from "@/contexts/I18nContext";
+import { useI18n } from "@/core/i18n/I18nContext";
 import { Button, Alert, Badge } from "@/shared/ui";
 import { CATEGORY_META } from "@/lib/challenges";
-import type { Challenge, ChallengeStatus } from "@/types/database";
+import type { Challenge, ChallengeStatus } from "@/core/supabase/database";
 import { VideoRecorderModal } from "@/components/challenges/VideoRecorderModal";
 import { WinnerReviewModal } from "@/components/challenges/WinnerReviewModal";
 

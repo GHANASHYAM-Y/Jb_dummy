@@ -8,8 +8,8 @@ import {
   RefreshCw, Wifi, WifiOff, Sparkles, Volume2, VolumeX,
   Clock, HelpCircle, X, Swords,
 } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
-import { useI18n } from "@/contexts/I18nContext";
+import { createClient } from "@/core/supabase/client";
+import { useI18n } from "@/core/i18n/I18nContext";
 import { Button, Alert, Avatar, Spinner } from "@/shared/ui";
 import {
   roundOutcomeLabel,
@@ -21,7 +21,7 @@ import {
   MOVE_LABEL_TA,
 } from "@/lib/rps";
 import { cn } from "@/shared/lib/utils";
-import type { Challenge } from "@/types/database";
+import type { Challenge } from "@/core/supabase/database";
 import { ChallengeSelectionModal } from "@/components/challenges/ChallengeSelectionModal";
 import { MatchChallengeCard } from "@/components/challenges/MatchChallengeCard";
 import { HandGraphic } from "@/components/rps/HandGraphic";
@@ -30,7 +30,7 @@ import { ArenaDuelStage } from "@/components/rps/ArenaDuelStage";
 import { rpsAudio } from "@/components/rps/RpsAudio";
 import { RpsConfetti } from "@/components/rps/RpsConfetti";
 import { GameLifecycleBanner } from "@/shared/game/GameLifecycleBanner";
-import type { MatchPhase, GameEndReason } from "@/types/database";
+import type { MatchPhase, GameEndReason } from "@/core/supabase/database";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 

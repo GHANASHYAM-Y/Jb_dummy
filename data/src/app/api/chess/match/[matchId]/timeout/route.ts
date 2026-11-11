@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse, connection } from "next/server";
-import { createServerSupabaseClient, createServiceRoleClient } from "@/lib/supabase/server";
+import { createServerSupabaseClient, createServiceRoleClient } from "@/core/supabase/server";
 import { calculateClocks, handleTimeout } from "@/lib/chess/engine";
 import { ChessMatchState } from "@/lib/chess/types";
 

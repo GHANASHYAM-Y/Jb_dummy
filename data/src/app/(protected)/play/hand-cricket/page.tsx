@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { connection } from "next/server";
-import { createServerSupabaseClient, getServerUser } from "@/lib/supabase/server";
+import { createServerSupabaseClient, getServerUser } from "@/core/supabase/server";
 import { HandCricketLobby } from "@/components/hand-cricket/HandCricketLobby";
-import type { FriendEntry, MatchPhase } from "@/types/database";
+import type { FriendEntry, MatchPhase } from "@/core/supabase/database";
 import type { HandCricketOpenMatch } from "@/lib/hand-cricket/types";
 
 export const metadata: Metadata = {

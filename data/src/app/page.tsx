@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { LandingPage } from "@/components/landing/LandingPage";
+import { LandingPage } from "@/core/home/landing/LandingPage";
 
 export const metadata: Metadata = {
   title: "EVOAIQU — Futuristic Multiplayer Social Gaming Arena",

@@ -5,7 +5,7 @@
  * /api/hand-cricket routes. Field names follow the database (snake_case).
  */
 
-import type { GameEndReason, MatchPhase } from "@/types/database";
+import type { GameEndReason, MatchPhase } from "@/core/supabase/database";
 
 export type HandCricketGameStatus = "toss" | "in_play" | "finished";
 export type TossDecision = "bat" | "bowl";

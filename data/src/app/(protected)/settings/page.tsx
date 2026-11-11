@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { connection } from "next/server";
-import { createServerSupabaseClient, getServerUser } from "@/lib/supabase/server";
-import { DeleteAccountSection } from "@/components/settings/DeleteAccountSection";
-import { ProfileEditForm } from "@/components/profile/ProfileEditForm";
+import { createServerSupabaseClient, getServerUser } from "@/core/supabase/server";
+import { DeleteAccountSection } from "@/core/settings/DeleteAccountSection";
+import { ProfileEditForm } from "@/core/profile/ProfileEditForm";
 import { Shield, UserCircle } from "lucide-react";
 import Link from "next/link";
-import type { Profile } from "@/types/database";
+import type { Profile } from "@/core/supabase/database";
 
 export const metadata: Metadata = {
   title: "Settings",

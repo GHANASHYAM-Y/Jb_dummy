@@ -4,9 +4,9 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Bot, LogIn, Play, Swords, Users } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@/core/supabase/client";
 import { Avatar, Button, Spinner } from "@/shared/ui";
-import type { FriendEntry } from "@/types/database";
+import type { FriendEntry } from "@/core/supabase/database";
 import type { LudoOpenMatch } from "@/lib/ludo/types";
 
 interface LudoLobbyProps {

@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { connection } from "next/server";
-import { createServerSupabaseClient, getServerUser } from "@/lib/supabase/server";
-import { ProfileViewClient } from "@/components/profile/ProfileViewClient";
-import type { Profile } from "@/types/database";
+import { createServerSupabaseClient, getServerUser } from "@/core/supabase/server";
+import { ProfileViewClient } from "@/core/profile/ProfileViewClient";
+import type { Profile } from "@/core/supabase/database";
 
 export const metadata: Metadata = {
   title: "Profile — EVOAIQU",

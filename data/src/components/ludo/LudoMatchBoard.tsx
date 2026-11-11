@@ -4,13 +4,13 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Award, Flame, Hourglass, RotateCcw, Sparkles, Trophy, XCircle } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@/core/supabase/client";
 import { Avatar, Badge, Button, Spinner } from "@/shared/ui";
 import { cn } from "@/shared/lib/utils";
 import { GameLifecycleBanner } from "@/shared/game/GameLifecycleBanner";
 import { ChallengeSelectionModal } from "@/components/challenges/ChallengeSelectionModal";
 import { MatchChallengeCard } from "@/components/challenges/MatchChallengeCard";
-import type { Challenge, MatchPhase } from "@/types/database";
+import type { Challenge, MatchPhase } from "@/core/supabase/database";
 import { currentPlayer, legalMoves, tokensHome, type Color } from "@/lib/ludo/engine";
 import { LUDO_TURN_MS, type LudoPlayers, type LudoSnapshot } from "@/lib/ludo/types";
 import { COLOR_HEX, LudoBoard, LudoPlayersBar, describeEvent, shownDice } from "./LudoBoard";

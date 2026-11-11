@@ -11,7 +11,7 @@ import {
   ArrowLeft,
   ShieldAlert,
 } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@/core/supabase/client";
 import { ChessBoard } from "./ChessBoard";
 import { ChessPieceSvg } from "./ChessPieceSvg";
 import { ChessVictoryModal } from "./ChessVictoryModal";

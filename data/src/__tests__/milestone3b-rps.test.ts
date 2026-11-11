@@ -73,10 +73,10 @@ const historyRoutePath = path.resolve(
 );
 const historyRoute = fs.readFileSync(historyRoutePath, "utf-8");
 
-const dbTypesPath = path.resolve(__dirname, "../types/database.ts");
+const dbTypesPath = path.resolve(__dirname, "../core/supabase/database.ts");
 const dbTypes = fs.readFileSync(dbTypesPath, "utf-8");
 
-const i18nPath = path.resolve(__dirname, "../lib/i18n.ts");
+const i18nPath = path.resolve(__dirname, "../core/i18n/translations.ts");
 const i18nSrc = fs.readFileSync(i18nPath, "utf-8");
 
 // ── 1. Pure Game Logic Tests ──────────────────────────────────────────────────

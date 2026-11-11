@@ -11,7 +11,7 @@ const read = (rel: string) =>
 
 describe("Ludo integration wiring", () => {
   it("adds ludo to GameType", () => {
-    const src = read("types/database.ts");
+    const src = read("core/supabase/database.ts");
     expect(src).toMatch(/export type GameType =[^;]*"ludo"/);
   });
 
@@ -24,12 +24,12 @@ describe("Ludo integration wiring", () => {
   });
 
   it("treats Ludo sub-routes (not the lobby) as full-screen games", () => {
-    const src = read("components/navigation/AppNavigation.tsx");
+    const src = read("core/navigation/AppNavigation.tsx");
     expect(src).toContain('pathname.startsWith("/play/ludo/") && pathname !== "/play/ludo"');
   });
 
   it("shows a Ludo card and friend challenge link on the games page", () => {
-    const src = read("components/games/GameSectionClient.tsx");
+    const src = read("core/home/GameSectionClient.tsx");
     expect(src).toMatch(/import \{[^}]*\bDices\b[^}]*\} from "lucide-react"/);
     expect(src).toContain("Play Ludo");
     expect(src).toContain("Challenge in Ludo");
@@ -38,7 +38,7 @@ describe("Ludo integration wiring", () => {
   });
 
   it("links Ludo in the footer after Hand Cricket", () => {
-    const src = read("components/landing/FuturisticFooter.tsx");
+    const src = read("core/home/landing/FuturisticFooter.tsx");
     const ludo = src.indexOf('{ href: "/play/ludo", label: "Ludo" }');
     expect(ludo).toBeGreaterThan(-1);
     expect(src.indexOf('label: "Hand Cricket"')).toBeLessThan(ludo);
