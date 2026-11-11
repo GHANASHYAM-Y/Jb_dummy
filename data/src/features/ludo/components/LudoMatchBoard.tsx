@@ -11,8 +11,8 @@ import { GameLifecycleBanner } from "@/shared/game/GameLifecycleBanner";
 import { ChallengeSelectionModal } from "@/components/challenges/ChallengeSelectionModal";
 import { MatchChallengeCard } from "@/components/challenges/MatchChallengeCard";
 import type { Challenge, MatchPhase } from "@/core/supabase/database";
-import { currentPlayer, legalMoves, tokensHome, type Color } from "@/lib/ludo/engine";
-import { LUDO_TURN_MS, type LudoPlayers, type LudoSnapshot } from "@/lib/ludo/types";
+import { currentPlayer, legalMoves, tokensHome, type Color } from "@/features/ludo/engine/engine";
+import { LUDO_TURN_MS, type LudoPlayers, type LudoSnapshot } from "@/features/ludo/types";
 import { COLOR_HEX, LudoBoard, LudoPlayersBar, describeEvent, shownDice } from "./LudoBoard";
 import { LudoDice } from "./LudoDice";
 

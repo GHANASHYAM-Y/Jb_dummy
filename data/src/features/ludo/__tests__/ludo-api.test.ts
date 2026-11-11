@@ -13,8 +13,8 @@ import fs from "fs";
 import path from "path";
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { NextRequest } from "next/server";
-import { createGame, FINISHED, type LudoState } from "@/lib/ludo/engine";
-import { LUDO_TURN_MS, type LudoSnapshot } from "@/lib/ludo/types";
+import { createGame, FINISHED, type LudoState } from "@/features/ludo/engine/engine";
+import { LUDO_TURN_MS, type LudoSnapshot } from "@/features/ludo/types";
 
 // ── Supabase mocks ───────────────────────────────────────────────────────────
 
@@ -50,7 +50,7 @@ import { POST as cancelPOST } from "@/app/api/ludo/match/[matchId]/cancel/route"
 import { POST as rollPOST } from "@/app/api/ludo/match/[matchId]/roll/route";
 import { POST as movePOST } from "@/app/api/ludo/match/[matchId]/move/route";
 import { POST as timeoutPOST } from "@/app/api/ludo/match/[matchId]/timeout/route";
-import { httpStatusForCode, planLudoAction, winnerUserId } from "@/lib/ludo/server";
+import { httpStatusForCode, planLudoAction, winnerUserId } from "@/features/ludo/server/server";
 
 // ── Fixtures ─────────────────────────────────────────────────────────────────
 
@@ -492,7 +492,7 @@ describe("Ludo API — timeout", () => {
 
 describe("Migration 0017 — Ludo forfeit and cleanup", () => {
   const sql = fs.readFileSync(
-    path.resolve(__dirname, "../../supabase/migrations/0017_ludo_forfeit_and_cleanup.sql"),
+    path.resolve(__dirname, "../../../../supabase/migrations/0017_ludo_forfeit_and_cleanup.sql"),
     "utf-8",
   );
   const flat = sql.replace(/--[^\r\n]*/g, "").replace(/\s+/g, " ");
@@ -517,7 +517,7 @@ describe("Migration 0017 — Ludo forfeit and cleanup", () => {
 // ── 3. Migration contract ────────────────────────────────────────────────────
 
 describe("Migration 0016 — Ludo", () => {
-  const sql = fs.readFileSync(path.resolve(__dirname, "../../supabase/migrations/0016_ludo.sql"), "utf-8");
+  const sql = fs.readFileSync(path.resolve(__dirname, "../../../../supabase/migrations/0016_ludo.sql"), "utf-8");
   // Code only (comments stripped), newline-agnostic
   const flat = sql.replace(/--[^\r\n]*/g, "").replace(/\s+/g, " ");
 

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { LudoBotGame } from "@/components/ludo/LudoBotGame";
+import { LudoBotGame } from "@/features/ludo/components/LudoBotGame";
 
 export const metadata: Metadata = {
   title: "Ludo: Me vs bots — EVOAIQU",

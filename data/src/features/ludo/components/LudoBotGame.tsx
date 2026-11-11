@@ -18,7 +18,7 @@ import {
   type Color,
   type LudoPlayer,
   type LudoState,
-} from "@/lib/ludo/engine";
+} from "@/features/ludo/engine/engine";
 import { COLOR_HEX, COLOR_NAME, LudoBoard, LudoPlayersBar, describeEvent, shownDice } from "./LudoBoard";
 import { LudoDice } from "./LudoDice";
 

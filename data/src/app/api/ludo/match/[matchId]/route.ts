@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse, connection } from "next/server";
-import { errorResponse, loadLudoMatch, requireUser, UUID_RE } from "@/lib/ludo/server";
+import { errorResponse, loadLudoMatch, requireUser, UUID_RE } from "@/features/ludo/server/server";
 
 interface RouteContext {
   params: Promise<{ matchId: string }>;

@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Dices } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
-import type { Color } from "@/lib/ludo/engine";
+import type { Color } from "@/features/ludo/engine/engine";
 import { COLOR_HEX } from "./LudoBoard";
 
 /** Pip positions on a 3x3 grid (0 = top-left, 8 = bottom-right). */

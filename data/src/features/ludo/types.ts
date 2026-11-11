@@ -5,7 +5,7 @@
  */
 
 import type { GameEndReason, MatchPhase } from "@/core/supabase/database";
-import type { LudoState } from "./engine";
+import type { LudoState } from "./engine/engine";
 
 export interface LudoMatchInfo {
   id: string;

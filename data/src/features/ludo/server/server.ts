@@ -18,8 +18,8 @@ import {
   passTurn,
   type LudoEvent,
   type LudoState,
-} from "./engine";
-import { LUDO_TURN_MS, type LudoPlayerProfile, type LudoPlayers, type LudoSnapshot } from "./types";
+} from "../engine/engine";
+import { LUDO_TURN_MS, type LudoPlayerProfile, type LudoPlayers, type LudoSnapshot } from "../types";
 
 export const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 

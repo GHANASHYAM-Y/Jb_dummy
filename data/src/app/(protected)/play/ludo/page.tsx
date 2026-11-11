@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { connection } from "next/server";
 import { createServerSupabaseClient, getServerUser } from "@/core/supabase/server";
-import { LudoLobby } from "@/components/ludo/LudoLobby";
+import { LudoLobby } from "@/features/ludo/components/LudoLobby";
 import type { FriendEntry, MatchPhase } from "@/core/supabase/database";
-import type { LudoOpenMatch } from "@/lib/ludo/types";
+import type { LudoOpenMatch } from "@/features/ludo/types";
 
 export const metadata: Metadata = {
   title: "Ludo — EVOAIQU",

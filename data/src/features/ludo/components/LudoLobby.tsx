@@ -7,7 +7,7 @@ import { ArrowRight, Bot, LogIn, Play, Swords, Users } from "lucide-react";
 import { createClient } from "@/core/supabase/client";
 import { Avatar, Button, Spinner } from "@/shared/ui";
 import type { FriendEntry } from "@/core/supabase/database";
-import type { LudoOpenMatch } from "@/lib/ludo/types";
+import type { LudoOpenMatch } from "@/features/ludo/types";
 
 interface LudoLobbyProps {
   userId: string | null;

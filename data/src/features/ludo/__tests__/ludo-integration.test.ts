@@ -7,7 +7,7 @@ import path from "path";
 import { describe, it, expect } from "vitest";
 
 const read = (rel: string) =>
-  fs.readFileSync(path.resolve(__dirname, "..", rel), "utf-8").replace(/\r\n/g, "\n");
+  fs.readFileSync(path.resolve(__dirname, "../../..", rel), "utf-8").replace(/\r\n/g, "\n");
 
 describe("Ludo integration wiring", () => {
   it("adds ludo to GameType", () => {

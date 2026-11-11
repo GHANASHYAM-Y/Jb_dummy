@@ -13,8 +13,8 @@ import {
   type Color,
   type LudoEvent,
   type LudoState,
-} from "@/lib/ludo/engine";
-import { GRID, YARD_ORIGIN, homeColumnCell, tokenCell, trackCell, yardCells } from "@/lib/ludo/board";
+} from "@/features/ludo/engine/engine";
+import { GRID, YARD_ORIGIN, homeColumnCell, tokenCell, trackCell, yardCells } from "@/features/ludo/engine/board";
 
 // ── Shared presentation helpers ───────────────────────────────────────────────
 

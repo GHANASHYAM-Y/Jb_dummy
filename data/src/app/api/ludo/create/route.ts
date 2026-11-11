@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse, connection } from "next/server";
-import { errorResponse, readJson, requireUser, runRpc, UUID_RE } from "@/lib/ludo/server";
+import { errorResponse, readJson, requireUser, runRpc, UUID_RE } from "@/features/ludo/server/server";
 
 /**
  * POST /api/ludo/create

@@ -36,7 +36,7 @@ import {
   type Color,
   type LudoPlayer,
   type LudoState,
-} from "@/lib/ludo/engine";
+} from "@/features/ludo/engine/engine";
 import {
   GRID,
   YARD_ORIGIN,
@@ -45,8 +45,8 @@ import {
   trackCell,
   yardCells,
   type Cell,
-} from "@/lib/ludo/board";
-import { LUDO_TURN_MS } from "@/lib/ludo/types";
+} from "@/features/ludo/engine/board";
+import { LUDO_TURN_MS } from "@/features/ludo/types";
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
 
