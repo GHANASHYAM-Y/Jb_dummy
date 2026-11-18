@@ -14,6 +14,7 @@ data/.yarn/*
 /data/coverage
 
 # Next.js build & export outputs
+/.next/
 /data/.next/
 /data/out/
 /data/build
@@ -30,8 +31,6 @@ data/supabase/.temp/
 .DS_Store
 Thumbs.db
 .vscode/*
-# Shared: one-click server start in VS Code's terminal (Tasks: Run Task)
-!.vscode/tasks.json
 .idea/
 *.swp
 *.swo
