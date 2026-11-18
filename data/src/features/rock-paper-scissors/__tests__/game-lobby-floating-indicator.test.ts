@@ -8,7 +8,7 @@
  * 4. Cancellation flow reuses the existing cancel handler without duplicate network requests.
  * 5. Layout safeguards prevent overlapping the 64px mobile bottom navigation bar (docked at bottom-20 z-40).
  * 6. Accessibility standards are strictly enforced (role="status", aria-live="polite", 44px touch targets, focus rings).
- * 7. Coastal Modern Light tokens are utilized (#167D78, #D95F49, #F7F8F4).
+ * 7. Concept B tokens are utilized (#FF5A3C, #FF5A3C, #FFF6EC).
  */
 
 import { describe, it, expect } from "vitest";
@@ -54,7 +54,7 @@ describe("EVOAIQU Game Lobby (Stage C) — Matchmaking Floating Status Indicator
       expect(indicatorCode).toContain("Searching for Opponent...");
       expect(indicatorCode).toContain("10s Blitz");
       expect(indicatorCode).toContain("animate-ping");
-      expect(indicatorCode).toContain("bg-[#167D78]");
+      expect(indicatorCode).toContain("bg-[#FF5A3C]");
     });
 
     it("formats elapsed time in minutes and seconds (mm:ss) with clock icon", () => {
@@ -109,24 +109,24 @@ describe("EVOAIQU Game Lobby (Stage C) — Matchmaking Floating Status Indicator
       expect(indicatorCode).toContain('aria-live="polite"');
       expect(indicatorCode).toContain('aria-label="Active matchmaking queue"');
       expect(indicatorCode).toContain("focus-visible:ring-2");
-      expect(indicatorCode).toContain("focus-visible:ring-[#D95F49]");
+      expect(indicatorCode).toContain("focus-visible:ring-[#FF5A3C]");
     });
   });
 
-  describe("5. Coastal Modern Light Design System Compliance", () => {
-    it("incorporates Oceanic Teal (#167D78) and soft teal background (#DDF2EB)", () => {
-      expect(indicatorCode).toContain("#167D78");
-      expect(indicatorCode).toContain("#DDF2EB");
+  describe("5. Concept B Design System Compliance", () => {
+    it("incorporates Tangerine (#FF5A3C) and soft coral background (#FFE4DD)", () => {
+      expect(indicatorCode).toContain("#FF5A3C");
+      expect(indicatorCode).toContain("#FFE4DD");
     });
 
-    it("incorporates Warm Coral (#D95F49) and soft coral hover background (#FCE6DE)", () => {
-      expect(indicatorCode).toContain("#D95F49");
-      expect(indicatorCode).toContain("#FCE6DE");
+    it("incorporates Tangerine (#FF5A3C) and soft coral tint background (#FFE4DD)", () => {
+      expect(indicatorCode).toContain("#FF5A3C");
+      expect(indicatorCode).toContain("#FFE4DD");
     });
 
-    it("uses Charcoal (#203331) and WCAG AA compliant muted text (#52605C)", () => {
-      expect(indicatorCode).toContain("#203331");
-      expect(indicatorCode).toContain("#52605C");
+    it("uses Ink (#1E1B24) and WCAG AA compliant muted text (#6E6878)", () => {
+      expect(indicatorCode).toContain("#1E1B24");
+      expect(indicatorCode).toContain("#6E6878");
     });
   });
 

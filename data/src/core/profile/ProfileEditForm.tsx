@@ -106,35 +106,35 @@ export function ProfileEditForm({ profile }: ProfileEditFormProps) {
   return (
     <div className="space-y-6">
       {/* ── Evoora ID card (read-only, prominent) ── */}
-      <div className="rounded-2xl p-6 bg-[#101638] border border-[rgba(255,255,255,0.08)] shadow-[0_0_24px_rgba(0,0,0,0.25)]">
+      <div className="rounded-[26px] p-5 bg-[#EEEBFF] border-2 border-[#D7D0FF] shadow-[0_4px_0_#D7D0FF]">
         <div className="flex items-start gap-4">
-          <div className="w-12 h-12 rounded-xl bg-[#39DFFF]/15 border border-[#39DFFF]/30 flex items-center justify-center flex-shrink-0 text-[#39DFFF]">
+          <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center flex-shrink-0 text-[#4B3FC4]">
             <User className="h-6 w-6" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-[#B8C3E0] text-xs font-semibold uppercase tracking-wider mb-1">
+            <p className="text-[#6E6878] text-xs font-semibold uppercase tracking-wider mb-1">
               {t("profile.evoora_id")}
             </p>
             <div className="flex items-center gap-3 flex-wrap">
-              <span className="font-mono font-bold text-2xl text-[#F5F7FF] tracking-widest">
+              <span className="font-mono font-bold text-xl sm:text-2xl text-[#1E1B24] tracking-widest">
                 {profile.evoora_id}
               </span>
               <button
                 type="button"
                 onClick={handleCopyId}
                 className={cn(
-                  "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all shadow-xs",
+                  "flex items-center gap-1.5 px-4 min-h-[44px] rounded-full text-xs font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C]",
                   copied
-                    ? "bg-[#39DFFF]/20 border border-[#39DFFF]/50 text-[#39DFFF]"
-                    : "bg-[#070B25] border border-[rgba(255,255,255,0.12)] text-[#F5F7FF] hover:bg-[#161F48]",
+                    ? "bg-[#E3FAF3] border-2 border-[#B7EEDD] text-[#0B7D63]"
+                    : "bg-white border-2 border-[#EADBC8] text-[#1E1B24] hover:bg-[#F5EADC]",
                 )}
                 aria-label="Copy EVOAIQU ID"
               >
-                {copied ? <Check className="h-3.5 w-3.5 text-[#39DFFF]" /> : <Copy className="h-3.5 w-3.5 text-[#B8C3E0]" />}
+                {copied ? <Check className="h-3.5 w-3.5 text-[#0B7D63]" /> : <Copy className="h-3.5 w-3.5 text-[#6E6878]" />}
                 <span>{copied ? t("common.copied") : t("common.copy")}</span>
               </button>
             </div>
-            <p className="text-[#B8C3E0]/70 text-xs mt-2 leading-relaxed">
+            <p className="text-[#6E6878] text-xs mt-2 leading-relaxed">
               {t("profile.evoora_id_hint")}
             </p>
           </div>
@@ -142,20 +142,20 @@ export function ProfileEditForm({ profile }: ProfileEditFormProps) {
       </div>
 
       {/* ── Avatar area ── */}
-      <div className="rounded-2xl p-6 bg-[#101638] border border-[rgba(255,255,255,0.08)] shadow-[0_0_24px_rgba(0,0,0,0.25)]">
-        <p className="text-[#F5F7FF] font-semibold text-base mb-4">Avatar</p>
+      <div className="b-card !p-5">
+        <p className="font-display font-semibold text-[#1E1B24] text-lg mb-4">Avatar</p>
         <div className="flex items-center gap-5">
           <Avatar
             src={profile.avatar_url}
             name={profile.display_name}
             size="xl"
-            className="ring-2 ring-[#39DFFF]/40"
+            className="border-4 !border-[#FFF6EC] ring-2 ring-[#EADBC8]"
           />
           <div>
-            <p className="text-[#B8C3E0] text-sm">
+            <p className="text-[#6E6878] text-sm">
               {t("profile.avatar_fallback")}
             </p>
-            <p className="text-[#B8C3E0]/70 text-xs mt-1">
+            <p className="text-[#6E6878] text-xs mt-1">
               Avatar storage via Supabase Storage is available in Milestone 3.
             </p>
           </div>
@@ -163,8 +163,8 @@ export function ProfileEditForm({ profile }: ProfileEditFormProps) {
       </div>
 
       {/* ── Edit form ── */}
-      <form onSubmit={handleSave} noValidate className="rounded-2xl p-6 space-y-6 bg-[#101638] border border-[rgba(255,255,255,0.08)] shadow-[0_0_24px_rgba(0,0,0,0.25)]">
-        <p className="text-[#F5F7FF] font-bold text-lg">{t("profile.edit")}</p>
+      <form onSubmit={handleSave} noValidate className="b-card !p-5 space-y-6">
+        <p className="font-display font-semibold text-[#1E1B24] text-lg">{t("profile.edit")}</p>
 
         {/* Status messages */}
         {status === "saved" && (
@@ -181,7 +181,7 @@ export function ProfileEditForm({ profile }: ProfileEditFormProps) {
         {/* Display name */}
         <div>
           <label htmlFor="prof-name" className="evo-label">
-            {t("profile.display_name")} <span className="text-[#FF5370]">*</span>
+            {t("profile.display_name")} <span className="text-[#E5484D]">*</span>
           </label>
           <input
             id="prof-name"
@@ -195,11 +195,11 @@ export function ProfileEditForm({ profile }: ProfileEditFormProps) {
           />
           <div className="flex justify-between mt-1">
             {nameError && displayName.length > 0 ? (
-              <p className="text-[#FF5370] text-xs">{nameError}</p>
+              <p className="text-[#E5484D] text-xs">{nameError}</p>
             ) : (
               <span />
             )}
-            <p className="text-[#B8C3E0]/70 text-xs">{displayName.length}/64</p>
+            <p className="text-[#6E6878] text-xs">{displayName.length}/64</p>
           </div>
         </div>
 
@@ -207,7 +207,7 @@ export function ProfileEditForm({ profile }: ProfileEditFormProps) {
         <div>
           <label htmlFor="prof-bio" className="evo-label">
             {t("profile.bio")}{" "}
-            <span className="text-[#B8C3E0]/70 font-normal text-xs">
+            <span className="text-[#6E6878] font-normal text-xs">
               ({t("common.optional")})
             </span>
           </label>
@@ -225,18 +225,18 @@ export function ProfileEditForm({ profile }: ProfileEditFormProps) {
           />
           <div className="flex justify-between mt-1">
             {bioError ? (
-              <p className="text-[#FF5370] text-xs">{bioError}</p>
+              <p className="text-[#E5484D] text-xs">{bioError}</p>
             ) : (
               <span />
             )}
-            <p className="text-[#B8C3E0]/70 text-xs">{bio.length}/280</p>
+            <p className="text-[#6E6878] text-xs">{bio.length}/280</p>
           </div>
         </div>
 
         {/* Language */}
         <div>
           <label className="evo-label flex items-center gap-2">
-            <Globe className="h-4 w-4 text-[#39DFFF]" />
+            <Globe className="h-4 w-4 text-[#FF5A3C]" />
             {t("profile.language")}
           </label>
           <div className="flex gap-3 mt-2">
@@ -246,10 +246,10 @@ export function ProfileEditForm({ profile }: ProfileEditFormProps) {
                 type="button"
                 onClick={() => setLocale(l)}
                 className={cn(
-                  "flex-1 py-2.5 px-4 rounded-xl border text-sm font-semibold transition-all",
+                  "flex-1 min-h-[44px] px-4 rounded-full border-2 text-sm font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C]",
                   locale === l
-                    ? "bg-[#39DFFF]/15 border-[#39DFFF] text-[#39DFFF] shadow-[0_0_12px_rgba(57,223,255,0.2)]"
-                    : "bg-[#070B25] border-[rgba(255,255,255,0.1)] text-[#B8C3E0] hover:border-[#39DFFF]/40 hover:bg-[#161F48]",
+                    ? "bg-[#FFE4DD] border-[#FF5A3C] text-[#C9381F] shadow-[0_3px_0_#FFC9BC]"
+                    : "bg-white border-[#EADBC8] text-[#6E6878] hover:border-[#FF5A3C]/60 hover:bg-[#FFF6EC]",
                 )}
               >
                 {l === "en" ? "🇬🇧 English" : "🇮🇳 தமிழ்"}
@@ -266,10 +266,10 @@ export function ProfileEditForm({ profile }: ProfileEditFormProps) {
               type="button"
               onClick={() => setIsPublic(true)}
               className={cn(
-                "flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border text-sm font-semibold transition-all",
+                "flex-1 flex items-center justify-center gap-2 min-h-[44px] px-4 rounded-full border-2 text-sm font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C]",
                 isPublic
-                  ? "bg-[#39DFFF]/15 border-[#39DFFF] text-[#39DFFF] shadow-[0_0_12px_rgba(57,223,255,0.2)]"
-                  : "bg-[#070B25] border-[rgba(255,255,255,0.1)] text-[#B8C3E0] hover:border-[#39DFFF]/40 hover:bg-[#161F48]",
+                  ? "bg-[#FFE4DD] border-[#FF5A3C] text-[#C9381F] shadow-[0_3px_0_#FFC9BC]"
+                  : "bg-white border-[#EADBC8] text-[#6E6878] hover:border-[#FF5A3C]/60 hover:bg-[#FFF6EC]",
               )}
             >
               <Eye className="h-4 w-4" />
@@ -279,10 +279,10 @@ export function ProfileEditForm({ profile }: ProfileEditFormProps) {
               type="button"
               onClick={() => setIsPublic(false)}
               className={cn(
-                "flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border text-sm font-semibold transition-all",
+                "flex-1 flex items-center justify-center gap-2 min-h-[44px] px-4 rounded-full border-2 text-sm font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C]",
                 !isPublic
-                  ? "bg-[#FF5370]/15 border-[#FF5370] text-[#FF5370] shadow-[0_0_12px_rgba(255,83,112,0.2)]"
-                  : "bg-[#070B25] border-[rgba(255,255,255,0.1)] text-[#B8C3E0] hover:border-[#FF5370]/40 hover:bg-[#161F48]",
+                  ? "bg-[#FDECEC] border-[#E5484D] text-[#B3262B] shadow-[0_3px_0_#F6C9CB]"
+                  : "bg-white border-[#EADBC8] text-[#6E6878] hover:border-[#E5484D]/60 hover:bg-[#FFF6EC]",
               )}
             >
               <EyeOff className="h-4 w-4" />

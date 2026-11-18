@@ -156,8 +156,8 @@ describe("Component Graphics & Accessible Timer Architecture", () => {
   it("RoundTimer renders circular SVG and Coral warning below 3 seconds", () => {
     expect(roundTimerSrc).toContain("TOTAL_SECONDS = 10");
     expect(roundTimerSrc).toContain("CIRCUMFERENCE");
-    expect(roundTimerSrc).toContain("#167D78");
-    expect(roundTimerSrc).toContain("#D95F49");
+    expect(roundTimerSrc).toContain("#FF5A3C");
+    expect(roundTimerSrc).toContain("#FF5A3C");
     expect(roundTimerSrc).toContain("role=\"timer\"");
     expect(roundTimerSrc).toContain("serverNow");
   });

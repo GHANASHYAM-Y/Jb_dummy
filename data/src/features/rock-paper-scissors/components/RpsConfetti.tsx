@@ -21,11 +21,11 @@ interface Particle {
 }
 
 const BRAND_COLORS = [
-  "#167D78", // Coastal Teal
-  "#12635F", // Deep Teal
-  "#DDF2EB", // Pale Mint
-  "#D95F49", // Warm Coral
-  "#FCE6DE", // Pale Peach
+  "#FF5A3C", // Coastal Teal
+  "#C9381F", // Deep Teal
+  "#FFE4DD", // Pale Mint
+  "#FF5A3C", // Warm Coral
+  "#FFE4DD", // Pale Peach
   "#F59E0B", // Gold
   "#FFFFFF", // Ivory White
 ];

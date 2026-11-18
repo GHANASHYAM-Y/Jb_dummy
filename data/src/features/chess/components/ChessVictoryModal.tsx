@@ -91,12 +91,12 @@ export const ChessVictoryModal: React.FC<ChessVictoryModalProps> = ({
   return (
     <>
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
-        <div className="bg-white border border-[#E2E8E2] rounded-3xl max-w-md w-full p-6 md:p-8 text-center shadow-2xl space-y-6 relative overflow-hidden text-[#203331]">
+        <div className="bg-white border border-[#EADBC8] rounded-3xl max-w-md w-full p-6 md:p-8 text-center shadow-2xl space-y-6 relative overflow-hidden text-[#1E1B24]">
           {onClose && (
             <button
               type="button"
               onClick={onClose}
-              className="absolute top-4 right-4 p-1.5 rounded-full text-[#8E9B97] hover:text-[#203331] hover:bg-[#F7F8F4] transition-colors z-20"
+              className="absolute top-4 right-4 p-1.5 rounded-full text-[#8E8798] hover:text-[#1E1B24] hover:bg-[#FFF6EC] transition-colors z-20"
               title="Close modal"
             >
               <X className="w-5 h-5" />
@@ -104,17 +104,17 @@ export const ChessVictoryModal: React.FC<ChessVictoryModalProps> = ({
           )}
 
           {/* Outcome Graphic */}
-          <div className="mx-auto w-20 h-20 rounded-3xl flex items-center justify-center shadow-xs relative z-10 border border-[#E2E8E2]">
+          <div className="mx-auto w-20 h-20 rounded-3xl flex items-center justify-center shadow-xs relative z-10 border border-[#EADBC8]">
             {isWinner ? (
-              <div className="w-full h-full rounded-3xl bg-[#DDF2EB] flex items-center justify-center text-[#167D78]">
+              <div className="w-full h-full rounded-3xl bg-[#FFE4DD] flex items-center justify-center text-[#FF5A3C]">
                 <Trophy className="w-10 h-10 animate-bounce" />
               </div>
             ) : isDraw ? (
-              <div className="w-full h-full rounded-3xl bg-[#EEF1ED] flex items-center justify-center text-[#65736F]">
+              <div className="w-full h-full rounded-3xl bg-[#F5EADC] flex items-center justify-center text-[#6E6878]">
                 <Award className="w-10 h-10" />
               </div>
             ) : (
-              <div className="w-full h-full rounded-3xl bg-[#FCE6DE] flex items-center justify-center text-[#D95F49]">
+              <div className="w-full h-full rounded-3xl bg-[#FFE4DD] flex items-center justify-center text-[#FF5A3C]">
                 <XCircle className="w-10 h-10" />
               </div>
             )}
@@ -122,7 +122,7 @@ export const ChessVictoryModal: React.FC<ChessVictoryModalProps> = ({
 
           {/* Title & Reason */}
           <div className="space-y-1.5 relative z-10">
-            <h2 className="text-2xl md:text-3xl font-display font-black tracking-tight text-[#203331]">
+            <h2 className="text-2xl md:text-3xl font-display font-black tracking-tight text-[#1E1B24]">
               {isWinner ? "Triumphant Victory!" : isDraw ? "Honorable Stalemate" : "Defeat"}
             </h2>
             <div className="flex items-center justify-center gap-2">
@@ -147,13 +147,13 @@ export const ChessVictoryModal: React.FC<ChessVictoryModalProps> = ({
 
           {/* Winner Dare Action */}
           {isWinner && !assignedChallenge && (
-            <div className="bg-[#FCE6DE] border border-[rgba(217,95,73,0.3)] rounded-2xl p-4 text-center space-y-3 relative z-10">
-              <div className="flex items-center justify-center gap-1.5 text-[#D95F49] text-sm font-bold">
+            <div className="bg-[#FFE4DD] border border-[rgba(217,95,73,0.3)] rounded-2xl p-4 text-center space-y-3 relative z-10">
+              <div className="flex items-center justify-center gap-1.5 text-[#FF5A3C] text-sm font-bold">
                 <Sparkles className="w-4 h-4" />
                 <span>Winner Privilege Unlocked</span>
               </div>
-              <p className="text-xs text-[#65736F]">
-                You vanquished <strong className="text-[#203331]">{opponent.display_name}</strong>! Choose a dare from Dare Studio.
+              <p className="text-xs text-[#6E6878]">
+                You vanquished <strong className="text-[#1E1B24]">{opponent.display_name}</strong>! Choose a dare from Dare Studio.
               </p>
               <Button
                 variant="coral"

@@ -11,10 +11,10 @@ export const metadata: Metadata = {
 
 export default function SignupPage() {
   return (
-    <div className="min-h-screen w-full max-w-full flex flex-col bg-[#070B25] text-[#F5F7FF] relative overflow-x-hidden selection:bg-[#39DFFF]/30 selection:text-white">
+    <div className="min-h-screen w-full max-w-full flex flex-col bg-[#FFF6EC] text-[#1E1B24] overflow-x-hidden">
       <Suspense fallback={
         <div className="flex-1 flex items-center justify-center py-20">
-          <Spinner size="lg" className="text-[#39DFFF]" />
+          <Spinner size="lg" className="text-[#FF5A3C]" />
         </div>
       }>
         <SignupForm />

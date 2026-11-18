@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -9,16 +9,16 @@ import {
   CalendarDays,
   Globe,
   Lock,
-  Trophy,
-  Gamepad2,
-  Users,
-  Flame,
   LogOut,
   ChevronRight,
-  Film,
+  Pencil,
+  UserX,
+  Trash2,
+  Settings as SettingsIcon,
 } from "lucide-react";
-import { cn } from "@/shared/lib/utils";
-import { Avatar, Button } from "@/shared/ui";
+import { cn, timeAgo } from "@/shared/lib/utils";
+import { Avatar } from "@/shared/ui";
+import { useI18n } from "@/core/i18n/I18nContext";
 import { ProfileEditForm } from "@/core/profile/ProfileEditForm";
 import type { Profile } from "@/core/supabase/database";
 
@@ -37,17 +37,56 @@ interface ProfileViewClientProps {
   stats: ProfileStats;
 }
 
+interface HistoryRow {
+  match_id: string;
+  opponent_name: string;
+  opponent_avatar: string | null;
+  my_wins: number;
+  opp_wins: number;
+  winner_id: string | null;
+  is_draw: boolean;
+  completed_at: string;
+}
+
+type Tab = "matches" | "settings";
+
+const badges = [
+  { label: "First Blood", cls: "bg-[#FFE4DD] border-[#FFC9BC] text-[#C9381F] -rotate-2" },
+  { label: "Dare Hero", cls: "bg-[#FFC23D] border-[#E9A912] text-[#1E1B24] rotate-1" },
+  { label: "Social Butterfly", cls: "bg-[#EEEBFF] border-[#D7D0FF] text-[#4B3FC4] -rotate-1" },
+];
+
 export function ProfileViewClient({
   user,
   profile,
   stats,
 }: ProfileViewClientProps) {
   const router = useRouter();
+  const { t } = useI18n();
   const [copied, setCopied] = useState(false);
-  const [activeTab, setActiveTab] = useState<"overview" | "edit" | "settings">("overview");
+  const [activeTab, setActiveTab] = useState<Tab>("matches");
+  const [editing, setEditing] = useState(false);
+  const [history, setHistory] = useState<HistoryRow[] | null>(null);
 
   const displayName = profile.display_name || user.email?.split("@")[0] || "Player";
   const evoId = profile.evoora_id;
+
+  useEffect(() => {
+    let mounted = true;
+    void (async () => {
+      try {
+        const res = await fetch("/api/rps/history");
+        if (!res.ok) throw new Error("Failed to load");
+        const data = await res.json();
+        if (mounted) setHistory((data.history ?? []).slice(0, 10));
+      } catch {
+        if (mounted) setHistory([]);
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const handleCopyId = useCallback(async () => {
     try {
@@ -81,325 +120,266 @@ export function ProfileViewClient({
     }
   })();
 
-  const defaultInterests = [
-    "Rock Paper Scissors",
-    "Chess",
-    "Speed Dare",
-    "Dance Challenges",
-    "Quick Play",
+  const statBubbles = [
+    { label: "Matches", value: stats.totalMatches, bg: "bg-[#FFE4DD]", fg: "text-[#C9381F]" },
+    { label: "Victories", value: stats.wins, bg: "bg-[#E3FAF3]", fg: "text-[#0B7D63]" },
+    { label: "Win rate", value: `${stats.winRate}%`, bg: "bg-[#FFF1CC]", fg: "text-[#8A5F00]" },
+    { label: "Dares done", value: stats.daresCount, bg: "bg-[#EEEBFF]", fg: "text-[#4B3FC4]" },
   ];
 
+  const rowCls =
+    "flex items-center gap-3.5 w-full min-h-[64px] p-3.5 rounded-[22px] border-2 border-[#EADBC8] bg-white text-left transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C]";
+  const iconCls = "w-11 h-11 rounded-full flex items-center justify-center shrink-0";
+
   return (
-    <div className="space-y-8 max-w-4xl mx-auto">
-      {/* ── 1. Profile Hero ──────────────────────────────────────────────────── */}
-      <div className="rounded-3xl border border-[rgba(255,255,255,0.08)] bg-[#101638] p-6 sm:p-8 shadow-[0_0_30px_rgba(0,0,0,0.3)] relative overflow-hidden">
-        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6">
-          <div className="flex items-start gap-5">
+    <div className="space-y-6 max-w-[860px] mx-auto">
+      {/* Cover + identity */}
+      <div className="b-card !p-0 overflow-hidden !rounded-[30px]">
+        <div className="relative h-[150px] bg-gradient-to-br from-[#F5EADC] via-[#FFE4DD] to-[#FFC9BC] overflow-hidden">
+          <span aria-hidden className="absolute -top-8 -right-6 w-36 h-36 rounded-full bg-[#FFC23D]/80" />
+          <span aria-hidden className="absolute top-10 right-32 w-14 h-14 rounded-full bg-[#8C7BFF]/70" />
+          <span aria-hidden className="absolute -bottom-6 left-10 w-24 h-24 rounded-full bg-[#14C49A]/70" />
+          <span aria-hidden className="absolute bottom-4 left-48 w-8 h-8 rounded-full bg-white/70" />
+        </div>
+
+        <div className="px-5 sm:px-8 pb-6">
+          <div className="-mt-[52px] flex items-end justify-between gap-3">
             <Avatar
               src={profile.avatar_url}
               name={displayName}
-              size="lg"
-              className="w-20 h-20 text-xl ring-4 ring-[#39DFFF]/30 shrink-0"
+              size="xl"
+              className="!w-[104px] !h-[104px] text-3xl border-[5px] !border-[#FFF6EC] bg-[#F5EADC] shrink-0"
             />
-            <div className="space-y-2.5">
-              <div className="flex items-center gap-2.5 flex-wrap">
-                <h1 className="font-display font-black text-2xl sm:text-3xl text-[#F5F7FF]">
-                  {displayName}
-                </h1>
-                <span
-                  className={cn(
-                    "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold",
-                    profile.is_public
-                      ? "bg-[#39DFFF]/15 text-[#39DFFF] border border-[#39DFFF]/30"
-                      : "bg-[#161F48] text-[#B8C3E0] border border-[rgba(255,255,255,0.1)]",
-                  )}
-                >
-                  {profile.is_public ? (
-                    <>
-                      <Globe className="h-3 w-3" /> Public Profile
-                    </>
-                  ) : (
-                    <>
-                      <Lock className="h-3 w-3" /> Private Profile
-                    </>
-                  )}
-                </span>
-              </div>
-
-              {/* Unique EVOAIQU ID */}
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-xs text-[#B8C3E0]">Evoora ID:</span>
-                <span className="font-mono font-bold text-xs px-2.5 py-1 rounded-lg bg-[#070B25] border border-[rgba(255,255,255,0.12)] text-[#39DFFF]">
-                  {evoId}
-                </span>
-                <button
-                  type="button"
-                  onClick={handleCopyId}
-                  className="p-1 rounded-md hover:bg-[#161F48] text-[#B8C3E0] hover:text-[#F5F7FF] transition-colors"
-                  title="Copy ID"
-                >
-                  {copied ? <Check className="h-3.5 w-3.5 text-[#39DFFF]" /> : <Copy className="h-3.5 w-3.5" />}
-                </button>
-
-                <div className="flex items-center gap-1 text-xs text-[#B8C3E0] ml-2">
-                  <CalendarDays className="h-3.5 w-3.5 text-[#39DFFF]" />
-                  <span>Joined {memberSince}</span>
-                </div>
-              </div>
-
-              {/* Bio */}
-              <p className="text-sm text-[#B8C3E0] max-w-xl leading-relaxed pt-1">
-                {profile.bio || "Gaming enthusiast on EVOAIQU. Challenge me to Rock Paper Scissors!"}
-              </p>
-
-              {/* Interests */}
-              <div className="flex items-center gap-1.5 flex-wrap pt-2">
-                {defaultInterests.map((interest) => (
-                  <span
-                    key={interest}
-                    className="px-2.5 py-0.5 rounded-lg bg-[#070B25] border border-[rgba(255,255,255,0.08)] text-[11px] font-semibold text-[#B8C3E0]"
-                  >
-                    #{interest}
-                  </span>
-                ))}
-              </div>
-            </div>
+            <span
+              className={cn(
+                "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border-2 mb-1",
+                profile.is_public
+                  ? "bg-[#E3FAF3] text-[#0B7D63] border-[#B7EEDD]"
+                  : "bg-[#F5EADC] text-[#6E6878] border-[#EADBC8]",
+              )}
+            >
+              {profile.is_public ? (
+                <>
+                  <Globe className="h-3.5 w-3.5" /> Public Profile
+                </>
+              ) : (
+                <>
+                  <Lock className="h-3.5 w-3.5" /> Private Profile
+                </>
+              )}
+            </span>
           </div>
 
-          {/* Quick Tab Switcher */}
-          <div className="flex sm:flex-col gap-2 shrink-0">
-            <Button
-              variant={activeTab === "overview" ? "primary" : "secondary"}
-              size="sm"
-              onClick={() => setActiveTab("overview")}
-              className="text-xs font-bold"
+          <h1 className="font-display font-semibold text-[30px] leading-tight text-[#1E1B24] mt-3">
+            {displayName}
+          </h1>
+
+          <div className="flex items-center gap-2 flex-wrap mt-1.5">
+            <span className="text-xs text-[#6E6878]">Evoora ID:</span>
+            <span className="font-mono font-bold text-xs px-3 py-1 rounded-full bg-[#F5EADC] border-2 border-[#EADBC8] text-[#C9381F]">
+              {evoId}
+            </span>
+            <button
+              type="button"
+              onClick={handleCopyId}
+              className="inline-flex items-center justify-center w-11 h-11 -my-2 rounded-full hover:bg-[#F5EADC] text-[#6E6878] hover:text-[#1E1B24] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C]"
+              title="Copy ID"
+              aria-label="Copy ID"
             >
-              Overview
-            </Button>
-            <Button
-              variant={activeTab === "edit" ? "primary" : "secondary"}
-              size="sm"
-              onClick={() => setActiveTab("edit")}
-              className="text-xs font-bold"
-            >
-              Edit Profile
-            </Button>
-            <Button
-              variant={activeTab === "settings" ? "primary" : "secondary"}
-              size="sm"
-              onClick={() => setActiveTab("settings")}
-              className="text-xs font-bold"
-            >
-              Settings
-            </Button>
+              {copied ? <Check className="h-4 w-4 text-[#0B7D63]" /> : <Copy className="h-4 w-4" />}
+            </button>
+            <span className="inline-flex items-center gap-1 text-xs text-[#6E6878]">
+              <CalendarDays className="h-3.5 w-3.5 text-[#FF5A3C]" />
+              Joined {memberSince}
+            </span>
+          </div>
+
+          <p className="text-sm text-[#6E6878] max-w-xl leading-relaxed mt-3">
+            {profile.bio || "Gaming enthusiast on EVOAIQU. Challenge me to Rock Paper Scissors!"}
+          </p>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-5">
+            {statBubbles.map((s) => (
+              <div key={s.label} className={cn("rounded-[22px] p-4 text-center", s.bg)}>
+                <p className={cn("font-display font-semibold text-3xl", s.fg)}>{s.value}</p>
+                <p className="text-xs font-semibold text-[#6E6878] mt-0.5">{s.label}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex flex-wrap gap-2.5 mt-5" aria-label="Badges">
+            {badges.map((b) => (
+              <span
+                key={b.label}
+                className={cn("px-3.5 py-1.5 rounded-full border-2 text-xs font-bold", b.cls)}
+              >
+                {b.label}
+              </span>
+            ))}
+            <span className="px-3.5 py-1.5 rounded-full border-2 border-[#EADBC8] bg-white text-xs font-bold text-[#6E6878] rotate-1">
+              {stats.friendsCount} friends
+            </span>
           </div>
         </div>
       </div>
 
-      {/* ── 2. Content Sections Based on Active Tab ─────────────────────────── */}
-      {activeTab === "overview" && (
-        <div className="space-y-8 animate-fade-in">
-          {/* Game Statistics Grid */}
-          <section aria-labelledby="stats-heading">
-            <h2 id="stats-heading" className="font-display font-bold text-lg sm:text-xl text-[#F5F7FF] mb-4">
-              Game Statistics
+      {/* Pill tabs */}
+      <div role="tablist" aria-label="Profile sections" className="flex gap-1.5 p-1.5 rounded-full bg-[#F5EADC] w-full sm:w-fit">
+        {(
+          [
+            ["matches", "Matches"],
+            ["settings", "Settings"],
+          ] as [Tab, string][]
+        ).map(([key, label]) => (
+          <button
+            key={key}
+            type="button"
+            role="tab"
+            aria-selected={activeTab === key}
+            onClick={() => setActiveTab(key)}
+            className={cn(
+              "flex-1 sm:flex-none min-h-[44px] px-6 rounded-full text-sm font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C]",
+              activeTab === key
+                ? "bg-white text-[#1E1B24] shadow-[0_3px_0_#EADBC8]"
+                : "text-[#6E6878] hover:text-[#1E1B24]",
+            )}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {/* Matches */}
+      {activeTab === "matches" && (
+        <section aria-labelledby="matches-heading" className="b-card !p-4 sm:!p-5 animate-fade-in">
+          <div className="flex items-center justify-between mb-3 px-1">
+            <h2 id="matches-heading" className="font-display font-semibold text-xl text-[#1E1B24]">
+              Recent matches
             </h2>
-
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              <div className="rounded-2xl border border-[rgba(255,255,255,0.08)] bg-[#101638] p-5 shadow-[0_0_20px_rgba(0,0,0,0.25)] text-center">
-                <p className="text-xs font-semibold text-[#B8C3E0] mb-1">Matches Played</p>
-                <p className="font-display font-black text-2xl sm:text-3xl text-[#F5F7FF]">
-                  {stats.totalMatches}
-                </p>
-              </div>
-
-              <div className="rounded-2xl border border-[rgba(255,255,255,0.08)] bg-[#101638] p-5 shadow-[0_0_20px_rgba(0,0,0,0.25)] text-center">
-                <p className="text-xs font-semibold text-[#B8C3E0] mb-1">Victories</p>
-                <p className="font-display font-black text-2xl sm:text-3xl text-[#39DFFF]">
-                  {stats.wins}
-                </p>
-              </div>
-
-              <div className="rounded-2xl border border-[rgba(255,255,255,0.08)] bg-[#101638] p-5 shadow-[0_0_20px_rgba(0,0,0,0.25)] text-center">
-                <p className="text-xs font-semibold text-[#B8C3E0] mb-1">Win Rate</p>
-                <p className="font-display font-black text-2xl sm:text-3xl text-[#F5F7FF]">
-                  {stats.winRate}%
-                </p>
-              </div>
-
-              <div className="rounded-2xl border border-[rgba(255,255,255,0.08)] bg-[#101638] p-5 shadow-[0_0_20px_rgba(0,0,0,0.25)] text-center">
-                <p className="text-xs font-semibold text-[#B8C3E0] mb-1">Dares Completed</p>
-                <p className="font-display font-black text-2xl sm:text-3xl text-[#FF5370]">
-                  {stats.daresCount}
-                </p>
-              </div>
-            </div>
-          </section>
-
-          <hr className="evo-divider my-6" />
-
-          {/* Achievements Showcase */}
-          <section aria-labelledby="achievements-heading">
-            <h2 id="achievements-heading" className="font-display font-bold text-lg sm:text-xl text-[#F5F7FF] mb-4">
-              Achievements & Badges
-            </h2>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="rounded-2xl border border-[rgba(255,255,255,0.08)] bg-[#101638] p-4 shadow-[0_0_20px_rgba(0,0,0,0.25)] flex items-center gap-3.5">
-                <div className="w-11 h-11 rounded-xl bg-[#39DFFF]/15 border border-[#39DFFF]/30 flex items-center justify-center text-[#39DFFF] shrink-0">
-                  <Trophy className="h-5 w-5" />
-                </div>
-                <div>
-                  <p className="font-bold text-sm text-[#F5F7FF]">First Blood</p>
-                  <p className="text-xs text-[#B8C3E0]">Win your first RPS match</p>
-                </div>
-              </div>
-
-              <div className="rounded-2xl border border-[rgba(255,255,255,0.08)] bg-[#101638] p-4 shadow-[0_0_20px_rgba(0,0,0,0.25)] flex items-center gap-3.5">
-                <div className="w-11 h-11 rounded-xl bg-[#FF5370]/15 border border-[#FF5370]/30 flex items-center justify-center text-[#FF5370] shrink-0">
-                  <Flame className="h-5 w-5" />
-                </div>
-                <div>
-                  <p className="font-bold text-sm text-[#F5F7FF]">Dare Hero</p>
-                  <p className="text-xs text-[#B8C3E0]">Submit a challenge dare video</p>
-                </div>
-              </div>
-
-              <div className="rounded-2xl border border-[rgba(255,255,255,0.08)] bg-[#101638] p-4 shadow-[0_0_20px_rgba(0,0,0,0.25)] flex items-center gap-3.5">
-                <div className="w-11 h-11 rounded-xl bg-[#8B2CFF]/15 border border-[#8B2CFF]/30 flex items-center justify-center text-[#8B2CFF] shrink-0">
-                  <Users className="h-5 w-5" />
-                </div>
-                <div>
-                  <p className="font-bold text-sm text-[#F5F7FF]">Social Butterfly</p>
-                  <p className="text-xs text-[#B8C3E0]">Connect with {stats.friendsCount} friends</p>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <hr className="evo-divider my-6" />
-
-          {/* Quick Shortcuts */}
-          <section className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
             <Link
-              href="/games"
-              className="rounded-2xl border border-[rgba(255,255,255,0.08)] bg-[#101638] p-5 shadow-[0_0_20px_rgba(0,0,0,0.25)] hover:border-[#39DFFF]/50 transition-all flex items-center justify-between group"
+              href="/history"
+              className="inline-flex items-center min-h-[44px] text-sm font-bold text-[#C9381F] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C] rounded-full px-2"
             >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#39DFFF]/15 border border-[#39DFFF]/30 flex items-center justify-center text-[#39DFFF]">
-                  <Gamepad2 className="h-5 w-5" />
-                </div>
-                <div>
-                  <p className="font-bold text-sm text-[#F5F7FF]">Gaming Arena</p>
-                  <p className="text-xs text-[#B8C3E0]">Play RPS or matchmaking</p>
-                </div>
-              </div>
-              <ChevronRight className="h-4 w-4 text-[#B8C3E0] group-hover:text-[#39DFFF] group-hover:translate-x-1 transition-all" />
+              View all
             </Link>
+          </div>
 
-            <Link
-              href="/chat?tab=stories"
-              className="rounded-2xl border border-[rgba(255,255,255,0.08)] bg-[#101638] p-5 shadow-[0_0_20px_rgba(0,0,0,0.25)] hover:border-[#FF5370]/50 transition-all flex items-center justify-between group"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#FF5370]/15 border border-[#FF5370]/30 flex items-center justify-center text-[#FF5370]">
-                  <Film className="h-5 w-5" />
-                </div>
-                <div>
-                  <p className="font-bold text-sm text-[#F5F7FF]">Stories & Dares</p>
-                  <p className="text-xs text-[#B8C3E0]">Active 24h video dares</p>
-                </div>
-              </div>
-              <ChevronRight className="h-4 w-4 text-[#B8C3E0] group-hover:text-[#FF5370] group-hover:translate-x-1 transition-all" />
-            </Link>
-
-            <Link
-              href="/friends"
-              className="rounded-2xl border border-[rgba(255,255,255,0.08)] bg-[#101638] p-5 shadow-[0_0_20px_rgba(0,0,0,0.25)] hover:border-[#8B2CFF]/50 transition-all flex items-center justify-between group"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#8B2CFF]/15 border border-[#8B2CFF]/30 flex items-center justify-center text-[#8B2CFF]">
-                  <Users className="h-5 w-5" />
-                </div>
-                <div>
-                  <p className="font-bold text-sm text-[#F5F7FF]">Friends Network</p>
-                  <p className="text-xs text-[#B8C3E0]">{stats.friendsCount} Connected</p>
-                </div>
-              </div>
-              <ChevronRight className="h-4 w-4 text-[#B8C3E0] group-hover:text-[#8B2CFF] group-hover:translate-x-1 transition-all" />
-            </Link>
-          </section>
-        </div>
-      )}
-
-      {/* ── Tab: Edit Profile ───────────────────────────────────────────────── */}
-      {activeTab === "edit" && (
-        <div className="rounded-3xl border border-[rgba(255,255,255,0.08)] bg-[#101638] p-6 sm:p-8 shadow-[0_0_30px_rgba(0,0,0,0.3)] animate-fade-in">
-          <h2 className="font-display font-bold text-xl text-[#F5F7FF] mb-2">
-            Edit Your Profile
-          </h2>
-          <p className="text-[#B8C3E0] text-sm mb-6">
-            Update your display name, bio, language preference, and public visibility.
-          </p>
-          <ProfileEditForm profile={profile} />
-        </div>
-      )}
-
-      {/* ── Tab: Settings & Danger Zone ─────────────────────────────────────── */}
-      {activeTab === "settings" && (
-        <div className="space-y-6 animate-fade-in">
-          <div className="rounded-3xl border border-[rgba(255,255,255,0.08)] bg-[#101638] p-6 sm:p-8 shadow-[0_0_30px_rgba(0,0,0,0.3)] space-y-6">
-            <div>
-              <h2 className="font-display font-bold text-xl text-[#F5F7FF] mb-1">
-                Account & Privacy Settings
-              </h2>
-              <p className="text-[#B8C3E0] text-sm">
-                Manage your account credentials, security, and blocked users.
-              </p>
-            </div>
-
-            <div className="pt-4 border-t border-[rgba(255,255,255,0.08)] flex items-center justify-between">
-              <div>
-                <p className="font-bold text-sm text-[#F5F7FF]">Manage Blocked Users</p>
-                <p className="text-xs text-[#B8C3E0]">View and unblock users you have previously blocked</p>
-              </div>
-              <Link href="/friends">
-                <Button variant="secondary" size="sm">
-                  View Blocked
-                </Button>
+          {history === null ? (
+            <p className="text-sm text-[#6E6878] px-1 py-6 text-center">Loading…</p>
+          ) : history.length === 0 ? (
+            <div className="text-center py-8">
+              <p className="font-display font-semibold text-lg text-[#1E1B24]">No matches yet</p>
+              <Link href="/play/rps" className="evo-btn evo-btn-primary mt-4 inline-flex">
+                Play your first match
               </Link>
             </div>
+          ) : (
+            <ul className="space-y-2.5">
+              {history.map((m) => {
+                const won = m.winner_id === user.id;
+                return (
+                  <li key={m.match_id}>
+                    <Link
+                      href={`/play/rps/${m.match_id}`}
+                      className={rowCls}
+                      aria-label={`Match vs ${m.opponent_name}`}
+                    >
+                      <span
+                        className={cn(
+                          "w-11 h-11 rounded-[14px] flex items-center justify-center font-display font-semibold text-lg shrink-0 border-2",
+                          won
+                            ? "bg-[#E3FAF3] border-[#B7EEDD] text-[#0B7D63]"
+                            : "bg-[#F5EADC] border-[#EADBC8] text-[#6E6878]",
+                        )}
+                      >
+                        {won ? "W" : m.is_draw ? "D" : "L"}
+                      </span>
+                      <Avatar src={m.opponent_avatar} name={m.opponent_name} size="sm" />
+                      <div className="flex-1 min-w-0">
+                        <p className="font-bold text-sm text-[#1E1B24] truncate">vs {m.opponent_name}</p>
+                        <p className="text-xs text-[#6E6878]">
+                          {won ? t("rps.win") : m.is_draw ? t("rps.draw") : t("rps.loss")} · {timeAgo(m.completed_at)}
+                        </p>
+                      </div>
+                      <span className="font-display font-semibold text-lg text-[#1E1B24] shrink-0">
+                        {m.my_wins}–{m.opp_wins}
+                      </span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </section>
+      )}
 
-            <div className="pt-4 border-t border-[rgba(255,255,255,0.08)] flex items-center justify-between">
-              <div>
-                <p className="font-bold text-sm text-[#F5F7FF]">Sign Out</p>
-                <p className="text-xs text-[#B8C3E0]">End your current session on this device</p>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleLogout}
-                className="text-[#FF5370] hover:bg-[#FF5370]/15 border border-[rgba(255,83,112,0.3)] font-semibold"
-              >
-                <LogOut className="h-4 w-4 mr-1.5" />
-                Sign Out
-              </Button>
+      {/* Settings */}
+      {activeTab === "settings" && (
+        <section aria-labelledby="profile-settings-heading" className="space-y-3 animate-fade-in">
+          <h2 id="profile-settings-heading" className="sr-only">
+            Settings
+          </h2>
+
+          <button type="button" className={rowCls} onClick={() => setEditing((v) => !v)} aria-expanded={editing}>
+            <span className={cn(iconCls, "bg-[#FFE4DD] text-[#C9381F]")}>
+              <Pencil className="h-5 w-5" />
+            </span>
+            <span className="flex-1 min-w-0">
+              <span className="block font-bold text-sm text-[#1E1B24]">Edit profile</span>
+              <span className="block text-xs text-[#6E6878]">Name, bio, language and visibility</span>
+            </span>
+            <ChevronRight className={cn("h-5 w-5 text-[#8E8798] transition-transform", editing && "rotate-90")} />
+          </button>
+
+          {editing && (
+            <div className="b-card animate-fade-in">
+              <ProfileEditForm profile={profile} />
             </div>
-          </div>
+          )}
 
-          {/* Danger Zone */}
-          <div className="rounded-3xl border border-[rgba(255,83,112,0.3)] bg-[#101638] p-6 sm:p-8 shadow-[0_0_24px_rgba(255,83,112,0.1)]">
-            <h3 className="font-bold text-base text-[#FF5370] mb-1">Danger Zone</h3>
-            <p className="text-xs text-[#B8C3E0] mb-4">
-              Permanently delete your EVOAIQU account, games history, and personal profile data.
-            </p>
-            <Link href="/settings#delete-account">
-              <Button variant="ghost" size="sm" className="text-[#FF5370] border border-[rgba(255,83,112,0.3)] hover:bg-[#FF5370]/15">
-                Proceed to Delete Account
-              </Button>
-            </Link>
-          </div>
-        </div>
+          <Link href="/settings" className={rowCls}>
+            <span className={cn(iconCls, "bg-[#EEEBFF] text-[#4B3FC4]")}>
+              <SettingsIcon className="h-5 w-5" />
+            </span>
+            <span className="flex-1 min-w-0">
+              <span className="block font-bold text-sm text-[#1E1B24]">All settings</span>
+              <span className="block text-xs text-[#6E6878]">Security, password and account</span>
+            </span>
+            <ChevronRight className="h-5 w-5 text-[#8E8798]" />
+          </Link>
+
+          <Link href="/friends" className={rowCls}>
+            <span className={cn(iconCls, "bg-[#FFF1CC] text-[#8A5F00]")}>
+              <UserX className="h-5 w-5" />
+            </span>
+            <span className="flex-1 min-w-0">
+              <span className="block font-bold text-sm text-[#1E1B24]">Blocked players</span>
+              <span className="block text-xs text-[#6E6878]">View and unblock users you have blocked</span>
+            </span>
+            <ChevronRight className="h-5 w-5 text-[#8E8798]" />
+          </Link>
+
+          <button type="button" className={rowCls} onClick={handleLogout}>
+            <span className={cn(iconCls, "bg-[#F5EADC] text-[#1E1B24]")}>
+              <LogOut className="h-5 w-5" />
+            </span>
+            <span className="flex-1 min-w-0">
+              <span className="block font-bold text-sm text-[#1E1B24]">Sign out</span>
+              <span className="block text-xs text-[#6E6878]">End your current session on this device</span>
+            </span>
+          </button>
+
+          <Link href="/settings#delete-account" className={cn(rowCls, "!border-[#F6C9CB]")}>
+            <span className={cn(iconCls, "bg-[#FDECEC] text-[#E5484D]")}>
+              <Trash2 className="h-5 w-5" />
+            </span>
+            <span className="flex-1 min-w-0">
+              <span className="block font-bold text-sm text-[#E5484D]">Delete account</span>
+              <span className="block text-xs text-[#6E6878]">Permanently remove your account and data</span>
+            </span>
+            <ChevronRight className="h-5 w-5 text-[#8E8798]" />
+          </Link>
+        </section>
       )}
     </div>
   );

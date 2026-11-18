@@ -17,7 +17,7 @@ import {
   Video,
 } from "lucide-react";
 import { useI18n } from "@/core/i18n/I18nContext";
-import { Button, Alert, Badge } from "@/shared/ui";
+import { Alert, Spinner } from "@/shared/ui";
 import { CATEGORY_META } from "@/features/dare-game/lib/challenges";
 import type { Challenge, ChallengeStatus } from "@/core/supabase/database";
 import { VideoRecorderModal } from "@/features/dare-game/components/VideoRecorderModal";
@@ -254,66 +254,68 @@ export function MatchChallengeCard({
     }
   }
 
-  // ── Contextual Status Badge ─────────────────────────────────────────────────
+  // ── Contextual Status Badge (white pill: legible on hot, lilac and plain cards) ──
+  const pillBase =
+    "inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-[#FFFFFF] border-2 border-[#EADBC8]";
   function getStatusBadge() {
     if (isCompleted) {
       return (
-        <Badge variant="teal" className="flex items-center gap-1">
+        <span className={`${pillBase} text-[#0B8A6C]`}>
           <CheckCircle2 className="h-3 w-3" />
           {t("challenges.completed")}
-        </Badge>
+        </span>
       );
     }
 
     if (isSubmitted) {
       return (
-        <Badge variant="teal" className="flex items-center gap-1 bg-[#39DFFF]/15 text-[#39DFFF] border border-[#39DFFF]/30 animate-pulse">
+        <span className={`${pillBase} text-[#5B49D6]`}>
           <Video className="h-3 w-3" />
           Story Submitted
-        </Badge>
+        </span>
       );
     }
 
     if (isRetryRequested) {
       return (
-        <Badge variant="coral" className="flex items-center gap-1 bg-[rgba(255,83,112,0.15)] text-[#FF5370] border border-[#FF5370]/30">
+        <span className={`${pillBase} text-[#C9381F]`}>
           <RotateCcw className="h-3 w-3" />
           Retry Requested
-        </Badge>
+        </span>
       );
     }
 
     if (isAccepted) {
       return (
-        <Badge variant="teal" className="flex items-center gap-1 bg-[#39DFFF]/15 text-[#39DFFF] border border-[#39DFFF]/30">
+        <span className={`${pillBase} text-[#0B8A6C]`}>
           <CheckCircle2 className="h-3 w-3" />
           {t("challenges.accepted")}
-        </Badge>
+        </span>
       );
     }
 
     if (isDeclined) {
       return (
-        <Badge variant="coral" className="flex items-center gap-1 bg-[rgba(255,83,112,0.15)] text-[#FF5370] border border-[#FF5370]/30">
+        <span className={`${pillBase} text-[#C9381F]`}>
           <XCircle className="h-3 w-3" />
           {t("challenges.declined")}
-        </Badge>
+        </span>
       );
     }
 
     if (isCancelled) {
       return (
-        <Badge variant="muted" className="flex items-center gap-1 bg-[#070B25] text-[#8B98B5] border border-[rgba(255,255,255,0.1)]">
+        <span className={`${pillBase} text-[#6E6878]`}>
           <Ban className="h-3 w-3" />
           {t("challenges.cancelled")}
-        </Badge>
+        </span>
       );
     }
 
     // Pending status: Contextual for sender vs recipient
     if (isLoser) {
       return (
-        <span className="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full bg-[rgba(255,83,112,0.15)] text-[#FF5370] border border-[#FF5370]/30 animate-pulse">
+        <span className={`${pillBase} text-[#C9381F]`}>
           <Clock className="h-3 w-3" />
           {t("challenges.invitation_received")}
         </span>
@@ -322,32 +324,58 @@ export function MatchChallengeCard({
 
     // Sender or neutral
     return (
-      <Badge variant="muted" className="flex items-center gap-1 text-[#8B98B5] bg-[#070B25] border border-[rgba(255,255,255,0.08)]">
+      <span className={`${pillBase} text-[#6E6878]`}>
         <Clock className="h-3 w-3" />
         {t("challenges.awaiting_response")}
-      </Badge>
+      </span>
     );
   }
 
+  // B card tone: hot when the dare is owed by the viewer, lilac when a video is
+  // awaiting review/submitted, plain otherwise.
+  const owed = isLoser && (isPending || isAccepted || isRetryRequested);
+  const reviewTone = isSubmitted;
+  const cardTone = owed ? "b-card-hot" : reviewTone ? "b-card-lilac" : "";
+  const muted = owed ? "text-white/90" : "text-[#6E6878]";
+  const strong = owed ? "text-white" : "text-[#1E1B24]";
+  const divider = owed ? "border-white/30" : "border-[#EADBC8]";
+  const focusRing = "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1B24]";
+  const pillBtn =
+    "inline-flex items-center justify-center gap-1.5 min-h-[44px] px-5 rounded-full text-sm font-bold transition-transform active:translate-y-[2px] disabled:opacity-60 disabled:cursor-not-allowed " +
+    focusRing;
+  const pillOnHot = `${pillBtn} bg-[#FFFFFF] text-[#C9381F] shadow-[0_4px_0_rgba(0,0,0,0.25)] active:shadow-[0_2px_0_rgba(0,0,0,0.25)]`;
+  const pillGhostOnHot = `${pillBtn} bg-white/20 text-white border-2 border-white/50 hover:bg-white/30`;
+  const pillAccent = `${pillBtn} bg-[#FF5A3C] text-white shadow-[0_4px_0_#C9381F] active:shadow-[0_2px_0_#C9381F]`;
+
   return (
-    <div className="p-6 sm:p-7 rounded-3xl border border-[rgba(255,255,255,0.08)] bg-[#101638] shadow-xl space-y-4">
-      {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2.5">
-          <span className="text-2xl" role="img" aria-label={catMeta?.name}>
+    <div className={`b-card !p-5 sm:!p-6 space-y-4 ${cardTone}`}>
+      {/* Header: Fredoka "emoji Category: text" line */}
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div className="flex items-start gap-3 min-w-0">
+          <span
+            className={`w-12 h-12 shrink-0 rounded-full flex items-center justify-center text-2xl ${
+              owed ? "bg-white/20" : "bg-[#FFFFFF] border-2 border-[#EADBC8]"
+            }`}
+            role="img"
+            aria-label={catMeta?.name}
+          >
             {catMeta?.emoji ?? "🎯"}
           </span>
-          <span className="font-bold text-[#F5F7FF] text-base sm:text-lg">
-            {challenge.title}
-          </span>
-          <Badge variant="muted" className="text-xs uppercase bg-[#070B25] border border-[rgba(255,255,255,0.1)] text-[#39DFFF]">
-            {catMeta?.name ?? challenge.category}
-          </Badge>
+          <div className="min-w-0">
+            <h3 className={`font-display font-bold text-lg sm:text-xl leading-tight ${strong}`}>
+              {catMeta?.name ?? challenge.category}: {challenge.title}
+            </h3>
+            <p className={`text-xs font-mono mt-0.5 ${owed ? "text-white/80" : "text-[#6E6878]"}`}>
+              {new Date(challenge.created_at).toLocaleDateString()}
+            </p>
+          </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           {challenge.visibility === "private" ? (
             <span
-              className="inline-flex items-center gap-1 text-xs text-[#39DFFF] bg-[#39DFFF]/15 border border-[#39DFFF]/30 px-2.5 py-0.5 rounded-full font-medium"
+              className={`inline-flex items-center gap-1 text-xs px-3 py-1 rounded-full font-bold border-2 ${
+                owed ? "bg-white/20 text-white border-white/40" : "bg-[#FFF6EC] text-[#C9381F] border-[#EADBC8]"
+              }`}
               title="Private Story — only visible to winner and accepted friends"
             >
               <Shield className="h-3 w-3" />
@@ -355,7 +383,9 @@ export function MatchChallengeCard({
             </span>
           ) : (
             <span
-              className="inline-flex items-center gap-1 text-xs text-[#C084FC] bg-[rgba(139,44,255,0.2)] border border-[#8B2CFF]/40 px-2.5 py-0.5 rounded-full font-medium"
+              className={`inline-flex items-center gap-1 text-xs px-3 py-1 rounded-full font-bold border-2 ${
+                owed ? "bg-white/20 text-white border-white/40" : "bg-[#EEEBFF] text-[#5B49D6] border-[#D7D0FF]"
+              }`}
               title="Public Story — visible to everyone"
             >
               <Sparkles className="h-3 w-3" />
@@ -367,31 +397,35 @@ export function MatchChallengeCard({
       </div>
 
       {/* Description */}
-      <p className="text-sm text-[#B8C3E0] leading-relaxed">
+      <p className={`text-sm leading-relaxed ${muted}`}>
         {challenge.description}
       </p>
 
       {/* Instructions */}
       {challenge.instructions && (
-        <div className="p-4 rounded-2xl bg-[#070B25] border border-[rgba(255,255,255,0.08)]">
-          <p className="text-xs font-semibold text-[#39DFFF] mb-1 flex items-center gap-1.5">
+        <div
+          className={`p-4 rounded-[18px] border-2 ${
+            owed ? "bg-white/15 border-white/30" : "bg-[#FFFFFF] border-[#EADBC8]"
+          }`}
+        >
+          <p className={`text-xs font-bold mb-1 flex items-center gap-1.5 ${owed ? "text-white" : "text-[#C9381F]"}`}>
             <HelpCircle className="h-3.5 w-3.5" />
             {t("challenges.instructions")}:
           </p>
-          <p className="text-xs text-[#F5F7FF] leading-normal font-medium">
+          <p className={`text-sm leading-normal font-medium ${strong}`}>
             {challenge.instructions}
           </p>
         </div>
       )}
 
       {/* Role notice */}
-      <div className="text-xs text-[#8B98B5] flex items-center justify-between pt-1">
+      <div className={`text-xs flex items-center justify-between pt-1 ${muted}`}>
         <span>
           {isWinner
             ? `${t("challenges.role_winner")} ${opponentName}`
             : `${t("challenges.role_loser")} ${opponentName}`}
         </span>
-        <span className="text-[11px] opacity-75 font-mono">
+        <span className="text-[11px] font-mono">
           {new Date(challenge.created_at).toLocaleDateString()}
         </span>
       </div>
@@ -404,34 +438,34 @@ export function MatchChallengeCard({
 
       {/* ── RECIPIENT ACTIONS: Invitation Received (Pending) ── */}
       {isLoser && isPending && (
-        <div className="pt-3 border-t border-[rgba(255,255,255,0.08)] space-y-2.5">
-          <div className="flex flex-wrap items-center gap-3">
-            <Button
-              variant="primary"
-              size="sm"
-              loading={loadingAction === "accept"}
+        <div className={`pt-3 border-t-2 space-y-2.5 ${divider}`}>
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
               disabled={loadingAction !== null}
               onClick={() => handleResponse("accept")}
               id="accept-challenge-btn"
-              className="font-bold"
+              className={pillOnHot}
             >
-              <CheckCircle2 className="h-4 w-4 mr-1.5" />
+              {loadingAction === "accept" ? <Spinner size="sm" /> : <CheckCircle2 className="h-4 w-4" />}
               {t("challenges.accept")}
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              loading={loadingAction === "decline" || loadingAction === "skip"}
+            </button>
+            <button
+              type="button"
               disabled={loadingAction !== null}
               onClick={() => handleResponse("decline")}
-              className="text-[#B8C3E0] hover:text-[#FF5370] hover:bg-[rgba(255,83,112,0.1)]"
               id="decline-challenge-btn"
+              className={pillGhostOnHot}
             >
-              <XCircle className="h-4 w-4 mr-1.5" />
+              {loadingAction === "decline" || loadingAction === "skip" ? (
+                <Spinner size="sm" />
+              ) : (
+                <XCircle className="h-4 w-4" />
+              )}
               {t("challenges.decline")}
-            </Button>
+            </button>
           </div>
-          <p className="text-[11px] text-[#8B98B5]">
+          <p className="text-xs text-white/90">
             {t("challenges.invitation_received_desc")}
           </p>
         </div>
@@ -439,26 +473,25 @@ export function MatchChallengeCard({
 
       {/* ── RECIPIENT ACTIONS: Accepted or Retry Requested -> Record Video ── */}
       {isLoser && (isAccepted || isRetryRequested) && (
-        <div className="pt-3 border-t border-[rgba(255,255,255,0.08)] space-y-2.5 animate-fade-in">
+        <div className={`pt-3 border-t-2 space-y-2.5 animate-fade-in ${divider}`}>
           {isRetryRequested && submission?.retry_note && (
-            <div className="p-3.5 rounded-xl bg-[rgba(255,83,112,0.15)] border border-[rgba(255,83,112,0.3)] text-xs text-[#FF5370] mb-2">
+            <div className="p-3.5 rounded-[18px] bg-[#FFFFFF] border-2 border-[#EADBC8] text-sm text-[#C9381F] mb-2">
               <strong>Winner Feedback:</strong> {submission.retry_note}
             </div>
           )}
 
           <div className="flex flex-wrap items-center gap-3">
-            <Button
-              variant="primary"
-              size="sm"
+            <button
+              type="button"
               onClick={() => setIsRecordModalOpen(true)}
-              className="font-bold"
+              className={pillOnHot}
               id="record-video-story-btn"
             >
-              <Camera className="h-4 w-4 mr-1.5" />
+              <Camera className="h-4 w-4" />
               {isRetryRequested ? "Record New Attempt" : "Record Video & Post Story"}
-            </Button>
+            </button>
           </div>
-          <p className="text-[11px] text-[#39DFFF] font-medium flex items-center gap-1">
+          <p className="text-xs text-white/90 font-medium flex items-center gap-1">
             <Clock className="w-3.5 h-3.5" />
             Videos are published to your 24-hour Story. You alone choose Public or Private visibility.
           </p>
@@ -467,36 +500,36 @@ export function MatchChallengeCard({
 
       {/* ── RECIPIENT ACTIONS: Video Submitted (Awaiting Winner Review) ── */}
       {isLoser && isSubmitted && (
-        <div className="pt-3 border-t border-[rgba(255,255,255,0.08)] space-y-3 bg-[#070B25] p-4 rounded-2xl border border-[rgba(255,255,255,0.08)]">
-          <div className="flex items-center justify-between">
+        <div className="space-y-3 bg-[#FFFFFF] p-4 rounded-[18px] border-2 border-[#D7D0FF]">
+          <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#39DFFF] animate-ping" />
-              <span className="text-xs font-bold text-[#F5F7FF]">
+              <span className="w-2 h-2 rounded-full bg-[#8C7BFF] animate-ping" />
+              <span className="text-sm font-bold text-[#1E1B24]">
                 Video Submitted to Story!
               </span>
             </div>
-            <span className="text-[11px] font-mono text-[#39DFFF]">
+            <span className="text-xs font-mono text-[#5B49D6]">
               Awaiting Winner Review
             </span>
           </div>
 
-          <p className="text-xs text-[#B8C3E0]">
+          <p className="text-sm text-[#6E6878]">
             Your video is active in your Story for 24 hours. The winner has been granted one confidential viewing session.
           </p>
 
           {/* Visibility Controls */}
           {submission && (
-            <div className="flex items-center justify-between pt-2 border-t border-[rgba(255,255,255,0.08)]">
-              <div className="flex items-center gap-2">
-                <span className="text-[11px] text-[#8B98B5]">Visibility:</span>
-                <span className="text-[11px] font-bold text-[#39DFFF] uppercase">
+            <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t-2 border-[#EADBC8]">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-xs text-[#6E6878]">Visibility:</span>
+                <span className="text-xs font-bold text-[#C9381F] uppercase">
                   {submission.visibility}
                 </span>
                 <button
                   type="button"
                   onClick={handleToggleVisibility}
                   disabled={loadingAction === "visibility"}
-                  className="text-[11px] text-[#39DFFF] underline hover:text-[#39DFFF]/80 ml-1"
+                  className="text-xs font-bold text-[#C9381F] underline min-h-[44px] px-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C] rounded-full"
                 >
                   Change to {submission.visibility === "private" ? "Public" : "Private"}
                 </button>
@@ -506,7 +539,7 @@ export function MatchChallengeCard({
                 type="button"
                 onClick={handleDeleteStory}
                 disabled={loadingAction === "delete"}
-                className="flex items-center gap-1 text-[11px] text-[#FF5370] hover:underline"
+                className="flex items-center gap-1 text-xs font-bold text-[#E5484D] hover:underline min-h-[44px] px-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C] rounded-full"
               >
                 <Trash2 className="w-3 h-3" /> Delete Story
               </button>
@@ -517,24 +550,23 @@ export function MatchChallengeCard({
 
       {/* ── WINNER ACTIONS: Video Submitted (Review Modal Trigger) ── */}
       {isWinner && isSubmitted && (
-        <div className="pt-3 border-t border-[rgba(255,255,255,0.08)] space-y-2.5 animate-fade-in">
+        <div className="pt-3 border-t-2 border-[#D7D0FF] space-y-2.5 animate-fade-in">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="text-xs text-[#F5F7FF] font-semibold flex items-center gap-1.5">
-              <Sparkles className="w-4 h-4 text-[#39DFFF]" />
+            <div className="text-sm text-[#1E1B24] font-semibold flex items-center gap-1.5">
+              <Sparkles className="w-4 h-4 text-[#5B49D6]" />
               {opponentName} submitted their challenge video!
             </div>
 
-            <Button
-              variant="primary"
-              size="sm"
+            <button
+              type="button"
               onClick={() => setIsReviewModalOpen(true)}
-              className="font-bold"
+              className={pillAccent}
               id="review-challenge-btn"
             >
-              <Eye className="h-4 w-4 mr-1.5" /> Review Video (1-Time View)
-            </Button>
+              <Eye className="h-4 w-4" /> Review Video (1-Time View)
+            </button>
           </div>
-          <p className="text-[11px] text-[#B8C3E0]">
+          <p className="text-xs text-[#6E6878]">
             You have one confidential viewing session. After reviewing, you can approve or request a retry.
           </p>
         </div>
@@ -542,28 +574,27 @@ export function MatchChallengeCard({
 
       {/* ── SENDER STATUS: Pending ── */}
       {isWinner && isPending && (
-        <div className="pt-3 border-t border-[rgba(255,255,255,0.08)] flex flex-wrap items-center justify-between gap-2">
-          <p className="text-xs text-[#B8C3E0]">
+        <div className="pt-3 border-t-2 border-[#EADBC8] flex flex-wrap items-center justify-between gap-2">
+          <p className="text-sm text-[#6E6878]">
             {t("challenges.awaiting_response_desc").replace("{name}", opponentName)}
           </p>
-          <Button
-            variant="ghost"
-            size="sm"
-            loading={loadingAction === "cancel"}
+          <button
+            type="button"
             disabled={loadingAction !== null}
             onClick={handleCancel}
-            className="text-xs text-[#8B98B5] hover:text-[#FF5370]"
             id="cancel-challenge-btn"
+            className="inline-flex items-center justify-center min-h-[44px] px-5 rounded-full bg-[#F5EADC] text-[#1E1B24] text-sm font-bold hover:bg-[#EADBC8] disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C]"
           >
+            {loadingAction === "cancel" ? <Spinner size="sm" className="mr-1.5" /> : null}
             {t("challenges.cancel_action")}
-          </Button>
+          </button>
         </div>
       )}
 
       {/* ── SENDER STATUS: Accepted (Waiting for video) ── */}
       {isWinner && isAccepted && (
-        <div className="pt-3 border-t border-[rgba(255,255,255,0.08)]">
-          <p className="text-xs text-[#39DFFF] font-medium flex items-center gap-1.5">
+        <div className="pt-3 border-t-2 border-[#EADBC8]">
+          <p className="text-sm text-[#0B8A6C] font-semibold flex items-center gap-1.5">
             <CheckCircle2 className="h-4 w-4" />
             {opponentName} accepted the dare! Waiting for them to record and post their video.
           </p>
@@ -572,8 +603,8 @@ export function MatchChallengeCard({
 
       {/* ── SENDER STATUS: Retry Requested ── */}
       {isWinner && isRetryRequested && (
-        <div className="pt-3 border-t border-[rgba(255,255,255,0.08)]">
-          <p className="text-xs text-[#FF5370] font-medium flex items-center gap-1.5">
+        <div className="pt-3 border-t-2 border-[#EADBC8]">
+          <p className="text-sm text-[#C9381F] font-semibold flex items-center gap-1.5">
             <RotateCcw className="h-4 w-4" />
             Retry requested. Waiting for {opponentName} to record a new attempt.
           </p>
@@ -582,9 +613,9 @@ export function MatchChallengeCard({
 
       {/* ── COMPLETED BANNER ── */}
       {isCompleted && (
-        <div className="pt-3 border-t border-[rgba(255,255,255,0.08)]">
-          <div className="p-3 rounded-2xl bg-[#39DFFF]/15 border border-[#39DFFF]/30 flex items-center gap-2 text-xs font-semibold text-[#39DFFF]">
-            <CheckCircle2 className="h-4 w-4 shrink-0 text-[#39DFFF]" />
+        <div className="pt-3 border-t-2 border-[#EADBC8]">
+          <div className="p-3.5 rounded-[18px] bg-[#E3FAF3] border-2 border-[#B7EEDD] flex items-center gap-2 text-sm font-semibold text-[#0B6B53]">
+            <CheckCircle2 className="h-4 w-4 shrink-0" />
             <span>
               {isWinner
                 ? `Dare verified and approved! You successfully completed this challenge with ${opponentName}.`
@@ -596,8 +627,8 @@ export function MatchChallengeCard({
 
       {/* ── DECLINED BANNER ── */}
       {isDeclined && (
-        <div className="pt-3 border-t border-[rgba(255,255,255,0.08)]">
-          <p className="text-xs text-[#FF5370] flex items-center gap-1.5">
+        <div className="pt-3 border-t-2 border-[#EADBC8]">
+          <p className="text-sm text-[#C9381F] font-semibold flex items-center gap-1.5">
             <XCircle className="h-4 w-4" />
             {isWinner
               ? `${opponentName} ${t("challenges.declined_desc").toLowerCase()}`
@@ -608,8 +639,8 @@ export function MatchChallengeCard({
 
       {/* ── CANCELLED BANNER ── */}
       {isCancelled && (
-        <div className="pt-3 border-t border-[rgba(255,255,255,0.08)]">
-          <p className="text-xs text-[#8B98B5] flex items-center gap-1.5">
+        <div className="pt-3 border-t-2 border-[#EADBC8]">
+          <p className="text-sm text-[#6E6878] flex items-center gap-1.5">
             <Ban className="h-4 w-4" />
             {t("challenges.cancelled_desc")}
           </p>

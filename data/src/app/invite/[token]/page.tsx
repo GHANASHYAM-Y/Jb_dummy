@@ -68,12 +68,10 @@ async function InviteContent({ params }: PageProps) {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#070B25] text-[#F5F7FF] relative overflow-hidden">
-      {/* Ambient background glow */}
-      <div
-        className="pointer-events-none absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-radial from-[#315BFF]/15 via-[#8B2CFF]/10 to-transparent blur-3xl"
-        aria-hidden="true"
-      />
+    <div className="flex flex-col min-h-screen bg-[#FFF6EC] text-[#1E1B24] relative overflow-hidden">
+      {/* Decorative sticker blobs */}
+      <div className="pointer-events-none absolute -top-16 -left-16 w-56 h-56 rounded-full bg-[#8C7BFF]/20" aria-hidden="true" />
+      <div className="pointer-events-none absolute bottom-24 -right-12 w-44 h-44 rounded-full bg-[#FFC23D]/30" aria-hidden="true" />
 
       <Navbar
         user={user}
@@ -97,8 +95,8 @@ export default function InvitePage({ params }: PageProps) {
   return (
     <Suspense
       fallback={
-        <div className="flex-1 flex items-center justify-center min-h-screen bg-[#070B25] text-[#39DFFF]">
-          <Spinner size="lg" className="text-[#39DFFF]" />
+        <div className="flex-1 flex items-center justify-center min-h-screen bg-[#FFF6EC] text-[#FF5A3C]">
+          <Spinner size="lg" className="text-[#FF5A3C]" />
         </div>
       }
     >

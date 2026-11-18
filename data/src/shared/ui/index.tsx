@@ -98,7 +98,7 @@ interface CardProps {
 export function Card({ children, className, glass, hover = true, onClick }: CardProps) {
   return (
     <div
-      className={cn(glass ? "evo-card-glass" : "evo-card", !hover && "hover:transform-none hover:shadow-none hover:border-[#315BFF]/25", className)}
+      className={cn(glass ? "evo-card-glass" : "evo-card", !hover && "hover:transform-none hover:shadow-none hover:border-[#EADBC8]", className)}
       onClick={onClick}
       role={onClick ? "button" : undefined}
       tabIndex={onClick ? 0 : undefined}
@@ -134,12 +134,12 @@ export function Input({
       {label && (
         <label htmlFor={inputId} className="evo-label">
           {label}
-          {props.required && <span className="text-[#FF5370] ml-1">*</span>}
+          {props.required && <span className="text-[#E5484D] ml-1">*</span>}
         </label>
       )}
       <div className="relative">
         {leftIcon && (
-          <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8A98C0] pointer-events-none">
+          <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8E8798] pointer-events-none">
             {leftIcon}
           </span>
         )}
@@ -157,18 +157,18 @@ export function Input({
           {...props}
         />
         {rightIcon && (
-          <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#8A98C0] pointer-events-none">
+          <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#8E8798] pointer-events-none">
             {rightIcon}
           </span>
         )}
       </div>
       {error && (
-        <p id={`${inputId}-error`} className="text-[#FF5370] text-xs mt-0.5" role="alert">
+        <p id={`${inputId}-error`} className="text-[#E5484D] text-xs mt-0.5" role="alert">
           {error}
         </p>
       )}
       {hint && !error && (
-        <p id={`${inputId}-hint`} className="text-[#8A98C0] text-xs mt-0.5">
+        <p id={`${inputId}-hint`} className="text-[#8E8798] text-xs mt-0.5">
           {hint}
         </p>
       )}
@@ -234,12 +234,12 @@ export function Alert({ variant = "info", children, className, icon }: AlertProp
 // ── Divider ───────────────────────────────────────────────────────────────────
 
 export function Divider({ label, className }: { label?: string; className?: string }) {
-  if (!label) return <hr className={cn("border-0 border-t border-[#315BFF]/20 my-6 sm:my-8", className)} />;
+  if (!label) return <hr className={cn("border-0 border-t border-[#EADBC8] my-6 sm:my-8", className)} />;
   return (
     <div className={cn("flex items-center gap-3 my-6 sm:my-8", className)}>
-      <hr className="flex-1 border-0 border-t border-[#315BFF]/20 my-0" />
-      <span className="text-xs font-mono uppercase tracking-wider text-[#8A98C0] shrink-0">{label}</span>
-      <hr className="flex-1 border-0 border-t border-[#315BFF]/20 my-0" />
+      <hr className="flex-1 border-0 border-t border-[#EADBC8] my-0" />
+      <span className="text-xs font-mono uppercase tracking-wider text-[#8E8798] shrink-0">{label}</span>
+      <hr className="flex-1 border-0 border-t border-[#EADBC8] my-0" />
     </div>
   );
 }
@@ -274,7 +274,7 @@ export function Avatar({ src, name, size = "md", className }: AvatarProps) {
       className={cn(
         "rounded-full flex items-center justify-center overflow-hidden flex-shrink-0 font-bold select-none",
         avatarSizes[size],
-        !src && "bg-[#182352] text-[#39DFFF] border border-[#315BFF]/40 shadow-[0_0_12px_rgba(49,91,255,0.2)]",
+        !src && "bg-[#F5EADC] text-[#FF5A3C] border border-[#EADBC8] shadow-[0_0_12px_rgba(140,123,255,0.2)]",
         className,
       )}
       aria-label={name}
@@ -319,8 +319,8 @@ export function EvoIdBadge({ id, className }: { id: string; className?: string }
     <span
       className={cn(
         "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg",
-        "bg-[#101638] border border-[#315BFF]/35",
-        "text-[#39DFFF] text-xs font-mono font-bold tracking-wider shadow-[0_0_8px_rgba(57,223,255,0.15)]",
+        "bg-[#FFFFFF] border border-[#EADBC8]",
+        "text-[#FF5A3C] text-xs font-mono font-bold tracking-wider shadow-[0_0_8px_rgba(255,90,60,0.15)]",
         className,
       )}
     >

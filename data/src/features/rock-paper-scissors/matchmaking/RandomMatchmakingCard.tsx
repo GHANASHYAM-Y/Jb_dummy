@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import {
   Zap,
   Clock,
@@ -17,6 +18,22 @@ import { useI18n } from "@/core/i18n/I18nContext";
 import { Button, Alert, Spinner } from "@/shared/ui";
 import { cn } from "@/shared/lib/utils";
 import { MatchmakingFloatingIndicator } from "./MatchmakingFloatingIndicator";
+import { LobbyHero, heroCtaClass } from "@/shared/game/LobbyChrome";
+
+const QUEUE_TIPS = [
+  "Most players open with Rock. Paper is a sneaky first throw.",
+  "You get 10 seconds a round. Pick fast, then lock it in.",
+  "First to 5 wins. The loser owes a dare.",
+  "Switch it up. Players who repeat a throw get read quickly.",
+];
+
+interface RandomMatchmakingHero {
+  emoji: string;
+  eyebrow?: string;
+  title: string;
+  tagline: string;
+  chips?: string[];
+}
 
 type MatchmakingUIState =
   | "idle"
@@ -32,12 +49,15 @@ interface RandomMatchmakingCardProps {
   className?: string;
   onMatched?: (matchId: string) => void;
   showFloatingIndicator?: boolean;
+  /** When set, the idle state renders as the lobby hero card */
+  hero?: RandomMatchmakingHero;
 }
 
 export function RandomMatchmakingCard({
   className,
   onMatched,
   showFloatingIndicator = true,
+  hero,
 }: RandomMatchmakingCardProps) {
   const { t } = useI18n();
   const router = useRouter();
@@ -313,15 +333,11 @@ export function RandomMatchmakingCard({
     return `${m}:${s < 10 ? "0" : ""}${s}`;
   };
 
-  return (
-    <div
-      className={cn(
-        "rounded-2xl p-4 sm:p-6 border border-[rgba(57,223,255,0.2)] bg-[#101638]/90 backdrop-blur-xl shadow-[0_12px_36px_rgba(0,0,0,0.45)] relative overflow-hidden transition-all text-[#F5F7FF]",
-        state === "searching" && "border-[#39DFFF] shadow-[0_0_30px_rgba(57,223,255,0.25)]",
-        state === "matched" && "border-[#39DFFF] bg-[rgba(57,223,255,0.1)] shadow-[0_0_30px_rgba(57,223,255,0.3)]",
-        className
-      )}
-    >
+  const queueTip = QUEUE_TIPS[Math.floor(elapsedSecs / 6) % QUEUE_TIPS.length];
+  const showHero = state === "idle" && hero;
+
+  const content = (
+    <>
       {errorMsg && (
         <Alert variant="error" icon={<AlertCircle className="h-4 w-4" />} className="mb-4">
           {errorMsg}
@@ -329,18 +345,38 @@ export function RandomMatchmakingCard({
       )}
 
       {/* ── Idle State ── */}
-      {state === "idle" && (
+      {state === "idle" && hero && (
+        <LobbyHero
+          color="tangerine"
+          emoji={hero.emoji}
+          eyebrow={hero.eyebrow}
+          title={hero.title}
+          tagline={hero.tagline}
+          chips={hero.chips}
+        >
+          <button
+            type="button"
+            onClick={handleJoin}
+            id="play-random-btn"
+            className={heroCtaClass}
+          >
+            <Play className="h-4 w-4 fill-current" aria-hidden="true" />
+            {t("matchmaking.play_random")}
+          </button>
+        </LobbyHero>
+      )}
+      {state === "idle" && !hero && (
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2.5">
-              <span className="p-2 rounded-xl bg-[#39DFFF]/15 border border-[#39DFFF]/30 text-[#39DFFF] shadow-[0_0_12px_rgba(57,223,255,0.3)]">
+              <span className="w-9 h-9 rounded-full bg-[#FFC23D] border-2 border-[#E9A912] text-[#1E1B24] flex items-center justify-center">
                 <Zap className="h-4 w-4" />
               </span>
-              <h3 className="font-bold text-[#F5F7FF] text-base">
+              <h3 className="font-display font-bold text-[#1E1B24] text-lg">
                 {t("matchmaking.play_random")}
               </h3>
             </div>
-            <p className="text-xs text-[#B8C3E0] max-w-sm">
+            <p className="text-sm text-[#6E6878] max-w-sm">
               {t("matchmaking.play_random_desc")}
             </p>
           </div>
@@ -350,7 +386,7 @@ export function RandomMatchmakingCard({
             size="md"
             onClick={handleJoin}
             id="play-random-btn"
-            className="w-full sm:w-auto min-h-[44px] font-bold shadow-[0_0_20px_rgba(49,91,255,0.4)] hover:shadow-[0_0_28px_rgba(57,223,255,0.6)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78] focus-visible:ring-offset-2"
+            className="w-full sm:w-auto min-h-[44px] font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C] focus-visible:ring-offset-2"
           >
             <Play className="h-4 w-4 mr-2 fill-current" />
             {t("matchmaking.play_random")}
@@ -361,50 +397,65 @@ export function RandomMatchmakingCard({
       {/* ── Joining State ── */}
       {state === "joining" && (
         <div className="flex items-center justify-center gap-3 py-4">
-          <Spinner size="md" className="text-[#39DFFF]" />
-          <span className="text-sm font-semibold text-[#F5F7FF]">Connecting to matchmaking...</span>
+          <Spinner size="md" className="text-[#FF5A3C]" />
+          <span className="text-sm font-semibold text-[#1E1B24]">Connecting to matchmaking...</span>
         </div>
       )}
 
-      {/* ── Searching State (Radar Animation + Timer + Cancel) ── */}
+      {/* ── Searching State (bouncing avatars + timer + tip + Cancel) ── */}
       {state === "searching" && (
-        <div className="space-y-4 animate-fade-in">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="relative flex items-center justify-center w-8 h-8">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#39DFFF] opacity-75" />
-                <span className="relative inline-flex rounded-full h-4 w-4 bg-[#39DFFF] shadow-[0_0_12px_#39DFFF]" />
-              </div>
-              <div>
-                <h4 className="font-bold text-[#F5F7FF] text-sm">
-                  {t("matchmaking.searching")}
-                </h4>
-                <p className="text-xs text-[#52605C] dark:text-[#B8C3E0]">
-                  {t("matchmaking.searching_desc")}
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#070B25] border border-[rgba(57,223,255,0.3)] text-xs font-mono font-semibold text-[#39DFFF] shadow-[0_0_12px_rgba(57,223,255,0.2)]">
-              <Clock className="h-3.5 w-3.5 text-[#39DFFF]" />
-              <span>{formatTime(elapsedSecs)}</span>
-            </div>
+        <div className="flex flex-col items-center text-center gap-4 py-4 animate-fade-in">
+          <div className="flex items-end justify-center gap-3" aria-hidden="true">
+            <span className="w-16 h-16 rounded-full bg-[#FF5A3C] border-[3px] border-[#C9381F] text-white font-display font-bold text-lg flex items-center justify-center animate-bounce [animation-delay:0ms]">
+              You
+            </span>
+            <span className="w-16 h-16 rounded-full bg-[#FFC23D] border-[3px] border-[#E9A912] text-[#1E1B24] font-display font-bold text-2xl flex items-center justify-center animate-bounce [animation-delay:150ms]">
+              ?
+            </span>
+            <span className="w-16 h-16 rounded-full bg-[#8C7BFF] border-[3px] border-[#6A58DB] text-[#1E1B24] font-display font-bold text-2xl flex items-center justify-center animate-bounce [animation-delay:300ms]">
+              ?
+            </span>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-[#1C2758]">
-            <div className="flex items-center gap-2 text-xs text-[#52605C] dark:text-[#B8C3E0] font-medium">
-              <Shield className="h-3.5 w-3.5 text-[#39DFFF]" />
-              <span>{t("matchmaking.queue_info")}</span>
-            </div>
+          <div>
+            <h4 className="font-display font-bold text-[#1E1B24] text-[32px] leading-tight">
+              {t("matchmaking.searching")}
+            </h4>
+            <p className="mt-1 text-sm text-[#6E6878]">
+              {t("matchmaking.searching_desc")}
+            </p>
+          </div>
 
+          <div className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#FFE4DD] border-2 border-[#FF5A3C] text-base font-mono font-bold text-[#C9381F]">
+            <Clock className="h-4 w-4" />
+            <span>{formatTime(elapsedSecs)}</span>
+          </div>
+
+          <div className="w-full max-w-sm rounded-[22px] bg-[#EEEBFF] border-2 border-[#D7D0FF] p-4 text-sm text-[#1E1B24] text-left">
+            <p className="text-xs font-extrabold uppercase tracking-wider text-[#6A58DB] mb-1">Tip</p>
+            <p className="leading-relaxed">{queueTip}</p>
+          </div>
+
+          <div className="flex items-center gap-2 text-xs text-[#6E6878] font-medium">
+            <Shield className="h-3.5 w-3.5 text-[#FF5A3C]" />
+            <span>{t("matchmaking.queue_info")}</span>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <Link
+              href="/games"
+              className="inline-flex items-center justify-center min-h-[44px] px-5 rounded-full bg-[#F5EADC] border-2 border-[#EADBC8] text-sm font-bold text-[#1E1B24] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C] focus-visible:ring-offset-2"
+            >
+              Keep browsing
+            </Link>
             <Button
               variant="ghost"
               size="sm"
               onClick={handleCancel}
               id="cancel-matchmaking-btn"
-              className="min-h-[44px] min-w-[44px] px-3.5 inline-flex items-center justify-center font-bold text-[#FF5370] hover:text-white hover:bg-[#FF5370]/20 rounded-xl transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D95F49] focus-visible:ring-offset-2 border border-[#FF5370]/30"
+              className="min-h-[44px] min-w-[44px] px-5 inline-flex items-center justify-center font-bold text-[#E5484D] hover:bg-[#E5484D]/10 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C] focus-visible:ring-offset-2 border-2 border-[#E5484D]/40"
             >
-              <X className="h-4 w-4 mr-1 text-[#52605C] dark:text-[#FF5370]" />
+              <X className="h-4 w-4 mr-1 text-[#E5484D]" />
               {t("matchmaking.cancel")}
             </Button>
           </div>
@@ -413,8 +464,8 @@ export function RandomMatchmakingCard({
 
       {/* ── Cancelling State ── */}
       {state === "cancelling" && (
-        <div className="flex items-center justify-center gap-2 py-4 text-xs font-semibold text-[#52605C] dark:text-[#B8C3E0]">
-          <Spinner size="sm" className="text-[#39DFFF]" />
+        <div className="flex items-center justify-center gap-2 py-4 text-xs font-semibold text-[#6E6878]">
+          <Spinner size="sm" className="text-[#FF5A3C]" />
           <span>{t("matchmaking.cancelling")}</span>
         </div>
       )}
@@ -423,14 +474,14 @@ export function RandomMatchmakingCard({
       {state === "matched" && (
         <div className="flex items-center justify-between gap-4 py-2 animate-fade-in">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-[#39DFFF]/20 border border-[#39DFFF]/40 flex items-center justify-center text-[#39DFFF] shadow-[0_0_16px_rgba(57,223,255,0.4)]">
+            <div className="w-11 h-11 rounded-full bg-[#14C49A] border-2 border-[#0E9B79] flex items-center justify-center text-[#1E1B24]">
               <CheckCircle2 className="h-6 w-6" />
             </div>
             <div>
-              <h4 className="font-bold text-[#F5F7FF] text-sm">
+              <h4 className="font-display font-bold text-[#1E1B24] text-lg">
                 {t("matchmaking.matched")}
               </h4>
-              <p className="text-xs text-[#39DFFF] font-semibold">Starting round 1...</p>
+              <p className="text-xs text-[#C9381F] font-semibold">Starting round 1...</p>
             </div>
           </div>
 
@@ -439,7 +490,7 @@ export function RandomMatchmakingCard({
               variant="primary"
               size="sm"
               onClick={() => handleGoToMatch(matchId)}
-              className="min-h-[44px] px-4 font-bold shadow-[0_0_20px_rgba(49,91,255,0.4)] hover:shadow-[0_0_28px_rgba(57,223,255,0.6)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78] focus-visible:ring-offset-2"
+              className="min-h-[44px] px-4 font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C] focus-visible:ring-offset-2"
             >
               Enter Game
               <ArrowRight className="h-4 w-4 ml-1.5" />
@@ -452,10 +503,10 @@ export function RandomMatchmakingCard({
       {state === "expired" && (
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 py-2 animate-fade-in">
           <div className="space-y-0.5">
-            <h4 className="font-semibold text-[#F5F7FF] text-sm">
+            <h4 className="font-display font-bold text-[#1E1B24] text-lg">
               {t("matchmaking.expired")}
             </h4>
-            <p className="text-xs text-[#52605C] dark:text-[#B8C3E0]">
+            <p className="text-sm text-[#6E6878]">
               No matching opponents were available in the queue during the 2-minute search.
             </p>
           </div>
@@ -465,7 +516,7 @@ export function RandomMatchmakingCard({
               variant="ghost"
               size="sm"
               onClick={() => setState("idle")}
-              className="min-h-[44px] px-4 font-bold text-[#B8C3E0] hover:text-[#F5F7FF] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78] focus-visible:ring-offset-2"
+              className="min-h-[44px] px-4 font-bold text-[#6E6878] hover:text-[#1E1B24] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C] focus-visible:ring-offset-2"
             >
               {t("common.cancel")}
             </Button>
@@ -473,7 +524,7 @@ export function RandomMatchmakingCard({
               variant="primary"
               size="sm"
               onClick={handleJoin}
-              className="min-h-[44px] px-4 font-bold shadow-[0_0_20px_rgba(49,91,255,0.4)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78] focus-visible:ring-offset-2"
+              className="min-h-[44px] px-4 font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C] focus-visible:ring-offset-2"
             >
               <RefreshCw className="h-4 w-4 mr-1.5" />
               {t("matchmaking.retry")}
@@ -487,14 +538,14 @@ export function RandomMatchmakingCard({
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 py-2 animate-fade-in">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <span className="p-1.5 rounded-lg bg-[#39DFFF]/20 text-[#39DFFF]">
+              <span className="w-8 h-8 rounded-full bg-[#FFC23D] border-2 border-[#E9A912] text-[#1E1B24] flex items-center justify-center">
                 <Shield className="h-4 w-4" />
               </span>
-              <h4 className="font-bold text-[#F5F7FF] text-sm sm:text-base">
+              <h4 className="font-display font-bold text-[#1E1B24] text-base sm:text-lg">
                 {t("matchmaking.in_active_match")}
               </h4>
             </div>
-            <p className="text-xs sm:text-sm text-[#52605C] dark:text-[#B8C3E0] max-w-sm">
+            <p className="text-xs sm:text-sm text-[#6E6878] max-w-sm">
               You cannot queue for a new game while your current match is unfinished.
             </p>
           </div>
@@ -504,7 +555,7 @@ export function RandomMatchmakingCard({
               variant="primary"
               size="md"
               onClick={() => handleGoToMatch(matchId)}
-              className="w-full sm:w-auto min-h-[44px] font-bold shrink-0 shadow-[0_0_20px_rgba(49,91,255,0.4)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78] focus-visible:ring-offset-2"
+              className="w-full sm:w-auto min-h-[44px] font-bold shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C] focus-visible:ring-offset-2"
             >
               {t("matchmaking.resume_match")}
               <ArrowRight className="h-4 w-4 ml-1.5" />
@@ -525,6 +576,23 @@ export function RandomMatchmakingCard({
           }}
         />
       )}
+    </>
+  );
+
+  if (showHero) {
+    return <div className={className}>{content}</div>;
+  }
+
+  return (
+    <div
+      className={cn(
+        "b-card relative overflow-hidden transition-all text-[#1E1B24] p-4 sm:p-6",
+        state === "searching" && "border-[#FF5A3C] shadow-[0_4px_0_#C9381F]",
+        state === "matched" && "border-[#B7EEDD] bg-[#E3FAF3] shadow-[0_4px_0_#B7EEDD]",
+        className
+      )}
+    >
+      {content}
     </div>
   );
 }

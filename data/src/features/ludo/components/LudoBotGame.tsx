@@ -122,19 +122,19 @@ export function LudoBotGame() {
     return (
       <div className="w-full max-w-lg mx-auto flex flex-col gap-4">
         <TopBar />
-        <div className="rounded-3xl border border-[rgba(57,223,255,0.25)] bg-[#101638] p-6 sm:p-7 shadow-xl space-y-6 animate-fade-in">
+        <div className="rounded-3xl border border-[rgba(255,90,60,0.25)] bg-[#FFFFFF] p-6 sm:p-7 shadow-xl space-y-6 animate-fade-in">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-[#39DFFF]/10 border border-[#39DFFF]/30 flex items-center justify-center text-[#39DFFF] shrink-0">
+            <div className="w-12 h-12 rounded-2xl bg-[#FF5A3C]/10 border border-[#FF5A3C]/30 flex items-center justify-center text-[#FF5A3C] shrink-0">
               <Bot className="w-6 h-6" aria-hidden="true" />
             </div>
             <div>
-              <h1 className="font-display font-black text-xl text-[#F5F7FF]">Me vs bots</h1>
-              <p className="text-sm text-[#B8C3E0]">Runs on this device. No sign-in needed.</p>
+              <h1 className="font-display font-black text-xl text-[#1E1B24]">Me vs bots</h1>
+              <p className="text-sm text-[#6E6878]">Runs on this device. No sign-in needed.</p>
             </div>
           </div>
 
           <div>
-            <p className="text-xs font-bold uppercase tracking-wider text-[#39DFFF] mb-2">Players</p>
+            <p className="text-xs font-bold uppercase tracking-wider text-[#FF5A3C] mb-2">Players</p>
             <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label="Number of players">
               {PLAYER_COUNTS.map((n) => (
                 <button
@@ -146,8 +146,8 @@ export function LudoBotGame() {
                   className={cn(
                     "py-3 rounded-2xl border font-display font-black text-lg transition-all",
                     count === n
-                      ? "bg-[#39DFFF]/15 border-[#39DFFF] text-[#39DFFF]"
-                      : "bg-[#070B25] border-[rgba(255,255,255,0.08)] text-[#B8C3E0] hover:border-[#39DFFF]/40",
+                      ? "bg-[#FF5A3C]/15 border-[#FF5A3C] text-[#FF5A3C]"
+                      : "bg-[#FFF6EC] border-[rgba(30,27,36,0.08)] text-[#6E6878] hover:border-[#FF5A3C]/40",
                   )}
                 >
                   {n}
@@ -160,17 +160,17 @@ export function LudoBotGame() {
             {preview.map((p) => (
               <li
                 key={p.color}
-                className="flex items-center gap-2 px-3 py-2 rounded-2xl bg-[#070B25] border border-[rgba(255,255,255,0.08)]"
+                className="flex items-center gap-2 px-3 py-2 rounded-2xl bg-[#FFF6EC] border border-[rgba(30,27,36,0.08)]"
               >
                 <span
-                  className="w-3.5 h-3.5 rounded-full border-2 border-white/80"
+                  className="w-3.5 h-3.5 rounded-full border-2 border-[#1E1B24]/64"
                   style={{ backgroundColor: COLOR_HEX[p.color] }}
                   aria-hidden="true"
                 />
-                <span className={cn("text-sm font-bold", p.kind === "human" ? "text-[#39DFFF]" : "text-[#F5F7FF]")}>
+                <span className={cn("text-sm font-bold", p.kind === "human" ? "text-[#FF5A3C]" : "text-[#1E1B24]")}>
                   {p.label}
                 </span>
-                <span className="text-[10px] font-mono uppercase text-[#8B98B5] ml-auto">{COLOR_NAME[p.color]}</span>
+                <span className="text-[10px] font-mono uppercase text-[#6E6878] ml-auto">{COLOR_NAME[p.color]}</span>
               </li>
             ))}
           </ul>
@@ -218,7 +218,7 @@ export function LudoBotGame() {
         }))}
       />
 
-      <div className="rounded-3xl border border-[rgba(255,255,255,0.08)] bg-[#101638] p-2 sm:p-3 shadow-xl">
+      <div className="rounded-3xl border border-[rgba(30,27,36,0.08)] bg-[#FFFFFF] p-2 sm:p-3 shadow-xl">
         <LudoBoard
           state={game}
           myColor={me?.color ?? ME_COLOR}
@@ -230,8 +230,8 @@ export function LudoBotGame() {
       </div>
 
       {!finished && (
-        <div className="rounded-3xl border border-[rgba(255,255,255,0.08)] bg-[#101638] p-4 sm:p-5 shadow-xl space-y-3">
-          <p className="min-h-[1.25rem] text-sm font-semibold text-[#F5F7FF]" aria-live="polite">
+        <div className="rounded-3xl border border-[rgba(30,27,36,0.08)] bg-[#FFFFFF] p-4 sm:p-5 shadow-xl space-y-3">
+          <p className="min-h-[1.25rem] text-sm font-semibold text-[#1E1B24]" aria-live="polite">
             {event ?? "Roll a 6 to bring a token out."}
           </p>
           <div className="flex items-center justify-between gap-3 flex-wrap">
@@ -248,22 +248,22 @@ export function LudoBotGame() {
       )}
 
       {finished && (
-        <div className="rounded-3xl border border-[rgba(57,223,255,0.25)] bg-[#101638] p-6 space-y-5 shadow-2xl animate-slide-up">
+        <div className="rounded-3xl border border-[rgba(255,90,60,0.25)] bg-[#FFFFFF] p-6 space-y-5 shadow-2xl animate-slide-up">
           <div className="text-center space-y-2">
             <div
               className={cn(
                 "w-16 h-16 mx-auto rounded-2xl border flex items-center justify-center",
                 iWon
-                  ? "bg-[#39DFFF]/15 border-[#39DFFF]/40 text-[#39DFFF]"
-                  : "bg-[#FF5370]/15 border-[#FF5370]/40 text-[#FF5370]",
+                  ? "bg-[#FF5A3C]/15 border-[#FF5A3C]/40 text-[#FF5A3C]"
+                  : "bg-[#E5484D]/15 border-[#E5484D]/40 text-[#E5484D]",
               )}
             >
               {iWon ? <Trophy className="w-8 h-8" aria-hidden="true" /> : <XCircle className="w-8 h-8" aria-hidden="true" />}
             </div>
-            <h2 className="font-display font-black text-2xl text-[#F5F7FF]">
+            <h2 className="font-display font-black text-2xl text-[#1E1B24]">
               {iWon ? "You won!" : `${game.winner ? labelOf(game.winner) : "A bot"} wins`}
             </h2>
-            <p className="text-sm text-[#B8C3E0]">
+            <p className="text-sm text-[#6E6878]">
               {iWon ? "All four of your tokens made it home." : `You got ${tokensHome(game, ME_COLOR)} of 4 tokens home.`}
             </p>
           </div>
@@ -288,7 +288,7 @@ export function LudoBotGame() {
 
       {!finished && (
         <div className="flex justify-center">
-          <Button variant="ghost" size="sm" className="text-xs text-[#8B98B5]" onClick={() => setGame(null)}>
+          <Button variant="ghost" size="sm" className="text-xs text-[#6E6878]" onClick={() => setGame(null)}>
             Quit and start over
           </Button>
         </div>
@@ -299,10 +299,10 @@ export function LudoBotGame() {
 
 function TopBar({ playing = false }: { playing?: boolean }) {
   return (
-    <div className="flex items-center justify-between px-4 py-3 bg-[#101638] border border-[rgba(255,255,255,0.08)] rounded-2xl shadow-xl">
+    <div className="flex items-center justify-between px-4 py-3 bg-[#FFFFFF] border border-[rgba(30,27,36,0.08)] rounded-2xl shadow-xl">
       <Link
         href="/play/ludo"
-        className="flex items-center gap-1.5 text-xs font-semibold text-[#B8C3E0] hover:text-[#39DFFF] transition-colors"
+        className="flex items-center gap-1.5 text-xs font-semibold text-[#6E6878] hover:text-[#FF5A3C] transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
         <span>Lobby</span>

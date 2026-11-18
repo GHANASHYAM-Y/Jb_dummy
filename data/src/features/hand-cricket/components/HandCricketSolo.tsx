@@ -280,10 +280,10 @@ export function HandCricketSolo() {
   return (
     <div className="w-full max-w-lg mx-auto flex flex-col gap-4 select-none">
       {/* Top bar */}
-      <div className="flex items-center justify-between px-4 py-3 bg-[#101638] border border-[rgba(255,255,255,0.08)] rounded-2xl shadow-xl">
+      <div className="flex items-center justify-between px-4 py-3 bg-[#FFFFFF] border border-[rgba(30,27,36,0.08)] rounded-2xl shadow-xl">
         <Link
           href="/play/hand-cricket"
-          className="flex items-center gap-1.5 text-xs font-semibold text-[#B8C3E0] hover:text-[#39DFFF] transition-colors"
+          className="flex items-center gap-1.5 text-xs font-semibold text-[#6E6878] hover:text-[#FF5A3C] transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Lobby</span>
@@ -296,14 +296,14 @@ export function HandCricketSolo() {
 
       {/* ── Setup: overs + players ───────────────────────────────────────────── */}
       {stage === "setup" && (
-        <div className="rounded-3xl border border-[rgba(57,223,255,0.2)] bg-[#101638] p-6 sm:p-8 space-y-6 shadow-xl animate-fade-in">
+        <div className="rounded-3xl border border-[rgba(255,90,60,0.2)] bg-[#FFFFFF] p-6 sm:p-8 space-y-6 shadow-xl animate-fade-in">
           <div className="text-center">
-            <h1 className="font-display font-black text-2xl text-[#F5F7FF]">Me vs Bot</h1>
-            <p className="text-sm text-[#B8C3E0] mt-1">11 players a side. Pick the overs, name your team, then toss.</p>
+            <h1 className="font-display font-black text-2xl text-[#1E1B24]">Me vs Bot</h1>
+            <p className="text-sm text-[#6E6878] mt-1">11 players a side. Pick the overs, name your team, then toss.</p>
           </div>
 
           <div>
-            <p className="text-xs font-bold uppercase tracking-wider text-[#39DFFF] mb-3">Overs per side</p>
+            <p className="text-xs font-bold uppercase tracking-wider text-[#FF5A3C] mb-3">Overs per side</p>
             <div className="grid grid-cols-4 gap-2" role="radiogroup" aria-label="Overs per side">
               {OVER_OPTIONS.map((option) => (
                 <button
@@ -315,8 +315,8 @@ export function HandCricketSolo() {
                   className={cn(
                     "py-3 rounded-2xl border font-display font-black text-xl transition-all",
                     overs === option
-                      ? "bg-[#39DFFF]/15 border-[#39DFFF] text-[#39DFFF]"
-                      : "bg-[#070B25] border-[rgba(255,255,255,0.08)] text-[#B8C3E0] hover:border-[#39DFFF]/40",
+                      ? "bg-[#FF5A3C]/15 border-[#FF5A3C] text-[#FF5A3C]"
+                      : "bg-[#FFF6EC] border-[rgba(30,27,36,0.08)] text-[#6E6878] hover:border-[#FF5A3C]/40",
                   )}
                 >
                   {option}
@@ -326,7 +326,7 @@ export function HandCricketSolo() {
           </div>
 
           <div className="flex items-center justify-between gap-3">
-            <p className="text-sm text-[#B8C3E0]">Your 11 players</p>
+            <p className="text-sm text-[#6E6878]">Your 11 players</p>
             <EditPlayersButton onClick={openEditor} />
           </div>
 
@@ -338,13 +338,13 @@ export function HandCricketSolo() {
 
       {/* ── Toss ─────────────────────────────────────────────────────────────── */}
       {stage === "toss_call" && (
-        <div className="rounded-3xl border border-[rgba(57,223,255,0.2)] bg-[#101638] p-6 sm:p-8 text-center space-y-5 shadow-xl animate-fade-in">
-          <div className="w-16 h-16 mx-auto rounded-2xl bg-[#FBBF24]/15 border border-[#FBBF24]/40 flex items-center justify-center text-[#FBBF24]">
+        <div className="rounded-3xl border border-[rgba(255,90,60,0.2)] bg-[#FFFFFF] p-6 sm:p-8 text-center space-y-5 shadow-xl animate-fade-in">
+          <div className="w-16 h-16 mx-auto rounded-2xl bg-[#FFC23D]/15 border border-[#FFC23D]/40 flex items-center justify-center text-[#FFC23D]">
             <Coins className="w-8 h-8" aria-hidden="true" />
           </div>
           <div>
-            <h1 className="font-display font-black text-2xl text-[#F5F7FF]">Call the toss</h1>
-            <p className="text-sm text-[#B8C3E0] mt-1">
+            <h1 className="font-display font-black text-2xl text-[#1E1B24]">Call the toss</h1>
+            <p className="text-sm text-[#6E6878] mt-1">
               {overs} overs a side. Win the toss and you choose to bat or bowl first.
             </p>
           </div>
@@ -360,13 +360,13 @@ export function HandCricketSolo() {
       )}
 
       {(stage === "toss_decision" || stage === "bot_decided") && (
-        <div className="rounded-3xl border border-[rgba(57,223,255,0.2)] bg-[#101638] p-6 sm:p-8 text-center space-y-5 shadow-xl animate-scale-in">
-          <p className="text-xs font-mono uppercase tracking-wider text-[#8B98B5]">
-            The coin landed <span className="text-[#FBBF24] font-bold">{coin}</span>
+        <div className="rounded-3xl border border-[rgba(255,90,60,0.2)] bg-[#FFFFFF] p-6 sm:p-8 text-center space-y-5 shadow-xl animate-scale-in">
+          <p className="text-xs font-mono uppercase tracking-wider text-[#6E6878]">
+            The coin landed <span className="text-[#FFC23D] font-bold">{coin}</span>
           </p>
           {stage === "toss_decision" ? (
             <>
-              <h1 className="font-display font-black text-2xl text-[#F5F7FF]">You won the toss!</h1>
+              <h1 className="font-display font-black text-2xl text-[#1E1B24]">You won the toss!</h1>
               <div className="grid grid-cols-2 gap-3">
                 <Button variant="primary" size="lg" className="font-bold" onClick={() => startMatch(ME)}>
                   Bat first
@@ -378,8 +378,8 @@ export function HandCricketSolo() {
             </>
           ) : (
             <>
-              <h1 className="font-display font-black text-2xl text-[#F5F7FF]">Bot won the toss and chose to {botChoice}</h1>
-              <p className="text-sm text-[#B8C3E0]">
+              <h1 className="font-display font-black text-2xl text-[#1E1B24]">Bot won the toss and chose to {botChoice}</h1>
+              <p className="text-sm text-[#6E6878]">
                 {botChoice === "bat" ? "You'll bowl first, then chase." : "You'll bat first and set the target."}
               </p>
               <Button
@@ -409,7 +409,7 @@ export function HandCricketSolo() {
             bowlerLine={crease.bowlerLine}
           />
 
-          <div className="rounded-3xl border border-[rgba(255,255,255,0.08)] bg-[#101638]/80 p-4 sm:p-5 space-y-4 shadow-xl">
+          <div className="rounded-3xl border border-[rgba(30,27,36,0.08)] bg-[#FFFFFF]/80 p-4 sm:p-5 space-y-4 shadow-xl">
             <div className="flex items-center justify-center gap-3 sm:gap-6">
               {/* Me: always on the left */}
               <HandTile
@@ -419,7 +419,7 @@ export function HandCricketSolo() {
                 hasThrown={false}
                 highlight={inReveal ? highlight : null}
               />
-              <span className="font-display font-black text-lg text-[#8B98B5]" aria-hidden="true">vs</span>
+              <span className="font-display font-black text-lg text-[#6E6878]" aria-hidden="true">vs</span>
               {/* Bot: always on the right */}
               <HandTile
                 team={TEAM.B}
@@ -434,7 +434,7 @@ export function HandCricketSolo() {
               <p
                 className={cn(
                   "text-center font-display font-black text-2xl animate-rps-pop",
-                  revealBall.isOut ? "text-[#FF5370]" : revealBall.runs > 0 ? "text-[#39DFFF]" : "text-[#8B98B5]",
+                  revealBall.isOut ? "text-[#E5484D]" : revealBall.runs > 0 ? "text-[#FF5A3C]" : "text-[#6E6878]",
                 )}
               >
                 {revealBall.isOut
@@ -473,12 +473,12 @@ export function HandCricketSolo() {
 
       {/* ── Innings break ────────────────────────────────────────────────────── */}
       {stage === "innings_break" && match && (
-        <div className="rounded-3xl border border-[#FBBF24]/40 bg-[#101638] p-6 text-center space-y-4 shadow-xl animate-slide-up">
-          <p className="text-xs font-mono uppercase tracking-wider text-[#FBBF24]">Innings break</p>
-          <h2 className="font-display font-black text-xl text-[#F5F7FF]">
+        <div className="rounded-3xl border border-[#FFC23D]/40 bg-[#FFFFFF] p-6 text-center space-y-4 shadow-xl animate-slide-up">
+          <p className="text-xs font-mono uppercase tracking-wider text-[#FFC23D]">Innings break</p>
+          <h2 className="font-display font-black text-xl text-[#1E1B24]">
             {TEAM[match.firstBatter]} made {match.innings1.runs}/{match.innings1.wickets} in {formatOvers(match.innings1.balls)} overs
           </h2>
-          <p className="text-sm text-[#B8C3E0]">
+          <p className="text-sm text-[#6E6878]">
             {currentBatter(match) === ME ? `You need ${match.target} to win.` : `Bot needs ${match.target} to win. Defend it!`}
           </p>
           <Button
@@ -518,16 +518,16 @@ function SoloResult({
   const second = otherSide(first);
 
   return (
-    <div className="rounded-3xl border border-[rgba(57,223,255,0.25)] bg-[#101638] p-6 space-y-5 shadow-2xl animate-slide-up">
+    <div className="rounded-3xl border border-[rgba(255,90,60,0.25)] bg-[#FFFFFF] p-6 space-y-5 shadow-2xl animate-slide-up">
       <div className="text-center space-y-2">
         <div
           className={cn(
             "w-16 h-16 mx-auto rounded-2xl border flex items-center justify-center",
             match.isDraw
-              ? "bg-[#070B25] border-[rgba(255,255,255,0.12)] text-[#B8C3E0]"
+              ? "bg-[#FFF6EC] border-[rgba(30,27,36,0.12)] text-[#6E6878]"
               : iWon
-              ? "bg-[#39DFFF]/15 border-[#39DFFF]/40 text-[#39DFFF]"
-              : "bg-[#FF5370]/15 border-[#FF5370]/40 text-[#FF5370]",
+              ? "bg-[#FF5A3C]/15 border-[#FF5A3C]/40 text-[#FF5A3C]"
+              : "bg-[#E5484D]/15 border-[#E5484D]/40 text-[#E5484D]",
           )}
         >
           {match.isDraw ? (
@@ -538,10 +538,10 @@ function SoloResult({
             <XCircle className="w-8 h-8" aria-hidden="true" />
           )}
         </div>
-        <h2 className="font-display font-black text-2xl text-[#F5F7FF]">
+        <h2 className="font-display font-black text-2xl text-[#1E1B24]">
           {match.isDraw ? "It's a tie!" : iWon ? "You won!" : "Bot wins"}
         </h2>
-        {summary && <p className="text-sm text-[#B8C3E0]">{summary}</p>}
+        {summary && <p className="text-sm text-[#6E6878]">{summary}</p>}
       </div>
 
       <InningsCard

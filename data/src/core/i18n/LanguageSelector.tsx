@@ -32,12 +32,12 @@ export function LanguageSelector({
         className={cn(
           "evo-btn evo-btn-ghost evo-btn-sm flex items-center gap-2 min-h-[38px] px-3 py-1.5",
           isDark
-            ? "text-[#B8C3E0] hover:text-[#F5F7FF] border border-[#315BFF]/35 bg-[#101638]/90 hover:bg-[#182352] rounded-xl"
-            : "text-[#65736F] hover:text-[#203331] border border-[#E2E8E2] bg-white hover:bg-[#F7F8F4]"
+            ? "text-[#6E6878] hover:text-[#1E1B24] border border-[#EADBC8] bg-[#FFFFFF]/90 hover:bg-[#F5EADC] rounded-xl"
+            : "text-[#6E6878] hover:text-[#1E1B24] border border-[#EADBC8] bg-white hover:bg-[#FFF6EC]"
         )}
       >
         <Globe
-          className={cn("h-4 w-4 shrink-0", isDark ? "text-[#39DFFF]" : "text-[#167D78]")}
+          className={cn("h-4 w-4 shrink-0", isDark ? "text-[#FF5A3C]" : "text-[#FF5A3C]")}
           aria-hidden="true"
         />
         {!compact && (
@@ -50,8 +50,8 @@ export function LanguageSelector({
         className={cn(
           "absolute right-0 top-full mt-1 z-50",
           isDark
-            ? "bg-[#101638] rounded-xl p-1.5 shadow-2xl border border-[#315BFF]/35 backdrop-blur-xl"
-            : "bg-white rounded-lg p-1 shadow-lg border border-[#E2E8E2]",
+            ? "bg-[#FFFFFF] rounded-xl p-1.5 shadow-2xl border border-[#EADBC8] backdrop-blur-xl"
+            : "bg-white rounded-lg p-1 shadow-lg border border-[#EADBC8]",
           "opacity-0 invisible group-hover:opacity-100 group-hover:visible",
           "translate-y-1 group-hover:translate-y-0",
           "transition-all duration-150",
@@ -66,11 +66,11 @@ export function LanguageSelector({
               "w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-colors cursor-pointer",
               locale === loc
                 ? isDark
-                  ? "bg-[#315BFF]/30 text-[#39DFFF] font-semibold"
-                  : "bg-[#DDF2EB] text-[#167D78] font-semibold"
+                  ? "bg-[#8C7BFF]/30 text-[#FF5A3C] font-semibold"
+                  : "bg-[#FFE4DD] text-[#FF5A3C] font-semibold"
                 : isDark
-                ? "text-[#B8C3E0] hover:text-[#F5F7FF] hover:bg-[#070B25]"
-                : "text-[#65736F] hover:text-[#203331] hover:bg-[#F7F8F4]"
+                ? "text-[#6E6878] hover:text-[#1E1B24] hover:bg-[#FFF6EC]"
+                : "text-[#6E6878] hover:text-[#1E1B24] hover:bg-[#FFF6EC]"
             )}
             lang={loc}
             aria-current={locale === loc ? "true" : undefined}

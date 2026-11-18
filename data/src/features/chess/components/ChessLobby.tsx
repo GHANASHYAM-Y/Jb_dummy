@@ -9,7 +9,11 @@ import {
   Play,
   ArrowRight,
 } from "lucide-react";
-import { Button, Avatar, Spinner } from "@/shared/ui";
+import { Button } from "@/shared/ui";
+import {
+  LobbyFrame, LobbyBackLink, LobbyHero, LobbyCard, PickWhoRow, NumberedRules,
+  InviteRailCard, RecordRailCard, heroCtaClass, type PickFriend,
+} from "@/shared/game/LobbyChrome";
 import type { FriendEntry } from "@/core/supabase/database";
 
 interface ActiveChessMatch {
@@ -81,31 +85,54 @@ export function ChessLobby({ friends, activeMatches = [] }: ChessLobbyProps) {
   };
 
   return (
-    <div className="flex flex-col gap-6 sm:gap-8 select-none">
+    <LobbyFrame
+      rail={
+        <>
+          <InviteRailCard label="Challenge a friend to a timed duel. The winner gets to dare the loser." />
+          <RecordRailCard />
+        </>
+      }
+    >
+      <LobbyBackLink />
+
+      <LobbyHero
+        color="lilac"
+        emoji="♟️"
+        eyebrow="Strategy Arena"
+        title="Speed Chess"
+        tagline="Server-authoritative FIDE rules, timed blitz clocks, and post-game Dares for the vanquished."
+        chips={["1v1", "Live clocks", "Dare for the loser"]}
+      >
+        <a href="#chess-pick" className={heroCtaClass}>
+          <Play className="w-4 h-4 fill-current" aria-hidden="true" />
+          Challenge a friend
+        </a>
+      </LobbyHero>
+
       {/* ── 1. Resume Active Matches (Recovery / Reconnect) ──────────────────── */}
       {activeMatches.length > 0 && (
-        <div className="bg-[#101638] border border-[rgba(57,223,255,0.25)] rounded-3xl p-6 shadow-xl">
+        <LobbyCard tone="hot">
           <div className="flex items-center gap-2.5 mb-4">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#39DFFF] animate-pulse shadow-[0_0_8px_#39DFFF]" />
-            <h2 className="font-display font-bold text-base text-[#F5F7FF]">Active Matches in Progress</h2>
+            <span className="w-2.5 h-2.5 rounded-full bg-white animate-pulse" />
+            <h2 className="font-display font-bold text-lg text-white">Active Matches in Progress</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
             {activeMatches.map((m) => (
               <div
                 key={m.id}
-                className="flex items-center justify-between p-4 bg-[#070B25]/80 border border-[rgba(255,255,255,0.08)] rounded-2xl hover:border-[#39DFFF]/40 transition-colors"
+                className="flex items-center justify-between gap-3 p-4 bg-white border-2 border-white rounded-[22px]"
               >
-                <div>
-                  <p className="font-bold text-sm text-[#F5F7FF]">{m.opponent_name}</p>
-                  <p className="text-xs text-[#B8C3E0] mt-0.5">
+                <div className="min-w-0">
+                  <p className="font-bold text-sm text-[#1E1B24] truncate">{m.opponent_name}</p>
+                  <p className="text-xs mt-0.5">
                     {m.is_my_turn ? (
-                      <span className="text-[#39DFFF] font-bold">Your turn to move</span>
+                      <span className="text-[#C9381F] font-bold">Your turn to move</span>
                     ) : (
-                      <span className="text-[#8B98B5]">Opponent&apos;s turn</span>
+                      <span className="text-[#6E6878]">Opponent&apos;s turn</span>
                     )}
                   </p>
                 </div>
-                <Link href={`/play/chess/${m.id}`}>
+                <Link href={`/play/chess/${m.id}`} className="shrink-0">
                   <Button variant="primary" size="sm" className="font-bold">
                     Resume <ArrowRight className="w-3.5 h-3.5 ml-1" />
                   </Button>
@@ -113,102 +140,116 @@ export function ChessLobby({ friends, activeMatches = [] }: ChessLobbyProps) {
               </div>
             ))}
           </div>
-        </div>
+        </LobbyCard>
       )}
 
       {/* ── 2. Match Settings (Time Control & Color) ─────────────────────────── */}
-      <div className="bg-[#101638] border border-[rgba(255,255,255,0.08)] rounded-3xl p-6 sm:p-7 shadow-xl space-y-6">
+      <LobbyCard className="space-y-5">
         <div>
-          <h2 className="font-display font-extrabold text-xl text-[#F5F7FF] mb-1">
-            Game Settings
-          </h2>
-          <p className="text-[#B8C3E0] text-xs sm:text-sm">
+          <h2 className="font-display font-bold text-xl text-[#1E1B24] mb-1">Game Settings</h2>
+          <p className="text-[#6E6878] text-sm">
             Choose clock timing and piece color before issuing a challenge.
           </p>
         </div>
 
-        {/* Time Control Buttons */}
+        {/* Time Control pill segment */}
         <div>
-          <label className="block text-xs font-bold uppercase tracking-wider text-[#39DFFF] mb-3">
+          <p id="chess-clock-label" className="text-xs font-extrabold uppercase tracking-wider text-[#6E6878] mb-2">
             Time Control
-          </label>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            {TIME_OPTIONS.map((opt) => (
-              <button
-                key={opt.label}
-                type="button"
-                onClick={() => setTimeControl(opt)}
-                className={`flex items-center justify-center gap-2 p-3.5 rounded-2xl border text-sm font-bold transition-all ${
-                  timeControl.label === opt.label
-                    ? "bg-[#39DFFF]/15 border-[#39DFFF] text-[#39DFFF] shadow-[0_0_12px_rgba(57,223,255,0.2)]"
-                    : "bg-[#070B25] border-[rgba(255,255,255,0.08)] text-[#B8C3E0] hover:border-[rgba(57,223,255,0.3)] hover:text-[#F5F7FF]"
-                }`}
-              >
-                <Clock className="w-4 h-4" />
-                <span>{opt.label}</span>
-              </button>
-            ))}
+          </p>
+          <div
+            role="radiogroup"
+            aria-labelledby="chess-clock-label"
+            className="flex flex-col sm:flex-row gap-1 p-1 rounded-[26px] sm:rounded-full bg-[#F5EADC]"
+          >
+            {TIME_OPTIONS.map((opt) => {
+              const active = timeControl.label === opt.label;
+              return (
+                <button
+                  key={opt.label}
+                  type="button"
+                  role="radio"
+                  aria-checked={active}
+                  onClick={() => setTimeControl(opt)}
+                  className={`flex-1 flex items-center justify-center gap-2 min-h-[44px] px-4 rounded-full text-sm font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C] ${
+                    active
+                      ? "bg-white text-[#1E1B24] border-2 border-[#EADBC8] shadow-[0_2px_0_#EADBC8]"
+                      : "text-[#6E6878] border-2 border-transparent hover:text-[#1E1B24]"
+                  }`}
+                >
+                  <Clock className="w-4 h-4" aria-hidden="true" />
+                  <span>{opt.label}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        {/* Color Preference */}
+        {/* Color Preference pill segment */}
         <div>
-          <label className="block text-xs font-bold uppercase tracking-wider text-[#39DFFF] mb-3">
+          <p id="chess-color-label" className="text-xs font-extrabold uppercase tracking-wider text-[#6E6878] mb-2">
             Color Preference
-          </label>
-          <div className="grid grid-cols-3 gap-3">
+          </p>
+          <div
+            role="radiogroup"
+            aria-labelledby="chess-color-label"
+            className="grid grid-cols-3 gap-1 p-1 rounded-full bg-[#F5EADC]"
+          >
             {[
               { val: "random", label: "Random 50/50" },
               { val: "white", label: "White Pieces" },
               { val: "black", label: "Black Pieces" },
-            ].map((c) => (
-              <button
-                key={c.val}
-                type="button"
-                onClick={() => setPreferredColor(c.val as "random" | "white" | "black")}
-                className={`p-3 rounded-2xl border text-xs font-bold transition-all text-center ${
-                  preferredColor === c.val
-                    ? "bg-[#39DFFF]/15 border-[#39DFFF] text-[#39DFFF] shadow-[0_0_12px_rgba(57,223,255,0.2)]"
-                    : "bg-[#070B25] border-[rgba(255,255,255,0.08)] text-[#B8C3E0] hover:border-[rgba(57,223,255,0.3)] hover:text-[#F5F7FF]"
-                }`}
-              >
-                {c.label}
-              </button>
-            ))}
+            ].map((c) => {
+              const active = preferredColor === c.val;
+              return (
+                <button
+                  key={c.val}
+                  type="button"
+                  role="radio"
+                  aria-checked={active}
+                  onClick={() => setPreferredColor(c.val as "random" | "white" | "black")}
+                  className={`min-h-[44px] px-2 rounded-full text-xs sm:text-sm font-bold transition-all text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C] ${
+                    active
+                      ? "bg-white text-[#1E1B24] border-2 border-[#EADBC8] shadow-[0_2px_0_#EADBC8]"
+                      : "text-[#6E6878] border-2 border-transparent hover:text-[#1E1B24]"
+                  }`}
+                >
+                  {c.label}
+                </button>
+              );
+            })}
           </div>
         </div>
-      </div>
+      </LobbyCard>
 
-      {/* ── 3. Challenge a Friend List ───────────────────────────────────────── */}
-      <div className="bg-[#101638] border border-[rgba(255,255,255,0.08)] rounded-3xl p-6 sm:p-7 shadow-xl space-y-5">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="font-display font-extrabold text-xl text-[#F5F7FF]">
-              Challenge a Friend
-            </h2>
-            <p className="text-[#B8C3E0] text-xs sm:text-sm mt-0.5">
-              Instant 1-on-1 Speed Chess duel with authoritative move validation.
+      {/* ── 3. Pick who to play ──────────────────────────────────────────────── */}
+      <LobbyCard className="space-y-4">
+        <div id="chess-pick" className="flex items-center justify-between gap-3 scroll-mt-24">
+          <div className="min-w-0">
+            <h2 className="font-display font-bold text-xl text-[#1E1B24]">Pick who to play</h2>
+            <p className="text-[#6E6878] text-sm mt-0.5">
+              Tap a friend to start an instant 1-on-1 Speed Chess duel.
             </p>
           </div>
-          <Link href="/friends">
-            <Button variant="ghost" size="sm" className="text-xs text-[#39DFFF] hover:text-[#39DFFF]/80">
+          <Link href="/friends" className="shrink-0">
+            <Button variant="ghost" size="sm" className="text-xs text-[#FF5A3C] hover:text-[#C9381F]">
               Find Friends <ArrowRight className="w-3.5 h-3.5 ml-1" />
             </Button>
           </Link>
         </div>
 
         {errorMsg && (
-          <div className="p-3.5 bg-[rgba(255,83,112,0.1)] border border-[rgba(255,83,112,0.3)] rounded-2xl text-xs text-[#FF5370] font-medium">
+          <div role="alert" className="p-3.5 bg-[#FFE4DD] border-2 border-[#E5484D]/40 rounded-[18px] text-xs text-[#B42318] font-medium">
             {errorMsg}
           </div>
         )}
 
         {friends.length === 0 ? (
-          <div className="p-8 text-center bg-[#070B25]/60 border border-dashed border-[rgba(255,255,255,0.15)] rounded-2xl space-y-3">
-            <Users className="w-8 h-8 text-[#8B98B5] mx-auto" />
+          <div className="p-8 text-center bg-[#FFF6EC] border-2 border-dashed border-[#EADBC8] rounded-[22px] space-y-3">
+            <Users className="w-8 h-8 text-[#6E6878] mx-auto" />
             <div>
-              <p className="font-bold text-sm text-[#F5F7FF]">No Friends Connected Yet</p>
-              <p className="text-xs text-[#B8C3E0] mt-1">
+              <p className="font-bold text-sm text-[#1E1B24]">No Friends Connected Yet</p>
+              <p className="text-xs text-[#6E6878] mt-1">
                 Add friends using their Evoora ID to challenge them to Speed Chess duels.
               </p>
             </div>
@@ -219,47 +260,33 @@ export function ChessLobby({ friends, activeMatches = [] }: ChessLobbyProps) {
             </Link>
           </div>
         ) : (
-          <div className="divide-y divide-[rgba(255,255,255,0.06)]">
-            {friends.map((friend) => {
-              const isChallenging = loadingFriendId === friend.friend_id;
-              return (
-                <div key={friend.friend_id} className="py-3.5 flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-3 min-w-0">
-                    <Avatar
-                      src={friend.avatar_url ?? undefined}
-                      name={friend.display_name}
-                      className="w-10 h-10 border border-[rgba(57,223,255,0.25)] shrink-0"
-                    />
-                    <div className="min-w-0">
-                      <p className="font-bold text-sm text-[#F5F7FF] truncate">
-                        {friend.display_name}
-                      </p>
-                      <p className="text-[11px] font-mono text-[#39DFFF] truncate">
-                        {friend.evoora_id ?? "EVO-ID"}
-                      </p>
-                    </div>
-                  </div>
-
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    onClick={() => handleChallenge(friend.friend_id)}
-                    disabled={Boolean(loadingFriendId)}
-                    className="shrink-0 font-bold"
-                  >
-                    {isChallenging ? (
-                      <Spinner className="w-3.5 h-3.5 mr-1" />
-                    ) : (
-                      <Play className="w-3.5 h-3.5 mr-1 fill-current" />
-                    )}
-                    Challenge
-                  </Button>
-                </div>
-              );
-            })}
-          </div>
+          <PickWhoRow
+            title="Challenge"
+            friends={friends.map((friend): PickFriend => ({
+              id: friend.friend_id,
+              name: friend.display_name,
+              avatar: friend.avatar_url,
+              ariaLabel: `Challenge ${friend.display_name}`,
+              disabled: Boolean(loadingFriendId),
+              busy: loadingFriendId === friend.friend_id,
+            }))}
+            onPick={handleChallenge}
+          />
         )}
-      </div>
-    </div>
+      </LobbyCard>
+
+      {/* ── 4. Rules ─────────────────────────────────────────────────────────── */}
+      <LobbyCard className="space-y-3">
+        <h2 className="font-display font-bold text-xl text-[#1E1B24]">How it works</h2>
+        <NumberedRules
+          rules={[
+            "Pick a clock and your colour, then challenge a friend.",
+            "Standard FIDE rules. The server checks every move.",
+            "Run out of time and you lose, so watch the clock.",
+            "The winner gets to dare the loser after the game.",
+          ]}
+        />
+      </LobbyCard>
+    </LobbyFrame>
   );
 }

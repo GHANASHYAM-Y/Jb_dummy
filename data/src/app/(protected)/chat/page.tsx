@@ -29,10 +29,6 @@ export default async function ChatPage() {
   const friends: FriendEntry[] = friendsData ?? [];
 
   return (
-    <div className="evo-section py-4 sm:py-6">
-      <div className="evo-container max-w-6xl">
-        <ChatStoriesClient userId={user.id} initialFriends={friends} />
-      </div>
-    </div>
+    <ChatStoriesClient userId={user.id} initialFriends={friends} />
   );
 }

@@ -3,8 +3,9 @@ import { redirect } from "next/navigation";
 import { connection } from "next/server";
 import { createServerSupabaseClient, getServerUser } from "@/core/supabase/server";
 import { DeleteAccountSection } from "@/core/settings/DeleteAccountSection";
+import { SignOutRow } from "@/core/settings/SignOutRow";
 import { ProfileEditForm } from "@/core/profile/ProfileEditForm";
-import { Shield, UserCircle } from "lucide-react";
+import { ChevronRight, KeyRound, Mail, Pencil, UserX } from "lucide-react";
 import Link from "next/link";
 import type { Profile } from "@/core/supabase/database";
 
@@ -13,6 +14,10 @@ export const metadata: Metadata = {
   description: "Manage your EVOAIQU account settings.",
   robots: { index: false },
 };
+
+const rowCls =
+  "flex items-center gap-3.5 w-full min-h-[64px] p-3.5 rounded-[22px] border-2 border-[#EADBC8] bg-white text-left transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C] cursor-pointer";
+const iconCls = "w-11 h-11 rounded-full flex items-center justify-center shrink-0";
 
 export default async function SettingsPage() {
   await connection();
@@ -30,77 +35,92 @@ export default async function SettingsPage() {
   const profile = profileData as Profile | null;
 
   return (
-    <div className="py-8 sm:py-12 min-h-[calc(100vh-5rem)]">
-      <div className="evo-container max-w-3xl">
-        {/* Header */}
-        <div className="mb-8 animate-fade-in">
-          <h1 className="font-display font-black text-3xl sm:text-4xl text-[#F5F7FF] tracking-tight mb-2">
+    <div className="px-4 sm:px-7 py-6 min-h-[calc(100vh-5rem)]">
+      <div className="max-w-[860px] mx-auto">
+        <div className="mb-6 animate-fade-in">
+          <h1 className="font-display font-semibold text-[32px] leading-tight text-[#1E1B24] mb-1">
             Settings
           </h1>
-          <p className="text-[#B8C3E0] text-base leading-relaxed">
+          <p className="text-[#6E6878] text-base leading-relaxed">
             Manage your account security and preferences.
           </p>
         </div>
 
-        <div className="space-y-8">
-          {/* Profile section shortcut */}
-          {profile && (
-            <section className="animate-slide-up" aria-labelledby="profile-settings-heading">
-              <div className="flex items-center gap-2.5 mb-4">
-                <UserCircle className="h-5 w-5 text-[#39DFFF]" />
-                <h2 id="profile-settings-heading" className="font-display font-bold text-xl text-[#F5F7FF]">
-                  Profile
-                </h2>
-              </div>
-              <ProfileEditForm profile={profile} />
-            </section>
-          )}
-
-          {!profile && (
-            <div className="rounded-2xl p-6 border border-[rgba(255,83,112,0.3)] bg-[#101638]">
-              <p className="text-[#FF5370] font-bold mb-1">Profile not available</p>
-              <p className="text-[#B8C3E0] text-sm">
-                Apply the database migration to enable profile settings.
-              </p>
-            </div>
-          )}
-
-          <hr className="evo-divider my-8" />
-
-          {/* Security section */}
-          <section className="animate-slide-up" style={{ animationDelay: "80ms" }} aria-labelledby="security-settings-heading">
-            <div className="flex items-center gap-2.5 mb-4">
-              <Shield className="h-5 w-5 text-[#39DFFF]" />
-              <h2 id="security-settings-heading" className="font-display font-bold text-xl text-[#F5F7FF]">
-                Security
-              </h2>
-            </div>
-            <div className="rounded-2xl p-6 space-y-4 bg-[#101638] border border-[rgba(255,255,255,0.08)] shadow-[0_0_24px_rgba(0,0,0,0.25)]">
-              <div>
-                <p className="text-[#F5F7FF] text-sm font-semibold">Email address</p>
-                <p className="text-[#B8C3E0] font-mono text-sm mt-1">{user.email}</p>
-              </div>
-              <hr className="evo-divider my-2" />
-              <div>
-                <p className="text-[#F5F7FF] text-sm font-semibold mb-1">Password</p>
-                <p className="text-[#B8C3E0] text-xs mb-3 leading-relaxed">
-                  To change your password, send a recovery link to your registered email address.
+        <div className="space-y-6">
+          {/* Profile */}
+          <section className="animate-slide-up space-y-3" aria-labelledby="profile-settings-heading">
+            <h2 id="profile-settings-heading" className="font-display font-semibold text-xl text-[#1E1B24] px-1">
+              Profile
+            </h2>
+            {profile ? (
+              <details className="group">
+                <summary className={`${rowCls} list-none [&::-webkit-details-marker]:hidden`}>
+                  <span className={`${iconCls} bg-[#FFE4DD] text-[#C9381F]`}>
+                    <Pencil className="h-5 w-5" />
+                  </span>
+                  <span className="flex-1 min-w-0">
+                    <span className="block font-bold text-sm text-[#1E1B24]">Edit profile</span>
+                    <span className="block text-xs text-[#6E6878]">Name, bio, language and visibility</span>
+                  </span>
+                  <ChevronRight className="h-5 w-5 text-[#8E8798] transition-transform group-open:rotate-90" />
+                </summary>
+                <div className="b-card mt-3">
+                  <ProfileEditForm profile={profile} />
+                </div>
+              </details>
+            ) : (
+              <div className="b-card !border-[#F6C9CB]">
+                <p className="text-[#E5484D] font-bold mb-1">Profile not available</p>
+                <p className="text-[#6E6878] text-sm">
+                  Apply the database migration to enable profile settings.
                 </p>
-                <Link
-                  href="/auth/reset-password"
-                  className="text-[#39DFFF] hover:text-[#5B7BFF] transition-colors text-sm font-semibold inline-flex items-center gap-1.5"
-                >
-                  Send password reset email →
-                </Link>
               </div>
-            </div>
+            )}
+
+            <Link href="/friends" className={rowCls}>
+              <span className={`${iconCls} bg-[#FFF1CC] text-[#8A5F00]`}>
+                <UserX className="h-5 w-5" />
+              </span>
+              <span className="flex-1 min-w-0">
+                <span className="block font-bold text-sm text-[#1E1B24]">Blocked players</span>
+                <span className="block text-xs text-[#6E6878]">View and unblock users you have blocked</span>
+              </span>
+              <ChevronRight className="h-5 w-5 text-[#8E8798]" />
+            </Link>
           </section>
 
-          <hr className="evo-divider my-8" />
+          {/* Security */}
+          <section className="animate-slide-up space-y-3" style={{ animationDelay: "80ms" }} aria-labelledby="security-settings-heading">
+            <h2 id="security-settings-heading" className="font-display font-semibold text-xl text-[#1E1B24] px-1">
+              Security
+            </h2>
+            <div className={`${rowCls} cursor-default hover:translate-y-0`}>
+              <span className={`${iconCls} bg-[#E3FAF3] text-[#0B7D63]`}>
+                <Mail className="h-5 w-5" />
+              </span>
+              <span className="flex-1 min-w-0">
+                <span className="block font-bold text-sm text-[#1E1B24]">Email address</span>
+                <span className="block font-mono text-xs text-[#6E6878] truncate">{user.email}</span>
+              </span>
+            </div>
+            <Link href="/auth/reset-password" className={rowCls}>
+              <span className={`${iconCls} bg-[#EEEBFF] text-[#4B3FC4]`}>
+                <KeyRound className="h-5 w-5" />
+              </span>
+              <span className="flex-1 min-w-0">
+                <span className="block font-bold text-sm text-[#1E1B24]">Password</span>
+                <span className="block text-xs text-[#6E6878]">
+                  Send a recovery link to your registered email address
+                </span>
+              </span>
+              <ChevronRight className="h-5 w-5 text-[#8E8798]" />
+            </Link>
+            <SignOutRow className={rowCls} />
+          </section>
 
           {/* Danger zone */}
           <section className="animate-slide-up" style={{ animationDelay: "160ms" }} aria-labelledby="danger-zone-heading">
-            <h2 id="danger-zone-heading" className="font-display font-bold text-xl text-[#FF5370] mb-4 flex items-center gap-2">
+            <h2 id="danger-zone-heading" className="font-display font-semibold text-xl text-[#E5484D] mb-3 px-1 flex items-center gap-2">
               ⚠️ Danger Zone
             </h2>
             <DeleteAccountSection />

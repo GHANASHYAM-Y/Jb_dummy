@@ -6,7 +6,6 @@ import {
   Menu, X, ArrowRight, UserCircle, LogIn
 } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
-import { Button } from "@/shared/ui";
 import { createClient } from "@/core/supabase/client";
 
 interface FuturisticLandingNavProps {
@@ -49,167 +48,128 @@ export function FuturisticLandingNav({ user }: FuturisticLandingNavProps) {
     { href: "/about", label: "About" },
   ];
 
+  const pillLink =
+    "inline-flex items-center justify-center gap-2 min-h-[44px] px-5 rounded-full text-sm font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C]";
+
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-full transition-all duration-300",
-        scrolled
-          ? "bg-[#070B25]/92 border-b border-[#315BFF]/25 backdrop-blur-xl shadow-[0_8px_30px_rgba(7,11,37,0.85)] py-3.5 sm:py-4"
-          : "bg-transparent py-5 sm:py-6"
+        "sticky top-0 z-50 w-full transition-all duration-300 bg-[#FFF6EC]/95 backdrop-blur-xl border-b-2",
+        scrolled ? "border-[#EADBC8] shadow-[0_3px_0_#EADBC8] py-2.5" : "border-transparent py-3.5"
       )}
     >
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-12 lg:px-16">
-        <div className="flex items-center justify-between">
-          
-          {/* ── Brand Logo ── */}
+      <div className="max-w-[1180px] mx-auto px-4 sm:px-7">
+        <div className="flex items-center justify-between gap-3">
+          {/* Brand */}
           <Link
             href="/"
-            className="flex items-center gap-3.5 group select-none shrink-0"
+            className="flex items-center gap-2.5 group select-none shrink-0 rounded-full min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C]"
             aria-label="EVOAIQU Home"
           >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#315BFF] to-[#8B2CFF] flex items-center justify-center shadow-[0_0_16px_rgba(49,91,255,0.4)] border border-[#39DFFF]/40 group-hover:scale-105 transition-transform">
-              <span className="font-display font-black text-sm text-white tracking-wider">
-                EQ
-              </span>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-display font-extrabold text-xl text-[#F5F7FF] tracking-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#39DFFF] group-hover:to-[#8B2CFF] transition-all">
-                EVOAIQU
-              </span>
-              <span className="text-[10px] font-mono font-semibold text-[#B8C3E0] tracking-[0.15em] uppercase -mt-0.5 hidden sm:block">
-                CYBER ARENA
-              </span>
-            </div>
+            <span className="b-logo-mark w-[36px] h-[36px] group-hover:rotate-0 transition-transform" aria-hidden="true">EQ</span>
+            <span className="font-display font-bold text-[1.7rem] leading-none tracking-tight text-[#1E1B24] group-hover:text-[#FF5A3C] transition-colors">
+              EVOAIQU
+            </span>
           </Link>
 
-          {/* ── Desktop Navigation Links ── */}
+          {/* Desktop pill navigation */}
           <nav
             aria-label="Desktop Navigation"
-            className="hidden md:flex items-center gap-2 lg:gap-3 px-3.5 py-1.5 rounded-2xl bg-[#101638]/70 border border-[#315BFF]/25 backdrop-blur-md"
+            className="hidden md:flex items-center gap-1 p-1.5 rounded-full bg-white border-2 border-[#EADBC8]"
           >
             {navLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
-                className="px-4 py-2 rounded-xl text-sm font-semibold text-[#B8C3E0] hover:text-[#F5F7FF] hover:bg-[#315BFF]/15 transition-all cursor-pointer"
+                className="inline-flex items-center min-h-[40px] px-4 rounded-full text-sm font-bold text-[#6E6878] hover:text-[#C9381F] hover:bg-[#FFE4DD] transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C]"
               >
                 {link.label}
               </a>
             ))}
           </nav>
 
-          {/* ── Desktop Right Controls & CTAs ── */}
-          <div className="hidden sm:flex items-center gap-3.5">
+          {/* Desktop CTAs */}
+          <div className="hidden sm:flex items-center gap-2.5">
             {currentUser ? (
-              <div className="flex items-center gap-3">
-                <Link href="/profile">
-                  <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#101638] border border-[#315BFF]/30 text-xs font-semibold text-[#F5F7FF] hover:border-[#39DFFF] transition-colors">
-                    <UserCircle className="w-4 h-4 text-[#39DFFF]" />
-                    <span className="max-w-[120px] truncate">{currentUser.email?.split("@")[0] ?? "Player"}</span>
-                  </div>
+              <>
+                <Link
+                  href="/profile"
+                  className={`${pillLink} bg-white border-2 border-[#EADBC8] text-[#1E1B24] hover:bg-[#F5EADC]`}
+                >
+                  <UserCircle className="w-4 h-4 text-[#FF5A3C]" />
+                  <span className="max-w-[120px] truncate">{currentUser.email?.split("@")[0] ?? "Player"}</span>
                 </Link>
-                <Link href="/games">
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    className="!bg-gradient-to-r !from-[#315BFF] !to-[#8B2CFF] !text-white font-bold shadow-[0_0_16px_rgba(49,91,255,0.4)] px-5 py-2 rounded-xl"
-                  >
-                    Open Arena
-                    <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
-                  </Button>
+                <Link href="/games" className="evo-btn evo-btn-primary evo-btn-sm font-bold">
+                  Open Arena
+                  <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
                 </Link>
-              </div>
+              </>
             ) : (
-              <div className="flex items-center gap-3.5">
-                <Link href="/login">
-                  <button
-                    type="button"
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-[#B8C3E0] hover:text-[#F5F7FF] hover:bg-[#101638] transition-colors"
-                  >
-                    <LogIn className="w-4 h-4 text-[#39DFFF]" />
-                    Log In
-                  </button>
+              <>
+                <Link
+                  href="/login"
+                  className={`${pillLink} bg-white border-2 border-[#EADBC8] text-[#1E1B24] hover:bg-[#F5EADC]`}
+                >
+                  <LogIn className="w-4 h-4 text-[#FF5A3C]" />
+                  Sign in
                 </Link>
-                <Link href="/signup">
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    className="!bg-gradient-to-r !from-[#315BFF] !to-[#8B2CFF] !text-white font-bold shadow-[0_0_20px_rgba(49,91,255,0.45)] px-5 py-2 rounded-xl"
-                  >
-                    Play Now
-                    <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
-                  </Button>
+                <Link href="/signup" className="evo-btn evo-btn-primary evo-btn-sm font-bold">
+                  Sign up
+                  <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
                 </Link>
-              </div>
+              </>
             )}
           </div>
 
-          {/* ── Mobile Hamburger Trigger ── */}
+          {/* Mobile Hamburger Trigger (existing behaviour) */}
           <div className="flex items-center gap-2 sm:hidden">
             <button
               type="button"
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="p-2.5 rounded-xl bg-[#101638] border border-[#315BFF]/30 text-[#F5F7FF] hover:text-[#39DFFF] focus:outline-none focus:ring-2 focus:ring-[#39DFFF] transition-colors"
+              className="w-11 h-11 flex items-center justify-center rounded-full bg-white border-2 border-[#EADBC8] text-[#1E1B24] hover:text-[#FF5A3C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C] transition-colors"
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
               aria-expanded={mobileOpen}
             >
               {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
-
         </div>
       </div>
 
-      {/* ── Mobile Dropdown Drawer ── */}
+      {/* Mobile Dropdown Drawer (existing behaviour) */}
       {mobileOpen && (
-        <div className="sm:hidden border-b border-[#315BFF]/30 bg-[#070B25]/98 backdrop-blur-2xl px-6 pt-4 pb-8 animate-fade-in shadow-2xl">
-          <nav className="flex flex-col gap-2 pt-2 pb-5 border-b border-[#315BFF]/20">
+        <div className="sm:hidden border-b-2 border-[#EADBC8] bg-[#FFF6EC] px-4 pt-3 pb-6 animate-fade-in">
+          <nav className="flex flex-col gap-1.5 pb-4 border-b-2 border-[#EADBC8]">
             {navLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
-                className="flex items-center justify-between px-4 py-3 rounded-xl text-base font-semibold text-[#F5F7FF] hover:bg-[#101638] hover:text-[#39DFFF] transition-colors"
+                className="flex items-center justify-between min-h-[48px] px-5 rounded-full text-base font-bold text-[#1E1B24] bg-white border-2 border-[#EADBC8] hover:text-[#C9381F] transition-colors"
               >
                 <span>{link.label}</span>
-                <span className="text-[#39DFFF] text-sm">→</span>
+                <span className="text-[#FF5A3C] text-sm" aria-hidden="true">→</span>
               </a>
             ))}
           </nav>
 
-          <div className="flex flex-col gap-3 pt-5">
+          <div className="flex flex-col gap-3 pt-4">
             {currentUser ? (
               <>
-                <Link
-                  href="/games"
-                  onClick={() => setMobileOpen(false)}
-                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#315BFF] to-[#8B2CFF] text-white text-center font-bold text-sm shadow-md"
-                >
+                <Link href="/games" onClick={() => setMobileOpen(false)} className="evo-btn evo-btn-primary evo-btn-lg w-full font-bold">
                   Enter Game Arena
                 </Link>
-                <Link
-                  href="/profile"
-                  onClick={() => setMobileOpen(false)}
-                  className="w-full py-3 rounded-xl bg-[#101638] border border-[#315BFF]/30 text-[#B8C3E0] text-center font-semibold text-xs"
-                >
+                <Link href="/profile" onClick={() => setMobileOpen(false)} className={`${pillLink} w-full bg-white border-2 border-[#EADBC8] text-[#1E1B24]`}>
                   My Profile
                 </Link>
               </>
             ) : (
               <>
-                <Link
-                  href="/signup"
-                  onClick={() => setMobileOpen(false)}
-                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#315BFF] to-[#8B2CFF] text-white text-center font-bold text-sm shadow-[0_0_20px_rgba(49,91,255,0.4)]"
-                >
-                  Play Now — Free Registration
+                <Link href="/signup" onClick={() => setMobileOpen(false)} className="evo-btn evo-btn-primary evo-btn-lg w-full font-bold">
+                  Sign up, it is free
                 </Link>
-                <Link
-                  href="/login"
-                  onClick={() => setMobileOpen(false)}
-                  className="w-full py-3 rounded-xl bg-[#101638] border border-[#315BFF]/30 text-[#F5F7FF] text-center font-semibold text-xs"
-                >
-                  Log In to Existing Account
+                <Link href="/login" onClick={() => setMobileOpen(false)} className={`${pillLink} w-full bg-white border-2 border-[#EADBC8] text-[#1E1B24]`}>
+                  Sign in
                 </Link>
               </>
             )}

@@ -107,22 +107,5 @@ export default async function LudoLobbyPage() {
     console.warn("[LudoLobbyPage] Falling back to guest view:", err);
   }
 
-  return (
-    <div className="evo-section py-8 sm:py-12">
-      <div className="evo-container max-w-2xl">
-        <div className="mb-8 animate-fade-in">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#101638] border border-[rgba(57,223,255,0.25)] text-[11px] font-mono font-semibold tracking-wider text-[#39DFFF] uppercase mb-3">
-            Board Arena
-          </div>
-          <h1 className="font-display font-black text-3xl sm:text-4xl text-[#F5F7FF] tracking-tight mb-2">Ludo</h1>
-          <p className="text-[#B8C3E0] text-sm sm:text-base leading-relaxed">
-            Roll, race your four tokens round the board and get them home first. Capture anyone who gets in the way.
-          </p>
-          <hr className="evo-divider mt-6" />
-        </div>
-
-        <LudoLobby userId={userId} friends={friends} openMatches={openMatches} />
-      </div>
-    </div>
-  );
+  return <LudoLobby userId={userId} friends={friends} openMatches={openMatches} />;
 }

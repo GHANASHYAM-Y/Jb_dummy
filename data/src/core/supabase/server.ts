@@ -52,18 +52,43 @@ export async function createServerSupabaseClient() {
   );
 }
 
+/** The fields Server Components read from the signed-in user. */
+export interface ServerUser {
+  id: string;
+  email?: string;
+}
+
 /**
- * The signed-in user for the current request, verified with Supabase Auth.
+ * The signed-in user for the current request.
  *
- * Wrapped in React `cache()`, so the layout and the page share ONE
- * `auth.getUser()` network call per request instead of each making their own.
- * Returns the same `{ data: { user }, error }` shape as `supabase.auth.getUser()`.
+ * Uses `auth.getClaims()`, which checks the session JWT's signature locally
+ * against the project's public signing keys (ES256; the key set is cached in
+ * memory). That skips a ~200 ms round trip to Supabase Auth on every page.
+ * The middleware has already confirmed the user with the Auth server
+ * (`getUser()`) earlier in the same request, so this is not the only check.
+ * If the project uses a legacy shared secret, `getClaims()` falls back to a
+ * network check by itself.
+ *
+ * Wrapped in React `cache()`, so the layout and the page share one lookup.
+ * Returns the `{ data: { user }, error }` shape of `supabase.auth.getUser()`.
  * Server Components only; Route Handlers should keep calling `auth.getUser()`.
  */
-export const getServerUser = cache(async () => {
-  const supabase = await createServerSupabaseClient();
-  return supabase.auth.getUser();
-});
+export const getServerUser = cache(
+  async (): Promise<{ data: { user: ServerUser | null }; error: Error | null }> => {
+    const supabase = await createServerSupabaseClient();
+    const { data, error } = await supabase.auth.getClaims();
+    const claims = data?.claims;
+    if (error || !claims?.sub) {
+      return { data: { user: null }, error: error ?? null };
+    }
+    return {
+      data: {
+        user: { id: claims.sub, email: typeof claims.email === "string" ? claims.email : undefined },
+      },
+      error: null,
+    };
+  },
+);
 
 /**
  * Admin/service client — ONLY for trusted server operations (e.g. migrations,

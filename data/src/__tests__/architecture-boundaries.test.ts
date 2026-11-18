@@ -17,7 +17,7 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 
 const SRC = path.resolve(__dirname, "..");
-const FEATURES = ["chess", "dare-game", "hand-cricket", "ludo", "password-game", "rock-paper-scissors"];
+const FEATURES = ["chess", "dare-game", "draw-guess", "hand-cricket", "ludo", "memory-match", "password-game", "rock-paper-scissors", "tic-tac-toe"];
 /** The one feature other features may use (the four match games embed dares). */
 const SHARED_FEATURE = "dare-game";
 

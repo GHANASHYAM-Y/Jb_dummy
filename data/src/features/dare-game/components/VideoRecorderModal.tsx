@@ -260,21 +260,21 @@ export function VideoRecorderModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="video-recorder-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in overflow-y-auto"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1E1B24]/60 animate-fade-in overflow-y-auto"
     >
-      <div className="relative w-full max-w-lg bg-white rounded-3xl border border-[#E2E8E2] shadow-2xl p-6 sm:p-7 overflow-hidden my-6">
+      <div className="relative w-full max-w-lg bg-white rounded-[32px] border-2 border-[#EADBC8] shadow-[0_6px_0_#EADBC8] p-6 sm:p-7 overflow-hidden my-6">
         {/* Header */}
         <div className="flex items-start justify-between gap-4 mb-4">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <span className="w-8 h-8 rounded-xl bg-[#FCE6DE] border border-[rgba(217,95,73,0.3)] flex items-center justify-center text-[#D95F49]">
+              <span className="w-10 h-10 rounded-full bg-[#FFC23D] border-2 border-[#E9A912] flex items-center justify-center text-[#1E1B24]">
                 <Camera className="w-4 h-4" />
               </span>
-              <h2 id="video-recorder-title" className="font-display font-bold text-xl text-[#203331]">
+              <h2 id="video-recorder-title" className="font-display font-bold text-xl text-[#1E1B24]">
                 Record Challenge Video
               </h2>
             </div>
-            <p className="text-xs sm:text-sm text-[#65736F]">
+            <p className="text-xs sm:text-sm text-[#6E6878]">
               {challengeTitle} ({durationSecs}s)
             </p>
           </div>
@@ -282,7 +282,7 @@ export function VideoRecorderModal({
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-xl hover:bg-[#EEF1ED] text-[#65736F] hover:text-[#203331] transition-colors"
+            className="shrink-0 w-11 h-11 rounded-full bg-[#F5EADC] flex items-center justify-center hover:bg-[#EADBC8] text-[#1E1B24] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C]"
             aria-label="Close modal"
           >
             <X className="w-5 h-5" />
@@ -290,8 +290,8 @@ export function VideoRecorderModal({
         </div>
 
         {/* Prompt reminder */}
-        <div className="p-3 rounded-xl bg-[#F7F8F4] border border-[#E2E8E2] text-xs text-[#203331] mb-4">
-          <span className="font-bold text-[#167D78] block mb-0.5">Your Task:</span>
+        <div className="p-4 rounded-[18px] bg-[#FFC23D]/30 border-2 border-[#E9A912] text-sm text-[#1E1B24] mb-4">
+          <span className="font-display font-bold text-[#1E1B24] block mb-0.5">Your Task:</span>
           {challengeInstructions}
         </div>
 
@@ -303,7 +303,7 @@ export function VideoRecorderModal({
 
         {/* Mode Selector Tabs */}
         {!previewUrl && (
-          <div className="flex rounded-xl bg-[#EEF1ED] p-1 mb-4 text-xs font-semibold">
+          <div className="flex rounded-full bg-[#F5EADC] p-1.5 mb-4 text-sm font-bold">
             <button
               type="button"
               onClick={() => {
@@ -311,8 +311,8 @@ export function VideoRecorderModal({
                 setError(null);
               }}
               className={cn(
-                "flex-1 py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-colors",
-                tab === "record" ? "bg-white text-[#203331] shadow-xs" : "text-[#65736F] hover:text-[#203331]"
+                "flex-1 min-h-[44px] rounded-full flex items-center justify-center gap-1.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C]",
+                tab === "record" ? "bg-white text-[#1E1B24] shadow-[0_2px_0_#EADBC8]" : "text-[#6E6878] hover:text-[#1E1B24]"
               )}
             >
               <Video className="w-3.5 h-3.5" /> Camera
@@ -325,8 +325,8 @@ export function VideoRecorderModal({
                 setError(null);
               }}
               className={cn(
-                "flex-1 py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-colors",
-                tab === "upload" ? "bg-white text-[#203331] shadow-xs" : "text-[#65736F] hover:text-[#203331]"
+                "flex-1 min-h-[44px] rounded-full flex items-center justify-center gap-1.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C]",
+                tab === "upload" ? "bg-white text-[#1E1B24] shadow-[0_2px_0_#EADBC8]" : "text-[#6E6878] hover:text-[#1E1B24]"
               )}
             >
               <Upload className="w-3.5 h-3.5" /> Upload File
@@ -335,7 +335,7 @@ export function VideoRecorderModal({
         )}
 
         {/* ── Viewport Area ── */}
-        <div className="relative rounded-2xl overflow-hidden bg-black aspect-4/3 flex items-center justify-center border border-[#E2E8E2] mb-4">
+        <div className="relative rounded-[22px] overflow-hidden bg-[#0F0D14] aspect-4/3 flex items-center justify-center border-2 border-[#EADBC8] mb-4">
           {previewUrl ? (
             /* Video Preview Player */
             <video
@@ -349,8 +349,8 @@ export function VideoRecorderModal({
             /* Live Camera View */
             cameraError ? (
               <div className="p-6 text-center text-white">
-                <AlertTriangle className="w-8 h-8 text-[#D95F49] mx-auto mb-2" />
-                <p className="text-xs text-white/90 mb-3">{cameraError}</p>
+                <AlertTriangle className="w-8 h-8 text-[#FFC23D] mx-auto mb-2" />
+                <p className="text-sm text-white/90 mb-3">{cameraError}</p>
                 <Button variant="secondary" size="sm" onClick={() => setTab("upload")}>
                   Switch to Upload
                 </Button>
@@ -375,8 +375,8 @@ export function VideoRecorderModal({
           ) : (
             /* File Upload Input View */
             <div className="p-6 text-center text-white flex flex-col items-center">
-              <Upload className="w-10 h-10 text-[#167D78] mb-3 animate-bounce" />
-              <p className="text-sm font-semibold mb-1">Choose a video file</p>
+              <Upload className="w-10 h-10 text-[#FFC23D] mb-3 animate-bounce" />
+              <p className="text-base font-display font-bold mb-1">Choose a video file</p>
               <p className="text-xs text-white/70 mb-4">MP4, WebM, or MOV up to 50MB</p>
               <label className="cursor-pointer">
                 <input
@@ -385,7 +385,7 @@ export function VideoRecorderModal({
                   onChange={handleFileChange}
                   className="hidden"
                 />
-                <span className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#167D78] hover:bg-[#12635F] text-white text-xs font-bold transition-colors">
+                <span className="inline-flex items-center gap-2 min-h-[44px] px-6 rounded-full bg-[#FF5A3C] text-white text-sm font-bold shadow-[0_4px_0_#C9381F] transition-transform active:translate-y-[2px]">
                   Select Video
                 </span>
               </label>
@@ -401,7 +401,7 @@ export function VideoRecorderModal({
                 <button
                   type="button"
                   onClick={handleStopRecording}
-                  className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#D95F49] text-white text-xs font-bold hover:bg-[#C34E39] shadow-md active:scale-95 transition-all"
+                  className="flex items-center gap-2 min-h-[48px] px-7 rounded-full bg-[#FF5A3C] text-white text-sm font-bold shadow-[0_4px_0_#C9381F] active:translate-y-[2px] active:shadow-[0_2px_0_#C9381F] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1B24]"
                 >
                   <span className="w-3 h-3 rounded-xs bg-white" /> Stop Recording
                 </button>
@@ -410,7 +410,7 @@ export function VideoRecorderModal({
                   type="button"
                   onClick={handleStartRecording}
                   disabled={!stream}
-                  className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#167D78] text-white text-xs font-bold hover:bg-[#12635F] shadow-md active:scale-95 transition-all disabled:opacity-50"
+                  className="flex items-center gap-2 min-h-[48px] px-7 rounded-full bg-[#FF5A3C] text-white text-sm font-bold shadow-[0_4px_0_#C9381F] active:translate-y-[2px] active:shadow-[0_2px_0_#C9381F] transition-all disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E1B24]"
                 >
                   <span className="w-3 h-3 rounded-full bg-red-400" /> Start Recording
                 </button>
@@ -422,7 +422,7 @@ export function VideoRecorderModal({
             <button
               type="button"
               onClick={handleResetRecord}
-              className="flex items-center gap-1.5 text-xs font-semibold text-[#65736F] hover:text-[#203331] transition-colors"
+              className="flex items-center gap-1.5 min-h-[44px] px-4 rounded-full bg-[#F5EADC] text-sm font-bold text-[#1E1B24] hover:bg-[#EADBC8] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C]"
             >
               <RotateCcw className="w-3.5 h-3.5" /> Re-record / Change
             </button>
@@ -431,8 +431,8 @@ export function VideoRecorderModal({
 
         {/* ── Visibility Choice & Story Disclaimer ── */}
         {previewUrl && (
-          <div className="border-t border-[#E2E8E2] pt-4 mb-5">
-            <label className="block text-xs font-bold text-[#203331] mb-2">
+          <div className="border-t-2 border-[#EADBC8] pt-4 mb-5">
+            <label className="block font-display text-base font-bold text-[#1E1B24] mb-2">
               Choose Story Visibility:
             </label>
             <div className="grid grid-cols-2 gap-3 mb-3">
@@ -440,17 +440,17 @@ export function VideoRecorderModal({
                 type="button"
                 onClick={() => setVisibility("private")}
                 className={cn(
-                  "flex flex-col items-start p-3 rounded-xl border text-left transition-all",
+                  "flex flex-col items-start p-4 min-h-[44px] rounded-[18px] border-2 text-left transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C]",
                   visibility === "private"
-                    ? "border-[#167D78] bg-[#DDF2EB]/40 ring-1 ring-[#167D78]"
-                    : "border-[#E2E8E2] bg-white hover:bg-[#F7F8F4]"
+                    ? "border-[#FF5A3C] bg-[#FFF6EC] shadow-[0_3px_0_#FF5A3C]"
+                    : "border-[#EADBC8] bg-white hover:bg-[#FFF6EC]"
                 )}
               >
-                <div className="flex items-center gap-1.5 text-xs font-bold text-[#203331] mb-1">
-                  <Lock className="w-3.5 h-3.5 text-[#167D78]" />
+                <div className="flex items-center gap-1.5 text-sm font-bold text-[#1E1B24] mb-1">
+                  <Lock className="w-3.5 h-3.5 text-[#FF5A3C]" />
                   <span>Private Story</span>
                 </div>
-                <p className="text-[11px] text-[#65736F] leading-tight">
+                <p className="text-xs text-[#6E6878] leading-snug">
                   Only the match winner (1-time view) and your accepted friends.
                 </p>
               </button>
@@ -459,25 +459,25 @@ export function VideoRecorderModal({
                 type="button"
                 onClick={() => setVisibility("public")}
                 className={cn(
-                  "flex flex-col items-start p-3 rounded-xl border text-left transition-all",
+                  "flex flex-col items-start p-4 min-h-[44px] rounded-[18px] border-2 text-left transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C]",
                   visibility === "public"
-                    ? "border-[#167D78] bg-[#DDF2EB]/40 ring-1 ring-[#167D78]"
-                    : "border-[#E2E8E2] bg-white hover:bg-[#F7F8F4]"
+                    ? "border-[#FF5A3C] bg-[#FFF6EC] shadow-[0_3px_0_#FF5A3C]"
+                    : "border-[#EADBC8] bg-white hover:bg-[#FFF6EC]"
                 )}
               >
-                <div className="flex items-center gap-1.5 text-xs font-bold text-[#203331] mb-1">
-                  <Globe className="w-3.5 h-3.5 text-[#167D78]" />
+                <div className="flex items-center gap-1.5 text-sm font-bold text-[#1E1B24] mb-1">
+                  <Globe className="w-3.5 h-3.5 text-[#FF5A3C]" />
                   <span>Public Story</span>
                 </div>
-                <p className="text-[11px] text-[#65736F] leading-tight">
+                <p className="text-xs text-[#6E6878] leading-snug">
                   Visible to the EVOAIQU community on your profile and story feed.
                 </p>
               </button>
             </div>
 
             {/* 24-Hour Expiry & Retention Notice */}
-            <div className="flex items-start gap-2 p-2.5 rounded-xl bg-[#FFF6F4] border border-[#FCE6DE] text-[11px] text-[#65736F]">
-              <Clock className="w-4 h-4 text-[#D95F49] shrink-0 mt-0.5" />
+            <div className="flex items-start gap-2 p-3 rounded-[18px] bg-[#EEEBFF] border-2 border-[#D7D0FF] text-xs text-[#1E1B24]">
+              <Clock className="w-4 h-4 text-[#5B49D6] shrink-0 mt-0.5" />
               <span>
                 <strong>24-Hour Story Retention:</strong> Your video will automatically expire and its media will be permanently deleted after 24 hours. You control visibility at all times.
               </span>
@@ -487,17 +487,17 @@ export function VideoRecorderModal({
 
         {/* ── Submit / Cancel Footer ── */}
         <div className="flex items-center justify-end gap-3 pt-2">
-          <Button variant="ghost" size="sm" onClick={onClose} disabled={submitting}>
+          <Button variant="ghost" size="md" onClick={onClose} disabled={submitting} className="min-h-[44px]">
             Cancel
           </Button>
 
           {previewUrl && (
             <Button
               variant="primary"
-              size="sm"
+              size="md"
               onClick={handleSubmit}
               disabled={submitting}
-              className="bg-[#167D78] hover:bg-[#12635F]"
+              className="min-h-[44px]"
             >
               {submitting ? (
                 <>

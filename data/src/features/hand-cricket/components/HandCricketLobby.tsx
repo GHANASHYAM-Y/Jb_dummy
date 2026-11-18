@@ -3,11 +3,15 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowRight, Bot, LogIn, Play, Swords, Users } from "lucide-react";
+import { ArrowRight, Bot, LogIn, Swords, Users } from "lucide-react";
 import { createClient } from "@/core/supabase/client";
 import { cn } from "@/shared/lib/utils";
 import { OVER_OPTIONS, type OversOption } from "@/features/hand-cricket/engine/engine";
-import { Avatar, Button, Spinner } from "@/shared/ui";
+import { Avatar, Button } from "@/shared/ui";
+import {
+  LobbyFrame, LobbyBackLink, LobbyHero, LobbyCard, PickWhoRow, InviteRailCard, RecordRailCard,
+  heroCtaClass, type PickFriend,
+} from "@/shared/game/LobbyChrome";
 import type { FriendEntry } from "@/core/supabase/database";
 import type { HandCricketOpenMatch } from "@/features/hand-cricket/types";
 import { HandCricketRules } from "./HandCricketParts";
@@ -77,32 +81,42 @@ export function HandCricketLobby({ userId, friends, openMatches }: HandCricketLo
   };
 
   return (
-    <div className="flex flex-col gap-6 sm:gap-8">
-      {/* ── Solo ─────────────────────────────────────────────────────────────── */}
-      <div className="rounded-3xl border border-[rgba(57,223,255,0.25)] bg-[#101638] p-6 sm:p-7 shadow-xl flex flex-col sm:flex-row sm:items-center gap-5">
-        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#39DFFF]/20 to-[#315BFF]/30 border border-[#39DFFF]/40 flex items-center justify-center text-[#39DFFF] shrink-0">
-          <Bot className="w-7 h-7" aria-hidden="true" />
-        </div>
-        <div className="flex-1 min-w-0">
-          <h2 className="font-display font-extrabold text-xl text-[#F5F7FF]">Play solo</h2>
-          <p className="text-sm text-[#B8C3E0] mt-0.5">
-            Practise against EVO Bot. No sign-in needed, nothing is saved.
-          </p>
-        </div>
-        <Link href="/play/hand-cricket/solo" className="shrink-0">
-          <Button variant="primary" size="md" className="w-full sm:w-auto font-bold">
-            <Play className="w-4 h-4 mr-2 fill-current" />
-            Play vs bot
-          </Button>
+    <LobbyFrame
+      rail={
+        <>
+          <InviteRailCard label="Friends can challenge you to a match. The winner dares the loser." />
+          <RecordRailCard />
+        </>
+      }
+    >
+      <LobbyBackLink />
+
+      <LobbyHero
+        color="mint"
+        emoji="🏏"
+        eyebrow="Hand Arena"
+        title="Hand Cricket"
+        tagline="Throw 1 to 6. Match the batter to get them out, dodge the bowler to score. Two overs each."
+        chips={["Hidden throws", "11 a side", "Dare for the loser"]}
+      >
+        <Link href="/play/hand-cricket/solo" className={heroCtaClass}>
+          <Bot className="w-4 h-4" aria-hidden="true" />
+          Play vs bot
         </Link>
-      </div>
+        {userId && (
+          <a href="#hc-pick" className={heroCtaClass}>
+            <Swords className="w-4 h-4" aria-hidden="true" />
+            Challenge a friend
+          </a>
+        )}
+      </LobbyHero>
 
       {!userId ? (
-        <div className="rounded-3xl border border-[rgba(255,255,255,0.08)] bg-[#101638] p-6 sm:p-7 shadow-xl text-center space-y-3">
-          <Users className="w-8 h-8 text-[#8B98B5] mx-auto" aria-hidden="true" />
+        <LobbyCard className="text-center space-y-3">
+          <Users className="w-8 h-8 text-[#6E6878] mx-auto" aria-hidden="true" />
           <div>
-            <h2 className="font-display font-extrabold text-lg text-[#F5F7FF]">Play your friends</h2>
-            <p className="text-sm text-[#B8C3E0] mt-1">
+            <h2 className="font-display font-bold text-xl text-[#1E1B24]">Play your friends</h2>
+            <p className="text-sm text-[#6E6878] mt-1">
               Sign in to challenge friends. The winner gets to dare the loser.
             </p>
           </div>
@@ -112,15 +126,15 @@ export function HandCricketLobby({ userId, friends, openMatches }: HandCricketLo
               Sign in
             </Button>
           </Link>
-        </div>
+        </LobbyCard>
       ) : (
         <>
           {/* ── Open matches ───────────────────────────────────────────────── */}
           {openMatches.length > 0 && (
-            <div className="rounded-3xl border border-[rgba(57,223,255,0.25)] bg-[#101638] p-6 shadow-xl">
+            <LobbyCard tone="hot">
               <div className="flex items-center gap-2.5 mb-4">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#39DFFF] animate-pulse shadow-[0_0_8px_#39DFFF]" />
-                <h2 className="font-display font-bold text-base text-[#F5F7FF]">Your matches</h2>
+                <span className="w-2.5 h-2.5 rounded-full bg-white animate-pulse" />
+                <h2 className="font-display font-bold text-lg text-white">Your matches</h2>
               </div>
               <ul className="space-y-3">
                 {openMatches.map((m) => {
@@ -128,13 +142,13 @@ export function HandCricketLobby({ userId, friends, openMatches }: HandCricketLo
                   return (
                     <li
                       key={m.id}
-                      className="flex items-center justify-between gap-3 p-4 bg-[#070B25]/80 border border-[rgba(255,255,255,0.08)] rounded-2xl"
+                      className="flex items-center justify-between gap-3 p-4 bg-white border-2 border-white rounded-[22px]"
                     >
                       <div className="flex items-center gap-3 min-w-0">
                         <Avatar src={m.opponent_avatar} name={m.opponent_name} size="sm" />
                         <div className="min-w-0">
-                          <p className="font-bold text-sm text-[#F5F7FF] truncate">{m.opponent_name}</p>
-                          <p className={status.urgent ? "text-xs text-[#39DFFF] font-semibold" : "text-xs text-[#8B98B5]"}>
+                          <p className="font-bold text-sm text-[#1E1B24] truncate">{m.opponent_name}</p>
+                          <p className={status.urgent ? "text-xs text-[#C9381F] font-semibold" : "text-xs text-[#6E6878]"}>
                             {status.label}
                           </p>
                         </div>
@@ -149,28 +163,32 @@ export function HandCricketLobby({ userId, friends, openMatches }: HandCricketLo
                   );
                 })}
               </ul>
-            </div>
+            </LobbyCard>
           )}
 
-          {/* ── Challenge a friend ─────────────────────────────────────────── */}
-          <div className="rounded-3xl border border-[rgba(255,255,255,0.08)] bg-[#101638] p-6 sm:p-7 shadow-xl space-y-5">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <h2 className="font-display font-extrabold text-xl text-[#F5F7FF]">Challenge a friend</h2>
-                <p className="text-[#B8C3E0] text-sm mt-0.5">
+          {/* ── Pick who to play ───────────────────────────────────────────── */}
+          <LobbyCard className="space-y-5">
+            <div id="hc-pick" className="flex items-start justify-between gap-3 scroll-mt-24">
+              <div className="min-w-0">
+                <h2 className="font-display font-bold text-xl text-[#1E1B24]">Pick who to play</h2>
+                <p className="text-[#6E6878] text-sm mt-0.5">
                   11 players a side, hidden throws, and a dare for the loser.
                 </p>
               </div>
               <Link href="/friends" className="shrink-0">
-                <Button variant="ghost" size="sm" className="text-xs text-[#39DFFF]">
+                <Button variant="ghost" size="sm" className="text-xs text-[#FF5A3C]">
                   Find friends <ArrowRight className="w-3.5 h-3.5 ml-1" />
                 </Button>
               </Link>
             </div>
 
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-[#39DFFF] mb-2">Overs per side</p>
-              <div className="grid grid-cols-4 gap-2" role="radiogroup" aria-label="Overs per side">
+              <p id="hc-overs-label" className="text-xs font-extrabold uppercase tracking-wider text-[#6E6878] mb-2">Overs per side</p>
+              <div
+                className="grid grid-cols-4 gap-1 p-1 rounded-full bg-[#F5EADC]"
+                role="radiogroup"
+                aria-label="Overs per side"
+              >
                 {OVER_OPTIONS.map((option) => (
                   <button
                     key={option}
@@ -179,10 +197,10 @@ export function HandCricketLobby({ userId, friends, openMatches }: HandCricketLo
                     aria-checked={overs === option}
                     onClick={() => setOvers(option)}
                     className={cn(
-                      "py-2.5 rounded-2xl border font-display font-black text-lg transition-all",
+                      "min-h-[44px] rounded-full border-2 font-display font-bold text-lg transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C]",
                       overs === option
-                        ? "bg-[#39DFFF]/15 border-[#39DFFF] text-[#39DFFF]"
-                        : "bg-[#070B25] border-[rgba(255,255,255,0.08)] text-[#B8C3E0] hover:border-[#39DFFF]/40",
+                        ? "bg-white border-[#EADBC8] text-[#1E1B24] shadow-[0_2px_0_#EADBC8]"
+                        : "border-transparent text-[#6E6878] hover:text-[#1E1B24]",
                     )}
                   >
                     {option}
@@ -192,59 +210,45 @@ export function HandCricketLobby({ userId, friends, openMatches }: HandCricketLo
             </div>
 
             {errorMsg && (
-              <div className="p-3.5 bg-[rgba(255,83,112,0.1)] border border-[rgba(255,83,112,0.3)] rounded-2xl text-xs text-[#FF5370] font-medium" role="alert">
+              <div className="p-3.5 bg-[#FFE4DD] border-2 border-[#E5484D]/40 rounded-[18px] text-xs text-[#B42318] font-medium" role="alert">
                 {errorMsg}
               </div>
             )}
 
             {friends.length === 0 ? (
-              <div className="p-8 text-center bg-[#070B25]/60 border border-dashed border-[rgba(255,255,255,0.15)] rounded-2xl space-y-3">
-                <Users className="w-8 h-8 text-[#8B98B5] mx-auto" aria-hidden="true" />
+              <div className="p-8 text-center bg-[#FFF6EC] border-2 border-dashed border-[#EADBC8] rounded-[22px] space-y-3">
+                <Users className="w-8 h-8 text-[#6E6878] mx-auto" aria-hidden="true" />
                 <div>
-                  <p className="font-bold text-sm text-[#F5F7FF]">No friends yet</p>
-                  <p className="text-xs text-[#B8C3E0] mt-1">Add friends with their EVOAIQU ID to challenge them.</p>
+                  <p className="font-bold text-sm text-[#1E1B24]">No friends yet</p>
+                  <p className="text-xs text-[#6E6878] mt-1">Add friends with their EVOAIQU ID to challenge them.</p>
                 </div>
                 <Link href="/friends" className="inline-block">
                   <Button variant="primary" size="sm" className="font-bold">Add friends</Button>
                 </Link>
               </div>
             ) : (
-              <ul className="divide-y divide-[rgba(255,255,255,0.06)]">
-                {friends.map((friend) => {
-                  const isLoading = loadingFriendId === friend.friend_id;
-                  return (
-                    <li key={friend.friend_id} className="py-3.5 flex items-center justify-between gap-3">
-                      <div className="flex items-center gap-3 min-w-0">
-                        <Avatar src={friend.avatar_url} name={friend.display_name} />
-                        <div className="min-w-0">
-                          <p className="font-bold text-sm text-[#F5F7FF] truncate">{friend.display_name}</p>
-                          <p className="text-[11px] font-mono text-[#39DFFF] truncate">{friend.evoora_id}</p>
-                        </div>
-                      </div>
-                      <Button
-                        variant="primary"
-                        size="sm"
-                        onClick={() => handleChallenge(friend.friend_id)}
-                        disabled={loadingFriendId !== null}
-                        className="shrink-0 font-bold"
-                      >
-                        {isLoading ? <Spinner size="sm" className="mr-1" /> : <Swords className="w-3.5 h-3.5 mr-1" />}
-                        Challenge
-                      </Button>
-                    </li>
-                  );
-                })}
-              </ul>
+              <PickWhoRow
+                title="Challenge"
+                friends={friends.map((friend): PickFriend => ({
+                  id: friend.friend_id,
+                  name: friend.display_name,
+                  avatar: friend.avatar_url,
+                  ariaLabel: `Challenge ${friend.display_name}`,
+                  disabled: loadingFriendId !== null,
+                  busy: loadingFriendId === friend.friend_id,
+                }))}
+                onPick={handleChallenge}
+              />
             )}
-          </div>
+          </LobbyCard>
         </>
       )}
 
       {/* ── Rules ────────────────────────────────────────────────────────────── */}
-      <div className="rounded-3xl border border-[rgba(255,255,255,0.08)] bg-[#101638] p-6 sm:p-7 shadow-xl space-y-4">
-        <h2 className="font-display font-extrabold text-lg text-[#F5F7FF]">How it works</h2>
+      <LobbyCard className="space-y-4">
+        <h2 className="font-display font-bold text-xl text-[#1E1B24]">How it works</h2>
         <HandCricketRules />
-      </div>
-    </div>
+      </LobbyCard>
+    </LobbyFrame>
   );
 }

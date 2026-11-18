@@ -29,7 +29,9 @@ data/supabase/.temp/
 # Operating System & Editor files
 .DS_Store
 Thumbs.db
-.vscode/
+.vscode/*
+# Shared: one-click server start in VS Code's terminal (Tasks: Run Task)
+!.vscode/tasks.json
 .idea/
 *.swp
 *.swo

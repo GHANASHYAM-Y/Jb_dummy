@@ -6,6 +6,7 @@ import React, {
   useTransition,
   useEffect,
 } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   Users,
@@ -31,8 +32,6 @@ import {
   Input,
   Alert,
   Avatar,
-  Badge,
-  EvoIdBadge,
   Spinner,
 } from "@/shared/ui";
 import { cn, isValidEvoId } from "@/shared/lib/utils";
@@ -74,6 +73,22 @@ interface FriendsClientProps {
   userId: string;
 }
 
+// ── Shared style bits ─────────────────────────────────────────────────────────
+
+const FOCUS = "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C]";
+const PILL_BASE = cn(
+  "inline-flex items-center justify-center gap-1.5 min-h-[44px] px-4 rounded-full text-sm font-bold border-2 transition-colors disabled:opacity-50 disabled:pointer-events-none",
+  FOCUS,
+);
+const PILL_PRIMARY = cn(PILL_BASE, "bg-[#FF5A3C] border-[#FF5A3C] text-white shadow-[0_3px_0_#C9381F] hover:bg-[#FF6B4F]");
+const PILL_GHOST = cn(PILL_BASE, "bg-white border-[#EADBC8] text-[#1E1B24] hover:border-[#1E1B24]");
+const PILL_DANGER_GHOST = cn(PILL_BASE, "bg-white border-[#EADBC8] text-[#E5484D] hover:border-[#E5484D]");
+const ICON_PILL = cn(
+  "inline-flex items-center justify-center min-h-[44px] min-w-[44px] rounded-full border-2 border-[#EADBC8] bg-white text-[#6E6878] transition-colors disabled:opacity-50 disabled:pointer-events-none",
+  FOCUS,
+);
+const CARD = "bg-white border-2 border-[#EADBC8] rounded-[26px] shadow-[0_4px_0_#EADBC8]";
+
 // ── FriendCard ────────────────────────────────────────────────────────────────
 
 function FriendCard({
@@ -89,34 +104,39 @@ function FriendCard({
 }) {
   const { t } = useI18n();
   return (
-    <div className="p-4 sm:p-5 flex items-center gap-4 bg-[#101638] border border-[rgba(255,255,255,0.08)] rounded-2xl animate-fade-in shadow-xl hover:border-[#39DFFF]/30 transition-all">
-      <Avatar src={friend.avatar_url} name={friend.display_name} size="md" className="border border-[rgba(57,223,255,0.25)]" />
+    <div className="px-4 py-3 flex items-center gap-3 animate-fade-in">
+      <Avatar src={friend.avatar_url} name={friend.display_name} size="lg" className="border-2 border-[#EADBC8]" />
       <div className="flex-1 min-w-0">
-        <p className="font-semibold text-[#F5F7FF] truncate">{friend.display_name}</p>
-        <EvoIdBadge id={friend.evoora_id} className="mt-0.5" />
+        <p className="font-bold text-[#1E1B24] truncate">{friend.display_name}</p>
+        <p className="text-xs text-[#6E6878] font-mono truncate">{friend.evoora_id}</p>
       </div>
-      <div className="flex items-center gap-1">
-        <Button
-          variant="ghost"
-          size="sm"
+      <div className="flex items-center gap-1.5 flex-shrink-0">
+        <Link href="/chat" aria-label={`Chat with ${friend.display_name}`} className={ICON_PILL}>
+          <MessageCircle className="h-4 w-4" />
+        </Link>
+        <Link href="/games" className={cn(PILL_PRIMARY, "hidden sm:inline-flex")}>
+          Play
+        </Link>
+        <button
+          type="button"
           onClick={() => onRemove(friend.friend_id, friend.request_id)}
           disabled={busy}
           aria-label={t("friends.remove")}
-          className="text-[#8B98B5] hover:text-[#FF5370] hover:bg-[rgba(255,83,112,0.1)] flex-shrink-0"
+          title={t("friends.remove")}
+          className={cn(ICON_PILL, "hover:text-[#E5484D] hover:border-[#E5484D]")}
         >
           {busy ? <Spinner size="sm" /> : <Trash2 className="h-4 w-4" />}
-        </Button>
-        <Button
-          variant="ghost"
-          size="sm"
+        </button>
+        <button
+          type="button"
           onClick={() => onBlock(friend.friend_id, friend.display_name)}
           disabled={busy}
           aria-label={t("blocks.block")}
           title={t("blocks.block")}
-          className="text-[#8B98B5] hover:text-[#FF5370] hover:bg-[rgba(255,83,112,0.1)] flex-shrink-0"
+          className={cn(ICON_PILL, "hover:text-[#E5484D] hover:border-[#E5484D]")}
         >
           <Ban className="h-4 w-4" />
-        </Button>
+        </button>
       </div>
     </div>
   );
@@ -135,100 +155,113 @@ function BlockedCard({
 }) {
   const { t } = useI18n();
   return (
-    <div className="p-4 sm:p-5 flex items-center gap-4 bg-[#101638] border border-[rgba(255,255,255,0.08)] rounded-2xl animate-fade-in shadow-xl">
-      <Avatar src={user.avatar_url} name={user.display_name} size="md" className="border border-[rgba(255,255,255,0.1)]" />
+    <div className="px-4 py-3 flex items-center gap-3 animate-fade-in">
+      <Avatar src={user.avatar_url} name={user.display_name} size="lg" className="border-2 border-[#EADBC8]" />
       <div className="flex-1 min-w-0">
-        <p className="font-semibold text-[#F5F7FF] truncate">{user.display_name}</p>
-        <EvoIdBadge id={user.evoora_id} className="mt-0.5" />
+        <p className="font-bold text-[#1E1B24] truncate">{user.display_name}</p>
+        <p className="text-xs text-[#6E6878] font-mono truncate">{user.evoora_id}</p>
       </div>
-      <Button
-        variant="ghost"
-        size="sm"
+      <button
+        type="button"
         onClick={() => onUnblock(user.blocked_id, user.display_name)}
         disabled={busy}
-        className="text-[#FF5370] hover:bg-[rgba(255,83,112,0.1)] flex-shrink-0 font-medium"
+        className={cn(PILL_DANGER_GHOST, "flex-shrink-0")}
       >
         {busy ? <Spinner size="sm" /> : t("blocks.unblock")}
-      </Button>
+      </button>
     </div>
   );
 }
 
-// ── UserPreviewCard ───────────────────────────────────────────────────────────
+// ── UserPreviewCard (search results, vertical rows) ───────────────────────────
 
-function UserPreviewCard({
-  user,
-  onSendRequest,
-  onAccept,
-  onCancel,
-  busy,
-}: {
+interface UserCardProps {
   user: UserSearchResult;
   onSendRequest: (evoId: string) => void;
   onAccept: (reqId: string) => void;
   onCancel: (reqId: string) => void;
   busy: boolean;
-}) {
+}
+
+function UserActionPill({ user, onSendRequest, onAccept, onCancel, busy }: UserCardProps) {
   return (
-    <div className="p-4 sm:p-5 flex items-center gap-4 bg-[#101638] border border-[rgba(255,255,255,0.08)] rounded-2xl shadow-xl hover:border-[#39DFFF]/30 transition-all animate-fade-in">
-      <Avatar src={user.avatar_url} name={user.display_name} size="md" className="border border-[rgba(57,223,255,0.25)]" />
+    <>
+      {user.friendship_status === "friend" && (
+        <span className="inline-flex items-center justify-center min-h-[44px] px-4 rounded-full bg-[#E3FAF3] border-2 border-[#B7EEDD] text-[#0B7A60] text-sm font-bold">
+          Friends ✓
+        </span>
+      )}
+      {user.friendship_status === "pending_sent" && (
+        <button
+          type="button"
+          onClick={() => user.request_id && onCancel(user.request_id)}
+          disabled={busy || !user.request_id}
+          className={PILL_GHOST}
+        >
+          Requested (Cancel)
+        </button>
+      )}
+      {user.friendship_status === "pending_received" && (
+        <button
+          type="button"
+          onClick={() => user.request_id && onAccept(user.request_id)}
+          disabled={busy || !user.request_id}
+          className={PILL_PRIMARY}
+        >
+          Accept
+        </button>
+      )}
+      {user.friendship_status === "none" && (
+        <button
+          type="button"
+          onClick={() => onSendRequest(user.evoora_id)}
+          disabled={busy}
+          className={PILL_PRIMARY}
+        >
+          <UserPlus className="h-4 w-4" />
+          Add Friend
+        </button>
+      )}
+    </>
+  );
+}
+
+function UserPreviewCard(props: UserCardProps) {
+  const { user } = props;
+  return (
+    <div className="px-4 py-3 flex items-center gap-3 animate-fade-in">
+      <Avatar src={user.avatar_url} name={user.display_name} size="lg" className="border-2 border-[#EADBC8]" />
       <div className="flex-1 min-w-0">
-        <p className="font-bold text-[#F5F7FF] truncate text-sm">{user.display_name}</p>
-        <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-          <EvoIdBadge id={user.evoora_id} />
-          {user.bio && (
-            <span className="text-xs text-[#B8C3E0] truncate max-w-[220px]">
-              {user.bio}
-            </span>
-          )}
-        </div>
+        <p className="font-bold text-[#1E1B24] truncate">{user.display_name}</p>
+        <p className="text-xs text-[#6E6878] truncate">
+          <span className="font-mono">{user.evoora_id}</span>
+          {user.bio ? ` · ${user.bio}` : ""}
+        </p>
       </div>
       <div className="shrink-0">
-        {user.friendship_status === "friend" && (
-          <span className="px-3 py-1 rounded-xl bg-[#39DFFF]/15 text-[#39DFFF] text-xs font-bold border border-[#39DFFF]/30">
-            Friends ✓
-          </span>
-        )}
-        {user.friendship_status === "pending_sent" && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => user.request_id && onCancel(user.request_id)}
-            disabled={busy || !user.request_id}
-            className="text-xs text-[#B8C3E0] hover:text-[#FF5370]"
-          >
-            Requested (Cancel)
-          </Button>
-        )}
-        {user.friendship_status === "pending_received" && (
-          <Button
-            variant="primary"
-            size="sm"
-            onClick={() => user.request_id && onAccept(user.request_id)}
-            disabled={busy || !user.request_id}
-            className="text-xs font-bold"
-          >
-            Accept
-          </Button>
-        )}
-        {user.friendship_status === "none" && (
-          <Button
-            variant="primary"
-            size="sm"
-            onClick={() => onSendRequest(user.evoora_id)}
-            disabled={busy}
-            className="text-xs font-bold"
-          >
-            <UserPlus className="h-3.5 w-3.5 mr-1" />
-            Add Friend
-          </Button>
-        )}
+        <UserActionPill {...props} />
       </div>
     </div>
   );
 }
 
-// ── RequestCard ───────────────────────────────────────────────────────────────
+// ── SuggestedCard (horizontal "People you may know") ──────────────────────────
+
+function SuggestedCard(props: UserCardProps) {
+  const { user } = props;
+  return (
+    <div className="w-[168px] shrink-0 snap-start bg-[#FFF6EC] border-2 border-[#EADBC8] rounded-[22px] p-4 flex flex-col items-center text-center gap-2 animate-fade-in">
+      <Avatar src={user.avatar_url} name={user.display_name} size="lg" className="border-2 border-white" />
+      <div className="min-w-0 w-full">
+        <p className="font-bold text-[#1E1B24] text-sm truncate">{user.display_name}</p>
+        <p className="text-xs text-[#6E6878] font-mono truncate">{user.evoora_id}</p>
+      </div>
+      <UserActionPill {...props} />
+    </div>
+  );
+}
+
+// ── RequestCard (row inside a card) ───────────────────────────────────────────
 
 function RequestCard({
   req,
@@ -248,58 +281,60 @@ function RequestCard({
   const profile = req.sender_profile;
 
   return (
-    <div className="p-4 sm:p-5 flex items-center gap-4 bg-[#101638] border border-[rgba(255,255,255,0.08)] rounded-2xl animate-fade-in shadow-xl hover:border-[#39DFFF]/30 transition-all">
+    <div className="px-4 py-3 flex items-center gap-3 animate-fade-in">
       <Avatar
         src={profile?.avatar_url ?? null}
         name={profile?.display_name ?? "?"}
-        size="md"
-        className="border border-[rgba(57,223,255,0.25)]"
+        size="lg"
+        className="border-2 border-[#EADBC8]"
       />
       <div className="flex-1 min-w-0">
-        <p className="font-semibold text-[#F5F7FF] truncate">
+        <p className="font-bold text-[#1E1B24] truncate">
           {profile?.display_name ?? "Unknown"}
         </p>
-        {profile?.evoora_id && <EvoIdBadge id={profile.evoora_id} className="mt-0.5" />}
+        {profile?.evoora_id && (
+          <p className="text-xs text-[#6E6878] font-mono truncate">{profile.evoora_id}</p>
+        )}
       </div>
 
       {isIncoming ? (
         <div className="flex items-center gap-2 flex-shrink-0">
-          <Button
-            variant="primary"
-            size="sm"
+          <button
+            type="button"
             onClick={() => onRespond(req.id, "accept")}
             disabled={busy}
             aria-label={t("friends.accept")}
-            className="font-bold"
+            className={PILL_PRIMARY}
           >
             {busy ? <Spinner size="sm" /> : <Check className="h-4 w-4" />}
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
+            <span className="hidden sm:inline">{t("friends.accept")}</span>
+          </button>
+          <button
+            type="button"
             onClick={() => onRespond(req.id, "reject")}
             disabled={busy}
             aria-label={t("friends.reject")}
-            className="text-[#FF5370] hover:bg-[rgba(255,83,112,0.1)]"
+            className={PILL_GHOST}
           >
-            <X className="h-4 w-4" />
-          </Button>
+            <X className="h-4 w-4 sm:hidden" />
+            <span className="hidden sm:inline">Not now</span>
+          </button>
         </div>
       ) : (
-        <Button
-          variant="ghost"
-          size="sm"
+        <button
+          type="button"
           onClick={() => onCancel(req.id)}
           disabled={busy}
           aria-label={t("friends.cancel")}
-          className="text-[#8B98B5] hover:text-[#FF5370] flex-shrink-0"
+          className={cn(ICON_PILL, "hover:text-[#E5484D] hover:border-[#E5484D] flex-shrink-0")}
         >
           {busy ? <Spinner size="sm" /> : <X className="h-4 w-4" />}
-        </Button>
+        </button>
       )}
     </div>
   );
 }
+
 
 // ── Main FriendsClient Component ──────────────────────────────────────────────
 
@@ -309,7 +344,7 @@ export function FriendsClient({ userId }: FriendsClientProps) {
   const [, startTransition] = useTransition();
 
   // ── Tab state ──────────────────────────────────────────────────────────────
-  const [activeTab, setActiveTab] = useState<Tab>("find");
+  const [activeTab, setActiveTab] = useState<Tab>("friends");
 
   // ── Data state ─────────────────────────────────────────────────────────────
   const [friends, setFriends] = useState<FriendEntry[]>([]);
@@ -720,394 +755,429 @@ export function FriendsClient({ userId }: FriendsClientProps) {
   ];
 
   // ── Render ─────────────────────────────────────────────────────────────────
+  const visibleSearch = searchResults.length > 0 ? searchResults : suggestedUsers;
+  const userBusy = (u: UserSearchResult) =>
+    busyIds.has(u.id) || (u.request_id ? busyIds.has(u.request_id) : false);
+
   return (
-    <div className="space-y-8">
-      {/* ── 1. Primary: Invite Friends via Personal Link ── */}
-      <div className="p-6 sm:p-7 space-y-5 rounded-3xl border border-[rgba(255,255,255,0.08)] bg-[#101638] shadow-xl">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3.5">
-            <div className="w-11 h-11 rounded-2xl bg-[#070B25] border border-[rgba(57,223,255,0.25)] flex items-center justify-center text-[#39DFFF] shadow-[0_0_12px_rgba(57,223,255,0.2)]">
-              <Share2 className="h-5 w-5" />
+    <div className="grid gap-7 lg:grid-cols-[minmax(0,640px)_300px] lg:justify-center">
+      {/* ── Main column ── */}
+      <div className="space-y-5 min-w-0">
+        {/* Pill search */}
+        <div className="space-y-3">
+          {searchMsg && (
+            <Alert
+              variant={searchMsg.type === "success" ? "success" : searchMsg.type === "info" ? "info" : "error"}
+              icon={searchMsg.type === "success" ? <Check className="h-4 w-4" /> : <AlertCircle className="h-4 w-4" />}
+            >
+              {searchMsg.text}
+            </Alert>
+          )}
+          <div className="flex gap-2.5">
+            <div className="flex-1 min-w-0">
+              <Input
+                id="friend-search-input"
+                placeholder="Search by display name or EVO-A1B2C3..."
+                value={searchId}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setSearchId(val);
+                  setSearchMsg(null);
+                  handleSearch(val);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    setActiveTab("find");
+                    if (isValidEvoId(searchId.trim())) {
+                      handleSend();
+                    } else {
+                      handleSearch(searchId);
+                    }
+                  }
+                }}
+                leftIcon={<Search className="h-4 w-4" />}
+                autoComplete="off"
+                spellCheck={false}
+                className="text-sm rounded-full"
+                aria-label="Search players by display name or unique EVOAIQU ID"
+              />
+              <span className="sr-only">{t("friends.or_evoora_id")}</span>
             </div>
-            <div>
-              <p className="font-bold text-[#F5F7FF] text-base sm:text-lg">{t("friends.invite_title")}</p>
-              <p className="text-[#B8C3E0] text-xs sm:text-sm mt-0.5">
-                {t("friends.invite_subtitle")}
-              </p>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={handleRotateInvite}
-            disabled={rotating || inviteLoading}
-            title={t("friends.new_link")}
-            className="text-[#8B98B5] hover:text-[#39DFFF] transition-colors p-2 rounded-xl hover:bg-[#070B25] text-xs flex items-center gap-1.5"
-          >
-            <RefreshCw className={cn("h-3.5 w-3.5", rotating && "animate-spin")} />
-            <span className="hidden md:inline font-medium">{t("friends.new_link")}</span>
-          </button>
-        </div>
-
-        {inviteError && (
-          <Alert variant="error" icon={<AlertCircle className="h-4 w-4" />}>
-            {inviteError}
-          </Alert>
-        )}
-
-        {/* Link display & quick actions */}
-        <div className="flex flex-col sm:flex-row gap-3">
-          <div className="relative flex-1">
-            <input
-              type="text"
-              readOnly
-              value={inviteLoading ? t("friends.invite_loading") : inviteUrl || ""}
-              className="evo-input pr-10 text-xs sm:text-sm font-mono truncate select-all bg-[#070B25] text-[#39DFFF] border-[rgba(255,255,255,0.08)] font-medium"
-              aria-label="Your personal invite link"
-              onClick={(e) => (e.target as HTMLInputElement).select()}
-            />
-            {copied && (
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-[#39DFFF] animate-fade-in flex items-center gap-1">
-                <Check className="h-3.5 w-3.5" />
-                {t("friends.link_copied")}
-              </span>
-            )}
-          </div>
-
-          <div className="flex gap-2">
-            {/* Copy Button */}
             <Button
-              type="button"
               variant="primary"
               size="md"
-              onClick={handleCopyLink}
-              disabled={inviteLoading || !inviteUrl}
-              className="flex-1 sm:flex-none justify-center font-bold"
-            >
-              {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-              <span>{copied ? t("friends.link_copied") : t("friends.copy_link")}</span>
-            </Button>
-
-            {/* Native Device Share */}
-            <Button
-              type="button"
-              variant="secondary"
-              size="md"
-              onClick={handleNativeShare}
-              disabled={inviteLoading || !inviteUrl}
-              className="px-3.5"
-              title={t("friends.share")}
-              aria-label={t("friends.share")}
-            >
-              <Share2 className="h-4 w-4" />
-              <span className="hidden sm:inline font-semibold">{t("friends.share")}</span>
-            </Button>
-
-            {/* WhatsApp Share */}
-            <a
-              href={inviteUrl ? `https://wa.me/?text=${encodeURIComponent(`${t("friends.share_text")} ${inviteUrl}`)}` : "#"}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={cn(
-                "evo-btn px-3.5 text-[#25D366] bg-[#102A1E] hover:bg-[#133827] border border-[rgba(37,211,102,0.3)] flex items-center gap-1.5 font-semibold transition-colors",
-                (!inviteUrl || inviteLoading) && "pointer-events-none opacity-50",
-              )}
-              title={t("friends.share_whatsapp")}
-              aria-label={t("friends.share_whatsapp")}
-            >
-              <MessageCircle className="h-4 w-4" />
-              <span className="hidden sm:inline">{t("friends.share_whatsapp")}</span>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      {/* ── 2. Player Search Bar ── */}
-      <div className="p-6 sm:p-7 space-y-4 rounded-3xl border border-[rgba(255,255,255,0.08)] bg-[#101638] shadow-xl">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <Search className="h-4 w-4 text-[#39DFFF]" />
-            <p className="font-bold text-[#F5F7FF] text-sm sm:text-base">Find & Add Players</p>
-          </div>
-          <span className="text-xs text-[#8E9B97]">{t("friends.or_evoora_id")}</span>
-        </div>
-
-        {searchMsg && (
-          <Alert
-            variant={searchMsg.type === "success" ? "success" : searchMsg.type === "info" ? "info" : "error"}
-            icon={searchMsg.type === "success" ? <Check className="h-4 w-4" /> : <AlertCircle className="h-4 w-4" />}
-          >
-            {searchMsg.text}
-          </Alert>
-        )}
-
-        <div className="flex gap-2.5">
-          <div className="flex-1">
-            <Input
-              id="friend-search-input"
-              placeholder="Search by display name or EVO-A1B2C3..."
-              value={searchId}
-              onChange={(e) => {
-                const val = e.target.value;
-                setSearchId(val);
-                setSearchMsg(null);
-                handleSearch(val);
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  setActiveTab("find");
-                  if (isValidEvoId(searchId.trim())) {
-                    handleSend();
-                  } else {
-                    handleSearch(searchId);
-                  }
+              onClick={() => {
+                setActiveTab("find");
+                if (isValidEvoId(searchId.trim())) {
+                  handleSend();
+                } else {
+                  handleSearch(searchId);
                 }
               }}
-              leftIcon={<Search className="h-4 w-4" />}
-              autoComplete="off"
-              spellCheck={false}
-              className="text-sm"
-              aria-label="Search players by display name or unique EVOAIQU ID"
-            />
-          </div>
-          <Button
-            variant="secondary"
-            size="md"
-            onClick={() => {
-              setActiveTab("find");
-              if (isValidEvoId(searchId.trim())) {
-                handleSend();
-              } else {
-                handleSearch(searchId);
-              }
-            }}
-            loading={searchLoading}
-            disabled={!searchId.trim()}
-            id="send-friend-request-btn"
-            className="font-semibold"
-          >
-            <Search className="h-4 w-4 mr-1 sm:inline hidden" />
-            <span>Search</span>
-          </Button>
-        </div>
-      </div>
-
-      {/* ── Tabs ── */}
-      <div>
-        {/* Tab nav */}
-        <div
-          role="tablist"
-          aria-label={t("friends.sections")}
-          className="flex gap-1.5 p-1.5 bg-[#070B25] rounded-2xl border border-[rgba(255,255,255,0.08)] mb-6 overflow-x-auto"
-        >
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              role="tab"
-              id={`tab-${tab.id}`}
-              aria-selected={activeTab === tab.id}
-              aria-controls={`tabpanel-${tab.id}`}
-              onClick={() => setActiveTab(tab.id)}
-              className={cn(
-                "flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap",
-                activeTab === tab.id
-                  ? "bg-[#101638] text-[#39DFFF] shadow-[0_0_12px_rgba(57,223,255,0.15)] border border-[#39DFFF]/40"
-                  : "text-[#B8C3E0] hover:text-[#F5F7FF] hover:bg-white/5",
-              )}
+              loading={searchLoading}
+              disabled={!searchId.trim()}
+              id="send-friend-request-btn"
+              className="font-bold"
             >
-              {tab.icon}
-              <span className="hidden sm:inline">{tab.label}</span>
-              {tab.count > 0 && (
-                <Badge
-                  variant={activeTab === tab.id ? "teal" : "muted"}
-                  className="text-xs px-1.5 py-0.5 min-w-[1.25rem] text-center"
-                >
-                  {tab.count}
-                </Badge>
-              )}
-            </button>
-          ))}
+              <Search className="h-4 w-4 mr-1 sm:inline hidden" />
+              <span>Search</span>
+            </Button>
+          </div>
         </div>
 
-        {/* Tab panels */}
         {loadError && (
           <Alert variant="error" icon={<AlertCircle className="h-4 w-4" />}>
             {loadError}
           </Alert>
         )}
 
-        {loading ? (
-          <div className="flex justify-center py-16">
-            <Spinner size="lg" className="text-[#167D78]" />
-          </div>
-        ) : (
-          <>
-            {/* Find / Suggested panel */}
-            <div
-              role="tabpanel"
-              id="tabpanel-find"
-              aria-labelledby="tab-find"
-              hidden={activeTab !== "find"}
-              className="space-y-4"
-            >
-              <div className="flex items-center justify-between mb-2">
-                <p className="text-xs font-bold text-[#65736F] uppercase tracking-wider">
-                  {searchResults.length > 0
-                    ? `Search Results (${searchResults.length})`
-                    : searchId.trim()
-                    ? "No players found matching your search"
-                    : `Suggested Players (${suggestedUsers.length})`}
-                </p>
-                {searchId.trim() && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSearchId("");
-                      setSearchResults([]);
-                    }}
-                    className="text-xs text-[#167D78] font-bold hover:underline"
+        {/* Wants to be friends */}
+        {!loading && incoming.length > 0 && activeTab !== "incoming" && (
+          <section className={cn(CARD, "overflow-hidden")} aria-label={t("friends.tab_incoming")}>
+            <h2 className="font-display text-lg text-[#1E1B24] px-5 pt-4 pb-1 flex items-center gap-2">
+              Wants to be friends
+              <span className="inline-flex items-center justify-center min-w-[24px] h-6 px-2 rounded-full bg-[#FF5A3C] text-white text-xs font-bold">
+                {incoming.length}
+              </span>
+            </h2>
+            <div className="divide-y-2 divide-[#F5EADC]">
+              {incoming.map((req) => (
+                <RequestCard
+                  key={req.id}
+                  req={req}
+                  currentUserId={userId}
+                  onRespond={handleRespond}
+                  onCancel={handleCancel}
+                  busy={busyIds.has(req.id)}
+                />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Tabs + panels */}
+        <div className={cn(CARD, "p-3 sm:p-4")}>
+          <div
+            role="tablist"
+            aria-label={t("friends.sections")}
+            className="flex gap-1 p-1.5 bg-[#F5EADC] rounded-full mb-3 overflow-x-auto"
+          >
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                role="tab"
+                id={`tab-${tab.id}`}
+                aria-selected={activeTab === tab.id}
+                aria-controls={`tabpanel-${tab.id}`}
+                onClick={() => setActiveTab(tab.id)}
+                className={cn(
+                  "flex-1 flex items-center justify-center gap-1.5 min-h-[44px] px-3 rounded-full text-xs sm:text-sm font-bold transition-colors whitespace-nowrap",
+                  FOCUS,
+                  activeTab === tab.id
+                    ? "bg-white text-[#1E1B24] shadow-[0_2px_0_#EADBC8]"
+                    : "text-[#6E6878] hover:text-[#1E1B24]",
+                )}
+              >
+                {tab.icon}
+                <span className="hidden sm:inline">{tab.label}</span>
+                {tab.count > 0 && (
+                  <span
+                    className={cn(
+                      "text-xs px-1.5 min-w-[1.25rem] text-center rounded-full font-bold",
+                      activeTab === tab.id ? "bg-[#FF5A3C] text-white" : "bg-white text-[#6E6878]",
+                    )}
                   >
-                    Clear Search
-                  </button>
+                    {tab.count}
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
+
+          {loading ? (
+            <div className="flex justify-center py-16">
+              <Spinner size="lg" className="text-[#FF5A3C]" />
+            </div>
+          ) : (
+            <>
+              {/* Find / People you may know panel */}
+              <div
+                role="tabpanel"
+                id="tabpanel-find"
+                aria-labelledby="tab-find"
+                hidden={activeTab !== "find"}
+                className="space-y-3"
+              >
+                <div className="flex items-center justify-between px-2">
+                  <h2 className="font-display text-lg text-[#1E1B24]">
+                    {searchResults.length > 0
+                      ? `Search Results (${searchResults.length})`
+                      : searchId.trim()
+                      ? "No players found matching your search"
+                      : "People you may know"}
+                  </h2>
+                  {searchId.trim() && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSearchId("");
+                        setSearchResults([]);
+                      }}
+                      className={cn("text-sm text-[#C9381F] font-bold hover:underline min-h-[44px] px-2 rounded-full", FOCUS)}
+                    >
+                      Clear Search
+                    </button>
+                  )}
+                </div>
+
+                {visibleSearch.length === 0 ? (
+                  <EmptyState
+                    icon={<Search className="h-10 w-10" />}
+                    title="No players found"
+                    description="Try searching with a different display name or unique EVOAIQU ID."
+                  />
+                ) : searchResults.length > 0 ? (
+                  <div className="divide-y-2 divide-[#F5EADC]">
+                    {searchResults.map((u) => (
+                      <UserPreviewCard
+                        key={u.id}
+                        user={u}
+                        onSendRequest={(evoId) => handleSend(evoId)}
+                        onAccept={(reqId) => handleRespond(reqId, "accept")}
+                        onCancel={handleCancel}
+                        busy={userBusy(u)}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="flex gap-3 overflow-x-auto snap-x pb-2 px-1">
+                    {suggestedUsers.map((u) => (
+                      <SuggestedCard
+                        key={u.id}
+                        user={u}
+                        onSendRequest={(evoId) => handleSend(evoId)}
+                        onAccept={(reqId) => handleRespond(reqId, "accept")}
+                        onCancel={handleCancel}
+                        busy={userBusy(u)}
+                      />
+                    ))}
+                  </div>
                 )}
               </div>
 
-              {(searchResults.length > 0 ? searchResults : suggestedUsers).length === 0 ? (
-                <EmptyState
-                  icon={<Search className="h-10 w-10" />}
-                  title="No players found"
-                  description="Try searching with a different display name or unique EVOAIQU ID."
-                />
-              ) : (
-                (searchResults.length > 0 ? searchResults : suggestedUsers).map((u) => (
-                  <UserPreviewCard
-                    key={u.id}
-                    user={u}
-                    onSendRequest={(evoId) => handleSend(evoId)}
-                    onAccept={(reqId) => handleRespond(reqId, "accept")}
-                    onCancel={handleCancel}
-                    busy={busyIds.has(u.id) || (u.request_id ? busyIds.has(u.request_id) : false)}
+              {/* Friends panel */}
+              <div
+                role="tabpanel"
+                id="tabpanel-friends"
+                aria-labelledby="tab-friends"
+                hidden={activeTab !== "friends"}
+                className="divide-y-2 divide-[#F5EADC]"
+              >
+                {friends.length === 0 ? (
+                  <EmptyState
+                    icon={<Users className="h-10 w-10" />}
+                    title={t("friends.empty_friends")}
+                    description={t("friends.empty_friends_desc")}
                   />
-                ))
-              )}
-            </div>
+                ) : (
+                  friends.map((f) => (
+                    <FriendCard
+                      key={f.request_id}
+                      friend={f}
+                      onRemove={handleRemove}
+                      onBlock={handleBlockUser}
+                      busy={busyIds.has(f.request_id)}
+                    />
+                  ))
+                )}
+              </div>
 
-            {/* Friends panel */}
-            <div
-              role="tabpanel"
-              id="tabpanel-friends"
-              aria-labelledby="tab-friends"
-              hidden={activeTab !== "friends"}
-              className="space-y-3"
-            >
-              {friends.length === 0 ? (
-                <EmptyState
-                  icon={<Users className="h-10 w-10" />}
-                  title={t("friends.empty_friends")}
-                  description={t("friends.empty_friends_desc")}
-                />
-              ) : (
-                friends.map((f) => (
-                  <FriendCard
-                    key={f.request_id}
-                    friend={f}
-                    onRemove={handleRemove}
-                    onBlock={handleBlockUser}
-                    busy={busyIds.has(f.request_id)}
+              {/* Incoming panel */}
+              <div
+                role="tabpanel"
+                id="tabpanel-incoming"
+                aria-labelledby="tab-incoming"
+                hidden={activeTab !== "incoming"}
+                className="divide-y-2 divide-[#F5EADC]"
+              >
+                {incoming.length === 0 ? (
+                  <EmptyState
+                    icon={<UserCheck className="h-10 w-10" />}
+                    title={t("friends.empty_incoming")}
+                    description={t("friends.empty_incoming_desc")}
                   />
-                ))
-              )}
-            </div>
+                ) : (
+                  incoming.map((req) => (
+                    <RequestCard
+                      key={req.id}
+                      req={req}
+                      currentUserId={userId}
+                      onRespond={handleRespond}
+                      onCancel={handleCancel}
+                      busy={busyIds.has(req.id)}
+                    />
+                  ))
+                )}
+              </div>
 
-            {/* Incoming panel */}
-            <div
-              role="tabpanel"
-              id="tabpanel-incoming"
-              aria-labelledby="tab-incoming"
-              hidden={activeTab !== "incoming"}
-              className="space-y-3"
-            >
-              {incoming.length === 0 ? (
-                <EmptyState
-                  icon={<UserCheck className="h-10 w-10" />}
-                  title={t("friends.empty_incoming")}
-                  description={t("friends.empty_incoming_desc")}
-                />
-              ) : (
-                incoming.map((req) => (
-                  <RequestCard
-                    key={req.id}
-                    req={req}
-                    currentUserId={userId}
-                    onRespond={handleRespond}
-                    onCancel={handleCancel}
-                    busy={busyIds.has(req.id)}
+              {/* Sent panel */}
+              <div
+                role="tabpanel"
+                id="tabpanel-sent"
+                aria-labelledby="tab-sent"
+                hidden={activeTab !== "sent"}
+                className="divide-y-2 divide-[#F5EADC]"
+              >
+                {sent.length === 0 ? (
+                  <EmptyState
+                    icon={<UserX className="h-10 w-10" />}
+                    title={t("friends.empty_sent")}
+                    description={t("friends.empty_sent_desc")}
                   />
-                ))
-              )}
-            </div>
+                ) : (
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  sent.map((req: any) => (
+                    <RequestCard
+                      key={req.id}
+                      req={{
+                        ...req,
+                        // Map receiver_profile → sender_profile for RequestCard display
+                        sender_profile: req.receiver_profile,
+                      }}
+                      currentUserId={userId}
+                      onRespond={handleRespond}
+                      onCancel={handleCancel}
+                      busy={busyIds.has(req.id)}
+                    />
+                  ))
+                )}
+              </div>
 
-            {/* Sent panel */}
-            <div
-              role="tabpanel"
-              id="tabpanel-sent"
-              aria-labelledby="tab-sent"
-              hidden={activeTab !== "sent"}
-              className="space-y-3"
-            >
-              {sent.length === 0 ? (
-                <EmptyState
-                  icon={<UserX className="h-10 w-10" />}
-                  title={t("friends.empty_sent")}
-                  description={t("friends.empty_sent_desc")}
-                />
-              ) : (
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                sent.map((req: any) => (
-                  <RequestCard
-                    key={req.id}
-                    req={{
-                      ...req,
-                      // Map receiver_profile → sender_profile for RequestCard display
-                      sender_profile: req.receiver_profile,
-                    }}
-                    currentUserId={userId}
-                    onRespond={handleRespond}
-                    onCancel={handleCancel}
-                    busy={busyIds.has(req.id)}
+              {/* Blocked panel */}
+              <div
+                role="tabpanel"
+                id="tabpanel-blocked"
+                aria-labelledby="tab-blocked"
+                hidden={activeTab !== "blocked"}
+                className="divide-y-2 divide-[#F5EADC]"
+              >
+                {blockedUsers.length === 0 ? (
+                  <EmptyState
+                    icon={<Ban className="h-10 w-10" />}
+                    title={t("blocks.empty")}
+                    description={t("blocks.empty_desc")}
                   />
-                ))
-              )}
-            </div>
-
-            {/* Blocked panel */}
-            <div
-              role="tabpanel"
-              id="tabpanel-blocked"
-              aria-labelledby="tab-blocked"
-              hidden={activeTab !== "blocked"}
-              className="space-y-3"
-            >
-              {blockedUsers.length === 0 ? (
-                <EmptyState
-                  icon={<Ban className="h-10 w-10" />}
-                  title={t("blocks.empty")}
-                  description={t("blocks.empty_desc")}
-                />
-              ) : (
-                blockedUsers.map((b) => (
-                  <BlockedCard
-                    key={b.blocked_id}
-                    user={b}
-                    onUnblock={handleUnblockUser}
-                    busy={busyIds.has(b.blocked_id)}
-                  />
-                ))
-              )}
-            </div>
-          </>
-        )}
+                ) : (
+                  blockedUsers.map((b) => (
+                    <BlockedCard
+                      key={b.blocked_id}
+                      user={b}
+                      onUnblock={handleUnblockUser}
+                      busy={busyIds.has(b.blocked_id)}
+                    />
+                  ))
+                )}
+              </div>
+            </>
+          )}
+        </div>
       </div>
+
+      {/* ── Right rail (stacks below on mobile) ── */}
+      <aside className="space-y-5 min-w-0" aria-label={t("friends.invite_title")}>
+        {/* Invite a friend: lilac */}
+        <div className="b-card-lilac border-2 rounded-[26px] p-5 space-y-4">
+          <div className="flex items-start justify-between gap-2">
+            <div>
+              <h2 className="font-display text-xl text-[#1E1B24] leading-tight">{t("friends.invite_title")}</h2>
+              <p className="text-[#4B4560] text-sm mt-1">{t("friends.invite_subtitle")}</p>
+            </div>
+            <button
+              type="button"
+              onClick={handleRotateInvite}
+              disabled={rotating || inviteLoading}
+              title={t("friends.new_link")}
+              aria-label={t("friends.new_link")}
+              className={cn(
+                "shrink-0 min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded-full bg-white border-2 border-[#D7D0FF] text-[#4B4560] hover:text-[#C9381F] disabled:opacity-50",
+                FOCUS,
+              )}
+            >
+              <RefreshCw className={cn("h-4 w-4", rotating && "animate-spin")} />
+            </button>
+          </div>
+
+          {inviteError && (
+            <Alert variant="error" icon={<AlertCircle className="h-4 w-4" />}>
+              {inviteError}
+            </Alert>
+          )}
+
+          <div className="relative">
+            <input
+              type="text"
+              readOnly
+              value={inviteLoading ? t("friends.invite_loading") : inviteUrl || ""}
+              className="evo-input text-xs font-mono truncate select-all bg-white text-[#1E1B24] border-[#D7D0FF] font-medium"
+              aria-label="Your personal invite link"
+              onClick={(e) => (e.target as HTMLInputElement).select()}
+            />
+            {copied && (
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-[#0B7A60] bg-white pl-1 animate-fade-in flex items-center gap-1">
+                <Check className="h-3.5 w-3.5" />
+                {t("friends.link_copied")}
+              </span>
+            )}
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={handleCopyLink}
+              disabled={inviteLoading || !inviteUrl}
+              className={cn(PILL_BASE, "flex-1 bg-white border-[#1E1B24] text-[#1E1B24] hover:bg-[#FFF6EC]")}
+            >
+              {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+              <span>{copied ? t("friends.link_copied") : t("friends.copy_link")}</span>
+            </button>
+            <a
+              href={inviteUrl ? `https://wa.me/?text=${encodeURIComponent(`${t("friends.share_text")} ${inviteUrl}`)}` : "#"}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={cn(
+                PILL_BASE,
+                "flex-1 bg-[#14C49A] border-[#14C49A] text-[#0A2E26] shadow-[0_3px_0_#0E9A78] hover:bg-[#2AD3AA]",
+                (!inviteUrl || inviteLoading) && "pointer-events-none opacity-50",
+              )}
+              title={t("friends.share_whatsapp")}
+              aria-label={t("friends.share_whatsapp")}
+            >
+              <MessageCircle className="h-4 w-4" />
+              <span>{t("friends.share_whatsapp")}</span>
+            </a>
+            <button
+              type="button"
+              onClick={handleNativeShare}
+              disabled={inviteLoading || !inviteUrl}
+              className={cn(ICON_PILL, "bg-white border-[#D7D0FF] text-[#4B4560]")}
+              title={t("friends.share")}
+              aria-label={t("friends.share")}
+            >
+              <Share2 className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+
+        {/* EVO-ID card */}
+        <div className={cn(CARD, "p-5")}>
+          <h2 className="font-display text-lg text-[#1E1B24]">Find friends by EVO-ID</h2>
+          <p className="text-sm text-[#6E6878] mt-1">
+            Every player has a unique ID like <span className="font-mono font-bold text-[#1E1B24]">EVO-A1B2C3</span>.
+            Paste one into the search box to send a request.
+          </p>
+        </div>
+      </aside>
     </div>
   );
 }
@@ -1124,12 +1194,12 @@ function EmptyState({
   description: string;
 }) {
   return (
-    <div className="flex flex-col items-center justify-center py-16 px-4 text-center animate-fade-in bg-[#101638] border border-[rgba(255,255,255,0.08)] rounded-3xl shadow-xl">
-      <div className="w-16 h-16 rounded-2xl bg-[#070B25] border border-[rgba(57,223,255,0.25)] flex items-center justify-center text-[#39DFFF] shadow-[0_0_12px_rgba(57,223,255,0.2)] mb-4">
+    <div className="flex flex-col items-center justify-center py-12 px-4 text-center animate-fade-in">
+      <div className="w-16 h-16 rounded-[22px] bg-[#FFF6EC] border-2 border-[#EADBC8] flex items-center justify-center text-[#FF5A3C] mb-4">
         {icon}
       </div>
-      <p className="font-bold text-[#F5F7FF] text-base sm:text-lg mb-1">{title}</p>
-      <p className="text-[#B8C3E0] text-sm max-w-sm">{description}</p>
+      <p className="font-display text-lg text-[#1E1B24] mb-1">{title}</p>
+      <p className="text-[#6E6878] text-sm max-w-sm">{description}</p>
     </div>
   );
 }

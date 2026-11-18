@@ -13,7 +13,7 @@ export const metadata: Metadata = {
  */
 export default function HandCricketSoloPage() {
   return (
-    <div className="min-h-screen bg-[#070B14] py-4 md:py-8 px-3 md:px-4">
+    <div className="min-h-screen bg-[#FFF6EC] py-4 md:py-8 px-3 md:px-4">
       <HandCricketSolo />
     </div>
   );

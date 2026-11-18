@@ -12,7 +12,7 @@
  *    - Friend search routes to /friends
  * 3. Accessibility requirements are met:
  *    - Interactive buttons enforce min-h-[44px] / min-w-[44px] touch targets
- *    - Secondary text tokens use WCAG AA compliant #52605C contrast
+ *    - Secondary text tokens use WCAG AA compliant #6E6878 contrast
  *    - Keyboard focus indicators (focus-visible:ring-2) are present on interactive elements
  * 4. Statistics and profile data display logic remains intact.
  */
@@ -93,14 +93,14 @@ describe("EVOAIQU Game Lobby (Stage A) — UX & Navigation Standards", () => {
       expect(mmCardCode).toContain('id="cancel-matchmaking-btn"');
     });
 
-    it("applies WCAG AA compliant text color (#52605C) across secondary copy", () => {
-      expect(lobbyCode).toContain("text-[#52605C]");
-      expect(mmCardCode).toContain("text-[#52605C]");
+    it("applies WCAG AA compliant text color (#6E6878) across secondary copy", () => {
+      expect(lobbyCode).toContain("text-[#6E6878]");
+      expect(mmCardCode).toContain("text-[#6E6878]");
     });
 
     it("implements visible keyboard focus states on interactive buttons and cards", () => {
       expect(lobbyCode).toContain("focus-visible:ring-2");
-      expect(lobbyCode).toContain("focus-visible:ring-[#167D78]");
+      expect(lobbyCode).toContain("focus-visible:ring-[#FF5A3C]");
       expect(lobbyCode).toContain("focus-within:ring-2");
       expect(mmCardCode).toContain("focus-visible:ring-2");
     });
@@ -130,12 +130,11 @@ describe("EVOAIQU Game Lobby (Stage A) — UX & Navigation Standards", () => {
 
   describe("5. Stage B Mobile Viewport Optimization & Layout Hierarchy", () => {
     it("applies compact responsive vertical spacing to prevent mobile scroll fatigue", () => {
-      // Outer layout padding
-      expect(lobbyCode).toContain("py-4 sm:py-8 lg:py-10");
-      // Inter-section vertical spacing
-      expect(lobbyCode).toContain("space-y-6 sm:space-y-8 lg:space-y-10");
-      // Hero card padding
-      expect(lobbyCode).toContain("p-4 sm:p-7 lg:p-8");
+      // Concept B feed: padded two-column grid (main column + 300px rail)
+      expect(lobbyCode).toContain("px-4 py-6");
+      expect(lobbyCode).toContain("lg:grid-cols-[minmax(0,640px)_300px]");
+      // Feed column vertical rhythm
+      expect(lobbyCode).toContain("min-w-0 space-y-5");
       // Arena modes cards padding
       expect(lobbyCode).toContain("p-4 sm:p-7 lg:p-8");
       // Matchmaking card padding
@@ -156,7 +155,7 @@ describe("EVOAIQU Game Lobby (Stage A) — UX & Navigation Standards", () => {
 
       // Content disclosure: hidden md:block when collapsed, block when expanded
       expect(lobbyCode).toContain('id="arena-rules-content"');
-      expect(lobbyCode).toContain('rulesExpanded ? "block border-t border-[#E2E8E2] md:border-t-0" : "hidden md:block"');
+      expect(lobbyCode).toContain('rulesExpanded ? "block border-t border-[#EADBC8] md:border-t-0" : "hidden md:block"');
 
       // Desktop 3-column grid preservation
       expect(lobbyCode).toContain("grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6");
@@ -164,32 +163,31 @@ describe("EVOAIQU Game Lobby (Stage A) — UX & Navigation Standards", () => {
 
     it("prevents horizontal overflow at 375px and 390px viewports", () => {
       // Stat box responsive layout and padding to fit 375px screens
-      expect(lobbyCode).toContain("gap-2 sm:gap-6");
-      expect(lobbyCode).toContain("px-3 sm:px-5 py-2.5 sm:py-3");
+      expect(lobbyCode).toContain("sm:gap-6");
+      expect(lobbyCode).toContain("px-3 py-2.5 sm:gap-6 sm:px-5 sm:py-3");
+      // Stories row scrolls horizontally instead of overflowing
+      expect(lobbyCode).toContain("overflow-x-auto");
 
       // Full-width invite copy button on mobile
       expect(lobbyCode).toContain("w-full sm:w-auto shrink-0 min-h-[44px]");
 
-      // Game cards grid responsive columns
-      expect(lobbyCode).toContain("grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3");
-
-      // Arena modes responsive grid
-      expect(lobbyCode).toContain("grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-7");
+      // Friend challenge buttons stack on mobile, two columns from sm
+      expect(lobbyCode).toContain("grid grid-cols-1 gap-3 sm:grid-cols-2");
     });
 
-    it("maintains the Coastal Modern Light design system tokens", () => {
+    it("maintains the Concept B design system tokens", () => {
       // Teal primary brand token
-      expect(lobbyCode).toContain("#167D78");
+      expect(lobbyCode).toContain("#FF5A3C");
       // Teal light background token
-      expect(lobbyCode).toContain("#DDF2EB");
+      expect(lobbyCode).toContain("#FFE4DD");
       // Coral secondary/accent token
-      expect(lobbyCode).toContain("#D95F49");
+      expect(lobbyCode).toContain("#FF5A3C");
       // Coral soft background
-      expect(lobbyCode).toContain("#FCE6DE");
-      // Charcoal dark text token
-      expect(lobbyCode).toContain("#203331");
-      // Ivory background token
-      expect(lobbyCode).toContain("#F7F8F4");
+      expect(lobbyCode).toContain("#FFE4DD");
+      // Ink dark text token
+      expect(lobbyCode).toContain("#1E1B24");
+      // Cream background token
+      expect(lobbyCode).toContain("#FFF6EC");
     });
   });
 

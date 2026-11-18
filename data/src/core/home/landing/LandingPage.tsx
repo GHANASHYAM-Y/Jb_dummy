@@ -2,11 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import {
-  Trophy, Users, Swords, Shield, ArrowRight,
-  Share2, Sparkles, Clock, Flame, Crown, Award, CheckCircle2
-} from "lucide-react";
-import { Button } from "@/shared/ui";
+import { ArrowRight, Share2, Shield, Clock, Crown, Trophy, Users } from "lucide-react";
 import { FuturisticLandingNav } from "@/core/home/landing/FuturisticLandingNav";
 import { FuturisticHeroArtwork } from "@/core/home/landing/FuturisticHeroArtwork";
 import { FuturisticFooter } from "@/core/home/landing/FuturisticFooter";
@@ -14,6 +10,8 @@ import { FuturisticFooter } from "@/core/home/landing/FuturisticFooter";
 interface LandingPageProps {
   initialUser?: { id: string; email?: string } | null;
 }
+
+const wrap = "max-w-[1180px] mx-auto px-4 sm:px-7";
 
 export function LandingPage({ initialUser }: LandingPageProps) {
   const [copiedLink, setCopiedLink] = useState(false);
@@ -24,581 +22,318 @@ export function LandingPage({ initialUser }: LandingPageProps) {
   };
 
   const featurePills = [
-    "Instant Matchmaking",
-    "Real-Time 10s Blitz",
-    "Consensual & Safe Dares",
+    { emoji: "⚡", label: "Instant Matchmaking" },
+    { emoji: "⏱️", label: "Real-Time 10s Blitz" },
+    { emoji: "🤝", label: "Consensual & Safe Dares" },
+  ];
+
+  const games = [
+    {
+      id: "rps",
+      emoji: "✊",
+      tone: "b-card-hot",
+      title: "Rock Paper Scissors",
+      tag: "10s Blitz Arena",
+      desc: "First to 5 wins. Ten seconds a round, zero stalling, pure nerve.",
+      href: "/play/rps",
+      cta: "Play RPS",
+      hot: true,
+    },
+    {
+      id: "chess",
+      emoji: "♟️",
+      tone: "b-card-lilac",
+      title: "Speed Chess",
+      tag: "Live Clock Battles",
+      desc: "Real-time chess with a ticking clock. Think fast, move faster.",
+      href: "/play/chess",
+      cta: "Play Chess",
+      hot: false,
+    },
+    {
+      id: "dares",
+      emoji: "🎬",
+      tone: "b-card-sun",
+      title: "Creative Video Dares",
+      tag: "24h Stories",
+      desc: "Win and pick a dare. Lose and record it. Everyone cheers in Stories.",
+      href: "/challenges",
+      cta: "Explore Dares",
+      hot: false,
+    },
+  ];
+
+  const steps = [
+    {
+      n: "1",
+      emoji: "🎮",
+      title: "Play",
+      desc: "Jump into a quick match or challenge a friend with one tap. Matches are fast, fair and server-verified.",
+    },
+    {
+      n: "2",
+      emoji: "🏆",
+      title: "Win",
+      desc: "Take the match and unlock the Dare Studio. You choose the challenge: dance, sing, mimic, act and more.",
+    },
+    {
+      n: "3",
+      emoji: "😂",
+      title: "Dare",
+      desc: "Your rival records a short video. You review it once, approve it, and it lands in the 24-hour Stories reel.",
+    },
+  ];
+
+  const features = [
+    { icon: Share2, tone: "bg-[#FF5A3C] text-white", title: "Instant One-Click Invites", desc: "Share a link and your friend is in your lobby in seconds." },
+    { icon: Clock, tone: "bg-[#FFC23D] text-[#1E1B24]", title: "Zero-Stall Matches", desc: "Move timers keep every round snappy so nobody waits around." },
+    { icon: Shield, tone: "bg-[#14C49A] text-white", title: "Safe & Consensual", desc: "Creator-controlled visibility, blocking, and 24-hour video expiry." },
+    { icon: Crown, tone: "bg-[#8C7BFF] text-white", title: "Bragging Rights", desc: "Track your record, streaks and rematches against your crew." },
   ];
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#070B25] text-[#F5F7FF] selection:bg-[#39DFFF]/30 selection:text-white relative overflow-x-hidden">
-      
-      {/* ── Global Background Starfield & Atmosphere ── */}
-      <div className="fixed inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(49,91,255,0.12),transparent_70%)] pointer-events-none z-0" />
-      <div className="fixed inset-0 bg-[radial-gradient(ellipse_60%_50%_at_80%_50%,rgba(139,44,255,0.07),transparent_70%)] pointer-events-none z-0" />
-      <div className="fixed inset-0 bg-[linear-gradient(to_right,#101638_1px,transparent_1px),linear-gradient(to_bottom,#101638_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-30 pointer-events-none z-0" />
-
-      {/* ── TOP NAVIGATION ── */}
+    <div className="flex flex-col min-h-screen bg-[#FFF6EC] text-[#1E1B24] selection:bg-[#FF5A3C]/30 relative overflow-x-hidden">
       <FuturisticLandingNav user={initialUser} />
 
       <main className="flex-1 relative z-10">
+        {/* ═══ HERO ═══ */}
+        <section id="hero" className="pt-8 sm:pt-12 pb-14 sm:pb-20" aria-labelledby="hero-title">
+          <div className={wrap}>
+            <div className="relative rounded-[32px] bg-[#FFC23D] border-2 border-[#E9A912] shadow-[0_5px_0_#E9A912] overflow-hidden px-6 sm:px-12 lg:px-16 py-12 sm:py-16">
+              <span aria-hidden="true" className="absolute -top-14 -left-12 w-48 h-48 rounded-full bg-white/40" />
+              <span aria-hidden="true" className="absolute -bottom-16 left-1/3 w-56 h-56 rounded-full bg-[#14C49A]/35" />
+              <span aria-hidden="true" className="absolute -top-10 right-1/3 w-36 h-36 rounded-full bg-[#8C7BFF]/35" />
 
-        {/* ══════════════════════════════════════════════════════════════════════
-            SECTION 1: HERO — SPACIOUS BALANCED TWO-COLUMN ARENA
-        ══════════════════════════════════════════════════════════════════════ */}
-        <section
-          id="hero"
-          className="relative pt-8 pb-16 sm:pt-12 sm:pb-24 md:pt-16 md:pb-32 lg:pt-20 lg:pb-36 overflow-hidden"
-          aria-labelledby="hero-title"
-        >
-          <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-12 lg:px-16 relative z-10">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 sm:gap-12 lg:gap-16 xl:gap-20 items-center">
-
-              {/* ── Left Column: Hero Content & CTAs ── */}
-              <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left">
-                
-                {/* Eyebrow Pill */}
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 sm:px-4 rounded-full bg-[#101638] border border-[#315BFF]/35 text-[#39DFFF] text-[11px] sm:text-xs font-mono font-semibold tracking-[0.16em] uppercase mb-6 shadow-[0_0_16px_rgba(49,91,255,0.2)]">
-                  <Sparkles className="w-3.5 h-3.5 text-[#39DFFF]" />
-                  <span>NEXT-GEN MULTIPLAYER ARENA</span>
-                </div>
-
-                {/* Main Headline */}
-                <h1
-                  id="hero-title"
-                  className="font-display font-black text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5rem] tracking-[-0.03em] leading-[1.1] !text-[#F5F7FF] mb-6 break-words"
-                >
-                  LET THE{" "}
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#39DFFF] via-[#5B7BFF] to-[#8B2CFF] drop-shadow-[0_0_30px_rgba(57,223,255,0.4)]">
-                    GAMES
-                  </span>{" "}
-                  BEGIN.
-                </h1>
-
-                {/* Supporting Headline */}
-                <p className="font-display font-semibold text-base sm:text-xl lg:text-2xl text-[#D6DEFF] mb-4 leading-snug max-w-xl">
-                  Challenge your friends. Test your instincts. Create unforgettable moments.
-                </p>
-
-                {/* Description */}
-                <p className="text-[#B8C3E0] text-sm sm:text-base lg:text-lg max-w-lg mb-8 leading-relaxed">
-                  EVOAIQU brings people together through competitive multiplayer games, hilarious dares, and unexpected moments.
-                </p>
-
-                {/* Primary & Secondary Call to Actions */}
-                <div className="flex flex-col sm:flex-row items-center gap-3.5 sm:gap-4 w-full sm:w-auto mb-10">
-                  <Link
-                    href={initialUser ? "/games" : "/signup"}
-                    className="w-full sm:w-auto"
+              <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
+                  <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border-2 border-[#1E1B24] text-xs font-extrabold uppercase tracking-wide -rotate-2">
+                    <span aria-hidden="true">🎉</span> Play with friends, dare the loser
+                  </span>
+                  <h1
+                    id="hero-title"
+                    className="font-display font-bold text-5xl sm:text-6xl lg:text-7xl tracking-tight leading-[1.02] text-[#1E1B24]"
                   >
-                    <Button
-                      variant="primary"
-                      size="xl"
-                      className="w-full sm:w-auto !bg-gradient-to-r !from-[#315BFF] !to-[#8B2CFF] !text-white font-black text-sm sm:text-base px-8 py-3.5 sm:px-9 sm:py-4 rounded-2xl shadow-[0_0_28px_rgba(49,91,255,0.55)] hover:shadow-[0_0_40px_rgba(49,91,255,0.8)] hover:scale-[1.02] transition-all cursor-pointer"
-                    >
-                      PLAY NOW
-                      <ArrowRight className="w-4 h-4 ml-2" />
-                    </Button>
-                  </Link>
+                    Win the match.{" "}
+                    <span className="text-white [text-shadow:0_4px_0_#1E1B24]">Dare your friend.</span>
+                  </h1>
+                  <p className="text-[#1E1B24] text-lg sm:text-xl max-w-xl mx-auto lg:mx-0 leading-relaxed font-medium">
+                    EVOAIQU turns quick multiplayer games into big laughs. Beat your friends at Rock Paper Scissors or Speed Chess, then watch them pay up with a video dare.
+                  </p>
 
-                  <a
-                    href="#games"
-                    className="w-full sm:w-auto inline-flex items-center justify-center px-7 py-3.5 sm:px-8 sm:py-4 rounded-2xl bg-[#101638] text-[#F5F7FF] border border-[#315BFF]/40 hover:border-[#39DFFF] hover:bg-[#182352] text-sm sm:text-base font-bold transition-all shadow-sm cursor-pointer"
-                  >
-                    EXPLORE GAMES
-                  </a>
-                </div>
-
-                {/* Trust / Experience Label & Benefits Row */}
-                <div className="w-full pt-6 border-t border-[#315BFF]/20 flex flex-col items-center lg:items-start">
-                  <div className="flex flex-wrap items-center justify-center lg:justify-start gap-1.5 sm:gap-2 text-[10px] sm:text-xs font-mono font-bold text-[#B8C3E0] tracking-[0.1em] sm:tracking-[0.12em] uppercase mb-4 text-center lg:text-left">
-                    <Shield className="w-3.5 h-3.5 text-[#39DFFF] shrink-0" />
-                    <span>PLAY WITH FRIENDS</span>
-                    <span className="text-[#39DFFF]">•</span>
-                    <span>MAKE EVERY MATCH COUNT</span>
-                  </div>
-
-                  {/* Feature Pills */}
-                  <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2.5 sm:gap-3 max-w-lg">
-                    {featurePills.map((pill) => (
-                      <span
-                        key={pill}
-                        className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:px-3.5 rounded-xl bg-[#101638] border border-[#315BFF]/25 text-xs sm:text-sm font-medium text-[#D6DEFF]"
-                      >
-                        <CheckCircle2 className="w-3.5 h-3.5 text-[#39DFFF] shrink-0" />
-                        {pill}
+                  <div className="flex flex-wrap justify-center lg:justify-start gap-2">
+                    {featurePills.map((p) => (
+                      <span key={p.label} className="b-chip !bg-white !border-[#1E1B24]/15">
+                        <span aria-hidden="true">{p.emoji}</span>
+                        {p.label}
                       </span>
                     ))}
                   </div>
-                </div>
 
-              </div>
-
-              {/* ── Right Column: Futuristic Hero Artwork Centerpiece ── */}
-              <div className="lg:col-span-5 w-full flex items-center justify-center pt-6 lg:pt-0">
-                <FuturisticHeroArtwork />
-              </div>
-
-            </div>
-          </div>
-        </section>
-
-        {/* ══════════════════════════════════════════════════════════════════════
-            SECTION 2: FEATURED GAMES — CHOOSE YOUR BATTLE
-        ══════════════════════════════════════════════════════════════════════ */}
-        <section
-          id="games"
-          className="py-20 sm:py-24 md:py-28 lg:py-32 relative border-t border-[#315BFF]/20 bg-[#070B25] overflow-hidden"
-          aria-labelledby="games-title"
-        >
-          {/* Subtle Ambient Glows */}
-          <div className="absolute top-1/2 left-0 w-80 h-80 bg-[#315BFF]/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute top-1/2 right-0 w-80 h-80 bg-[#8B2CFF]/10 rounded-full blur-3xl pointer-events-none" />
-
-          <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-12 lg:px-16 relative z-10">
-            
-            {/* Section Header */}
-            <div className="text-center max-w-2xl mx-auto mb-16 sm:mb-20">
-              <span className="inline-block px-4 py-1.5 rounded-full bg-[#101638] border border-[#315BFF]/40 text-[#39DFFF] text-xs font-mono font-semibold tracking-[0.2em] uppercase mb-4">
-                CYBER ARENAS
-              </span>
-              <h2
-                id="games-title"
-                className="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl !text-[#F5F7FF] tracking-[-0.02em] leading-tight mb-4"
-              >
-                CHOOSE YOUR BATTLE
-              </h2>
-              <p className="text-[#B8C3E0] text-base sm:text-lg leading-relaxed">
-                Every match tells a different story. Fast, competitive, and unforgettable.
-              </p>
-            </div>
-
-            {/* Game Cards Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-8 xl:gap-10 items-stretch">
-              
-              {/* ── Game 1: Rock, Paper, Scissors ── */}
-              <div className="group relative rounded-3xl bg-[#101638] border border-[#315BFF]/30 p-8 sm:p-9 lg:p-10 flex flex-col justify-between hover:border-[#39DFFF]/70 hover:shadow-[0_20px_50px_rgba(7,11,37,0.85)] transition-all duration-300">
-                <div>
-                  {/* Card Top Banner */}
-                  <div className="flex items-center justify-between gap-3 mb-7">
-                    <span className="px-3 py-1 rounded-full bg-[#39DFFF]/15 border border-[#39DFFF]/40 text-[#39DFFF] text-xs font-mono font-semibold tracking-wider uppercase">
-                      MULTIPLAYER
-                    </span>
-                    <span className="text-xs font-mono font-semibold text-[#B8C3E0] bg-[#070B25] border border-[#315BFF]/25 px-3 py-1 rounded-xl">
-                      10S ROUNDS
-                    </span>
-                  </div>
-
-                  {/* Card Icon */}
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#315BFF] to-[#8B2CFF] flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(49,91,255,0.35)] border border-[#39DFFF]/30 group-hover:scale-105 transition-transform">
-                    <Swords className="w-8 h-8 text-white" />
-                  </div>
-
-                  {/* Card Title & Description */}
-                  <h3 className="font-display font-bold text-2xl sm:text-[1.65rem] !text-[#F5F7FF] tracking-[-0.01em] mb-3">
-                    Rock, Paper, Scissors
-                  </h3>
-                  <p className="text-[#B8C3E0] text-sm sm:text-base leading-relaxed mb-6">
-                    Quick decisions. Clever moves. Friendly rivalries. Lock in your choice within 10 seconds and clash for first to 5 wins.
-                  </p>
-
-                  {/* Feature Badges */}
-                  <div className="flex flex-wrap gap-2.5 mb-8">
-                    <span className="px-3 py-1.5 rounded-xl bg-[#070B25] border border-[#315BFF]/25 text-xs font-medium text-[#D6DEFF]">
-                      First to 5 Wins
-                    </span>
-                    <span className="px-3 py-1.5 rounded-xl bg-[#070B25] border border-[#315BFF]/25 text-xs font-medium text-[#D6DEFF]">
-                      Single-Tap Lock-In
-                    </span>
-                    <span className="px-3 py-1.5 rounded-xl bg-[#070B25] border border-[#315BFF]/25 text-xs font-medium text-[#D6DEFF]">
-                      Live Clash FX
-                    </span>
-                  </div>
-                </div>
-
-                {/* Card Action Link */}
-                <div className="pt-6 border-t border-[#315BFF]/20 mt-auto">
-                  <Link href="/play/rps" className="block w-full">
-                    <Button
-                      variant="primary"
-                      size="md"
-                      className="w-full !bg-gradient-to-r !from-[#315BFF] !to-[#8B2CFF] !text-white font-bold py-3.5 sm:py-4 px-6 rounded-2xl shadow-[0_0_16px_rgba(49,91,255,0.35)]"
+                  <div className="flex flex-wrap justify-center lg:justify-start gap-3 pt-1">
+                    <Link
+                      href={initialUser ? "/games" : "/signup"}
+                      className="evo-btn evo-btn-primary evo-btn-xl font-bold"
                     >
-                      PLAY NOW
-                      <ArrowRight className="w-4 h-4 ml-2" />
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-
-              {/* ── Game 2: Speed Chess ── */}
-              <div className="group relative rounded-3xl bg-[#101638] border border-[#315BFF]/30 p-8 sm:p-9 lg:p-10 flex flex-col justify-between hover:border-[#8B2CFF]/70 hover:shadow-[0_20px_50px_rgba(7,11,37,0.85)] transition-all duration-300">
-                <div>
-                  {/* Card Top Banner */}
-                  <div className="flex items-center justify-between gap-3 mb-7">
-                    <span className="px-3 py-1 rounded-full bg-[#8B2CFF]/20 border border-[#8B2CFF]/40 text-[#8B2CFF] text-xs font-mono font-semibold tracking-wider uppercase">
-                      STRATEGY
-                    </span>
-                    <span className="text-xs font-mono font-semibold text-[#B8C3E0] bg-[#070B25] border border-[#315BFF]/25 px-3 py-1 rounded-xl">
-                      1M • 3M • 5M
-                    </span>
-                  </div>
-
-                  {/* Card Icon */}
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#8B2CFF] to-[#315BFF] flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(139,44,255,0.35)] border border-[#8B2CFF]/30 group-hover:scale-105 transition-transform">
-                    <Crown className="w-8 h-8 text-white" />
-                  </div>
-
-                  {/* Card Title & Description */}
-                  <h3 className="font-display font-bold text-2xl sm:text-[1.65rem] !text-[#F5F7FF] tracking-[-0.01em] mb-3">
-                    Speed Chess
-                  </h3>
-                  <p className="text-[#B8C3E0] text-sm sm:text-base leading-relaxed mb-6">
-                    Challenge your opponent and outthink every move. Fast-paced strategic chess with real-time clocks and blitz time controls.
-                  </p>
-
-                  {/* Feature Badges */}
-                  <div className="flex flex-wrap gap-2.5 mb-8">
-                    <span className="px-3 py-1.5 rounded-xl bg-[#070B25] border border-[#315BFF]/25 text-xs font-medium text-[#D6DEFF]">
-                      Live Clocks
-                    </span>
-                    <span className="px-3 py-1.5 rounded-xl bg-[#070B25] border border-[#315BFF]/25 text-xs font-medium text-[#D6DEFF]">
-                      Turn Verification
-                    </span>
-                    <span className="px-3 py-1.5 rounded-xl bg-[#070B25] border border-[#315BFF]/25 text-xs font-medium text-[#D6DEFF]">
-                      Interactive Board
-                    </span>
-                  </div>
-                </div>
-
-                {/* Card Action Link */}
-                <div className="pt-6 border-t border-[#315BFF]/20 mt-auto">
-                  <Link href="/play/chess" className="block w-full">
-                    <button
-                      type="button"
-                      className="w-full bg-[#070B25] hover:bg-[#182352] text-[#F5F7FF] border border-[#315BFF]/40 hover:border-[#39DFFF] font-bold py-3.5 sm:py-4 px-6 rounded-2xl flex items-center justify-center transition-all cursor-pointer shadow-sm text-sm sm:text-base group/btn"
+                      {initialUser ? "Open the arena" : "Sign up free"}
+                      <ArrowRight className="w-5 h-5 ml-2" />
+                    </Link>
+                    <a
+                      href="#games"
+                      className="evo-btn evo-btn-xl font-bold bg-white text-[#1E1B24] border-2 border-[#1E1B24] shadow-[0_4px_0_#1E1B24]"
                     >
-                      <span>PLAY CHESS</span>
-                      <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
-                    </button>
-                  </Link>
+                      Play now
+                    </a>
+                  </div>
+                </div>
+
+                <div className="lg:col-span-5 w-full flex items-center justify-center">
+                  <FuturisticHeroArtwork />
                 </div>
               </div>
-
-              {/* ── Game 3: Dare Challenges & Stories ── */}
-              <div className="group relative rounded-3xl bg-[#101638] border border-[#315BFF]/30 p-8 sm:p-9 lg:p-10 flex flex-col justify-between hover:border-[#39DFFF]/70 hover:shadow-[0_20px_50px_rgba(7,11,37,0.85)] transition-all duration-300 md:col-span-2 lg:col-span-1">
-                <div>
-                  {/* Card Top Banner */}
-                  <div className="flex items-center justify-between gap-3 mb-7">
-                    <span className="px-3 py-1 rounded-full bg-[#39DFFF]/15 border border-[#39DFFF]/40 text-[#39DFFF] text-xs font-mono font-semibold tracking-wider uppercase">
-                      SOCIAL DARES
-                    </span>
-                    <span className="text-xs font-mono font-semibold text-[#B8C3E0] bg-[#070B25] border border-[#315BFF]/25 px-3 py-1 rounded-xl">
-                      24H REELS
-                    </span>
-                  </div>
-
-                  {/* Card Icon */}
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#315BFF] via-[#39DFFF] to-[#8B2CFF] flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(57,223,255,0.25)] border border-[#39DFFF]/30 group-hover:scale-105 transition-transform">
-                    <Flame className="w-8 h-8 text-white" />
-                  </div>
-
-                  {/* Card Title & Description */}
-                  <h3 className="font-display font-bold text-2xl sm:text-[1.65rem] !text-[#F5F7FF] tracking-[-0.01em] mb-3">
-                    Post-Match Dares
-                  </h3>
-                  <p className="text-[#B8C3E0] text-sm sm:text-base leading-relaxed mb-6">
-                    Win the battle. Dare your friend. Make every match memorable. Losers record 24-hour video dares with one-time winner review sessions.
-                  </p>
-
-                  {/* Feature Badges */}
-                  <div className="flex flex-wrap gap-2.5 mb-8">
-                    <span className="px-3 py-1.5 rounded-xl bg-[#070B25] border border-[#315BFF]/25 text-xs font-medium text-[#D6DEFF]">
-                      Dance & Comedy
-                    </span>
-                    <span className="px-3 py-1.5 rounded-xl bg-[#070B25] border border-[#315BFF]/25 text-xs font-medium text-[#D6DEFF]">
-                      24h Stories
-                    </span>
-                    <span className="px-3 py-1.5 rounded-xl bg-[#070B25] border border-[#315BFF]/25 text-xs font-medium text-[#D6DEFF]">
-                      Safe & Consensual
-                    </span>
-                  </div>
-                </div>
-
-                {/* Card Action Link */}
-                <div className="pt-6 border-t border-[#315BFF]/20 mt-auto">
-                  <Link href="/challenges" className="block w-full">
-                    <button
-                      type="button"
-                      className="w-full bg-[#070B25] hover:bg-[#182352] text-[#F5F7FF] border border-[#315BFF]/40 hover:border-[#39DFFF] font-bold py-3.5 sm:py-4 px-6 rounded-2xl flex items-center justify-center transition-all cursor-pointer shadow-sm text-sm sm:text-base group/btn"
-                    >
-                      <span>EXPLORE DARES</span>
-                      <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
-                    </button>
-                  </Link>
-                </div>
-              </div>
-
             </div>
           </div>
         </section>
 
-        {/* ══════════════════════════════════════════════════════════════════════
-            SECTION 3: HOW IT WORKS — THREE SIMPLE STEPS
-        ══════════════════════════════════════════════════════════════════════ */}
-        <section
-          id="how-it-works"
-          className="py-20 sm:py-24 md:py-28 lg:py-32 relative border-t border-[#315BFF]/20 bg-[#070B25] overflow-hidden"
-          aria-labelledby="how-it-works-title"
-        >
-          <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-12 lg:px-16 relative z-10">
-            
-            <div className="text-center max-w-2xl mx-auto mb-16 sm:mb-20">
-              <span className="inline-block px-4 py-1.5 rounded-full bg-[#101638] border border-[#315BFF]/40 text-[#39DFFF] text-xs font-mono font-semibold tracking-[0.2em] uppercase mb-4">
-                GAMEPLAY PROGRESSION
-              </span>
-              <h2
-                id="how-it-works-title"
-                className="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl !text-[#F5F7FF] tracking-[-0.02em] leading-tight mb-4"
-              >
-                THREE STEPS TO GLORY
+        {/* ═══ GAMES ═══ */}
+        <section id="games" className="pb-16 sm:pb-24" aria-labelledby="games-title">
+          <div className={wrap}>
+            <div className="text-center max-w-2xl mx-auto mb-10 space-y-3">
+              <span className="b-chip">🕹️ Pick your game</span>
+              <h2 id="games-title" className="font-display font-bold text-4xl sm:text-5xl tracking-tight text-[#1E1B24]">
+                What are we playing tonight?
               </h2>
-              <p className="text-[#B8C3E0] text-base sm:text-lg leading-relaxed">
-                Simple, high-speed multiplayer matchmaking from personal invite link to sweet victory.
+              <p className="text-[#6E6878] text-base sm:text-lg leading-relaxed">
+                Fast games, real stakes, zero downloads. Pick one and call in your crew.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-8 xl:gap-10">
-              
-              {/* Step 1 */}
-              <div className="p-8 sm:p-9 lg:p-10 rounded-3xl bg-[#101638] border border-[#315BFF]/30 relative flex flex-col justify-between hover:border-[#39DFFF]/60 transition-all duration-300">
-                <div>
-                  <div className="flex items-center justify-between mb-8">
-                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#315BFF] to-[#39DFFF] flex items-center justify-center shadow-[0_0_16px_rgba(57,223,255,0.4)]">
-                      <Users className="w-7 h-7 text-white" />
-                    </div>
-                    <span className="font-mono font-black text-3xl sm:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-[#39DFFF] to-[#315BFF]">
-                      01
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {games.map((g) => (
+                <article key={g.id} className={`b-card ${g.tone} !p-7 flex flex-col gap-4`}>
+                  <div className="flex items-start justify-between">
+                    <span className="text-6xl -rotate-6" aria-hidden="true">{g.emoji}</span>
+                    <span className={`px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider border-2 ${g.hot ? "bg-white/20 border-white/60 text-white" : "bg-white border-[#1E1B24]/15 text-[#1E1B24]"}`}>
+                      {g.tag}
                     </span>
                   </div>
-                  <h3 className="font-display font-bold text-xl sm:text-2xl !text-[#F5F7FF] mb-3">
-                    Find Your Opponent
+                  <h3 className={`font-display font-bold text-2xl sm:text-[1.65rem] ${g.hot ? "text-white" : "text-[#1E1B24]"}`}>
+                    {g.title}
                   </h3>
-                  <p className="text-[#B8C3E0] text-sm sm:text-base leading-relaxed">
-                    Invite a friend with an instant personal invite link or jump into the real-time random matchmaking queue in one click.
+                  <p className={`text-sm sm:text-base leading-relaxed flex-1 ${g.hot ? "text-white" : "text-[#1E1B24]/80"}`}>
+                    {g.desc}
                   </p>
-                </div>
-              </div>
-
-              {/* Step 2 */}
-              <div className="p-8 sm:p-9 lg:p-10 rounded-3xl bg-[#101638] border border-[#315BFF]/30 relative flex flex-col justify-between hover:border-[#315BFF]/80 transition-all duration-300">
-                <div>
-                  <div className="flex items-center justify-between mb-8">
-                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#315BFF] to-[#8B2CFF] flex items-center justify-center shadow-[0_0_16px_rgba(49,91,255,0.4)]">
-                      <Swords className="w-7 h-7 text-white" />
-                    </div>
-                    <span className="font-mono font-black text-3xl sm:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-[#315BFF] to-[#8B2CFF]">
-                      02
-                    </span>
-                  </div>
-                  <h3 className="font-display font-bold text-xl sm:text-2xl !text-[#F5F7FF] mb-3">
-                    Enter the Arena
-                  </h3>
-                  <p className="text-[#B8C3E0] text-sm sm:text-base leading-relaxed">
-                    Choose your game and make your move. Race against the strict 10-second server clock and outsmart your rival.
-                  </p>
-                </div>
-              </div>
-
-              {/* Step 3 */}
-              <div className="p-8 sm:p-9 lg:p-10 rounded-3xl bg-[#101638] border border-[#315BFF]/30 relative flex flex-col justify-between hover:border-[#8B2CFF]/80 transition-all duration-300">
-                <div>
-                  <div className="flex items-center justify-between mb-8">
-                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#8B2CFF] to-[#39DFFF] flex items-center justify-center shadow-[0_0_16px_rgba(139,44,255,0.4)]">
-                      <Trophy className="w-7 h-7 text-white" />
-                    </div>
-                    <span className="font-mono font-black text-3xl sm:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-[#8B2CFF] to-[#39DFFF]">
-                      03
-                    </span>
-                  </div>
-                  <h3 className="font-display font-bold text-xl sm:text-2xl !text-[#F5F7FF] mb-3">
-                    Make It Memorable
-                  </h3>
-                  <p className="text-[#B8C3E0] text-sm sm:text-base leading-relaxed">
-                    Celebrate victories, share laughs, and take on fun challenges. Win the match to assign hilarious video dares to your rival.
-                  </p>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </section>
-
-        {/* ══════════════════════════════════════════════════════════════════════
-            SECTION 4: SOCIAL GAMING CAPABILITIES
-        ══════════════════════════════════════════════════════════════════════ */}
-        <section
-          id="features"
-          className="py-20 sm:py-24 md:py-28 lg:py-32 relative border-t border-[#315BFF]/20 bg-[#070B25] overflow-hidden"
-          aria-labelledby="features-title"
-        >
-          <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-12 lg:px-16 relative z-10">
-            
-            <div className="text-center max-w-2xl mx-auto mb-16 sm:mb-20">
-              <span className="inline-block px-4 py-1.5 rounded-full bg-[#101638] border border-[#315BFF]/40 text-[#39DFFF] text-xs font-mono font-semibold tracking-[0.2em] uppercase mb-4">
-                ARENA ADVANTAGE
-              </span>
-              <h2
-                id="features-title"
-                className="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl !text-[#F5F7FF] tracking-[-0.02em] leading-tight mb-4"
-              >
-                BUILT FOR COMPETITIVE SOCIAL PLAY
-              </h2>
-              <p className="text-[#B8C3E0] text-base sm:text-lg leading-relaxed">
-                State-of-the-art architecture ensuring fair play, zero stalling, and maximum fun.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-              
-              {/* Feature 1 */}
-              <div className="p-7 sm:p-8 rounded-3xl bg-[#101638] border border-[#315BFF]/25 hover:border-[#39DFFF]/50 transition-all duration-300">
-                <div className="w-12 h-12 rounded-2xl bg-[#39DFFF]/15 border border-[#39DFFF]/35 flex items-center justify-center text-[#39DFFF] mb-5">
-                  <Share2 className="w-6 h-6" />
-                </div>
-                <h3 className="font-display font-bold text-lg !text-[#F5F7FF] mb-2">
-                  Instant One-Click Invites
-                </h3>
-                <p className="text-sm text-[#B8C3E0] leading-relaxed">
-                  No friend codes or room pins needed. Share a private link on WhatsApp or messaging to enter the match directly.
-                </p>
-              </div>
-
-              {/* Feature 2 */}
-              <div className="p-7 sm:p-8 rounded-3xl bg-[#101638] border border-[#315BFF]/25 hover:border-[#315BFF]/70 transition-all duration-300">
-                <div className="w-12 h-12 rounded-2xl bg-[#315BFF]/15 border border-[#315BFF]/35 flex items-center justify-center text-[#315BFF] mb-5">
-                  <Clock className="w-6 h-6" />
-                </div>
-                <h3 className="font-display font-bold text-lg !text-[#F5F7FF] mb-2">
-                  Authoritative 10s Timer
-                </h3>
-                <p className="text-sm text-[#B8C3E0] leading-relaxed">
-                  Server-enforced PostgreSQL countdowns eliminate stalling and keep blitz rounds fast, high-energy, and fair.
-                </p>
-              </div>
-
-              {/* Feature 3 */}
-              <div className="p-7 sm:p-8 rounded-3xl bg-[#101638] border border-[#315BFF]/25 hover:border-[#8B2CFF]/70 transition-all duration-300">
-                <div className="w-12 h-12 rounded-2xl bg-[#8B2CFF]/15 border border-[#8B2CFF]/35 flex items-center justify-center text-[#8B2CFF] mb-5">
-                  <Shield className="w-6 h-6" />
-                </div>
-                <h3 className="font-display font-bold text-lg !text-[#F5F7FF] mb-2">
-                  Safe & Consensual Dares
-                </h3>
-                <p className="text-sm text-[#B8C3E0] leading-relaxed">
-                  Curated fun dare categories with decline options and optional 24-hour disappearing video playback.
-                </p>
-              </div>
-
-              {/* Feature 4 */}
-              <div className="p-7 sm:p-8 rounded-3xl bg-[#101638] border border-[#315BFF]/25 hover:border-[#39DFFF]/50 transition-all duration-300">
-                <div className="w-12 h-12 rounded-2xl bg-[#39DFFF]/15 border border-[#39DFFF]/35 flex items-center justify-center text-[#39DFFF] mb-5">
-                  <Award className="w-6 h-6" />
-                </div>
-                <h3 className="font-display font-bold text-lg !text-[#F5F7FF] mb-2">
-                  Head-to-Head Records
-                </h3>
-                <p className="text-sm text-[#B8C3E0] leading-relaxed">
-                  Track your lifetime wins, match scores, and bragging rights against friends in your personal profile scorecard.
-                </p>
-              </div>
-
-            </div>
-
-            {/* Instant Invite Demonstration Strip */}
-            <div className="mt-16 sm:mt-20 p-8 sm:p-10 lg:p-12 rounded-3xl bg-[#101638] border border-[#315BFF]/35 shadow-2xl max-w-3xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6 sm:gap-8">
-              <div className="text-center sm:text-left">
-                <span className="text-xs font-mono font-bold text-[#39DFFF] uppercase tracking-[0.15em] block mb-1.5">
-                  READY TO CHALLENGE SOMEONE?
-                </span>
-                <h4 className="font-display font-extrabold text-xl sm:text-2xl !text-[#F5F7FF]">
-                  Grab your personal invite link
-                </h4>
-              </div>
-
-              <div className="flex items-center gap-3 w-full sm:w-auto">
-                <div className="flex items-center gap-2 px-4 py-3 rounded-2xl bg-[#070B25] border border-[#315BFF]/30 text-xs font-mono text-[#39DFFF] flex-1 sm:w-64 truncate">
-                  https://evoaiqu.app/invite/...
-                </div>
-                <button
-                  type="button"
-                  onClick={handleCopy}
-                  className="px-5 py-3 rounded-2xl bg-gradient-to-r from-[#315BFF] to-[#8B2CFF] text-white text-xs font-bold shrink-0 hover:opacity-90 hover:scale-[1.02] transition-all cursor-pointer shadow-md"
-                >
-                  {copiedLink ? "Copied!" : "Copy Link"}
-                </button>
-              </div>
-            </div>
-
-          </div>
-        </section>
-
-        {/* ══════════════════════════════════════════════════════════════════════
-            SECTION 5: COMMUNITY CALL TO ACTION
-        ══════════════════════════════════════════════════════════════════════ */}
-        <section
-          className="py-24 sm:py-32 lg:py-40 relative border-t border-[#315BFF]/20 bg-[#070B25] overflow-hidden"
-          aria-labelledby="cta-heading"
-        >
-          {/* Central Radial Light Aura */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[360px] bg-gradient-to-r from-[#315BFF]/15 via-[#39DFFF]/10 to-[#8B2CFF]/15 blur-[90px] pointer-events-none" />
-
-          <div className="max-w-4xl mx-auto px-5 sm:px-8 relative z-10 text-center">
-            <div className="p-10 sm:p-16 lg:p-20 rounded-3xl bg-[#101638] border border-[#315BFF]/35 shadow-[0_24px_64px_rgba(7,11,37,0.95)] backdrop-blur-xl">
-              
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#315BFF] to-[#8B2CFF] flex items-center justify-center mx-auto mb-8 shadow-[0_0_24px_rgba(49,91,255,0.5)] border border-[#39DFFF]/40">
-                <Swords className="w-8 h-8 text-white" />
-              </div>
-
-              <h2
-                id="cta-heading"
-                className="font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl !text-[#F5F7FF] tracking-tight mb-5"
-              >
-                YOUR NEXT MATCH STARTS HERE.
-              </h2>
-
-              <p className="text-[#B8C3E0] text-base sm:text-xl max-w-xl mx-auto mb-10 leading-relaxed">
-                Bring your friends. Pick your game. Let the fun begin.
-              </p>
-
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Link
-                  href={initialUser ? "/games" : "/signup"}
-                  className="w-full sm:w-auto"
-                >
-                  <Button
-                    variant="primary"
-                    size="xl"
-                    className="w-full sm:w-auto !bg-gradient-to-r !from-[#315BFF] !to-[#8B2CFF] !text-white font-black text-base px-11 py-4.5 rounded-2xl shadow-[0_0_35px_rgba(49,91,255,0.6)] hover:shadow-[0_0_50px_rgba(49,91,255,0.85)] hover:scale-[1.02] transition-all cursor-pointer"
+                  <Link
+                    href={g.href}
+                    className={`evo-btn evo-btn-lg font-bold w-full ${g.hot ? "bg-white text-[#C9381F] shadow-[0_4px_0_#C9381F]" : "evo-btn-primary"}`}
                   >
-                    JOIN EVOAIQU
-                    <ArrowRight className="w-5 h-5 ml-2" />
-                  </Button>
-                </Link>
-              </div>
-
-              <p className="mt-8 text-xs font-mono text-[#B8C3E0]/75 tracking-[0.15em] uppercase">
-                Free to Play • Instant Browser Matchmaking • No Downloads
-              </p>
-
+                    {g.cta}
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Link>
+                </article>
+              ))}
             </div>
           </div>
         </section>
 
+        {/* ═══ HOW IT WORKS + FEED PREVIEW ═══ */}
+        <section id="how-it-works" className="pb-16 sm:pb-24" aria-labelledby="how-it-works-title">
+          <div className={wrap}>
+            <div className="text-center max-w-2xl mx-auto mb-10 space-y-3">
+              <span className="b-chip">📖 Play, win, dare</span>
+              <h2 id="how-it-works-title" className="font-display font-bold text-4xl sm:text-5xl tracking-tight text-[#1E1B24]">
+                How the fun works
+              </h2>
+              <p className="text-[#6E6878] text-base sm:text-lg leading-relaxed">
+                Three steps from the first move to the story everyone is talking about.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+              {/* Steps */}
+              <ol className="lg:col-span-7 flex flex-col gap-4">
+                {steps.map((s, i) => (
+                  <li key={s.n} className={`b-card flex items-start gap-5 !p-6 ${i === 0 ? "b-card-mint" : i === 1 ? "b-card-sun" : "b-card-lilac"}`}>
+                    <span className="w-12 h-12 shrink-0 rounded-full bg-white border-2 border-[#1E1B24]/15 grid place-items-center font-display font-bold text-xl">
+                      {s.n}
+                    </span>
+                    <div className="space-y-1.5">
+                      <h3 className="font-display font-bold text-2xl text-[#1E1B24]">
+                        <span aria-hidden="true">{s.emoji}</span> {s.title}
+                      </h3>
+                      <p className="text-[#1E1B24]/80 text-base leading-relaxed">{s.desc}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+
+              {/* Stories / feed preview */}
+              <div className="lg:col-span-5 space-y-4" aria-label="Preview of the EVOAIQU feed">
+                <div className="flex gap-4 overflow-hidden px-1 pt-1">
+                  {[
+                    { n: "You", e: "➕", plain: true },
+                    { n: "Maya", e: "💃" },
+                    { n: "Arjun", e: "🎤" },
+                    { n: "Zoe", e: "😂" },
+                  ].map((st) => (
+                    <div key={st.n} className="w-[72px] shrink-0 text-center">
+                      <div className={st.plain ? "p-[3px] rounded-full border-2 border-dashed border-[#8E8798]" : "b-story-ring"}>
+                        <div className="w-[62px] h-[62px] rounded-full bg-[#F5EADC] border-[3px] border-[#FFF6EC] grid place-items-center text-2xl">
+                          {st.e}
+                        </div>
+                      </div>
+                      <p className="text-xs font-bold text-[#1E1B24] mt-1.5 truncate">{st.n}</p>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="b-card b-card-hot space-y-3">
+                  <p className="text-xs font-extrabold uppercase tracking-wider">Dare owed</p>
+                  <p className="font-display font-bold text-2xl leading-snug">🕺 You lost to Maya. Dance like nobody&apos;s watching!</p>
+                  <span className="inline-flex items-center min-h-[44px] px-5 rounded-full bg-white text-[#C9381F] font-bold text-sm">
+                    Record now
+                  </span>
+                </div>
+
+                <div className="b-card flex items-center gap-4">
+                  <span className="w-12 h-12 rounded-full bg-[#E3FAF3] grid place-items-center text-2xl" aria-hidden="true">🏆</span>
+                  <div className="min-w-0">
+                    <p className="font-bold text-[#1E1B24]">You beat Arjun 5–3</p>
+                    <p className="text-sm text-[#6E6878]">Pick a dare for the loser. 👀</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ═══ FEATURES ═══ */}
+        <section id="features" className="pb-16 sm:pb-24" aria-labelledby="features-title">
+          <div className={wrap}>
+            <div className="text-center max-w-2xl mx-auto mb-10 space-y-3">
+              <h2 id="features-title" className="font-display font-bold text-4xl sm:text-5xl tracking-tight text-[#1E1B24]">
+                Built for friends who love a rematch
+              </h2>
+              <p className="text-[#6E6878] text-base sm:text-lg leading-relaxed">
+                Fair play, zero stalling, and maximum fun.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {features.map(({ icon: Icon, tone, title, desc }) => (
+                <div key={title} className="b-card !p-6 space-y-3">
+                  <span className={`w-12 h-12 rounded-[18px] grid place-items-center ${tone}`}>
+                    <Icon className="w-6 h-6" />
+                  </span>
+                  <h3 className="font-display font-bold text-xl text-[#1E1B24]">{title}</h3>
+                  <p className="text-sm text-[#6E6878] leading-relaxed">{desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ═══ CTA ═══ */}
+        <section className="pb-16 sm:pb-24" aria-labelledby="cta-heading">
+          <div className={wrap}>
+            <div className="b-card b-card-hot !rounded-[32px] !p-8 sm:!p-14 text-center space-y-5 relative overflow-hidden">
+              <span aria-hidden="true" className="absolute -top-10 -left-10 w-40 h-40 rounded-full bg-[#FFC23D]/60" />
+              <span aria-hidden="true" className="absolute -bottom-12 -right-8 w-44 h-44 rounded-full bg-[#8C7BFF]/50" />
+              <div className="relative space-y-5">
+                <div className="flex justify-center gap-3 text-5xl" aria-hidden="true">
+                  <span className="-rotate-6">🎮</span>
+                  <span>🏆</span>
+                  <span className="rotate-6">🎬</span>
+                </div>
+                <h2 id="cta-heading" className="font-display font-bold text-4xl sm:text-5xl text-white tracking-tight">
+                  Ready for your first dare?
+                </h2>
+                <p className="text-white text-base sm:text-lg max-w-xl mx-auto leading-relaxed">
+                  Sign up in seconds, invite your friends, and find out who plays and who pays.
+                </p>
+                <div className="flex flex-wrap justify-center gap-3 pt-2">
+                  <Link
+                    href={initialUser ? "/games" : "/signup"}
+                    className="evo-btn evo-btn-xl font-bold bg-white text-[#C9381F] shadow-[0_4px_0_#C9381F]"
+                  >
+                    <Users className="w-5 h-5 mr-2" />
+                    {initialUser ? "Open the arena" : "Sign up free"}
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={handleCopy}
+                    className="evo-btn evo-btn-xl font-bold bg-white/20 text-white border-2 border-white/60 cursor-pointer"
+                  >
+                    <Trophy className="w-5 h-5 mr-2" />
+                    {copiedLink ? "Copied!" : "Copy Link"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
 
-      {/* ── FOOTER ── */}
       <FuturisticFooter />
-
     </div>
   );
 }

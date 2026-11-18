@@ -53,15 +53,15 @@ describe("shadcn/ui Sheet Primitive & Navbar Integration", () => {
     expect(navbarSource).toContain('href="/settings"');
   });
 
-  it("preserves Coastal Modern Light styling and sign-out handler in Navbar", () => {
+  it("preserves Concept B styling and sign-out handler in Navbar", () => {
     const navbarPath = path.resolve(__dirname, "../navigation/Navbar.tsx");
     const navbarSource = fs.readFileSync(navbarPath, "utf-8");
 
-    // Coastal Modern palette
-    expect(navbarSource).toContain("#167D78"); // Oceanic Teal
-    expect(navbarSource).toContain("#DDF2EB"); // Mint Surface
-    expect(navbarSource).toContain("#D95F49"); // Warm Coral
-    expect(navbarSource).toContain("#E2E8E2"); // Border subtle
+    // Concept B palette
+    expect(navbarSource).toContain("#FF5A3C"); // Tangerine
+    expect(navbarSource).toContain("#FFE4DD"); // Coral tint
+    expect(navbarSource).toContain("#FF5A3C"); // Tangerine
+    expect(navbarSource).toContain("#EADBC8"); // Warm line
 
     // Sign out handler invoked
     expect(navbarSource).toContain("onLogout?.()");

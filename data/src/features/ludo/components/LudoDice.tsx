@@ -21,7 +21,7 @@ export function DiceFace({ value, color, rolling = false, size = "md" }: { value
   return (
     <div
       className={cn(
-        "grid grid-cols-3 grid-rows-3 rounded-2xl bg-[#F5F7FF] border-4 shadow-lg",
+        "grid grid-cols-3 grid-rows-3 rounded-2xl bg-[#1E1B24] border-4 shadow-lg",
         size === "md" ? "w-16 h-16 p-2 gap-0.5" : "w-11 h-11 p-1.5 gap-0",
         rolling && "ludo-dice-rolling",
       )}
@@ -31,7 +31,7 @@ export function DiceFace({ value, color, rolling = false, size = "md" }: { value
     >
       {Array.from({ length: 9 }, (_, i) => (
         <span key={i} className="flex items-center justify-center">
-          {pips.includes(i) && <span className="block w-[70%] aspect-square rounded-full bg-[#070B25]" />}
+          {pips.includes(i) && <span className="block w-[70%] aspect-square rounded-full bg-[#FFF6EC]" />}
         </span>
       ))}
     </div>
@@ -97,7 +97,7 @@ export function LudoDice({ value, rolling, disabled, onRoll, color, caption }: L
           <Dices className="w-4 h-4 mr-2" aria-hidden="true" />
           {rolling ? "Rolling…" : "Roll"}
         </button>
-        {caption && <p className="text-[11px] text-[#8B98B5] truncate max-w-[180px]">{caption}</p>}
+        {caption && <p className="text-[11px] text-[#6E6878] truncate max-w-[180px]">{caption}</p>}
       </div>
     </div>
   );

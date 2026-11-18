@@ -27,6 +27,9 @@ const PUBLIC_ROUTES = new Set([
   "/play/ludo/bots",
   // Password Game is a solo puzzle that runs in the browser
   "/play/password-game",
+  // Tic Tac Toe and Memory Match run entirely in the browser
+    "/play/tic-tac-toe",
+    "/play/memory-match",
 ]);
 
 /**

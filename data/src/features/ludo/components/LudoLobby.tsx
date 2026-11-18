@@ -3,9 +3,13 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowRight, Bot, LogIn, Play, Swords, Users } from "lucide-react";
+import { ArrowRight, Bot, LogIn, Swords, Users } from "lucide-react";
 import { createClient } from "@/core/supabase/client";
-import { Avatar, Button, Spinner } from "@/shared/ui";
+import { Avatar, Button } from "@/shared/ui";
+import {
+  LobbyFrame, LobbyBackLink, LobbyHero, LobbyCard, PickWhoRow, InviteRailCard, RecordRailCard,
+  heroCtaClass, NumberedRules, type PickFriend,
+} from "@/shared/game/LobbyChrome";
 import type { FriendEntry } from "@/core/supabase/database";
 import type { LudoOpenMatch } from "@/features/ludo/types";
 
@@ -33,18 +37,7 @@ const RULES: string[] = [
 ];
 
 export function LudoRules() {
-  return (
-    <ul className="space-y-2.5">
-      {RULES.map((rule, i) => (
-        <li key={i} className="flex gap-3 text-sm text-[#B8C3E0] leading-relaxed">
-          <span className="w-6 h-6 shrink-0 rounded-lg bg-[#39DFFF]/10 border border-[#39DFFF]/30 text-[#39DFFF] text-xs font-bold flex items-center justify-center">
-            {i + 1}
-          </span>
-          <span>{rule}</span>
-        </li>
-      ))}
-    </ul>
-  );
+  return <NumberedRules rules={RULES} />;
 }
 
 export function LudoLobby({ userId, friends, openMatches }: LudoLobbyProps) {
@@ -97,32 +90,42 @@ export function LudoLobby({ userId, friends, openMatches }: LudoLobbyProps) {
   };
 
   return (
-    <div className="flex flex-col gap-6 sm:gap-8">
-      {/* ── Bots ─────────────────────────────────────────────────────────────── */}
-      <div className="rounded-3xl border border-[rgba(57,223,255,0.25)] bg-[#101638] p-6 sm:p-7 shadow-xl flex flex-col sm:flex-row sm:items-center gap-5">
-        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#39DFFF]/20 to-[#315BFF]/30 border border-[#39DFFF]/40 flex items-center justify-center text-[#39DFFF] shrink-0">
-          <Bot className="w-7 h-7" aria-hidden="true" />
-        </div>
-        <div className="flex-1 min-w-0">
-          <h2 className="font-display font-extrabold text-xl text-[#F5F7FF]">Play vs bots</h2>
-          <p className="text-sm text-[#B8C3E0] mt-0.5">
-            2, 3 or 4 players. No sign-in needed, nothing is saved.
-          </p>
-        </div>
-        <Link href="/play/ludo/bots" className="shrink-0">
-          <Button variant="primary" size="md" className="w-full sm:w-auto font-bold">
-            <Play className="w-4 h-4 mr-2 fill-current" />
-            Play vs bots
-          </Button>
+    <LobbyFrame
+      rail={
+        <>
+          <InviteRailCard label="Friends can challenge you to a game. The winner dares the loser." />
+          <RecordRailCard />
+        </>
+      }
+    >
+      <LobbyBackLink />
+
+      <LobbyHero
+        color="sun"
+        emoji="🎲"
+        eyebrow="Board Arena"
+        title="Ludo"
+        tagline="Roll, race your four tokens round the board and get them home first. Capture anyone who gets in the way."
+        chips={["2 to 4 players", "20s turns", "Dare for the loser"]}
+      >
+        <Link href="/play/ludo/bots" className={heroCtaClass}>
+          <Bot className="w-4 h-4" aria-hidden="true" />
+          Play vs bots
         </Link>
-      </div>
+        {userId && (
+          <a href="#ludo-pick" className={heroCtaClass}>
+            <Swords className="w-4 h-4" aria-hidden="true" />
+            Challenge a friend
+          </a>
+        )}
+      </LobbyHero>
 
       {!userId ? (
-        <div className="rounded-3xl border border-[rgba(255,255,255,0.08)] bg-[#101638] p-6 sm:p-7 shadow-xl text-center space-y-3">
-          <Users className="w-8 h-8 text-[#8B98B5] mx-auto" aria-hidden="true" />
+        <LobbyCard className="text-center space-y-3">
+          <Users className="w-8 h-8 text-[#6E6878] mx-auto" aria-hidden="true" />
           <div>
-            <h2 className="font-display font-extrabold text-lg text-[#F5F7FF]">Play your friends</h2>
-            <p className="text-sm text-[#B8C3E0] mt-1">Sign in to challenge a friend. The winner gets to dare the loser.</p>
+            <h2 className="font-display font-bold text-xl text-[#1E1B24]">Play your friends</h2>
+            <p className="text-sm text-[#6E6878] mt-1">Sign in to challenge a friend. The winner gets to dare the loser.</p>
           </div>
           <Link href="/login?next=/play/ludo" className="inline-block">
             <Button variant="secondary" size="md" className="font-bold">
@@ -130,15 +133,15 @@ export function LudoLobby({ userId, friends, openMatches }: LudoLobbyProps) {
               Sign in
             </Button>
           </Link>
-        </div>
+        </LobbyCard>
       ) : (
         <>
           {/* ── Open matches ───────────────────────────────────────────────── */}
           {openMatches.length > 0 && (
-            <div className="rounded-3xl border border-[rgba(57,223,255,0.25)] bg-[#101638] p-6 shadow-xl">
+            <LobbyCard tone="hot">
               <div className="flex items-center gap-2.5 mb-4">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#39DFFF] animate-pulse shadow-[0_0_8px_#39DFFF]" />
-                <h2 className="font-display font-bold text-base text-[#F5F7FF]">Your games</h2>
+                <span className="w-2.5 h-2.5 rounded-full bg-white animate-pulse" />
+                <h2 className="font-display font-bold text-lg text-white">Your games</h2>
               </div>
               <ul className="space-y-3">
                 {openMatches.map((m) => {
@@ -146,13 +149,13 @@ export function LudoLobby({ userId, friends, openMatches }: LudoLobbyProps) {
                   return (
                     <li
                       key={m.id}
-                      className="flex items-center justify-between gap-3 p-4 bg-[#070B25]/80 border border-[rgba(255,255,255,0.08)] rounded-2xl"
+                      className="flex items-center justify-between gap-3 p-4 bg-white border-2 border-white rounded-[22px]"
                     >
                       <div className="flex items-center gap-3 min-w-0">
                         <Avatar src={m.opponent_avatar} name={m.opponent_name} size="sm" />
                         <div className="min-w-0">
-                          <p className="font-bold text-sm text-[#F5F7FF] truncate">{m.opponent_name}</p>
-                          <p className={status.urgent ? "text-xs text-[#39DFFF] font-semibold" : "text-xs text-[#8B98B5]"}>
+                          <p className="font-bold text-sm text-[#1E1B24] truncate">{m.opponent_name}</p>
+                          <p className={status.urgent ? "text-xs text-[#C9381F] font-semibold" : "text-xs text-[#6E6878]"}>
                             {status.label}
                           </p>
                         </div>
@@ -167,18 +170,18 @@ export function LudoLobby({ userId, friends, openMatches }: LudoLobbyProps) {
                   );
                 })}
               </ul>
-            </div>
+            </LobbyCard>
           )}
 
-          {/* ── Challenge a friend ─────────────────────────────────────────── */}
-          <div className="rounded-3xl border border-[rgba(255,255,255,0.08)] bg-[#101638] p-6 sm:p-7 shadow-xl space-y-5">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <h2 className="font-display font-extrabold text-xl text-[#F5F7FF]">Challenge a friend</h2>
-                <p className="text-[#B8C3E0] text-sm mt-0.5">One on one, 20 seconds a turn, and a dare for the loser.</p>
+          {/* ── Pick who to play ───────────────────────────────────────────── */}
+          <LobbyCard className="space-y-4">
+            <div id="ludo-pick" className="flex items-start justify-between gap-3 scroll-mt-24">
+              <div className="min-w-0">
+                <h2 className="font-display font-bold text-xl text-[#1E1B24]">Pick who to play</h2>
+                <p className="text-[#6E6878] text-sm mt-0.5">One on one, 20 seconds a turn, and a dare for the loser.</p>
               </div>
               <Link href="/friends" className="shrink-0">
-                <Button variant="ghost" size="sm" className="text-xs text-[#39DFFF]">
+                <Button variant="ghost" size="sm" className="text-xs text-[#FF5A3C]">
                   Find friends <ArrowRight className="w-3.5 h-3.5 ml-1" />
                 </Button>
               </Link>
@@ -186,7 +189,7 @@ export function LudoLobby({ userId, friends, openMatches }: LudoLobbyProps) {
 
             {errorMsg && (
               <div
-                className="p-3.5 bg-[rgba(255,83,112,0.1)] border border-[rgba(255,83,112,0.3)] rounded-2xl text-xs text-[#FF5370] font-medium"
+                className="p-3.5 bg-[#FFE4DD] border-2 border-[#E5484D]/40 rounded-[18px] text-xs text-[#B42318] font-medium"
                 role="alert"
               >
                 {errorMsg}
@@ -194,11 +197,11 @@ export function LudoLobby({ userId, friends, openMatches }: LudoLobbyProps) {
             )}
 
             {friends.length === 0 ? (
-              <div className="p-8 text-center bg-[#070B25]/60 border border-dashed border-[rgba(255,255,255,0.15)] rounded-2xl space-y-3">
-                <Users className="w-8 h-8 text-[#8B98B5] mx-auto" aria-hidden="true" />
+              <div className="p-8 text-center bg-[#FFF6EC] border-2 border-dashed border-[#EADBC8] rounded-[22px] space-y-3">
+                <Users className="w-8 h-8 text-[#6E6878] mx-auto" aria-hidden="true" />
                 <div>
-                  <p className="font-bold text-sm text-[#F5F7FF]">No friends yet</p>
-                  <p className="text-xs text-[#B8C3E0] mt-1">Add friends with their EVOAIQU ID to challenge them.</p>
+                  <p className="font-bold text-sm text-[#1E1B24]">No friends yet</p>
+                  <p className="text-xs text-[#6E6878] mt-1">Add friends with their EVOAIQU ID to challenge them.</p>
                 </div>
                 <Link href="/friends" className="inline-block">
                   <Button variant="primary" size="sm" className="font-bold">
@@ -207,42 +210,28 @@ export function LudoLobby({ userId, friends, openMatches }: LudoLobbyProps) {
                 </Link>
               </div>
             ) : (
-              <ul className="divide-y divide-[rgba(255,255,255,0.06)]">
-                {friends.map((friend) => {
-                  const isLoading = loadingFriendId === friend.friend_id;
-                  return (
-                    <li key={friend.friend_id} className="py-3.5 flex items-center justify-between gap-3">
-                      <div className="flex items-center gap-3 min-w-0">
-                        <Avatar src={friend.avatar_url} name={friend.display_name} />
-                        <div className="min-w-0">
-                          <p className="font-bold text-sm text-[#F5F7FF] truncate">{friend.display_name}</p>
-                          <p className="text-[11px] font-mono text-[#39DFFF] truncate">{friend.evoora_id}</p>
-                        </div>
-                      </div>
-                      <Button
-                        variant="primary"
-                        size="sm"
-                        onClick={() => handleChallenge(friend.friend_id)}
-                        disabled={loadingFriendId !== null}
-                        className="shrink-0 font-bold"
-                      >
-                        {isLoading ? <Spinner size="sm" className="mr-1" /> : <Swords className="w-3.5 h-3.5 mr-1" />}
-                        Challenge
-                      </Button>
-                    </li>
-                  );
-                })}
-              </ul>
+              <PickWhoRow
+                title="Challenge"
+                friends={friends.map((friend): PickFriend => ({
+                  id: friend.friend_id,
+                  name: friend.display_name,
+                  avatar: friend.avatar_url,
+                  ariaLabel: `Challenge ${friend.display_name}`,
+                  disabled: loadingFriendId !== null,
+                  busy: loadingFriendId === friend.friend_id,
+                }))}
+                onPick={handleChallenge}
+              />
             )}
-          </div>
+          </LobbyCard>
         </>
       )}
 
       {/* ── Rules ────────────────────────────────────────────────────────────── */}
-      <div className="rounded-3xl border border-[rgba(255,255,255,0.08)] bg-[#101638] p-6 sm:p-7 shadow-xl space-y-4">
-        <h2 className="font-display font-extrabold text-lg text-[#F5F7FF]">How to play</h2>
+      <LobbyCard className="space-y-4">
+        <h2 className="font-display font-bold text-xl text-[#1E1B24]">How to play</h2>
         <LudoRules />
-      </div>
-    </div>
+      </LobbyCard>
+    </LobbyFrame>
   );
 }

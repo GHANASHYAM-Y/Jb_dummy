@@ -1,110 +1,113 @@
 @import "tailwindcss";
 
 /* ============================================================
-   EVOAIQU FUTURISTIC GAMING DESIGN SYSTEM
-   Deep Space Navy (#070B25), Neon Cyan (#39DFFF), Purple (#8B2CFF)
+   EVOAIQU — CONCEPT B "SOCIAL FEED" DESIGN SYSTEM
+   Warm cream canvas, sticker-like white cards with chunky drop
+   shadows, Fredoka display + DM Sans body, pill buttons.
    ============================================================ */
 
 :root {
   /* ── Brand Palette ─────────────────────────────────────────── */
-  --bg-page:             #070B25; /* Deep space navy canvas */
-  --surface-card:        #101638; /* Primary card surface */
-  --surface-card-hover:  #182352; /* Card hover surface */
-  --surface-white:       #101638; /* Semantic card surface fallback */
-  --surface-pale-teal:   rgba(57, 223, 255, 0.12); /* Cyan chip / badge surface */
-  --surface-pale-peach:  rgba(255, 83, 112, 0.14); /* Neon coral badge surface */
-  --surface-disabled:    rgba(255, 255, 255, 0.05); /* Muted / disabled background */
+  --bg-page:             #FFF6EC; /* Warm cream canvas */
+  --surface-card:        #FFFFFF;
+  --surface-card-hover:  #FFFBF5;
+  --surface-white:       #FFFFFF;
+  --surface-pale-teal:   #E3FAF3; /* Mint tint */
+  --surface-pale-peach:  #FFE4DD; /* Coral tint */
+  --surface-disabled:    #F5EADC;
 
-  /* Primary Brand: Cyan & Blue Neon */
-  --brand-cyan:          #39DFFF;
-  --brand-purple:        #8B2CFF;
-  --brand-blue:          #315BFF;
-  --brand-teal:          #39DFFF; /* Canonical accent */
-  --brand-teal-hover:    #5B7BFF;
-  --brand-teal-tint:     rgba(57, 223, 255, 0.12);
-  --brand-teal-glow:     rgba(57, 223, 255, 0.35);
+  /* Accent: Tangerine, with Mint / Lilac / Sun companions */
+  --brand-cyan:          #FF5A3C;
+  --brand-purple:        #8C7BFF;
+  --brand-blue:          #8C7BFF;
+  --brand-teal:          #FF5A3C; /* Canonical accent (name kept for compatibility) */
+  --brand-teal-hover:    #E8482B;
+  --brand-teal-tint:     #FFE4DD;
+  --brand-teal-glow:     rgba(255, 90, 60, 0.28);
+  --brand-mint:          #14C49A;
+  --brand-lilac:         #8C7BFF;
+  --brand-sun:           #FFC23D;
 
-  /* Playful Accent: Spicy Coral (Selective for challenges & dares) */
-  --brand-coral:         #FF5370;
-  --brand-coral-hover:   #E03E5A;
-  --brand-coral-tint:    rgba(255, 83, 112, 0.12);
-  --brand-coral-glow:    rgba(255, 83, 112, 0.3);
+  --brand-coral:         #E5484D;
+  --brand-coral-hover:   #C9383D;
+  --brand-coral-tint:    rgba(229, 72, 77, 0.12);
+  --brand-coral-glow:    rgba(229, 72, 77, 0.28);
 
-  /* Text Hierarchy */
-  --text-primary:        #F5F7FF; /* Crisp off-white */
-  --text-secondary:      #B8C3E0; /* Futuristic slate-blue */
-  --text-faint:          #8A98C0; /* Subdued meta, timestamps */
+  /* Text */
+  --text-primary:        #1E1B24;
+  --text-secondary:      #6E6878;
+  --text-faint:          #8E8798;
 
   /* Borders */
-  --border-subtle:       rgba(49, 91, 255, 0.22); /* Neon wireframe subtle */
-  --border-hover:        rgba(57, 223, 255, 0.45); /* Hover cyan glow */
+  --border-subtle:       #EADBC8;
+  --border-hover:        #1E1B24;
 
-  /* Semantic Alerts */
-  --color-danger:        #FF5370;
-  --color-danger-bg:     rgba(255, 83, 112, 0.14);
-  --color-success:       #39DFFF;
-  --color-success-bg:    rgba(57, 223, 255, 0.14);
-  --color-warning:       #FBBF24;
-  --color-warning-bg:    rgba(251, 191, 36, 0.14);
+  /* Semantic */
+  --color-danger:        #E5484D;
+  --color-danger-bg:     #FDECEC;
+  --color-success:       #0E9C7A;
+  --color-success-bg:    #E3FAF3;
+  --color-warning:       #B7791F;
+  --color-warning-bg:    #FFF2CC;
 
   /* ── Compatibility Aliases ─────────────────────────────────── */
-  --evo-navy:            #070B25;
-  --evo-navy-light:      #101638;
-  --evo-navy-mid:        #141B42;
-  --evo-navy-card:       #101638;
-  --evo-navy-elevated:   #182352;
-  --evo-border:          rgba(49, 91, 255, 0.22);
-  --evo-border-hover:    rgba(57, 223, 255, 0.45);
-  --evo-violet:          #8B2CFF;
-  --evo-violet-light:    #A452FF;
-  --evo-violet-pale:     rgba(139, 44, 255, 0.15);
-  --evo-violet-glow:     rgba(139, 44, 255, 0.35);
-  --evo-yellow:          #39DFFF;
-  --evo-yellow-light:    rgba(57, 223, 255, 0.15);
-  --evo-yellow-glow:     rgba(57, 223, 255, 0.35);
-  --evo-coral:           #FF5370;
-  --evo-coral-glow:      rgba(255, 83, 112, 0.3);
-  --evo-green:           #39DFFF;
-  --evo-green-glow:      rgba(57, 223, 255, 0.35);
-  --evo-text:            #F5F7FF;
-  --evo-text-muted:      #B8C3E0;
-  --evo-text-faint:      #8A98C0;
+  --evo-navy:            #FFF6EC;
+  --evo-navy-light:      #FFFFFF;
+  --evo-navy-mid:        #F5EADC;
+  --evo-navy-card:       #FFFFFF;
+  --evo-navy-elevated:   #F5EADC;
+  --evo-border:          #EADBC8;
+  --evo-border-hover:    #1E1B24;
+  --evo-violet:          #8C7BFF;
+  --evo-violet-light:    #A596FF;
+  --evo-violet-pale:     #EEEBFF;
+  --evo-violet-glow:     rgba(140, 123, 255, 0.3);
+  --evo-yellow:          #FFC23D;
+  --evo-yellow-light:    #FFF2CC;
+  --evo-yellow-glow:     rgba(255, 194, 61, 0.35);
+  --evo-coral:           #E5484D;
+  --evo-coral-glow:      rgba(229, 72, 77, 0.28);
+  --evo-green:           #14C49A;
+  --evo-green-glow:      rgba(20, 196, 154, 0.3);
+  --evo-text:            #1E1B24;
+  --evo-text-muted:      #6E6878;
+  --evo-text-faint:      #8E8798;
 
-  /* Next.js & shadcn/ui semantic theme mappings (Cyber Navy) */
-  --background:             #070B25;
-  --foreground:             #F5F7FF;
-  --card:                   #101638;
-  --card-foreground:        #F5F7FF;
-  --popover:                #101638;
-  --popover-foreground:     #F5F7FF;
-  --primary:                #39DFFF;
-  --primary-foreground:     #070B25;
-  --secondary:              #182352;
-  --secondary-foreground:   #F5F7FF;
-  --muted:                  rgba(255, 255, 255, 0.06);
-  --muted-foreground:       #B8C3E0;
-  --accent:                 rgba(57, 223, 255, 0.14);
-  --accent-foreground:      #39DFFF;
-  --destructive:            #FF5370;
+  /* shadcn/ui semantic mappings */
+  --background:             #FFF6EC;
+  --foreground:             #1E1B24;
+  --card:                   #FFFFFF;
+  --card-foreground:        #1E1B24;
+  --popover:                #FFFFFF;
+  --popover-foreground:     #1E1B24;
+  --primary:                #FF5A3C;
+  --primary-foreground:     #FFFFFF;
+  --secondary:              #F5EADC;
+  --secondary-foreground:   #1E1B24;
+  --muted:                  #F5EADC;
+  --muted-foreground:       #6E6878;
+  --accent:                 #FFE4DD;
+  --accent-foreground:      #C9381F;
+  --destructive:            #E5484D;
   --destructive-foreground: #FFFFFF;
-  --border:                 rgba(49, 91, 255, 0.22);
-  --input:                  rgba(49, 91, 255, 0.25);
-  --ring:                   #39DFFF;
+  --border:                 #EADBC8;
+  --input:                  #EADBC8;
+  --ring:                   #FF5A3C;
 
-  /* Radii scale */
-  --radius:     0.75rem;
-  --radius-sm:  8px;
-  --radius-md:  12px;
-  --radius-lg:  16px;
-  --radius-xl:  20px;
-  --radius-2xl: 26px;
+  /* Radii: round and friendly */
+  --radius:     1rem;
+  --radius-sm:  12px;
+  --radius-md:  16px;
+  --radius-lg:  20px;
+  --radius-xl:  26px;
+  --radius-2xl: 32px;
 
-  /* Shadows — sleek, ambient, futuristic glows */
-  --shadow-subtle:   0 2px 10px rgba(7, 11, 37, 0.6);
-  --shadow-card:     0 8px 32px rgba(7, 11, 37, 0.55), 0 0 16px rgba(49, 91, 255, 0.1);
-  --shadow-elevated: 0 16px 48px rgba(7, 11, 37, 0.75), 0 0 24px rgba(57, 223, 255, 0.2);
-  --shadow-teal:     0 0 24px rgba(57, 223, 255, 0.4);
-  --shadow-coral:    0 0 24px rgba(255, 83, 112, 0.4);
+  /* Shadows: chunky, flat, sticker-like */
+  --shadow-subtle:   0 2px 0 #EADBC8;
+  --shadow-card:     0 4px 0 #EADBC8;
+  --shadow-elevated: 0 6px 0 #EADBC8;
+  --shadow-teal:     0 5px 0 #C9381F;
+  --shadow-coral:    0 5px 0 #B3262B;
 }
 
 @theme inline {
@@ -127,8 +130,8 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --font-sans: var(--font-inter), "Inter", "Noto Sans Tamil", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-display: var(--font-manrope), "Manrope", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans: var(--font-dm-sans), "DM Sans", "Noto Sans Tamil", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: var(--font-fredoka), "Fredoka", "Noto Sans Tamil", system-ui, sans-serif;
   --font-tamil: "Noto Sans Tamil", sans-serif;
 }
 
@@ -156,9 +159,9 @@
     min-height: 100dvh;
     max-width: 100%;
     overflow-x: hidden;
-    background: #070B25;
-    color: #F5F7FF;
-    font-family: var(--font-inter), "Inter", "Noto Sans Tamil", -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #FFF6EC;
+    color: #1E1B24;
+    font-family: var(--font-dm-sans), "DM Sans", "Noto Sans Tamil", -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 1rem;
     line-height: 1.6;
     letter-spacing: 0;
@@ -166,38 +169,33 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Typography Hierarchy */
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-manrope), "Manrope", sans-serif;
-    color: #F5F7FF;
+    font-family: var(--font-fredoka), "Fredoka", "Noto Sans Tamil", sans-serif;
+    font-weight: 600;
+    color: #1E1B24;
     letter-spacing: -0.01em;
     text-wrap: balance;
   }
 
-  h1 {
-    line-height: 1.15;
-    letter-spacing: -0.03em;
-  }
-
-  h2 {
-    line-height: 1.25;
-    letter-spacing: -0.02em;
-  }
-
-  h3 {
-    line-height: 1.35;
-    letter-spacing: -0.01em;
-  }
-
-  h4, h5, h6 {
-    line-height: 1.4;
-    letter-spacing: 0;
-  }
+  h1 { line-height: 1.1; letter-spacing: -0.02em; font-weight: 700; }
+  h2 { line-height: 1.2; letter-spacing: -0.01em; }
+  h3 { line-height: 1.3; }
+  h4, h5, h6 { line-height: 1.4; letter-spacing: 0; }
 
   p {
     line-height: 1.65;
     letter-spacing: 0;
-    color: #B8C3E0;
+    color: #6E6878;
+  }
+
+  /* Paragraphs inside white-text containers (tangerine "hot" cards, ink buttons,
+     anything with text-white) follow the container instead of turning grey, which
+     was unreadable on orange. This sits in the base layer, so any colour utility
+     on the paragraph itself (utilities layer) still wins. */
+  .text-white p,
+  .b-card-hot p,
+  .evo-btn p {
+    color: inherit;
   }
 
   button, input, select, textarea {
@@ -212,30 +210,31 @@
 }
 
 /* ============================================================
-   FUTURISTIC COMPONENT SYSTEM
+   COMPONENT SYSTEM (Concept B: sticker cards, pill buttons)
    ============================================================ */
 
 /* ----- Cards ----- */
 .evo-card {
-  background: #101638;
-  border: 1px solid rgba(49, 91, 255, 0.25);
-  border-radius: var(--radius-xl, 1.25rem);
-  padding: 1.5rem;
+  background: #FFFFFF;
+  border: 2px solid #EADBC8;
+  border-radius: var(--radius-xl);
+  padding: 1.25rem;
   box-shadow: var(--shadow-card);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
 }
-
+@media (min-width: 640px) {
+  .evo-card { padding: 1.5rem; }
+}
 .evo-card:hover {
-  border-color: rgba(57, 223, 255, 0.45);
-  box-shadow: 0 12px 40px rgba(7, 11, 37, 0.7), 0 0 20px rgba(49, 91, 255, 0.2);
+  border-color: #1E1B24;
+  box-shadow: 0 6px 0 #1E1B24;
+  transform: translateY(-2px);
 }
 
 .evo-card-glass {
-  background: rgba(16, 22, 56, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(49, 91, 255, 0.28);
-  border-radius: var(--radius-xl, 1.25rem);
+  background: #FFFFFF;
+  border: 2px solid #EADBC8;
+  border-radius: var(--radius-xl);
   box-shadow: var(--shadow-card);
 }
 
@@ -247,8 +246,9 @@
   gap: 0.5rem;
   padding: 0.625rem 1.25rem;
   min-height: 44px;
-  border-radius: var(--radius-md);
-  font-weight: 700;
+  border-radius: 999px;
+  font-family: var(--font-fredoka), "Fredoka", sans-serif;
+  font-weight: 600;
   font-size: 0.9375rem;
   line-height: 1.4;
   letter-spacing: 0.01em;
@@ -256,142 +256,128 @@
   border: none;
   outline: none;
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.15s ease;
   white-space: nowrap;
   -webkit-user-select: none;
   user-select: none;
 }
-
 .evo-btn:disabled {
-  opacity: 0.4;
+  opacity: 0.45;
   cursor: not-allowed;
   transform: none !important;
 }
 
-/* Primary Cyan/Blue Gradient CTA */
+/* Primary: tangerine pill with a chunky foot */
 .evo-btn-primary {
-  background: linear-gradient(135deg, #315BFF 0%, #8B2CFF 100%);
+  background: #FF5A3C;
   color: #FFFFFF;
-  box-shadow: 0 0 24px rgba(49, 91, 255, 0.45);
+  box-shadow: 0 4px 0 #C9381F;
 }
 .evo-btn-primary:hover:not(:disabled) {
-  background: linear-gradient(135deg, #39DFFF 0%, #8B2CFF 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 0 32px rgba(57, 223, 255, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #C9381F;
 }
 .evo-btn-primary:active:not(:disabled) {
-  transform: translateY(0);
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #C9381F;
 }
 
-/* Secondary Cyber Navy Button */
+/* Secondary: ink pill */
 .evo-btn-secondary {
-  background: #101638;
-  color: #F5F7FF;
-  border: 1px solid rgba(49, 91, 255, 0.4);
-  box-shadow: var(--shadow-subtle);
+  background: #1E1B24;
+  color: #FFFFFF;
+  box-shadow: 0 4px 0 #000000;
 }
 .evo-btn-secondary:hover:not(:disabled) {
-  background: #182352;
-  border-color: #39DFFF;
-  color: #FFFFFF;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #000000;
+}
+.evo-btn-secondary:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #000000;
 }
 
-/* Coral Button (For dares & winner challenges) */
+/* Coral: dares and winner challenges */
 .evo-btn-coral,
 .evo-btn-yellow {
-  background: #FF5370;
+  background: #E5484D;
   color: #FFFFFF;
-  font-weight: 700;
   box-shadow: var(--shadow-coral);
 }
 .evo-btn-coral:hover:not(:disabled),
 .evo-btn-yellow:hover:not(:disabled) {
-  background: #E03E5A;
-  transform: translateY(-1px);
-  box-shadow: 0 0 28px rgba(255, 83, 112, 0.55);
+  transform: translateY(-2px);
+  box-shadow: 0 7px 0 #B3262B;
+}
+.evo-btn-coral:active:not(:disabled),
+.evo-btn-yellow:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #B3262B;
 }
 
+/* Ghost: soft sand pill */
 .evo-btn-ghost {
-  background: transparent;
-  color: #B8C3E0;
+  background: #F5EADC;
+  color: #1E1B24;
 }
 .evo-btn-ghost:hover:not(:disabled) {
-  background: #101638;
-  color: #F5F7FF;
+  background: #EADBC8;
 }
 
 .evo-btn-danger {
-  background: rgba(255, 83, 112, 0.12);
-  color: #FF5370;
-  border: 1px solid rgba(255, 83, 112, 0.35);
+  background: #FDECEC;
+  color: #C9383D;
+  border: 2px solid #F5B9BB;
 }
 .evo-btn-danger:hover:not(:disabled) {
-  background: rgba(255, 83, 112, 0.22);
+  background: #FAD4D5;
 }
 
-.evo-btn-sm {
-  min-height: 38px;
-  padding: 0.4375rem 0.9375rem;
-  font-size: 0.875rem;
-  line-height: 1.4;
-  border-radius: var(--radius-sm);
-}
-.evo-btn-lg {
-  min-height: 48px;
-  padding: 0.75rem 1.75rem;
-  font-size: 1rem;
-  line-height: 1.4;
-  border-radius: var(--radius-md);
-}
-.evo-btn-xl {
-  min-height: 52px;
-  padding: 0.875rem 2rem;
-  font-size: 1.0625rem;
-  line-height: 1.4;
-  border-radius: var(--radius-lg);
-}
+.evo-btn-sm { min-height: 38px; padding: 0.4375rem 0.9375rem; font-size: 0.875rem; }
+.evo-btn-lg { min-height: 48px; padding: 0.75rem 1.75rem; font-size: 1rem; }
+.evo-btn-xl { min-height: 56px; padding: 0.875rem 2rem; font-size: 1.1875rem; }
 
 /* ----- Inputs ----- */
 .evo-input {
   width: 100%;
-  background: #070B25;
-  border: 1px solid rgba(49, 91, 255, 0.3);
-  border-radius: var(--radius-md);
-  padding: 0.625rem 0.875rem;
-  min-height: 44px;
-  color: #F5F7FF;
+  background: #FFFFFF;
+  border: 2px solid #EADBC8;
+  border-radius: 999px;
+  padding: 0.625rem 1.125rem;
+  min-height: 48px;
+  color: #1E1B24;
   font-size: 0.9375rem;
   font-family: inherit;
   outline: none;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
-  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
+textarea.evo-input {
+  border-radius: var(--radius-lg);
+}
+/* .evo-input is unlayered, so it beats Tailwind padding utilities; inputs with an
+   icon inside need these explicit overrides or the icon sits on top of the text. */
 .evo-input.pl-10,
-.evo-input.has-left-icon {
-  padding-left: 2.5rem !important;
-}
+.evo-input.has-left-icon { padding-left: 2.75rem !important; }
+.evo-input.pl-11 { padding-left: 2.875rem !important; }
+.evo-input.pl-12 { padding-left: 3rem !important; }
 .evo-input.pr-10,
-.evo-input.has-right-icon {
-  padding-right: 2.5rem !important;
-}
-.evo-input::placeholder {
-  color: #8A98C0;
-}
+.evo-input.has-right-icon { padding-right: 2.75rem !important; }
+.evo-input.pr-12 { padding-right: 3rem !important; }
+.evo-input::placeholder { color: #8E8798; }
 .evo-input:focus {
-  border-color: #39DFFF;
-  box-shadow: 0 0 0 3px rgba(57, 223, 255, 0.2);
+  border-color: #1E1B24;
+  box-shadow: 0 3px 0 #1E1B24;
 }
 .evo-input.error {
-  border-color: #FF5370;
-  box-shadow: 0 0 0 3px rgba(255, 83, 112, 0.2);
+  border-color: #E5484D;
+  box-shadow: 0 3px 0 rgba(229, 72, 77, 0.35);
 }
 
 .evo-label {
   display: block;
   font-size: 0.875rem;
-  font-weight: 600;
-  color: #D6DEFF;
+  font-weight: 700;
+  color: #1E1B24;
   margin-bottom: 0.375rem;
 }
 
@@ -400,50 +386,46 @@
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  padding: 0.3125rem 0.6875rem;
+  padding: 0.3125rem 0.75rem;
   border-radius: 999px;
   font-size: 0.8125rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
+  font-weight: 700;
+  letter-spacing: 0.01em;
   line-height: 1.35;
 }
-
-/* Cyan / Teal Badge */
 .evo-badge-teal,
 .evo-badge-green,
-.evo-badge-lime,
-.evo-badge-violet {
-  background: rgba(57, 223, 255, 0.12);
-  color: #39DFFF;
-  border: 1px solid rgba(57, 223, 255, 0.3);
+.evo-badge-lime {
+  background: #E3FAF3;
+  color: #0E7C62;
+  border: 2px solid #B7EEDD;
 }
-
-/* Coral Peach Badge */
+.evo-badge-violet {
+  background: #EEEBFF;
+  color: #5A47D6;
+  border: 2px solid #D7D0FF;
+}
 .evo-badge-coral,
 .evo-badge-yellow {
-  background: rgba(255, 83, 112, 0.14);
-  color: #FF5370;
-  border: 1px solid rgba(255, 83, 112, 0.35);
+  background: #FFE4DD;
+  color: #C9381F;
+  border: 2px solid #FFC9BC;
 }
-
-/* Muted Slate Badge */
 .evo-badge-muted {
-  background: rgba(255, 255, 255, 0.06);
-  color: #B8C3E0;
-  border: 1px solid rgba(49, 91, 255, 0.2);
+  background: #F5EADC;
+  color: #6E6878;
+  border: 2px solid #EADBC8;
 }
 
 /* ----- Dividers ----- */
 .evo-divider {
   border: none;
-  border-top: 1px solid rgba(49, 91, 255, 0.2);
+  border-top: 2px solid #EADBC8;
   margin: 1.5rem 0;
 }
 
 /* ----- Section helpers ----- */
-.evo-section {
-  padding: 3.5rem 0;
-}
+.evo-section { padding: 3.5rem 0; }
 .evo-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -452,29 +434,27 @@
 
 /* ----- Typography ----- */
 .evo-display {
-  font-family: var(--font-manrope), "Manrope", sans-serif;
-  font-weight: 800;
+  font-family: var(--font-fredoka), "Fredoka", sans-serif;
+  font-weight: 700;
   letter-spacing: -0.02em;
-  line-height: 1.15;
-  color: #F5F7FF;
+  line-height: 1.1;
+  color: #1E1B24;
 }
-
 .evo-gradient-text {
-  background: linear-gradient(135deg, #39DFFF 0%, #8B2CFF 100%);
+  background: linear-gradient(135deg, #FF5A3C 0%, #8C7BFF 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* ----- Navigation ----- */
+/* ----- Navigation (public header) ----- */
 .evo-nav {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(7, 11, 37, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(49, 91, 255, 0.25);
-  box-shadow: 0 4px 24px rgba(7, 11, 37, 0.7);
+  background: rgba(255, 246, 236, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 2px solid #EADBC8;
 }
 
 /* ----- Alert / Toast ----- */
@@ -483,31 +463,205 @@
   align-items: flex-start;
   gap: 0.75rem;
   padding: 0.875rem 1rem;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   font-size: 0.875rem;
-  border-left: 3px solid;
+  border: 2px solid;
 }
-.evo-alert-error {
-  background: rgba(255, 83, 112, 0.12);
-  border-color: #FF5370;
-  color: #FF8096;
+.evo-alert-error   { background: #FDECEC; border-color: #F5B9BB; color: #B3262B; }
+.evo-alert-success { background: #E3FAF3; border-color: #B7EEDD; color: #0E7C62; }
+.evo-alert-info    { background: #EEEBFF; border-color: #D7D0FF; color: #3F2FB0; }
+.evo-alert-warning { background: #FFF2CC; border-color: #F2D98A; color: #8A5A00; }
+
+/* ============================================================
+   CONCEPT B SHELL: sidebar, tab bar, play FAB, feed cards
+   ============================================================ */
+
+.b-shell { display: grid; grid-template-columns: 250px minmax(0, 1fr); min-height: 100dvh; background: #FFF6EC; }
+@media (max-width: 767px) {
+  .b-shell { grid-template-columns: minmax(0, 1fr); }
 }
-.evo-alert-success {
-  background: rgba(57, 223, 255, 0.12);
-  border-color: #39DFFF;
-  color: #39DFFF;
+.b-sidebar {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 22px 16px;
+  background: #FFF6EC;
+  border-right: 2px solid #EADBC8;
+  overflow-y: auto;
 }
-.evo-alert-info {
-  background: #101638;
-  border-color: #39DFFF;
-  color: #F5F7FF;
+.b-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px 18px;
+  font-family: var(--font-fredoka), "Fredoka", sans-serif;
+  font-weight: 700;
+  font-size: 1.625rem;
+  letter-spacing: -0.02em;
+  color: #1E1B24;
+}
+.b-logo-mark {
+  width: 30px; height: 30px;
+  border-radius: 10px;
+  background: #FF5A3C;
+  color: #fff;
+  display: grid; place-items: center;
+  font-size: 0.8rem; font-weight: 700;
+  transform: rotate(-8deg);
+}
+.b-nav {
+  position: relative;
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 14px;
+  border-radius: 16px;
+  font-weight: 700; font-size: 0.9375rem;
+  color: #6E6878;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+.b-nav:hover { background: #F5EADC; color: #1E1B24; }
+.b-nav[aria-current="page"] { background: #1E1B24; color: #FFFFFF; }
+.b-nav-count {
+  margin-left: auto;
+  min-width: 20px; height: 20px; padding: 0 5px;
+  border-radius: 10px;
+  background: #FF5A3C; color: #fff;
+  font-size: 0.6875rem; font-weight: 800;
+  display: grid; place-items: center;
+}
+.b-play-btn {
+  margin-top: 14px;
+  height: 56px;
+  border-radius: 999px;
+  background: #FF5A3C; color: #fff;
+  font-family: var(--font-fredoka), "Fredoka", sans-serif;
+  font-weight: 600; font-size: 1.1875rem;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  box-shadow: 0 5px 0 #C9381F;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+.b-play-btn:hover { transform: translateY(-2px); box-shadow: 0 7px 0 #C9381F; }
+.b-play-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 #C9381F; }
+.b-me {
+  margin-top: auto;
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px;
+  border-radius: 18px;
+  background: #FFFFFF;
+  border: 2px solid #EADBC8;
+  text-align: left;
+}
+
+.b-content { min-width: 0; display: flex; flex-direction: column; }
+.b-topbar {
+  display: none;
+  align-items: center; justify-content: space-between;
+  padding: 12px 16px 6px;
+}
+@media (max-width: 767px) {
+  .b-sidebar { display: none; }
+  .b-topbar { display: flex; }
+}
+
+.b-tabbar { display: none; }
+.b-fab { display: none; }
+@media (max-width: 767px) {
+  .b-tabbar {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    position: fixed; left: 0; right: 0; bottom: 0;
+    height: calc(74px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    background: #FFFFFF;
+    border-top: 2px solid #EADBC8;
+    z-index: 50;
+    align-items: center;
+  }
+  .b-tabbar a {
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    font-size: 0.6875rem; font-weight: 700; color: #6E6878;
+  }
+  .b-tabbar a[aria-current="page"] { color: #1E1B24; }
+  .b-fab {
+    display: grid; place-items: center;
+    position: fixed; left: 50%;
+    bottom: calc(30px + env(safe-area-inset-bottom, 0px));
+    transform: translateX(-50%);
+    width: 66px; height: 66px;
+    border-radius: 50%;
+    background: #FF5A3C; color: #fff;
+    box-shadow: 0 5px 0 #C9381F;
+    border: 4px solid #FFF6EC;
+    z-index: 60;
+  }
+  .b-fab:active { transform: translateX(-50%) translateY(3px); box-shadow: 0 2px 0 #C9381F; }
+}
+
+/* Feed-style cards */
+.b-card {
+  background: #FFFFFF;
+  border: 2px solid #EADBC8;
+  border-radius: 26px;
+  padding: 1.125rem;
+  box-shadow: 0 4px 0 #EADBC8;
+}
+.b-card-hot   { background: #FF5A3C; border-color: #FF5A3C; color: #fff; box-shadow: 0 5px 0 #C9381F; }
+.b-card-mint  { background: #E3FAF3; border-color: #B7EEDD; box-shadow: 0 4px 0 #B7EEDD; }
+.b-card-lilac { background: #EEEBFF; border-color: #D7D0FF; box-shadow: 0 4px 0 #D7D0FF; }
+.b-card-sun   { background: #FFC23D; border-color: #E9A912; box-shadow: 0 4px 0 #E9A912; }
+
+.b-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 9px 14px;
+  border-radius: 999px;
+  background: #F5EADC;
+  border: 2px solid transparent;
+  font-weight: 700; font-size: 0.875rem;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.b-chip:hover { transform: translateY(-2px) rotate(-1deg); border-color: #1E1B24; }
+
+.b-story-ring {
+  padding: 3px;
+  border-radius: 50%;
+  background: conic-gradient(#FF5A3C, #FFC23D, #8C7BFF, #FF5A3C);
+  transition: transform 0.2s ease;
+}
+.b-story-ring:hover { transform: scale(1.07) rotate(-4deg); }
+
+/* ----- Game card (lobby tiles) ----- */
+.game-card {
+  position: relative;
+  background: #FFFFFF;
+  border: 2px solid #EADBC8;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+@media (min-width: 640px) {
+  .game-card { padding: 1.75rem; }
+}
+.game-card:hover {
+  border-color: #1E1B24;
+  box-shadow: 0 6px 0 #1E1B24;
+  transform: translateY(-2px);
+}
+
+.evo-stat-tile {
+  background: #FFFFFF;
+  border: 2px solid #EADBC8;
+  border-radius: var(--radius-lg);
+  padding: 0.875rem 1rem;
   box-shadow: var(--shadow-subtle);
+  transition: border-color 0.15s ease;
 }
-.evo-alert-warning {
-  background: rgba(251, 191, 36, 0.12);
-  border-color: #FBBF24;
-  color: #FDE68A;
-}
+.evo-stat-tile:hover { border-color: #1E1B24; }
 
 /* ============================================================
    ANIMATIONS & MOTION
@@ -559,7 +713,7 @@
 }
 @keyframes rps-pip-pulse {
   0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.35); filter: drop-shadow(0 0 6px var(--brand-teal)); }
+  50% { transform: scale(1.35); filter: drop-shadow(0 0 6px rgba(255, 90, 60, 0.6)); }
 }
 @keyframes cyber-float {
   0%, 100% { transform: translateY(0px); }
@@ -608,12 +762,12 @@
 }
 
 /* ============================================================
-   BACKGROUND DECORATION (Gentle coastal ivory/mint gradient)
+   BACKGROUND DECORATION (soft warm wash)
    ============================================================ */
 
 .evo-bg-mesh {
   background-image:
-    radial-gradient(ellipse 70% 35% at 50% 0%, rgba(221, 242, 235, 0.45) 0%, transparent 70%);
+    radial-gradient(ellipse 70% 35% at 50% 0%, rgba(255, 90, 60, 0.07) 0%, transparent 70%);
 }
 
 /* ============================================================
@@ -621,7 +775,7 @@
    ============================================================ */
 
 ::-webkit-scrollbar        { width: 6px; height: 6px; }
-::-webkit-scrollbar-track  { background: var(--bg-page); }
+::-webkit-scrollbar-track  { background: #FFF6EC; }
 ::-webkit-scrollbar-thumb  { background: var(--border-subtle); border-radius: 999px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-faint); }
 
@@ -632,45 +786,6 @@
 :focus-visible {
   outline: 2px solid var(--brand-teal);
   outline-offset: 2px;
-}
-
-/* ============================================================
-   GAME CARD — clean, light-first interactive surface
-   ============================================================ */
-
-.game-card {
-  position: relative;
-  background: var(--surface-white);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-card);
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  transition: all 0.22s ease;
-}
-@media (min-width: 640px) {
-  .game-card {
-    padding: 1.75rem;
-  }
-}
-.game-card:hover {
-  border-color: var(--brand-teal);
-  box-shadow: var(--shadow-elevated);
-  transform: translateY(-2px);
-}
-
-.evo-stat-tile {
-  background: var(--surface-white);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  padding: 0.875rem 1rem;
-  box-shadow: var(--shadow-subtle);
-  transition: border-color 0.18s ease;
-}
-.evo-stat-tile:hover {
-  border-color: var(--border-hover);
 }
 
 /* ============================================================
@@ -689,9 +804,9 @@
 .cyber-autofill:-webkit-autofill:hover,
 .cyber-autofill:-webkit-autofill:focus,
 .cyber-autofill:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 1000px #070B25 inset !important;
-  -webkit-text-fill-color: #F5F7FF !important;
-  caret-color: #39DFFF !important;
+  -webkit-box-shadow: 0 0 0 1000px #FFFFFF inset !important;
+  -webkit-text-fill-color: #1E1B24 !important;
+  caret-color: #FF5A3C !important;
   transition: background-color 5000s ease-in-out 0s;
 }
 

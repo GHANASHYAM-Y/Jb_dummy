@@ -21,17 +21,17 @@ function MatchError({ title, message, forbidden = false }: { title: string; mess
   return (
     <div className="evo-section py-12 md:py-20">
       <div className="evo-container max-w-lg">
-        <div className="evo-card p-8 bg-[#101638] border border-[rgba(255,255,255,0.08)] text-center shadow-2xl space-y-4">
+        <div className="evo-card p-8 bg-[#FFFFFF] border border-[rgba(30,27,36,0.08)] text-center shadow-2xl space-y-4">
           <div
             className={`w-12 h-12 rounded-2xl ${
-              forbidden ? "bg-[rgba(255,83,112,0.15)] text-[#FF5370]" : "bg-[#070B25] text-[#8B98B5]"
-            } border border-[rgba(255,255,255,0.08)] flex items-center justify-center mx-auto`}
+              forbidden ? "bg-[rgba(229,72,77,0.15)] text-[#E5484D]" : "bg-[#FFF6EC] text-[#6E6878]"
+            } border border-[rgba(30,27,36,0.08)] flex items-center justify-center mx-auto`}
           >
             {forbidden ? <ShieldAlert className="h-6 w-6" /> : <AlertCircle className="h-6 w-6" />}
           </div>
           <div>
-            <h1 className="font-display font-bold text-xl text-[#F5F7FF] mb-1.5">{title}</h1>
-            <p className="text-[#B8C3E0] text-sm leading-relaxed">{message}</p>
+            <h1 className="font-display font-bold text-xl text-[#1E1B24] mb-1.5">{title}</h1>
+            <p className="text-[#6E6878] text-sm leading-relaxed">{message}</p>
           </div>
           <div className="pt-2 flex justify-center">
             <Link href="/play/hand-cricket">
@@ -93,7 +93,7 @@ export default async function HandCricketMatchPage({ params }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-[#070B14] py-4 md:py-8 px-3 md:px-4">
+    <div className="min-h-screen bg-[#FFF6EC] py-4 md:py-8 px-3 md:px-4">
       <HandCricketMatchBoard
         matchId={matchId}
         viewerId={user.id}

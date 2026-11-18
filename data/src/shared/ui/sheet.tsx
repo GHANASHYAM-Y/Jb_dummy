@@ -31,7 +31,7 @@ const SheetOverlay = React.forwardRef<
 SheetOverlay.displayName = SheetPrimitive.Overlay.displayName;
 
 const sheetVariants = cva(
-  "fixed z-50 gap-4 bg-white p-6 shadow-2xl transition ease-in-out data-[state=closed]:duration-200 data-[state=open]:duration-300 data-[state=open]:animate-in data-[state=closed]:animate-out border-[#E2E8E2]",
+  "fixed z-50 gap-4 bg-white p-6 shadow-2xl transition ease-in-out data-[state=closed]:duration-200 data-[state=open]:duration-300 data-[state=open]:animate-in data-[state=closed]:animate-out border-[#EADBC8]",
   {
     variants: {
       side: {
@@ -64,7 +64,7 @@ const SheetContent = React.forwardRef<
       className={cn(sheetVariants({ side }), className)}
       {...props}
     >
-      <SheetPrimitive.Close className="absolute right-4 top-4 rounded-lg p-2 text-[#65736F] hover:text-[#203331] hover:bg-[#F7F8F4] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78] focus-visible:ring-offset-2 transition-colors disabled:pointer-events-none min-h-[44px] min-w-[44px] flex items-center justify-center">
+      <SheetPrimitive.Close className="absolute right-4 top-4 rounded-lg p-2 text-[#6E6878] hover:text-[#1E1B24] hover:bg-[#FFF6EC] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C] focus-visible:ring-offset-2 transition-colors disabled:pointer-events-none min-h-[44px] min-w-[44px] flex items-center justify-center">
         <X className="h-5 w-5" />
         <span className="sr-only">Close</span>
       </SheetPrimitive.Close>
@@ -108,7 +108,7 @@ const SheetTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SheetPrimitive.Title
     ref={ref}
-    className={cn("text-lg font-bold text-[#203331]", className)}
+    className={cn("text-lg font-bold text-[#1E1B24]", className)}
     {...props}
   />
 ));
@@ -120,7 +120,7 @@ const SheetDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SheetPrimitive.Description
     ref={ref}
-    className={cn("text-sm text-[#65736F]", className)}
+    className={cn("text-sm text-[#6E6878]", className)}
     {...props}
   />
 ));

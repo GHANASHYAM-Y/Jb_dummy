@@ -19,10 +19,13 @@ import nextTs from "eslint-config-next/typescript";
 const FEATURES = [
   "chess",
   "dare-game",
+  "draw-guess",
   "hand-cricket",
   "ludo",
+  "memory-match",
   "password-game",
   "rock-paper-scissors",
+  "tic-tac-toe",
 ];
 const SHARED_FEATURE = "dare-game"; // the only feature other features may use
 const NOT_TESTS = ["**/__tests__/**"];

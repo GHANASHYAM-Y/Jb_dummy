@@ -122,23 +122,23 @@ export function ChallengeSelectionModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="challenge-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1E1B24]/60 animate-fade-in"
     >
       <div
-        className="relative w-full max-w-2xl max-h-[90vh] flex flex-col rounded-2xl border border-[#E2E8E2] bg-white shadow-2xl overflow-hidden"
+        className="relative w-full max-w-2xl max-h-[90vh] flex flex-col rounded-[32px] border-2 border-[#EADBC8] bg-white shadow-[0_6px_0_#EADBC8] overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-[#E2E8E2]">
+        <div className="flex items-center justify-between p-6 border-b-2 border-[#EADBC8]">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-[#FCE6DE] text-[#D95F49]">
+            <div className="w-11 h-11 rounded-full bg-[#FFC23D] border-2 border-[#E9A912] text-[#1E1B24] flex items-center justify-center">
               <Sparkles className="h-5 w-5" />
             </div>
             <div>
-              <h2 id="challenge-modal-title" className="text-xl font-bold font-display text-[#203331]">
+              <h2 id="challenge-modal-title" className="text-xl font-bold font-display text-[#1E1B24]">
                 {t("challenges.assign_dare")}
               </h2>
-              <p className="text-xs text-[#65736F] mt-0.5">
+              <p className="text-xs text-[#6E6878] mt-0.5">
                 {t("challenges.assign_dare_desc")} ({opponentName})
               </p>
             </div>
@@ -147,7 +147,7 @@ export function ChallengeSelectionModal({
             type="button"
             onClick={onClose}
             disabled={submitting}
-            className="p-2 text-[#65736F] hover:text-[#203331] rounded-lg hover:bg-[#EEF1ED] transition-colors"
+            className="w-11 h-11 flex items-center justify-center text-[#1E1B24] rounded-full bg-[#F5EADC] hover:bg-[#EADBC8] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C]"
             aria-label="Close"
           >
             <X className="h-5 w-5" />
@@ -164,7 +164,7 @@ export function ChallengeSelectionModal({
 
           {/* Category Tabs */}
           <div>
-            <label className="text-xs font-semibold text-[#65736F] uppercase tracking-wider block mb-2">
+            <label className="text-xs font-semibold text-[#6E6878] uppercase tracking-wider block mb-2">
               {t("challenges.select_category")}
             </label>
             <div className="flex flex-wrap gap-2">
@@ -172,10 +172,10 @@ export function ChallengeSelectionModal({
                 type="button"
                 onClick={() => setSelectedCategory("all")}
                 className={cn(
-                  "px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-150 border",
+                  "min-h-[44px] px-4 rounded-full text-sm font-bold transition-all duration-150 border-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C]",
                   selectedCategory === "all"
-                    ? "bg-[#167D78] text-white border-[#167D78] shadow-xs"
-                    : "bg-[#EEF1ED] text-[#65736F] border-[#E2E8E2] hover:text-[#203331] hover:bg-[#E2E8E2]"
+                    ? "bg-[#FF5A3C] text-white border-[#FF5A3C] shadow-[0_3px_0_#C9381F]"
+                    : "bg-[#F5EADC] text-[#1E1B24] border-transparent hover:border-[#1E1B24]"
                 )}
               >
                 {t("challenges.all_categories")}
@@ -188,10 +188,10 @@ export function ChallengeSelectionModal({
                     type="button"
                     onClick={() => setSelectedCategory(cat)}
                     className={cn(
-                      "px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-all duration-150 border",
+                      "min-h-[44px] px-4 rounded-full text-sm font-bold flex items-center gap-1.5 transition-all duration-150 border-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C]",
                       selectedCategory === cat
-                        ? "bg-[#167D78] text-white border-[#167D78] shadow-xs"
-                        : "bg-[#EEF1ED] text-[#65736F] border-[#E2E8E2] hover:text-[#203331] hover:bg-[#E2E8E2]"
+                        ? "bg-[#FF5A3C] text-white border-[#FF5A3C] shadow-[0_3px_0_#C9381F]"
+                        : "bg-[#F5EADC] text-[#1E1B24] border-transparent hover:border-[#1E1B24]"
                     )}
                   >
                     <span>{meta.emoji}</span>
@@ -204,7 +204,7 @@ export function ChallengeSelectionModal({
 
           {/* Catalog grid */}
           <div className="space-y-2">
-            <label className="text-xs font-semibold text-[#65736F] uppercase tracking-wider block">
+            <label className="text-xs font-semibold text-[#6E6878] uppercase tracking-wider block">
               Choose a challenge ({filteredChallenges.length})
             </label>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-56 overflow-y-auto pr-1">
@@ -217,21 +217,21 @@ export function ChallengeSelectionModal({
                     type="button"
                     onClick={() => setSelectedChallenge(item)}
                     className={cn(
-                      "text-left p-3.5 rounded-xl border transition-all duration-150 flex flex-col justify-between",
+                      "text-left p-4 rounded-[22px] border-2 transition-all duration-150 flex flex-col justify-between focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C]",
                       isSelected
-                        ? "border-[#167D78] bg-[#DDF2EB]/50 shadow-xs"
-                        : "border-[#E2E8E2] bg-white hover:border-[#CBD4CB] hover:bg-[#F7F8F4]"
+                        ? "border-[#FF5A3C] bg-[#FFF6EC] shadow-[0_3px_0_#FF5A3C]"
+                        : "border-[#EADBC8] bg-white hover:bg-[#FFF6EC]"
                     )}
                   >
                     <div className="flex items-start justify-between gap-2">
-                      <span className="font-semibold text-sm text-[#203331] line-clamp-1">
+                      <span className="font-display font-bold text-sm text-[#1E1B24] line-clamp-1">
                         {item.title}
                       </span>
-                      <Badge variant="teal" className="text-[10px] py-0 px-1.5 shrink-0">
+                      <Badge variant="muted" className="text-[11px] py-0.5 px-2 shrink-0 bg-[#F5EADC] text-[#1E1B24]">
                         {meta.emoji} {meta.name}
                       </Badge>
                     </div>
-                    <p className="text-xs text-[#65736F] mt-1 line-clamp-2">
+                    <p className="text-xs text-[#6E6878] mt-1.5 line-clamp-2">
                       {item.description}
                     </p>
                   </button>
@@ -242,24 +242,24 @@ export function ChallengeSelectionModal({
 
           {/* Selected Challenge Detail */}
           {selectedChallenge && (
-            <div className="p-4 rounded-xl border border-[#E2E8E2] bg-[#F7F8F4] space-y-2">
+            <div className="p-4 rounded-[22px] border-2 border-[#FFC23D] bg-[#FFC23D]/25 space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-sm font-bold text-[#203331] flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-[#167D78]" />
+                <span className="font-display text-base font-bold text-[#1E1B24] flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-[#0B8A6C]" />
                   {selectedChallenge.title}
                 </span>
-                <span className="text-xs text-[#8E9B97] uppercase font-mono">
+                <span className="text-xs text-[#8E8798] uppercase font-mono">
                   {selectedChallenge.category}
                 </span>
               </div>
-              <p className="text-xs text-[#65736F]">
+              <p className="text-xs text-[#6E6878]">
                 {selectedChallenge.description}
               </p>
-              <div className="pt-2 border-t border-[#E2E8E2]">
-                <p className="text-xs font-semibold text-[#167D78] mb-0.5">
+              <div className="pt-2 border-t-2 border-[#E9A912]/50">
+                <p className="text-xs font-bold text-[#1E1B24] mb-0.5">
                   {t("challenges.instructions")}:
                 </p>
-                <p className="text-xs text-[#65736F]">
+                <p className="text-xs text-[#1E1B24]">
                   {selectedChallenge.instructions}
                 </p>
               </div>
@@ -268,7 +268,7 @@ export function ChallengeSelectionModal({
 
           {/* Visibility Choice */}
           <div className="space-y-2">
-            <label className="text-xs font-semibold text-[#65736F] uppercase tracking-wider block">
+            <label className="text-xs font-semibold text-[#6E6878] uppercase tracking-wider block">
               {t("challenges.visibility")}
             </label>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -276,17 +276,17 @@ export function ChallengeSelectionModal({
                 type="button"
                 onClick={() => setVisibility("private")}
                 className={cn(
-                  "p-3 rounded-xl border text-left transition-all",
+                  "p-4 min-h-[44px] rounded-[22px] border-2 text-left transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C]",
                   visibility === "private"
-                    ? "border-[#167D78] bg-[#DDF2EB]/40 shadow-xs"
-                    : "border-[#E2E8E2] bg-white opacity-70 hover:opacity-100"
+                    ? "border-[#FF5A3C] bg-[#FFF6EC] shadow-[0_3px_0_#FF5A3C]"
+                    : "border-[#EADBC8] bg-white hover:bg-[#FFF6EC]"
                 )}
               >
-                <div className="flex items-center gap-2 font-semibold text-xs text-[#203331]">
-                  <Shield className="h-4 w-4 text-[#167D78]" />
+                <div className="flex items-center gap-2 font-semibold text-xs text-[#1E1B24]">
+                  <Shield className="h-4 w-4 text-[#FF5A3C]" />
                   {t("challenges.visibility_private")}
                 </div>
-                <p className="text-[11px] text-[#65736F] mt-1">
+                <p className="text-[11px] text-[#6E6878] mt-1">
                   {t("challenges.visibility_private_desc")}
                 </p>
               </button>
@@ -295,40 +295,41 @@ export function ChallengeSelectionModal({
                 type="button"
                 onClick={() => setVisibility("public")}
                 className={cn(
-                  "p-3 rounded-xl border text-left transition-all",
+                  "p-4 min-h-[44px] rounded-[22px] border-2 text-left transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C]",
                   visibility === "public"
-                    ? "border-[#D95F49] bg-[#FCE6DE]/40 shadow-xs"
-                    : "border-[#E2E8E2] bg-white opacity-70 hover:opacity-100"
+                    ? "border-[#FF5A3C] bg-[#FFF6EC] shadow-[0_3px_0_#FF5A3C]"
+                    : "border-[#EADBC8] bg-white hover:bg-[#FFF6EC]"
                 )}
               >
-                <div className="flex items-center gap-2 font-semibold text-xs text-[#203331]">
-                  <Sparkles className="h-4 w-4 text-[#D95F49]" />
+                <div className="flex items-center gap-2 font-semibold text-xs text-[#1E1B24]">
+                  <Sparkles className="h-4 w-4 text-[#FF5A3C]" />
                   {t("challenges.visibility_public")}
                 </div>
-                <p className="text-[11px] text-[#65736F] mt-1">
+                <p className="text-[11px] text-[#6E6878] mt-1">
                   {t("challenges.visibility_public_desc")}
                 </p>
               </button>
             </div>
-            <p className="text-[11px] text-[#8E9B97] leading-relaxed pt-1">
-              <span className="font-semibold text-[#167D78]">Privacy Policy: </span>
+            <p className="text-[11px] text-[#8E8798] leading-relaxed pt-1">
+              <span className="font-bold text-[#C9381F]">Privacy Policy: </span>
               {t("challenges.privacy_bullet3")}
             </p>
           </div>
         </div>
 
         {/* Footer Actions */}
-        <div className="flex items-center justify-end gap-3 p-4 border-t border-[#E2E8E2] bg-[#F7F8F4]">
-          <Button variant="ghost" size="sm" onClick={onClose} disabled={submitting}>
+        <div className="flex items-center justify-end gap-3 p-4 border-t-2 border-[#EADBC8] bg-[#FFF6EC]">
+          <Button variant="ghost" size="md" onClick={onClose} disabled={submitting} className="min-h-[44px]">
             {t("common.cancel")}
           </Button>
           <Button
             variant="primary"
-            size="sm"
+            size="md"
             onClick={handleAssign}
             loading={submitting}
             disabled={!selectedChallenge || submitting}
             id="assign-challenge-submit-btn"
+            className="min-h-[44px]"
           >
             <Sparkles className="h-4 w-4 mr-1.5" />
             {t("challenges.assign_btn")}

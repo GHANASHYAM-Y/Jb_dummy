@@ -20,25 +20,19 @@ export default async function FriendsPage() {
   if (!user) redirect("/login?next=/friends");
 
   return (
-    <div className="evo-section py-8 sm:py-12">
-      <div className="evo-container max-w-3xl">
-        {/* Header */}
-        <div className="mb-8 animate-fade-in">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#101638] border border-[rgba(57,223,255,0.25)] text-[11px] font-mono font-semibold tracking-wider text-[#39DFFF] uppercase mb-3">
-            Social Network
-          </div>
-          <h1 className="font-display font-black text-3xl sm:text-4xl text-[#F5F7FF] tracking-tight mb-2">
-            Find Friends
-          </h1>
-          <p className="text-[#B8C3E0] text-sm sm:text-base leading-relaxed">
-            Search players by display name or unique EVOAIQU ID, connect, and challenge to duels & dares.
-          </p>
-          <hr className="evo-divider mt-6" />
-        </div>
-
-        {/* Friend & Search system */}
-        <FriendsClient userId={user.id} />
+    <div className="mx-auto w-full max-w-[968px] px-4 sm:px-7 py-6">
+      {/* Header */}
+      <div className="mb-5 animate-fade-in">
+        <h1 className="font-display text-3xl sm:text-4xl text-[#1E1B24] mb-1">
+          Find Friends
+        </h1>
+        <p className="text-[#6E6878] text-sm sm:text-base leading-relaxed">
+          Search players by display name or unique EVOAIQU ID, connect, and challenge to duels &amp; dares.
+        </p>
       </div>
+
+      {/* Friend & Search system */}
+      <FriendsClient userId={user.id} />
     </div>
   );
 }

@@ -22,7 +22,7 @@ import {
   Lock,
 } from "lucide-react";
 import { useI18n } from "@/core/i18n/I18nContext";
-import { Button, Alert, Badge, Spinner, Avatar } from "@/shared/ui";
+import { Button, Alert, Spinner, Avatar } from "@/shared/ui";
 import {
   CHALLENGE_CATALOG,
   CATEGORY_META,
@@ -177,65 +177,68 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
   }
 
   function getStatusBadge(status: ChallengeStatus, role: "recipient" | "sender" = "recipient") {
+    // White-based pills read on hot (tangerine), lilac and plain cards alike.
+    const base =
+      "inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-[#FFFFFF] border-2 border-[#EADBC8]";
     switch (status) {
       case "submitted":
         return (
-          <Badge variant="teal" className="flex items-center gap-1 bg-[#39DFFF]/15 text-[#39DFFF] border border-[#39DFFF]/30 animate-pulse">
+          <span className={cn(base, "text-[#5B49D6]")}>
             <Video className="h-3 w-3" />
             Story Submitted
-          </Badge>
+          </span>
         );
       case "retry_requested":
         return (
-          <Badge variant="coral" className="flex items-center gap-1 bg-[rgba(255,83,112,0.15)] text-[#FF5370] border border-[#FF5370]/30">
+          <span className={cn(base, "text-[#C9381F]")}>
             <RotateCcw className="h-3 w-3" />
             Retry Requested
-          </Badge>
+          </span>
         );
       case "accepted":
         return (
-          <Badge variant="teal" className="flex items-center gap-1 bg-[#39DFFF]/15 text-[#39DFFF] border border-[#39DFFF]/30">
+          <span className={cn(base, "text-[#0B8A6C]")}>
             <CheckCircle2 className="h-3 w-3" />
             {t("challenges.accepted")}
-          </Badge>
+          </span>
         );
       case "declined":
       case "skipped":
         return (
-          <Badge variant="coral" className="flex items-center gap-1 bg-[rgba(255,83,112,0.15)] text-[#FF5370] border border-[#FF5370]/30">
+          <span className={cn(base, "text-[#C9381F]")}>
             <XCircle className="h-3 w-3" />
             {t("challenges.declined")}
-          </Badge>
+          </span>
         );
       case "completed":
         return (
-          <Badge variant="teal" className="flex items-center gap-1 bg-[#39DFFF]/15 text-[#39DFFF] border border-[#39DFFF]/30">
+          <span className={cn(base, "text-[#0B8A6C]")}>
             <CheckCircle2 className="h-3 w-3" />
             {t("challenges.completed")}
-          </Badge>
+          </span>
         );
       case "cancelled":
         return (
-          <Badge variant="muted" className="flex items-center gap-1 bg-[#070B25] text-[#8B98B5] border border-[rgba(255,255,255,0.08)]">
+          <span className={cn(base, "text-[#6E6878]")}>
             <XCircle className="h-3 w-3" />
             {t("challenges.cancelled")}
-          </Badge>
+          </span>
         );
       case "pending":
       default:
         if (role === "recipient") {
           return (
-            <Badge variant="coral" className="flex items-center gap-1 bg-[rgba(255,83,112,0.15)] text-[#FF5370] border border-[#FF5370]/30 animate-pulse">
+            <span className={cn(base, "text-[#C9381F]")}>
               <Clock className="h-3 w-3" />
               {t("challenges.invitation_received")}
-            </Badge>
+            </span>
           );
         }
         return (
-          <Badge variant="muted" className="flex items-center gap-1 text-[#8B98B5] bg-[#070B25] border border-[rgba(255,255,255,0.08)]">
+          <span className={cn(base, "text-[#6E6878]")}>
             <Clock className="h-3 w-3" />
             {t("challenges.awaiting_response")}
-          </Badge>
+          </span>
         );
     }
   }
@@ -261,28 +264,91 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
     return matchesCat && matchesSearch;
   });
 
+  const focusRing = "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C]";
+  const pillBase =
+    "inline-flex items-center justify-center gap-1.5 min-h-[44px] px-5 rounded-full text-sm font-bold transition-transform active:translate-y-[2px] disabled:opacity-60 disabled:cursor-not-allowed " +
+    focusRing;
+  // One chunky action pill per variant of card
+  const pillOnHot = cn(pillBase, "bg-[#FFFFFF] text-[#C9381F] shadow-[0_4px_0_rgba(0,0,0,0.25)] active:shadow-[0_2px_0_rgba(0,0,0,0.25)]");
+  const pillGhostOnHot = cn(pillBase, "bg-white/20 text-white border-2 border-white/50 hover:bg-white/30");
+  const pillAccent = cn(pillBase, "bg-[#FF5A3C] text-white shadow-[0_4px_0_#C9381F] active:shadow-[0_2px_0_#C9381F]");
+
+  const tabClass = (active: boolean) =>
+    cn(
+      "min-h-[44px] px-4 rounded-full text-sm font-bold transition-colors flex items-center gap-2 whitespace-nowrap",
+      focusRing,
+      active
+        ? "bg-[#FFFFFF] text-[#1E1B24] shadow-[0_2px_0_#EADBC8]"
+        : "text-[#6E6878] hover:text-[#1E1B24]",
+    );
+
+  const countBubble = "px-2 min-w-[22px] h-[22px] inline-flex items-center justify-center rounded-full text-[11px] bg-[#FF5A3C] text-white font-bold";
+
+  const filterChip = (active: boolean) =>
+    cn(
+      "min-h-[44px] sm:min-h-[36px] px-4 rounded-full text-sm font-bold capitalize transition-colors border-2 whitespace-nowrap",
+      focusRing,
+      active
+        ? "bg-[#1E1B24] text-white border-[#1E1B24]"
+        : "bg-[#FFFFFF] text-[#6E6878] border-[#EADBC8] hover:text-[#1E1B24]",
+    );
+
+  const emptyCard = (icon: React.ReactNode, title: string, desc: string, cta: React.ReactNode) => (
+    <div className="b-card !p-10 text-center space-y-4">
+      <div className="w-16 h-16 rounded-full bg-[#FFC23D] border-2 border-[#E9A912] text-[#1E1B24] flex items-center justify-center mx-auto -rotate-6">
+        {icon}
+      </div>
+      <div>
+        <h3 className="font-display font-bold text-[#1E1B24] text-xl">{title}</h3>
+        <p className="text-sm text-[#6E6878] max-w-md mx-auto mt-1">{desc}</p>
+      </div>
+      {cta}
+    </div>
+  );
+
+  const visibilityPill = (challenge: Challenge, onHot: boolean) =>
+    challenge.visibility === "private" ? (
+      <span
+        className={cn(
+          "inline-flex items-center gap-1 text-xs px-3 py-1 rounded-full font-bold border-2",
+          onHot ? "bg-white/20 text-white border-white/40" : "bg-[#FFF6EC] text-[#C9381F] border-[#EADBC8]",
+        )}
+        title={t("challenges.visibility_private_desc")}
+      >
+        <Shield className="h-3 w-3" />
+        {t("challenges.visibility_private")}
+      </span>
+    ) : (
+      <span
+        className={cn(
+          "inline-flex items-center gap-1 text-xs px-3 py-1 rounded-full font-bold border-2",
+          onHot ? "bg-white/20 text-white border-white/40" : "bg-[#EEEBFF] text-[#5B49D6] border-[#D7D0FF]",
+        )}
+        title={t("challenges.visibility_public_desc")}
+      >
+        <Sparkles className="h-3 w-3" />
+        {t("challenges.visibility_public")}
+      </span>
+    );
+
   return (
-    <div className="space-y-6">
-      {/* ── Top Tabs & Refresh ── */}
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[rgba(255,255,255,0.08)] pb-4">
-        <div className="flex items-center gap-1.5 bg-[#070B25] p-1.5 rounded-2xl border border-[rgba(255,255,255,0.08)]" role="tablist">
+    <div className="space-y-5">
+      {/* ── Pill tabs & Refresh ── */}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div
+          className="flex items-center gap-1 bg-[#F5EADC] p-1.5 rounded-full overflow-x-auto max-w-full scrollbar-none"
+          role="tablist"
+        >
           <button
             type="button"
             role="tab"
             aria-selected={activeTab === "received"}
             onClick={() => setActiveTab("received")}
-            className={cn(
-              "px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-150 flex items-center gap-2",
-              activeTab === "received"
-                ? "bg-[#101638] text-[#39DFFF] shadow-[0_0_12px_rgba(57,223,255,0.15)] border border-[#39DFFF]/40"
-                : "text-[#B8C3E0] hover:text-[#F5F7FF] hover:bg-white/5"
-            )}
+            className={tabClass(activeTab === "received")}
           >
             <span>{t("challenges.tab_received")}</span>
             {receivedChallenges.length > 0 && (
-              <span className="px-1.5 py-0.2 rounded-full text-xs bg-[#39DFFF]/20 text-[#39DFFF] font-bold">
-                {receivedChallenges.length}
-              </span>
+              <span className={countBubble}>{receivedChallenges.length}</span>
             )}
           </button>
 
@@ -291,18 +357,11 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
             role="tab"
             aria-selected={activeTab === "sent"}
             onClick={() => setActiveTab("sent")}
-            className={cn(
-              "px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-150 flex items-center gap-2",
-              activeTab === "sent"
-                ? "bg-[#101638] text-[#39DFFF] shadow-[0_0_12px_rgba(57,223,255,0.15)] border border-[#39DFFF]/40"
-                : "text-[#B8C3E0] hover:text-[#F5F7FF] hover:bg-white/5"
-            )}
+            className={tabClass(activeTab === "sent")}
           >
             <span>{t("challenges.tab_sent")}</span>
             {sentChallenges.length > 0 && (
-              <span className="px-1.5 py-0.2 rounded-full text-xs bg-[#39DFFF]/20 text-[#39DFFF] font-bold">
-                {sentChallenges.length}
-              </span>
+              <span className={countBubble}>{sentChallenges.length}</span>
             )}
           </button>
 
@@ -314,19 +373,12 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
               setActiveTab("stories");
               void fetchStories();
             }}
-            className={cn(
-              "px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-150 flex items-center gap-2",
-              activeTab === "stories"
-                ? "bg-[#101638] text-[#39DFFF] shadow-[0_0_12px_rgba(57,223,255,0.15)] border border-[#39DFFF]/40"
-                : "text-[#B8C3E0] hover:text-[#F5F7FF] hover:bg-white/5"
-            )}
+            className={tabClass(activeTab === "stories")}
           >
             <Video className="h-4 w-4" />
             <span>Stories (24h)</span>
             {stories.length > 0 && (
-              <span className="px-1.5 py-0.2 rounded-full text-xs bg-[rgba(255,83,112,0.2)] text-[#FF5370] font-bold">
-                {stories.length}
-              </span>
+              <span className={countBubble}>{stories.length}</span>
             )}
           </button>
 
@@ -335,34 +387,27 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
             role="tab"
             aria-selected={activeTab === "catalog"}
             onClick={() => setActiveTab("catalog")}
-            className={cn(
-              "px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-150 flex items-center gap-2",
-              activeTab === "catalog"
-                ? "bg-[#101638] text-[#39DFFF] shadow-[0_0_12px_rgba(57,223,255,0.15)] border border-[#39DFFF]/40"
-                : "text-[#B8C3E0] hover:text-[#F5F7FF] hover:bg-white/5"
-            )}
+            className={tabClass(activeTab === "catalog")}
           >
             <Sparkles className="h-4 w-4" />
             <span>{t("challenges.tab_catalog")}</span>
           </button>
         </div>
 
-        <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => {
-              setRefreshing(true);
-              void fetchChallenges();
-              void fetchStories();
-            }}
-            disabled={refreshing || loading}
-            className="text-xs text-[#B8C3E0] hover:text-[#39DFFF]"
-          >
-            <RefreshCw className={cn("h-3.5 w-3.5 mr-1.5", refreshing && "animate-spin")} />
-            {t("challenges.refresh")}
-          </Button>
-        </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => {
+            setRefreshing(true);
+            void fetchChallenges();
+            void fetchStories();
+          }}
+          disabled={refreshing || loading}
+          className="min-h-[44px] text-[#6E6878] hover:text-[#C9381F]"
+        >
+          <RefreshCw className={cn("h-4 w-4 mr-1.5", refreshing && "animate-spin")} />
+          {t("challenges.refresh")}
+        </Button>
       </div>
 
       {error && (
@@ -374,25 +419,20 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
       {/* ── Main Tab Contents ── */}
       {loading ? (
         <div className="flex justify-center py-20">
-          <Spinner size="lg" className="text-[#167D78]" />
+          <Spinner size="lg" className="text-[#FF5A3C]" />
         </div>
       ) : activeTab === "received" ? (
-        /* ── Received Tab ── */
+        /* ── Needs you (received) ── */
         <div className="space-y-4">
           {receivedChallenges.length > 0 && (
-            <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
-              <span className="text-[#B8C3E0] font-semibold text-xs mr-1">Status:</span>
+            <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+              <span className="text-[#6E6878] font-bold text-sm mr-1">Status:</span>
               {["all", "pending", "accepted", "submitted", "completed"].map((st) => (
                 <button
                   key={st}
                   type="button"
                   onClick={() => setStatusFilter(st)}
-                  className={cn(
-                    "px-3 py-1.5 rounded-xl text-xs font-semibold capitalize transition-all",
-                    statusFilter === st
-                      ? "bg-[#39DFFF] text-[#070B25] shadow-[0_0_10px_rgba(57,223,255,0.25)] font-bold"
-                      : "bg-[#101638] text-[#B8C3E0] border border-[rgba(255,255,255,0.08)] hover:text-[#F5F7FF]"
-                  )}
+                  className={filterChip(statusFilter === st)}
                 >
                   {st}
                 </button>
@@ -400,192 +440,170 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
             </div>
           )}
           {filteredReceived.length === 0 ? (
-            <div className="p-12 text-center space-y-4 bg-[#101638] border border-[rgba(255,255,255,0.08)] rounded-3xl shadow-xl">
-              <div className="w-14 h-14 rounded-2xl bg-[#070B25] text-[#39DFFF] border border-[rgba(57,223,255,0.25)] flex items-center justify-center mx-auto shadow-[0_0_12px_rgba(57,223,255,0.2)]">
-                <Trophy className="h-7 w-7" />
-              </div>
-              <div>
-                <h3 className="font-bold text-[#F5F7FF] text-lg">
-                  {t("challenges.empty_received")}
-                </h3>
-                <p className="text-sm text-[#B8C3E0] max-w-md mx-auto mt-1">
-                  {t("challenges.empty_received_desc")}
-                </p>
-              </div>
+            emptyCard(
+              <Trophy className="h-8 w-8" />,
+              t("challenges.empty_received"),
+              t("challenges.empty_received_desc"),
               <Link href="/play/rps" className="inline-block mt-2">
-                <Button variant="primary" size="sm" className="font-bold">
+                <Button variant="primary" size="md" className="font-bold">
                   {t("challenges.play_now")}
                 </Button>
-              </Link>
-            </div>
+              </Link>,
+            )
           ) : (
             <div className="space-y-4">
-            {filteredReceived.map((challenge) => {
-              const meta = CATEGORY_META[challenge.category];
-              const isActing = actingChallengeId === challenge.id;
-              return (
-                <div
-                  key={challenge.id}
-                  className="p-6 sm:p-7 rounded-3xl border border-[rgba(255,255,255,0.08)] bg-[#101638] hover:border-[#39DFFF]/40 shadow-xl transition-all space-y-4"
-                >
-                  <div className="flex flex-wrap items-center justify-between gap-3">
-                    <div className="flex items-center gap-3">
-                      <span className="text-2xl" role="img" aria-label={meta?.name}>
-                        {meta?.emoji ?? "🎯"}
-                      </span>
-                      <div>
-                        <h4 className="font-bold text-[#F5F7FF] text-base sm:text-lg">
-                          {challenge.title}
-                        </h4>
-                        <div className="flex items-center gap-2 mt-0.5">
-                          <Badge variant="muted" className="text-xs uppercase bg-[#070B25] border border-[rgba(255,255,255,0.08)] text-[#39DFFF]">
-                            {meta?.name ?? challenge.category}
-                          </Badge>
-                          <span className="text-xs text-[#8E9B97] font-mono">
+              {filteredReceived.map((challenge) => {
+                const meta = CATEGORY_META[challenge.category];
+                const isActing = actingChallengeId === challenge.id;
+                const owed = ["pending", "accepted", "retry_requested"].includes(challenge.status);
+                const review = challenge.status === "submitted";
+                const cardTone = owed ? "b-card-hot" : review ? "b-card-lilac" : "";
+                const muted = owed ? "text-white/90" : "text-[#6E6878]";
+                const linkTone = owed ? "text-white underline" : "text-[#C9381F] hover:underline";
+                return (
+                  <article
+                    key={challenge.id}
+                    className={cn("b-card !p-5 sm:!p-6 space-y-4", cardTone)}
+                  >
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                      <div className="flex items-start gap-3 min-w-0">
+                        <span
+                          className={cn(
+                            "w-12 h-12 shrink-0 rounded-full flex items-center justify-center text-2xl",
+                            owed ? "bg-white/20" : "bg-[#FFFFFF] border-2 border-[#EADBC8]",
+                          )}
+                          role="img"
+                          aria-label={meta?.name}
+                        >
+                          {meta?.emoji ?? "🎯"}
+                        </span>
+                        <div className="min-w-0">
+                          <h4 className={cn("font-display font-bold text-lg sm:text-xl leading-tight", owed ? "text-white" : "text-[#1E1B24]")}>
+                            {meta?.name ?? challenge.category}: {challenge.title}
+                          </h4>
+                          <p className={cn("text-xs font-mono mt-0.5", owed ? "text-white/80" : "text-[#6E6878]")}>
                             {new Date(challenge.created_at).toLocaleDateString()}
-                          </span>
+                          </p>
                         </div>
                       </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      {challenge.visibility === "private" ? (
-                        <span
-                          className="inline-flex items-center gap-1 text-xs text-[#39DFFF] bg-[#39DFFF]/15 border border-[#39DFFF]/30 px-2.5 py-0.5 rounded-full font-medium"
-                          title={t("challenges.visibility_private_desc")}
-                        >
-                          <Shield className="h-3 w-3" />
-                          {t("challenges.visibility_private")}
-                        </span>
-                      ) : (
-                        <span
-                          className="inline-flex items-center gap-1 text-xs text-[#C084FC] bg-[rgba(139,44,255,0.2)] border border-[#8B2CFF]/40 px-2.5 py-0.5 rounded-full font-medium"
-                          title={t("challenges.visibility_public_desc")}
-                        >
-                          <Sparkles className="h-3 w-3" />
-                          {t("challenges.visibility_public")}
-                        </span>
-                      )}
-                      {getStatusBadge(challenge.status, "recipient")}
-                    </div>
-                  </div>
-
-                  <p className="text-sm text-[#B8C3E0] leading-relaxed">
-                    {challenge.description}
-                  </p>
-
-                  {challenge.instructions && (
-                    <div className="p-4 rounded-2xl bg-[#070B25] border border-[rgba(255,255,255,0.08)]">
-                      <p className="text-xs font-semibold text-[#39DFFF] mb-1 flex items-center gap-1.5">
-                        <HelpCircle className="h-3.5 w-3.5" />
-                        {t("challenges.instructions")}:
-                      </p>
-                      <p className="text-xs text-[#F5F7FF] leading-normal font-medium">
-                        {challenge.instructions}
-                      </p>
-                    </div>
-                  )}
-
-                  {/* Actions for Pending */}
-                  {challenge.status === "pending" && (
-                    <div className="pt-3 border-t border-[rgba(255,255,255,0.08)] flex flex-wrap items-center justify-between gap-3">
-                      <div className="flex items-center gap-3">
-                        <Button
-                          variant="primary"
-                          size="sm"
-                          loading={isActing}
-                          disabled={isActing}
-                          onClick={() => handleResponse(challenge.id, "accept")}
-                          id="accept-challenge-btn"
-                          className="font-bold"
-                        >
-                          <CheckCircle2 className="h-4 w-4 mr-1.5" />
-                          {t("challenges.accept")}
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          loading={isActing}
-                          disabled={isActing}
-                          onClick={() => handleResponse(challenge.id, "decline")}
-                          className="text-[#B8C3E0] hover:text-[#FF5370] hover:bg-[rgba(255,83,112,0.1)]"
-                          id="decline-challenge-btn"
-                        >
-                          <XCircle className="h-4 w-4 mr-1.5" />
-                          {t("challenges.decline")}
-                        </Button>
+                      <div className="flex flex-wrap items-center gap-2">
+                        {visibilityPill(challenge, owed)}
+                        {getStatusBadge(challenge.status, "recipient")}
                       </div>
-                      <Link
-                        href={`/play/rps/${challenge.match_id}`}
-                        className="text-xs text-[#39DFFF] hover:underline inline-flex items-center gap-1 font-medium"
-                      >
-                        <span>View Match</span>
-                        <ExternalLink className="h-3 w-3" />
-                      </Link>
                     </div>
-                  )}
 
-                  {/* Actions for Accepted or Retry Requested -> Video Record */}
-                  {(challenge.status === "accepted" || challenge.status === "retry_requested") && (
-                    <div className="pt-3 border-t border-[rgba(255,255,255,0.08)] flex flex-wrap items-center justify-between gap-3">
-                      <Button
-                        variant="primary"
-                        size="sm"
-                        onClick={() => setRecordModalChallenge(challenge)}
-                        className="font-bold"
-                        id="record-video-btn"
-                      >
-                        <Camera className="h-4 w-4 mr-1.5" />
-                        {challenge.status === "retry_requested" ? "Record New Attempt" : "Record Video & Post Story"}
-                      </Button>
-                      <Link
-                        href={`/play/rps/${challenge.match_id}`}
-                        className="text-xs text-[#39DFFF] hover:underline inline-flex items-center gap-1 font-medium"
-                      >
-                        <span>View Match</span>
-                        <ExternalLink className="h-3 w-3" />
-                      </Link>
-                    </div>
-                  )}
+                    <p className={cn("text-sm leading-relaxed", muted)}>
+                      {challenge.description}
+                    </p>
 
-                  {/* Status indicator when Submitted */}
-                  {challenge.status === "submitted" && (
-                    <div className="pt-3 border-t border-[rgba(255,255,255,0.08)] flex items-center justify-between text-xs text-[#39DFFF] font-medium">
-                      <span className="flex items-center gap-1.5">
-                        <Video className="w-4 h-4 text-[#39DFFF]" />
-                        Video active on your 24h Story. Awaiting winner review.
-                      </span>
-                      <Link
-                        href={`/play/rps/${challenge.match_id}`}
-                        className="text-xs text-[#39DFFF] hover:underline inline-flex items-center gap-1 font-medium"
+                    {challenge.instructions && (
+                      <div
+                        className={cn(
+                          "p-4 rounded-[18px] border-2",
+                          owed ? "bg-white/15 border-white/30" : "bg-[#FFFFFF] border-[#EADBC8]",
+                        )}
                       >
-                        <span>View Match</span>
-                        <ExternalLink className="h-3 w-3" />
-                      </Link>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
+                        <p className={cn("text-xs font-bold mb-1 flex items-center gap-1.5", owed ? "text-white" : "text-[#C9381F]")}>
+                          <HelpCircle className="h-3.5 w-3.5" />
+                          {t("challenges.instructions")}:
+                        </p>
+                        <p className={cn("text-sm leading-normal font-medium", owed ? "text-white" : "text-[#1E1B24]")}>
+                          {challenge.instructions}
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Pending: accept / decline */}
+                    {challenge.status === "pending" && (
+                      <div className="flex flex-wrap items-center justify-between gap-3">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <button
+                            type="button"
+                            disabled={isActing}
+                            onClick={() => handleResponse(challenge.id, "accept")}
+                            id="accept-challenge-btn"
+                            className={pillOnHot}
+                          >
+                            {isActing ? <Spinner size="sm" /> : <CheckCircle2 className="h-4 w-4" />}
+                            {t("challenges.accept")}
+                          </button>
+                          <button
+                            type="button"
+                            disabled={isActing}
+                            onClick={() => handleResponse(challenge.id, "decline")}
+                            id="decline-challenge-btn"
+                            className={pillGhostOnHot}
+                          >
+                            <XCircle className="h-4 w-4" />
+                            {t("challenges.decline")}
+                          </button>
+                        </div>
+                        <Link
+                          href={`/play/rps/${challenge.match_id}`}
+                          className={cn("text-sm font-bold inline-flex items-center gap-1 min-h-[44px]", linkTone)}
+                        >
+                          <span>View Match</span>
+                          <ExternalLink className="h-3.5 w-3.5" />
+                        </Link>
+                      </div>
+                    )}
+
+                    {/* Accepted / retry: record video */}
+                    {(challenge.status === "accepted" || challenge.status === "retry_requested") && (
+                      <div className="flex flex-wrap items-center justify-between gap-3">
+                        <button
+                          type="button"
+                          onClick={() => setRecordModalChallenge(challenge)}
+                          className={pillOnHot}
+                          id="record-video-btn"
+                        >
+                          <Camera className="h-4 w-4" />
+                          {challenge.status === "retry_requested" ? "Record New Attempt" : "Record Video & Post Story"}
+                        </button>
+                        <Link
+                          href={`/play/rps/${challenge.match_id}`}
+                          className={cn("text-sm font-bold inline-flex items-center gap-1 min-h-[44px]", linkTone)}
+                        >
+                          <span>View Match</span>
+                          <ExternalLink className="h-3.5 w-3.5" />
+                        </Link>
+                      </div>
+                    )}
+
+                    {/* Submitted: waiting on winner */}
+                    {challenge.status === "submitted" && (
+                      <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-[#1E1B24] font-semibold">
+                        <span className="flex items-center gap-1.5">
+                          <Video className="w-4 h-4 text-[#5B49D6]" />
+                          Video active on your 24h Story. Awaiting winner review.
+                        </span>
+                        <Link
+                          href={`/play/rps/${challenge.match_id}`}
+                          className={cn("text-sm font-bold inline-flex items-center gap-1 min-h-[44px]", linkTone)}
+                        >
+                          <span>View Match</span>
+                          <ExternalLink className="h-3.5 w-3.5" />
+                        </Link>
+                      </div>
+                    )}
+                  </article>
+                );
+              })}
+            </div>
           )}
         </div>
       ) : activeTab === "sent" ? (
-        /* ── Sent Tab ── */
+        /* ── Sent ── */
         <div className="space-y-4">
           {sentChallenges.length > 0 && (
-            <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
-              <span className="text-[#B8C3E0] font-semibold text-xs mr-1">Status:</span>
+            <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+              <span className="text-[#6E6878] font-bold text-sm mr-1">Status:</span>
               {["all", "pending", "accepted", "submitted", "completed"].map((st) => (
                 <button
                   key={st}
                   type="button"
                   onClick={() => setStatusFilter(st)}
-                  className={cn(
-                    "px-3 py-1.5 rounded-xl text-xs font-semibold capitalize transition-all",
-                    statusFilter === st
-                      ? "bg-[#39DFFF] text-[#070B25] shadow-[0_0_10px_rgba(57,223,255,0.25)] font-bold"
-                      : "bg-[#101638] text-[#B8C3E0] border border-[rgba(255,255,255,0.08)] hover:text-[#F5F7FF]"
-                  )}
+                  className={filterChip(statusFilter === st)}
                 >
                   {st}
                 </button>
@@ -593,139 +611,109 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
             </div>
           )}
           {filteredSent.length === 0 ? (
-            <div className="p-12 text-center space-y-4 bg-[#101638] border border-[rgba(255,255,255,0.08)] rounded-3xl shadow-xl">
-              <div className="w-14 h-14 rounded-2xl bg-[#070B25] text-[#39DFFF] border border-[rgba(57,223,255,0.25)] flex items-center justify-center mx-auto shadow-[0_0_12px_rgba(57,223,255,0.2)]">
-                <Sparkles className="h-7 w-7" />
-              </div>
-              <div>
-                <h3 className="font-bold text-[#F5F7FF] text-lg">
-                  {t("challenges.empty_sent")}
-                </h3>
-                <p className="text-sm text-[#B8C3E0] max-w-md mx-auto mt-1">
-                  {t("challenges.empty_sent_desc")}
-                </p>
-              </div>
+            emptyCard(
+              <Sparkles className="h-8 w-8" />,
+              t("challenges.empty_sent"),
+              t("challenges.empty_sent_desc"),
               <Link href="/play/rps" className="inline-block mt-2">
-                <Button variant="coral" size="sm" className="font-bold">
+                <Button variant="coral" size="md" className="font-bold">
                   {t("challenges.play_now")}
                 </Button>
-              </Link>
-            </div>
+              </Link>,
+            )
           ) : (
             <div className="space-y-4">
-            {filteredSent.map((challenge) => {
-              const meta = CATEGORY_META[challenge.category];
-              return (
-                <div
-                  key={challenge.id}
-                  className="p-6 sm:p-7 rounded-3xl border border-[rgba(255,255,255,0.08)] bg-[#101638] hover:border-[#39DFFF]/40 shadow-xl transition-all space-y-4"
-                >
-                  <div className="flex flex-wrap items-center justify-between gap-3">
-                    <div className="flex items-center gap-3">
-                      <span className="text-2xl" role="img" aria-label={meta?.name}>
-                        {meta?.emoji ?? "🎯"}
-                      </span>
-                      <div>
-                        <h4 className="font-bold text-[#F5F7FF] text-base sm:text-lg">
-                          {challenge.title}
-                        </h4>
-                        <div className="flex items-center gap-2 mt-0.5">
-                          <Badge variant="muted" className="text-xs uppercase bg-[#070B25] border border-[rgba(255,255,255,0.08)] text-[#39DFFF]">
-                            {meta?.name ?? challenge.category}
-                          </Badge>
-                          <span className="text-xs text-[#8E9B97] font-mono">
+              {filteredSent.map((challenge) => {
+                const meta = CATEGORY_META[challenge.category];
+                const review = challenge.status === "submitted";
+                return (
+                  <article
+                    key={challenge.id}
+                    className={cn("b-card !p-5 sm:!p-6 space-y-4", review && "b-card-lilac")}
+                  >
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                      <div className="flex items-start gap-3 min-w-0">
+                        <span
+                          className="w-12 h-12 shrink-0 rounded-full bg-[#FFFFFF] border-2 border-[#EADBC8] flex items-center justify-center text-2xl"
+                          role="img"
+                          aria-label={meta?.name}
+                        >
+                          {meta?.emoji ?? "🎯"}
+                        </span>
+                        <div className="min-w-0">
+                          <h4 className="font-display font-bold text-lg sm:text-xl leading-tight text-[#1E1B24]">
+                            {meta?.name ?? challenge.category}: {challenge.title}
+                          </h4>
+                          <p className="text-xs font-mono mt-0.5 text-[#6E6878]">
                             {new Date(challenge.created_at).toLocaleDateString()}
-                          </span>
+                          </p>
                         </div>
                       </div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        {visibilityPill(challenge, false)}
+                        {getStatusBadge(challenge.status, "sender")}
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      {challenge.visibility === "private" ? (
-                        <span
-                          className="inline-flex items-center gap-1 text-xs text-[#39DFFF] bg-[#39DFFF]/15 border border-[#39DFFF]/30 px-2.5 py-0.5 rounded-full font-medium"
-                          title={t("challenges.visibility_private_desc")}
+
+                    <p className="text-sm text-[#6E6878] leading-relaxed">
+                      {challenge.description}
+                    </p>
+
+                    {/* Winner action when submitted */}
+                    {review && (
+                      <div className="flex flex-wrap items-center justify-between gap-3">
+                        <button
+                          type="button"
+                          onClick={() => setReviewModalChallenge(challenge)}
+                          className={pillAccent}
+                          id="review-submitted-challenge-btn"
                         >
-                          <Shield className="h-3 w-3" />
-                          {t("challenges.visibility_private")}
-                        </span>
-                      ) : (
-                        <span
-                          className="inline-flex items-center gap-1 text-xs text-[#C084FC] bg-[rgba(139,44,255,0.2)] border border-[#8B2CFF]/40 px-2.5 py-0.5 rounded-full font-medium"
-                          title={t("challenges.visibility_public_desc")}
+                          <Eye className="h-4 w-4" /> Review Video (1-Time View)
+                        </button>
+                        <Link
+                          href={`/play/rps/${challenge.match_id}`}
+                          className="text-sm font-bold text-[#C9381F] hover:underline inline-flex items-center gap-1 min-h-[44px]"
                         >
-                          <Sparkles className="h-3 w-3" />
-                          {t("challenges.visibility_public")}
+                          <span>View Match</span>
+                          <ExternalLink className="h-3.5 w-3.5" />
+                        </Link>
+                      </div>
+                    )}
+
+                    {!review && (
+                      <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-[#6E6878]">
+                        <span>
+                          Recipient status:{" "}
+                          <strong className="text-[#1E1B24] capitalize">
+                            {challenge.status}
+                          </strong>
                         </span>
-                      )}
-                      {getStatusBadge(challenge.status, "sender")}
-                    </div>
-                  </div>
-
-                  <p className="text-sm text-[#B8C3E0] leading-relaxed">
-                    {challenge.description}
-                  </p>
-
-                  {/* Winner Action when Submitted */}
-                  {challenge.status === "submitted" && (
-                    <div className="pt-3 border-t border-[rgba(255,255,255,0.08)] flex flex-wrap items-center justify-between gap-3">
-                      <Button
-                        variant="primary"
-                        size="sm"
-                        onClick={() => setReviewModalChallenge(challenge)}
-                        className="font-bold"
-                        id="review-submitted-challenge-btn"
-                      >
-                        <Eye className="h-4 w-4 mr-1.5" /> Review Video (1-Time View)
-                      </Button>
-                      <Link
-                        href={`/play/rps/${challenge.match_id}`}
-                        className="text-xs text-[#39DFFF] hover:underline inline-flex items-center gap-1 font-medium"
-                      >
-                        <span>View Match</span>
-                        <ExternalLink className="h-3 w-3" />
-                      </Link>
-                    </div>
-                  )}
-
-                  {challenge.status !== "submitted" && (
-                    <div className="pt-2 border-t border-[rgba(255,255,255,0.08)] flex items-center justify-between text-xs text-[#8E9B97]">
-                      <span>
-                        Recipient status:{" "}
-                        <strong className="text-[#F5F7FF] capitalize">
-                          {challenge.status}
-                        </strong>
-                      </span>
-                      <Link
-                        href={`/play/rps/${challenge.match_id}`}
-                        className="text-[#39DFFF] hover:underline inline-flex items-center gap-1 font-medium"
-                      >
-                        <span>View Match</span>
-                        <ExternalLink className="h-3 w-3" />
-                      </Link>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
+                        <Link
+                          href={`/play/rps/${challenge.match_id}`}
+                          className="text-sm font-bold text-[#C9381F] hover:underline inline-flex items-center gap-1 min-h-[44px]"
+                        >
+                          <span>View Match</span>
+                          <ExternalLink className="h-3.5 w-3.5" />
+                        </Link>
+                      </div>
+                    )}
+                  </article>
+                );
+              })}
+            </div>
           )}
         </div>
       ) : activeTab === "stories" ? (
         /* ── Stories Feed Tab (24h Retention) ── */
         stories.length === 0 ? (
-          <div className="p-12 text-center space-y-4 bg-[#101638] border border-[rgba(255,255,255,0.08)] rounded-3xl shadow-xl">
-            <div className="w-14 h-14 rounded-2xl bg-[#070B25] text-[#39DFFF] border border-[rgba(57,223,255,0.25)] flex items-center justify-center mx-auto shadow-[0_0_12px_rgba(57,223,255,0.2)]">
-              <Video className="h-7 w-7" />
-            </div>
-            <div>
-              <h3 className="font-bold text-[#F5F7FF] text-lg">No Active Stories</h3>
-              <p className="text-sm text-[#B8C3E0] max-w-md mx-auto mt-1">
-                Completed challenges and public dare videos appear here for 24 hours before expiring.
-              </p>
-            </div>
-          </div>
+          emptyCard(
+            <Video className="h-8 w-8" />,
+            "No Active Stories",
+            "Completed challenges and public dare videos appear here for 24 hours before expiring.",
+            null,
+          )
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {stories.map((story) => {
               const hoursLeft = Math.max(
                 0,
@@ -733,55 +721,53 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
               );
 
               return (
-                <div
-                  key={story.id}
-                  className="p-5 sm:p-6 rounded-3xl border border-[rgba(255,255,255,0.08)] bg-[#101638] shadow-xl space-y-4 flex flex-col justify-between"
-                >
+                <article key={story.id} className="b-card !p-5 space-y-3 flex flex-col justify-between">
                   <div>
-                    {/* Author & Visibility */}
                     <div className="flex items-center justify-between gap-3 mb-3">
-                      <div className="flex items-center gap-2.5">
-                        <Avatar
-                          src={story.creator?.avatar_url}
-                          name={story.creator?.display_name || "Player"}
-                          size="sm"
-                        />
-                        <div>
-                          <p className="text-xs font-bold text-[#F5F7FF]">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <span className="b-story-ring shrink-0">
+                          <span className="block rounded-full border-2 border-[#FFFFFF] overflow-hidden">
+                            <Avatar
+                              src={story.creator?.avatar_url}
+                              name={story.creator?.display_name || "Player"}
+                              size="sm"
+                            />
+                          </span>
+                        </span>
+                        <div className="min-w-0">
+                          <p className="text-sm font-bold text-[#1E1B24] truncate">
                             {story.creator?.display_name || "Player"}
                           </p>
-                          <p className="text-[10px] text-[#39DFFF] font-mono">
+                          <p className="text-[11px] text-[#6E6878] font-mono truncate">
                             {story.creator?.evoora_id}
                           </p>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-1.5">
+                      <div className="flex flex-wrap items-center justify-end gap-1.5">
                         {story.visibility === "public" ? (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-[rgba(139,44,255,0.2)] text-[#C084FC] border border-[#8B2CFF]/40">
+                          <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[11px] font-bold bg-[#EEEBFF] text-[#5B49D6] border-2 border-[#D7D0FF]">
                             <Globe className="w-3 h-3" /> Public Story
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-[#39DFFF]/15 text-[#39DFFF] border border-[#39DFFF]/30">
+                          <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[11px] font-bold bg-[#FFF6EC] text-[#C9381F] border-2 border-[#EADBC8]">
                             <Lock className="w-3 h-3" /> Friends Only
                           </span>
                         )}
-                        <span className="inline-flex items-center gap-1 text-[10px] text-[#39DFFF] bg-[#070B25] border border-[rgba(255,255,255,0.08)] px-2.5 py-0.5 rounded-full font-mono">
-                          <Clock className="w-3 h-3 text-[#39DFFF]" /> {hoursLeft}h left
+                        <span className="inline-flex items-center gap-1 text-[11px] text-[#1E1B24] bg-[#FFC23D] px-3 py-1 rounded-full font-bold">
+                          <Clock className="w-3 h-3" /> {hoursLeft}h left
                         </span>
                       </div>
                     </div>
 
-                    {/* Challenge title */}
-                    <h4 className="font-bold text-sm text-[#F5F7FF] mb-1">
+                    <h4 className="font-display font-bold text-base text-[#1E1B24] mb-1">
                       {story.challenge?.title || "Challenge Dare"}
                     </h4>
-                    <p className="text-xs text-[#B8C3E0] line-clamp-2 mb-3">
+                    <p className="text-sm text-[#6E6878] line-clamp-2 mb-3">
                       {story.challenge?.description}
                     </p>
 
-                    {/* Video Player or Simulated Frame */}
-                    <div className="rounded-2xl overflow-hidden bg-black aspect-video flex items-center justify-center border border-[rgba(255,255,255,0.08)]">
+                    <div className="rounded-[22px] overflow-hidden bg-[#0F0D14] aspect-video flex items-center justify-center">
                       {story.media_url ? (
                         <video
                           src={story.media_url}
@@ -791,10 +777,10 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
                           className="w-full h-full object-cover"
                         />
                       ) : (
-                        <div className="text-center p-4 text-white">
-                          <Video className="w-8 h-8 text-[#39DFFF] mx-auto mb-1" />
-                          <p className="text-xs font-semibold text-[#F5F7FF]">Story Video</p>
-                          <p className="text-[10px] text-[#B8C3E0]">
+                        <div className="text-center p-4">
+                          <Video className="w-8 h-8 text-[#FFC23D] mx-auto mb-1" />
+                          <p className="text-sm font-bold text-white">Story Video</p>
+                          <p className="text-xs text-white/70">
                             Expires automatically in {hoursLeft} hours.
                           </p>
                         </div>
@@ -802,34 +788,39 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
                     </div>
                   </div>
 
-                  <div className="pt-2 border-t border-[rgba(255,255,255,0.08)] flex items-center justify-between text-[11px] text-[#8E9B97]">
+                  <div className="flex items-center justify-between text-xs text-[#6E6878]">
                     <span>24h Ephemeral Story</span>
                     <Link
                       href={`/play/rps/${story.match_id}`}
-                      className="text-[#39DFFF] hover:underline"
+                      className="text-[#C9381F] font-bold hover:underline inline-flex items-center min-h-[44px]"
                     >
                       View Match
                     </Link>
                   </div>
-                </div>
+                </article>
               );
             })}
           </div>
         )
       ) : (
         /* ── Catalog Tab ── */
-        <div className="space-y-6">
-          <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
-            <div className="flex flex-wrap gap-2">
+        <div className="space-y-5">
+          <div className="flex flex-col gap-3">
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6E6878]" />
+              <input
+                type="text"
+                placeholder={t("challenges.search_placeholder")}
+                value={catalogSearch}
+                onChange={(e) => setCatalogSearch(e.target.value)}
+                className="w-full min-h-[48px] pl-11 pr-4 text-sm rounded-full border-2 border-[#EADBC8] bg-[#FFFFFF] text-[#1E1B24] placeholder:text-[#6E6878] focus:outline-none focus:border-[#FF5A3C] focus-visible:ring-2 focus-visible:ring-[#FF5A3C]"
+              />
+            </div>
+            <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
               <button
                 type="button"
                 onClick={() => setCatalogCategory("all")}
-                className={cn(
-                  "px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all border",
-                  catalogCategory === "all"
-                    ? "bg-[#39DFFF] text-[#070B25] border-[#39DFFF] shadow-[0_0_10px_rgba(57,223,255,0.25)] font-bold"
-                    : "bg-[#101638] text-[#B8C3E0] border-[rgba(255,255,255,0.08)] hover:text-[#F5F7FF]"
-                )}
+                className={filterChip(catalogCategory === "all")}
               >
                 {t("challenges.all_categories")}
               </button>
@@ -840,12 +831,7 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
                     key={cat}
                     type="button"
                     onClick={() => setCatalogCategory(cat)}
-                    className={cn(
-                      "px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all border flex items-center gap-1.5",
-                      catalogCategory === cat
-                        ? "bg-[#39DFFF] text-[#070B25] border-[#39DFFF] shadow-[0_0_10px_rgba(57,223,255,0.25)] font-bold"
-                        : "bg-[#101638] text-[#B8C3E0] border-[rgba(255,255,255,0.08)] hover:text-[#F5F7FF]"
-                    )}
+                    className={cn(filterChip(catalogCategory === cat), "inline-flex items-center gap-1.5 normal-case")}
                   >
                     <span>{meta.emoji}</span>
                     <span>{meta.name}</span>
@@ -853,50 +839,43 @@ export function ChallengesClient({ userId }: ChallengesClientProps) {
                 );
               })}
             </div>
-
-            <div className="relative min-w-[200px]">
-              <Search className="absolute left-3 top-2.5 h-4 w-4 text-[#8E9B97]" />
-              <input
-                type="text"
-                placeholder={t("challenges.search_placeholder")}
-                value={catalogSearch}
-                onChange={(e) => setCatalogSearch(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#070B25] text-[#F5F7FF] placeholder-[#8B98B5] focus:outline-hidden focus:border-[#39DFFF]"
-              />
-            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredCatalog.map((item) => {
               const meta = CATEGORY_META[item.category];
               return (
-                <div
+                <article
                   key={item.id}
-                  className="p-6 rounded-3xl border border-[rgba(255,255,255,0.08)] bg-[#101638] hover:border-[#39DFFF]/40 shadow-xl transition-all flex flex-col justify-between space-y-3"
+                  className="b-card !p-5 flex flex-col justify-between space-y-3"
                 >
                   <div className="space-y-2.5">
                     <div className="flex items-start justify-between gap-2">
-                      <span className="text-3xl" role="img" aria-label={meta.name}>
+                      <span
+                        className="w-14 h-14 rounded-[18px] bg-[#F5EADC] flex items-center justify-center text-3xl"
+                        role="img"
+                        aria-label={meta.name}
+                      >
                         {item.emoji}
                       </span>
-                      <Badge variant="muted" className="text-xs uppercase bg-[#070B25] border border-[rgba(255,255,255,0.08)] text-[#39DFFF]">
+                      <span className="inline-flex px-3 py-1 rounded-full text-[11px] font-bold bg-[#FFF6EC] border-2 border-[#EADBC8] text-[#C9381F]">
                         {meta.name}
-                      </Badge>
+                      </span>
                     </div>
-                    <h4 className="font-bold text-[#F5F7FF] text-sm leading-snug">
+                    <h4 className="font-display font-bold text-[#1E1B24] text-base leading-snug">
                       {item.title}
                     </h4>
-                    <p className="text-xs text-[#B8C3E0] leading-relaxed">
+                    <p className="text-sm text-[#6E6878] leading-relaxed">
                       {item.description}
                     </p>
                   </div>
-                  <div className="pt-2 border-t border-[rgba(255,255,255,0.08)] flex items-center justify-between text-xs text-[#8E9B97]">
-                    <span className="flex items-center gap-1 font-mono text-[#39DFFF]">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="flex items-center gap-1 font-mono text-[#6E6878]">
                       <Clock className="h-3 w-3" /> {item.durationSecs}s
                     </span>
-                    <span className="text-[#39DFFF] font-medium">Approved Dare</span>
+                    <span className="px-3 py-1 rounded-full bg-[#E3FAF3] text-[#0B8A6C] font-bold">Approved Dare</span>
                   </div>
-                </div>
+                </article>
               );
             })}
           </div>

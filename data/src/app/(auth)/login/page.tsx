@@ -12,8 +12,8 @@ export const metadata: Metadata = {
 export default function LoginPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen w-full flex items-center justify-center bg-[#070B25]">
-        <Spinner size="lg" className="text-[#39DFFF]" />
+      <div className="min-h-screen w-full flex items-center justify-center bg-[#FFF6EC]">
+        <Spinner size="lg" className="text-[#FF5A3C]" />
       </div>
     }>
       <LoginForm />

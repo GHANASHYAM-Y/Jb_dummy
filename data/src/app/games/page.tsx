@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 import { connection } from "next/server";
 import { createServerSupabaseClient, getServerUser } from "@/core/supabase/server";
 import { AppNavigation } from "@/core/navigation/AppNavigation";
-import { GameSectionClient } from "@/core/home/GameSectionClient";
+import {
+  GameSectionClient,
+  type HomeFriendItem,
+  type OwedDareItem,
+} from "@/core/home/GameSectionClient";
 import type { Profile } from "@/core/supabase/database";
 
 export const metadata: Metadata = {
@@ -34,6 +38,8 @@ export default async function GamesPage() {
   let recentMatches: RecentMatchQueryItem[] = [];
   let pendingChallengesCount = 0;
   let pendingRequestsCount = 0;
+  let friends: HomeFriendItem[] = [];
+  let owedDares: OwedDareItem[] = [];
 
   try {
     const supabase = await createServerSupabaseClient();
@@ -71,7 +77,24 @@ export default async function GamesPage() {
         .eq("receiver_id", authUser.id)
         .eq("status", "pending");
 
-      const [profileResult, matchesResult, challengesResult, requestsResult] =
+      const owedDaresQuery = supabase
+        .from("challenges")
+        .select("id, title, category, description")
+        .eq("loser_id", authUser.id)
+        .in("status", ["pending", "accepted", "retry_requested"])
+        .order("created_at", { ascending: false })
+        .limit(3);
+
+      const friendsQuery = supabase.rpc("get_friends");
+
+      const [
+        profileResult,
+        matchesResult,
+        challengesResult,
+        requestsResult,
+        owedDaresResult,
+        friendsResult,
+      ] =
         await Promise.all([
           Promise.resolve(profileQuery).catch((error: unknown) => {
             console.warn("[GamesPage] Profile query failed:", error);
@@ -89,6 +112,14 @@ export default async function GamesPage() {
             console.warn("[GamesPage] Pending friend requests query failed:", error);
             return { count: null };
           }),
+          Promise.resolve(owedDaresQuery).catch((error: unknown) => {
+            console.warn("[GamesPage] Owed dares query failed:", error);
+            return { data: null };
+          }),
+          Promise.resolve(friendsQuery).catch((error: unknown) => {
+            console.warn("[GamesPage] Friends query failed:", error);
+            return { data: null };
+          }),
         ]);
 
       profile = profileResult.data as Profile | null;
@@ -97,19 +128,36 @@ export default async function GamesPage() {
       }
       pendingChallengesCount = challengesResult.count ?? 0;
       pendingRequestsCount = requestsResult.count ?? 0;
+      if (owedDaresResult.data) {
+        owedDares = owedDaresResult.data as unknown as OwedDareItem[];
+      }
+      if (Array.isArray(friendsResult.data)) {
+        friends = (friendsResult.data as unknown as HomeFriendItem[]).map((f) => ({
+          friend_id: f.friend_id,
+          display_name: f.display_name,
+          avatar_url: f.avatar_url ?? null,
+        }));
+      }
     }
   } catch (err) {
     console.warn("[GamesPage] Session resolution fallback:", err);
   }
 
   return (
-    <AppNavigation user={user} profile={profile}>
+    <AppNavigation
+      user={user}
+      profile={profile}
+      pendingChallenges={pendingChallengesCount}
+      pendingRequests={pendingRequestsCount}
+    >
       <GameSectionClient
         user={user}
         profile={profile}
         recentMatches={recentMatches}
         pendingChallengesCount={pendingChallengesCount}
         pendingRequestsCount={pendingRequestsCount}
+        friends={friends}
+        owedDares={owedDares}
       />
     </AppNavigation>
   );

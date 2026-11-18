@@ -11,8 +11,12 @@ export function PageLoading() {
       aria-live="polite"
       aria-busy="true"
     >
-      <span className="w-9 h-9 rounded-full border-[3px] border-[#39DFFF]/20 border-t-[#39DFFF] animate-spin" />
-      <span className="text-xs font-mono uppercase tracking-wider text-[#8B98B5]">Loading…</span>
+      <span className="flex items-end gap-2" aria-hidden="true">
+        <span className="w-3.5 h-3.5 rounded-full bg-[#FF5A3C] animate-bounce [animation-delay:-0.3s]" />
+        <span className="w-3.5 h-3.5 rounded-full bg-[#FFC23D] animate-bounce [animation-delay:-0.15s]" />
+        <span className="w-3.5 h-3.5 rounded-full bg-[#8C7BFF] animate-bounce" />
+      </span>
+      <span className="font-display font-bold text-base text-[#6E6878]">Loading…</span>
     </div>
   );
 }

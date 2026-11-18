@@ -1,7 +1,6 @@
 /**
- * Shared layout for (auth) route group — wraps login/signup in the
- * centered auth shell without the main navbar (auth pages have their
- * own minimal header).
+ * Shared layout for (auth) route group — Concept B: cream canvas, no main
+ * navbar (each auth form renders its own logo header inside AuthShell).
  */
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (

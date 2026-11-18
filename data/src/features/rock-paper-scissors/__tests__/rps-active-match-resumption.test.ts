@@ -70,7 +70,7 @@ describe("RPS Match Completion & Lobby Navigation Regression Audit", () => {
 
     it("leaves user in lobby to join or create a new match when previous matches are completed", () => {
       // Lobby renders RandomMatchmakingCard and friends list
-      expect(lobbySrc).toContain("<RandomMatchmakingCard />");
+      expect(lobbySrc).toContain("<RandomMatchmakingCard");
       expect(lobbySrc).toContain('t("rps.challenge_friend")');
     });
   });

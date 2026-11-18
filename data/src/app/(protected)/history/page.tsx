@@ -16,21 +16,19 @@ export default async function HistoryPage() {
   if (!user) redirect("/login?next=/history");
 
   return (
-    <div className="py-8 sm:py-14 text-[#F5F7FF]">
-      <div className="evo-container max-w-2xl px-4 space-y-6">
+    <div className="px-4 sm:px-7 py-6 text-[#1E1B24]">
+      <div className="max-w-[860px] mx-auto space-y-6">
         <div className="animate-fade-in space-y-2">
-          <span className="inline-block px-3.5 py-1 rounded-full bg-[#39DFFF]/15 border border-[#39DFFF]/30 text-[#39DFFF] text-xs font-bold uppercase tracking-wider shadow-[0_0_12px_rgba(57,223,255,0.2)]">
+          <span className="b-chip !cursor-default hover:!transform-none">
             Battle Records
           </span>
-          <h1 className="font-display font-black text-3xl sm:text-4xl text-[#F5F7FF] tracking-tight">
+          <h1 className="font-display font-semibold text-[32px] leading-tight text-[#1E1B24]">
             Match History
           </h1>
-          <p className="text-[#B8C3E0] text-sm sm:text-base leading-relaxed">
+          <p className="text-[#6E6878] text-sm sm:text-base leading-relaxed">
             Your completed Rock, Paper, Scissors matches and head-to-head scorecards.
           </p>
         </div>
-
-        <hr className="border-t border-[#1C2758] opacity-60" />
 
         <HistoryClient userId={user.id} />
       </div>

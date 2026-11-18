@@ -293,7 +293,7 @@ export const ChessBoard: React.FC<ChessBoardProps> = ({
       {pendingPromotion && (
         <div className="absolute inset-0 z-30 flex items-center justify-center bg-black/75 backdrop-blur-sm rounded-2xl p-4 animate-in fade-in duration-150">
           <div className="bg-[#1E293B] border border-[#334155] rounded-2xl p-5 shadow-2xl max-w-xs w-full text-center space-y-4">
-            <h3 className="font-display font-bold text-lg text-white">Promote Pawn</h3>
+            <h3 className="font-display font-bold text-lg text-[#1E1B24]">Promote Pawn</h3>
             <p className="text-xs text-slate-300">Choose which piece your pawn evolves into:</p>
             <div className="grid grid-cols-4 gap-2.5 pt-1">
               {[
@@ -322,7 +322,7 @@ export const ChessBoard: React.FC<ChessBoardProps> = ({
             <button
               type="button"
               onClick={() => setPendingPromotion(null)}
-              className="text-xs text-slate-400 hover:text-white pt-2 underline underline-offset-4"
+              className="text-xs text-slate-400 hover:text-[#1E1B24] pt-2 underline underline-offset-4"
             >
               Cancel Move
             </button>

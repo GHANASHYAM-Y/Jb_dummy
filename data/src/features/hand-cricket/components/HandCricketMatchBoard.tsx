@@ -446,10 +446,10 @@ export function HandCricketMatchBoard({ matchId, viewerId, players, initialSnaps
   return (
     <div className="w-full max-w-lg mx-auto flex flex-col gap-4 select-none">
       {/* Top bar */}
-      <div className="flex items-center justify-between px-4 py-3 bg-[#101638] border border-[rgba(255,255,255,0.08)] rounded-2xl shadow-xl">
+      <div className="flex items-center justify-between px-4 py-3 bg-[#FFFFFF] border border-[rgba(30,27,36,0.08)] rounded-2xl shadow-xl">
         <Link
           href="/play/hand-cricket"
-          className="flex items-center gap-1.5 text-xs font-semibold text-[#B8C3E0] hover:text-[#39DFFF] transition-colors"
+          className="flex items-center gap-1.5 text-xs font-semibold text-[#6E6878] hover:text-[#FF5A3C] transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Lobby</span>
@@ -459,7 +459,7 @@ export function HandCricketMatchBoard({ matchId, viewerId, players, initialSnaps
           <span
             className={cn(
               "w-2 h-2 rounded-full",
-              isConnected ? "bg-[#39DFFF] animate-pulse shadow-[0_0_8px_#39DFFF]" : "bg-[#FF5370]",
+              isConnected ? "bg-[#FF5A3C] animate-pulse shadow-[0_0_8px_#FF5A3C]" : "bg-[#E5484D]",
             )}
             title={isConnected ? "Live updates connected" : "Reconnecting…"}
           />
@@ -488,17 +488,17 @@ export function HandCricketMatchBoard({ matchId, viewerId, players, initialSnaps
             <div
               key={player.id}
               className={cn(
-                "flex items-center gap-2.5 p-3 rounded-2xl border bg-[#101638] min-w-0",
-                batting ? "border-[#39DFFF]/50" : "border-[rgba(255,255,255,0.08)]",
+                "flex items-center gap-2.5 p-3 rounded-2xl border bg-[#FFFFFF] min-w-0",
+                batting ? "border-[#FF5A3C]/50" : "border-[rgba(30,27,36,0.08)]",
               )}
             >
               <Avatar src={player.avatar_url} name={player.display_name} size="sm" />
               <div className="min-w-0">
-                <p className="text-sm font-bold text-[#F5F7FF] truncate">
+                <p className="text-sm font-bold text-[#1E1B24] truncate">
                   {player.display_name}
-                  {player.id === viewerId && <span className="text-[#39DFFF] font-semibold"> (you)</span>}
+                  {player.id === viewerId && <span className="text-[#FF5A3C] font-semibold"> (you)</span>}
                 </p>
-                <p className="text-[10px] font-mono uppercase tracking-wider text-[#8B98B5]">
+                <p className="text-[10px] font-mono uppercase tracking-wider text-[#6E6878]">
                   {game.status === "in_play" && live
                     ? batting
                       ? "Batting"
@@ -518,29 +518,29 @@ export function HandCricketMatchBoard({ matchId, viewerId, players, initialSnaps
       )}
 
       {actionError && (
-        <div className="p-3 bg-[rgba(255,83,112,0.1)] border border-[rgba(255,83,112,0.3)] rounded-2xl text-xs text-[#FF5370] font-medium" role="alert">
+        <div className="p-3 bg-[rgba(229,72,77,0.1)] border border-[rgba(229,72,77,0.3)] rounded-2xl text-xs text-[#E5484D] font-medium" role="alert">
           {actionError}
         </div>
       )}
 
       {/* ── Waiting for the friend to open the match ─────────────────────────── */}
       {phase === "waiting" && (
-        <div className="rounded-3xl border border-[rgba(57,223,255,0.2)] bg-[#101638] p-6 text-center space-y-4 shadow-xl animate-fade-in">
-          <div className="w-14 h-14 mx-auto rounded-2xl bg-[#39DFFF]/10 border border-[#39DFFF]/30 flex items-center justify-center text-[#39DFFF]">
+        <div className="rounded-3xl border border-[rgba(255,90,60,0.2)] bg-[#FFFFFF] p-6 text-center space-y-4 shadow-xl animate-fade-in">
+          <div className="w-14 h-14 mx-auto rounded-2xl bg-[#FF5A3C]/10 border border-[#FF5A3C]/30 flex items-center justify-center text-[#FF5A3C]">
             <Hourglass className="w-7 h-7 animate-pulse" aria-hidden="true" />
           </div>
           <div>
-            <h1 className="font-display font-black text-xl text-[#F5F7FF]">Waiting for {opponent.display_name}</h1>
-            <p className="text-sm text-[#B8C3E0] mt-1">
+            <h1 className="font-display font-black text-xl text-[#1E1B24]">Waiting for {opponent.display_name}</h1>
+            <p className="text-sm text-[#6E6878] mt-1">
               They&apos;ll see your challenge in their Hand Cricket lobby. The toss happens as soon as they open it.
             </p>
           </div>
           {waitingDeadlineMs > 0 && serverNow > 0 && (
-            <p className="text-xs font-mono text-[#8B98B5]">
+            <p className="text-xs font-mono text-[#6E6878]">
               Challenge expires in {formatClock(waitingDeadlineMs - serverNow)}
             </p>
           )}
-          <Button variant="ghost" size="sm" onClick={handleCancel} loading={submitting} className="text-[#FF5370] hover:text-[#FF8599]">
+          <Button variant="ghost" size="sm" onClick={handleCancel} loading={submitting} className="text-[#E5484D] hover:text-[#F08A8D]">
             Cancel challenge
           </Button>
         </div>
@@ -548,17 +548,17 @@ export function HandCricketMatchBoard({ matchId, viewerId, players, initialSnaps
 
       {/* ── Toss ─────────────────────────────────────────────────────────────── */}
       {live && game.status === "toss" && (
-        <div className="rounded-3xl border border-[#FBBF24]/30 bg-[#101638] p-6 text-center space-y-4 shadow-xl animate-scale-in">
-          <div className="w-14 h-14 mx-auto rounded-2xl bg-[#FBBF24]/15 border border-[#FBBF24]/40 flex items-center justify-center text-[#FBBF24]">
+        <div className="rounded-3xl border border-[#FFC23D]/30 bg-[#FFFFFF] p-6 text-center space-y-4 shadow-xl animate-scale-in">
+          <div className="w-14 h-14 mx-auto rounded-2xl bg-[#FFC23D]/15 border border-[#FFC23D]/40 flex items-center justify-center text-[#FFC23D]">
             <Coins className="w-7 h-7" aria-hidden="true" />
           </div>
           {!(game.player1_joined && game.player2_joined) ? (
-            <p className="text-sm text-[#B8C3E0] flex items-center justify-center gap-2">
+            <p className="text-sm text-[#6E6878] flex items-center justify-center gap-2">
               <Spinner size="sm" /> Getting both players ready…
             </p>
           ) : (
             <>
-              <h1 className="font-display font-black text-xl text-[#F5F7FF]">
+              <h1 className="font-display font-black text-xl text-[#1E1B24]">
                 {iWonToss ? "You won the toss!" : `${opponent.display_name} won the toss`}
               </h1>
               {iWonToss ? (
@@ -571,7 +571,7 @@ export function HandCricketMatchBoard({ matchId, viewerId, players, initialSnaps
                   </Button>
                 </div>
               ) : (
-                <p className="text-sm text-[#B8C3E0]">Waiting for them to choose bat or bowl…</p>
+                <p className="text-sm text-[#6E6878]">Waiting for them to choose bat or bowl…</p>
               )}
               {tossDeadlineMs > 0 && (
                 <ShotClock
@@ -581,7 +581,7 @@ export function HandCricketMatchBoard({ matchId, viewerId, players, initialSnaps
                   running={serverNow > 0 && serverNow < tossDeadlineMs}
                 />
               )}
-              <p className="text-[11px] text-[#8B98B5]">If no choice is made in time, the toss winner bats first.</p>
+              <p className="text-[11px] text-[#6E6878]">If no choice is made in time, the toss winner bats first.</p>
             </>
           )}
         </div>
@@ -610,12 +610,12 @@ export function HandCricketMatchBoard({ matchId, viewerId, players, initialSnaps
           />
 
           {isInningsBreak && (
-            <div className="rounded-2xl border border-[#FBBF24]/40 bg-[#101638] px-4 py-3 text-center text-sm font-bold text-[#FBBF24] animate-fade-in">
+            <div className="rounded-2xl border border-[#FFC23D]/40 bg-[#FFFFFF] px-4 py-3 text-center text-sm font-bold text-[#FFC23D] animate-fade-in">
               Innings break · {nameOf(game.batting_player_id)} needs {engineState.target} to win
             </div>
           )}
 
-          <div className="rounded-3xl border border-[rgba(255,255,255,0.08)] bg-[#101638]/80 p-4 sm:p-5 space-y-4 shadow-xl">
+          <div className="rounded-3xl border border-[rgba(30,27,36,0.08)] bg-[#FFFFFF]/80 p-4 sm:p-5 space-y-4 shadow-xl">
             <div className="flex items-center justify-center gap-3 sm:gap-6">
               {/* Me: always on the left */}
               <HandTile
@@ -625,7 +625,7 @@ export function HandCricketMatchBoard({ matchId, viewerId, players, initialSnaps
                 hasThrown={myThrow !== null}
                 highlight={inReveal ? highlight : null}
               />
-              <span className="font-display font-black text-lg text-[#8B98B5]" aria-hidden="true">vs</span>
+              <span className="font-display font-black text-lg text-[#6E6878]" aria-hidden="true">vs</span>
               {/* Opponent: always on the right */}
               <HandTile
                 team={names[oppSide]}
@@ -640,7 +640,7 @@ export function HandCricketMatchBoard({ matchId, viewerId, players, initialSnaps
               <p
                 className={cn(
                   "text-center font-display font-black text-2xl animate-rps-pop",
-                  revealBall.isOut ? "text-[#FF5370]" : revealBall.runs > 0 ? "text-[#39DFFF]" : "text-[#8B98B5]",
+                  revealBall.isOut ? "text-[#E5484D]" : revealBall.runs > 0 ? "text-[#FF5A3C]" : "text-[#6E6878]",
                 )}
               >
                 {revealBall.isOut
@@ -682,16 +682,16 @@ export function HandCricketMatchBoard({ matchId, viewerId, players, initialSnaps
 
       {/* ── Result ───────────────────────────────────────────────────────────── */}
       {showResult && phase !== "waiting" && (
-        <div className="rounded-3xl border border-[rgba(57,223,255,0.25)] bg-[#101638] p-6 space-y-5 shadow-2xl animate-slide-up">
+        <div className="rounded-3xl border border-[rgba(255,90,60,0.25)] bg-[#FFFFFF] p-6 space-y-5 shadow-2xl animate-slide-up">
           <div className="text-center space-y-2">
             <div
               className={cn(
                 "w-16 h-16 mx-auto rounded-2xl border flex items-center justify-center",
                 iWon
-                  ? "bg-[#39DFFF]/15 border-[#39DFFF]/40 text-[#39DFFF]"
+                  ? "bg-[#FF5A3C]/15 border-[#FF5A3C]/40 text-[#FF5A3C]"
                   : iLost
-                  ? "bg-[#FF5370]/15 border-[#FF5370]/40 text-[#FF5370]"
-                  : "bg-[#070B25] border-[rgba(255,255,255,0.12)] text-[#B8C3E0]",
+                  ? "bg-[#E5484D]/15 border-[#E5484D]/40 text-[#E5484D]"
+                  : "bg-[#FFF6EC] border-[rgba(30,27,36,0.12)] text-[#6E6878]",
               )}
             >
               {iWon ? (
@@ -702,7 +702,7 @@ export function HandCricketMatchBoard({ matchId, viewerId, players, initialSnaps
                 <Award className="w-8 h-8" aria-hidden="true" />
               )}
             </div>
-            <h2 className="font-display font-black text-2xl text-[#F5F7FF]">
+            <h2 className="font-display font-black text-2xl text-[#1E1B24]">
               {phase === "cancelled"
                 ? "Challenge called off"
                 : phase === "aborted"
@@ -716,10 +716,10 @@ export function HandCricketMatchBoard({ matchId, viewerId, players, initialSnaps
                 : "Match over"}
             </h2>
             {phase === "completed" && engineState && (
-              <p className="text-sm text-[#B8C3E0]">{resultSummary(engineState, names)}</p>
+              <p className="text-sm text-[#6E6878]">{resultSummary(engineState, names)}</p>
             )}
             {phase === "forfeited" && (
-              <p className="text-sm text-[#B8C3E0]">
+              <p className="text-sm text-[#6E6878]">
                 {iWon ? `${opponent.display_name} left the match.` : "You left the match."}
               </p>
             )}
@@ -760,13 +760,13 @@ export function HandCricketMatchBoard({ matchId, viewerId, players, initialSnaps
           )}
 
           {phase === "completed" && iWon && !challenge && (
-            <div className="bg-[rgba(255,83,112,0.1)] border border-[rgba(255,83,112,0.3)] rounded-2xl p-4 text-center space-y-3">
-              <div className="flex items-center justify-center gap-1.5 text-[#FF8599] text-sm font-bold">
+            <div className="bg-[rgba(229,72,77,0.1)] border border-[rgba(229,72,77,0.3)] rounded-2xl p-4 text-center space-y-3">
+              <div className="flex items-center justify-center gap-1.5 text-[#F08A8D] text-sm font-bold">
                 <Sparkles className="w-4 h-4" aria-hidden="true" />
                 <span>Winner&apos;s privilege</span>
               </div>
-              <p className="text-xs text-[#B8C3E0]">
-                You beat <strong className="text-[#F5F7FF]">{opponent.display_name}</strong>. Pick a dare for them.
+              <p className="text-xs text-[#6E6878]">
+                You beat <strong className="text-[#1E1B24]">{opponent.display_name}</strong>. Pick a dare for them.
               </p>
               <Button variant="coral" size="md" onClick={() => setDareOpen(true)} className="w-full font-bold">
                 <Flame className="w-4 h-4 mr-2" />
@@ -776,7 +776,7 @@ export function HandCricketMatchBoard({ matchId, viewerId, players, initialSnaps
           )}
 
           {phase === "completed" && iLost && !challenge && (
-            <p className="text-center text-xs text-[#8B98B5]">
+            <p className="text-center text-xs text-[#6E6878]">
               {opponent.display_name} may send you a dare. It will appear here.
             </p>
           )}

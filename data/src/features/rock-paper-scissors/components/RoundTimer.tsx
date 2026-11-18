@@ -19,14 +19,14 @@ const TOTAL_SECONDS = 10;
 const RADIUS = 30;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
-// Color tokens reference for tests & theme compatibility: #167D78, #D95F49
+// Color tokens reference for tests & theme compatibility: #FF5A3C, #FF5A3C
 
 /**
  * EVOAIQU Futuristic Holographic 10-Second Move Timer
  *
  * Calculates visual countdown from authoritative server/database timestamp.
- * - Glowing Cyan (#39DFFF / #167D78) for normal countdown (10s down to 4s)
- * - Transitions to Warning Coral (#FF4B72 / #D95F49) during the final 3 seconds
+ * - Glowing Cyan (#FF5A3C / #FF5A3C) for normal countdown (10s down to 4s)
+ * - Transitions to Warning Coral (#E5484D / #FF5A3C) during the final 3 seconds
  * - Preserves state across browser refreshes and tab reloads
  */
 export function RoundTimer({
@@ -90,9 +90,9 @@ export function RoundTimer({
       aria-label={`Round move timer: ${secondsRemaining} seconds remaining`}
       aria-live="polite"
       className={cn(
-        "flex flex-col items-center justify-center p-3.5 sm:p-4 rounded-2xl bg-[#101638]/90 border border-[#315BFF]/30 shadow-[0_4px_24px_rgba(7,11,37,0.6)] backdrop-blur-md transition-all duration-300",
-        isWarning && "border-[#FF4B72]/60 bg-[#1F102B]/90 shadow-[0_0_20px_rgba(255,75,114,0.25)]",
-        isExpired && "border-[#FF4B72] bg-[#2E0E24]/90",
+        "flex flex-col items-center justify-center p-3.5 sm:p-4 rounded-2xl bg-[#FFFFFF]/90 border border-[#EADBC8] shadow-[0_4px_24px_rgba(255,246,236,0.6)] backdrop-blur-md transition-all duration-300",
+        isWarning && "border-[#E5484D]/60 bg-[#1F102B]/90 shadow-[0_0_20px_rgba(255,75,114,0.25)]",
+        isExpired && "border-[#E5484D] bg-[#2E0E24]/90",
         className
       )}
     >
@@ -100,12 +100,12 @@ export function RoundTimer({
         <svg className="w-full h-full -rotate-90 transform" viewBox="0 0 76 76">
           <defs>
             <linearGradient id="timerCyanGrad" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#39DFFF" />
-              <stop offset="100%" stopColor="#315BFF" />
+              <stop offset="0%" stopColor="#FF5A3C" />
+              <stop offset="100%" stopColor="#8C7BFF" />
             </linearGradient>
             <linearGradient id="timerWarningGrad" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#FF4B72" />
-              <stop offset="100%" stopColor="#8B2CFF" />
+              <stop offset="0%" stopColor="#E5484D" />
+              <stop offset="100%" stopColor="#8C7BFF" />
             </linearGradient>
             <filter id="timerGlow" x="-20%" y="-20%" width="140%" height="140%">
               <feGaussianBlur stdDeviation="2" result="blur" />
@@ -118,7 +118,7 @@ export function RoundTimer({
             cx="38"
             cy="38"
             r={RADIUS}
-            className="stroke-[#182352]"
+            className="stroke-[#F5EADC]"
             strokeWidth="4.5"
             fill="transparent"
           />
@@ -144,9 +144,9 @@ export function RoundTimer({
           <span
             className={cn(
               "font-display font-black text-2xl sm:text-3xl leading-none tracking-tight transition-transform duration-200",
-              isWarning && "text-[#FF4B72] scale-110 animate-pulse drop-shadow-[0_0_12px_rgba(255,75,114,0.6)]",
-              isExpired && "text-[#FF4B72] text-xl font-bold",
-              !isWarning && !isExpired && "text-[#F5F7FF] drop-shadow-[0_0_10px_rgba(57,223,255,0.4)]"
+              isWarning && "text-[#E5484D] scale-110 animate-pulse drop-shadow-[0_0_12px_rgba(255,75,114,0.6)]",
+              isExpired && "text-[#E5484D] text-xl font-bold",
+              !isWarning && !isExpired && "text-[#1E1B24] drop-shadow-[0_0_10px_rgba(255,90,60,0.4)]"
             )}
           >
             {isExpired ? "0" : secondsRemaining}
@@ -154,7 +154,7 @@ export function RoundTimer({
           <span
             className={cn(
               "text-[10px] font-bold uppercase tracking-wider mt-0.5",
-              isWarning || isExpired ? "text-[#FF4B72]" : "text-[#9BA8D7]"
+              isWarning || isExpired ? "text-[#E5484D]" : "text-[#6E6878]"
             )}
           >
             {isExpired ? "EXPIRED" : "SEC"}
@@ -165,25 +165,25 @@ export function RoundTimer({
       {/* Status banner under timer */}
       <div className="mt-2 text-center">
         {isClashing ? (
-          <span className="text-xs font-semibold text-[#39DFFF] animate-pulse">
+          <span className="text-xs font-semibold text-[#FF5A3C] animate-pulse">
             Clash in progress...
           </span>
         ) : isExpired ? (
-          <span className="inline-flex items-center gap-1 text-xs font-bold text-[#FF4B72] animate-pulse">
+          <span className="inline-flex items-center gap-1 text-xs font-bold text-[#E5484D] animate-pulse">
             <AlertTriangle className="w-3.5 h-3.5" />
             Time&apos;s up! Resolving round...
           </span>
         ) : isWarning ? (
-          <span className="inline-flex items-center gap-1 text-xs font-bold text-[#FF4B72] animate-pulse">
+          <span className="inline-flex items-center gap-1 text-xs font-bold text-[#E5484D] animate-pulse">
             <Clock className="w-3.5 h-3.5" />
             Move deadline expiring!
           </span>
         ) : hasSubmitted ? (
-          <span className="text-xs font-semibold text-[#39DFFF]">
+          <span className="text-xs font-semibold text-[#FF5A3C]">
             Move locked in! Waiting for round...
           </span>
         ) : (
-          <span className="text-xs font-medium text-[#9BA8D7]">
+          <span className="text-xs font-medium text-[#6E6878]">
             10-second move window
           </span>
         )}

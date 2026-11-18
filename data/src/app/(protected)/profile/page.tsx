@@ -70,12 +70,12 @@ export default async function ProfilePage() {
 
   if (!profile) {
     return (
-      <div className="py-16 evo-container max-w-xl text-center">
-        <div className="p-8 rounded-2xl bg-[#101638] border border-[rgba(255,255,255,0.08)] shadow-[0_0_24px_rgba(0,0,0,0.3)]">
-          <h1 className="font-display font-bold text-2xl text-[#F5F7FF] mb-2">
+      <div className="py-16 px-4 max-w-xl mx-auto text-center">
+        <div className="b-card !p-8">
+          <h1 className="font-display font-bold text-2xl text-[#1E1B24] mb-2">
             Profile Setup Required
           </h1>
-          <p className="text-[#B8C3E0] text-sm">
+          <p className="text-[#6E6878] text-sm">
             Your profile record is being initialized. Please refresh in a moment.
           </p>
         </div>
@@ -84,8 +84,8 @@ export default async function ProfilePage() {
   }
 
   return (
-    <div className="py-8 sm:py-12 min-h-[calc(100vh-5rem)]">
-      <div className="evo-container">
+    <div className="px-4 sm:px-7 py-6 min-h-[calc(100vh-5rem)]">
+      <div className="max-w-[860px] mx-auto">
         <ProfileViewClient
           user={{ id: user.id, email: user.email }}
           profile={profile}

@@ -2,6 +2,41 @@
 
 - Google sign-in (Google SSO): configure the Google OAuth provider and finish integration later.
 
+## Draw & Guess: steps only you can do
+
+The game is built (`data/src/features/draw-guess/`) but has never run against a real database. I could not do these because I have no Supabase login, database password or access token on this machine (`.env.local` has the app keys, which cannot run SQL).
+
+1. [ ] **Run the migration.** Open Supabase, go to SQL Editor, paste the whole of `data/supabase/migrations/0018_draw_guess.sql` and run it. Or, from `data`, run `npx supabase login`, then `npx supabase link --project-ref <your ref>`, then `npx supabase db push`. Check afterwards that the tables `draw_rooms`, `draw_guesses` and `draw_words` exist.
+2. [ ] **Check Realtime is on.** In Supabase go to Project Settings, then API (or Realtime), and make sure Realtime is enabled. Drawing is sent over a Realtime broadcast channel, so it will not show on the other screen without it.
+3. [ ] **Test with two real users.** Run the app (`npm run dev`), sign in as user A in one browser and user B in a private window. A creates a room and B joins with the code. Play all 4 rounds.
+4. [ ] **Things to look for while testing:**
+   - the guesser sees the drawing appear live, and a refresh mid-round brings it back
+   - the guesser never sees the real word before the round ends (check the browser's Network tab too)
+   - a right guess ends the round and both scores go up
+   - when the clock hits 0 with no guess, the round closes and shows the word
+   - the Leave button works and a left room shows up in "Your open rooms"
+5. [ ] **Schedule room cleanup (optional).** The function `cleanup_draw_rooms()` exists but nothing calls it. Add it to `pg_cron` in Supabase (for example hourly) so old rooms are deleted.
+6. [ ] **Later ideas:** dares for the loser and match history (needs the shared `matches` table), hints that reveal letters, a Tamil word list, more than 2 players, invite a friend straight from the lobby.
+
+If anything fails in step 3, send me the error text or a screenshot and I will fix it.
+
+## Speed and UI: signed-in pages still need a look
+
+I could only check signed-out pages (I have no account to sign in with).
+
+1. [ ] Restart the production server (`npm run prod`) so port 3001 has the latest build, then click around signed in and say if any page still feels slow, and which one.
+2. [ ] Send screenshots of the signed-in pages (home feed, friends, chat, profile, a game lobby, a match screen) so I can check them the way I checked the public ones.
+
+## Tic Tac Toe and Memory Match: check in a browser
+
+Both games run fully in the browser (no database, no login), and their rules are covered by tests, but nobody has looked at them on screen yet.
+
+1. [ ] Run `npm run dev` and open `/play/tic-tac-toe` and `/play/memory-match`, signed in and signed out.
+2. [ ] Tic Tac Toe: play each difficulty, try "Friend (same device)", and check that the opener swaps each round.
+3. [ ] Memory Match: play solo on each level (check the timer, stars and "New personal best"), then try 2 players.
+4. [ ] Look at them on a phone-sized window too, and send me screenshots of anything that looks off.
+5. [ ] Later ideas: online play against a friend for both (needs tables and RPCs like Rock Paper Scissors), win history, and a shared Memory Match leaderboard.
+
 ## Planned ideas
 
 Assumes the app already has chess, Hand Cricket and Ludo, plus challenges, blocking and accounts.

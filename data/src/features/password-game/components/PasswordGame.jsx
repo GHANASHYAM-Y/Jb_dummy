@@ -10,7 +10,9 @@ import LightningEffect from "./effects/LightningEffect";
 import { useLightningEvent } from "../hooks/useLightningEvent";
 import IceEffect from "./effects/IceEffect";
 import { useIceEvent } from "../hooks/useIceEvent";
-import { getRuleProgress } from "../utils/ruleProgress";
+import { getRuleProgress, getRuleView } from "../utils/ruleProgress";
+import { useEventLog } from "../hooks/useEventLog";
+import { TILE_LABEL, toTiles } from "../utils/characters";
 import "../styles/password-game.css";
 
 export default function PasswordGame() {
@@ -68,15 +70,39 @@ export default function PasswordGame() {
   const {
     evaluatedRules,
     completedRules,
-    currentRule,
     passedRuleIds,
   } = useMemo(
     () => getRuleProgress(rules, password, liveData),
     [password, liveData],
   );
 
+  // Remember the furthest rule reached. A solved rule that an edit breaks is
+  // shown as an error TOGETHER with the current rule; no new rule unlocks until
+  // it is fixed. Rules beyond the furthest one reached stay hidden.
+  const [furthestIndex, setFurthestIndex] = useState(0);
+  const {
+    reachedIndex,
+    hasBroken,
+    brokenRules,
+    currentRule,
+    currentSolved,
+    solvedRules,
+    segments,
+  } = getRuleView(evaluatedRules, furthestIndex);
+  // Adjust state during render (React's pattern for state derived from props):
+  // the guard makes it settle in one extra pass and it only ever moves forward.
+  if (reachedIndex > furthestIndex) setFurthestIndex(reachedIndex);
+
+  // Live data loads for any rule on screen: the current rule or a broken one
+  const shownRuleIds = new Set([currentRule?.id, ...brokenRules.map(({ rule }) => rule.id)]);
+  const needWordCollision = shownRuleIds.has(21);
+  const needSignalFlags = shownRuleIds.has(23);
+  const needMorseCode = shownRuleIds.has(24);
+  const needNatoAlphabet = shownRuleIds.has(25);
+  const needGreekWords = shownRuleIds.has(26);
+
   useEffect(() => {
-    if (currentRule?.id !== 21 || liveData.wordCollisionStatus !== "idle") {
+    if (!needWordCollision || liveData.wordCollisionStatus !== "idle") {
       return undefined;
     }
 
@@ -104,10 +130,10 @@ export default function PasswordGame() {
     return () => {
       active = false;
     };
-  }, [currentRule?.id, liveData.wordCollisionStatus]);
+  }, [needWordCollision, liveData.wordCollisionStatus]);
 
   useEffect(() => {
-    if (currentRule?.id !== 23 || liveData.signalFlagStatus !== "idle") {
+    if (!needSignalFlags || liveData.signalFlagStatus !== "idle") {
       return undefined;
     }
 
@@ -136,10 +162,10 @@ export default function PasswordGame() {
       });
 
     return () => controller.abort();
-  }, [currentRule?.id, liveData.signalFlagStatus]);
+  }, [needSignalFlags, liveData.signalFlagStatus]);
 
   useEffect(() => {
-    if (currentRule?.id !== 24 || liveData.morseCodeStatus !== "idle") {
+    if (!needMorseCode || liveData.morseCodeStatus !== "idle") {
       return undefined;
     }
 
@@ -168,10 +194,10 @@ export default function PasswordGame() {
       });
 
     return () => controller.abort();
-  }, [currentRule?.id, liveData.morseCodeStatus]);
+  }, [needMorseCode, liveData.morseCodeStatus]);
 
   useEffect(() => {
-    if (currentRule?.id !== 25 || liveData.natoAlphabetStatus !== "idle") {
+    if (!needNatoAlphabet || liveData.natoAlphabetStatus !== "idle") {
       return undefined;
     }
 
@@ -200,10 +226,10 @@ export default function PasswordGame() {
       });
 
     return () => controller.abort();
-  }, [currentRule?.id, liveData.natoAlphabetStatus]);
+  }, [needNatoAlphabet, liveData.natoAlphabetStatus]);
 
   useEffect(() => {
-    if (currentRule?.id !== 26 || liveData.greekEnglishWordsStatus !== "idle") {
+    if (!needGreekWords || liveData.greekEnglishWordsStatus !== "idle") {
       return undefined;
     }
 
@@ -232,7 +258,7 @@ export default function PasswordGame() {
       });
 
     return () => controller.abort();
-  }, [currentRule?.id, liveData.greekEnglishWordsStatus]);
+  }, [needGreekWords, liveData.greekEnglishWordsStatus]);
 
   const fireTriggered = passedRuleIds.has("chaos-fire");
   const fire = useFireEvent({
@@ -330,7 +356,7 @@ export default function PasswordGame() {
     .reduce((sum, digit) => sum + Number(digit), 0);
   const letterCount = vowelCount + consonantCount;
   const statPercent = (count, total) => (total ? Math.round((count / total) * 100) : 0);
-  const activeHint = {
+  const ruleHints = {
     1: "Start with at least 8 characters.",
     2: "Add a digit anywhere in the password.",
     3: "Add an uppercase letter (A–Z).",
@@ -361,218 +387,335 @@ export default function PasswordGame() {
     24: "Include a letter whose International Morse code consists of one element.",
     25: "Include a complete NATO phonetic alphabet codeword.",
     26: "Include a complete English word that is also the name of a Greek letter.",
-  }[currentRule?.id] || "Solve this rule to reveal the next challenge.";
+  };
+  const hintFor = (rule) => ruleHints[rule?.id] || "Solve this rule to reveal the next challenge.";
+  const ruleChip = (rule) =>
+    rule.category === "Chaos" ? "EVENT · CHAOS" : `RULE ${rule.id} · ${rule.category.toUpperCase()}`;
+  const ruleText = (rule) => (rule.getText ? rule.getText(password, liveData) : rule.text);
 
-  // Keep the active challenge first, then show the completed path beneath it.
-  // Future failed rules remain hidden until they become the lowest unsolved one.
-  const currentRuleIndex = evaluatedRules.findIndex(
-    ({ rule }) => rule.id === currentRule?.id,
-  );
-  const displayedRules = currentRule
-    ? [
-        evaluatedRules[currentRuleIndex],
-        ...evaluatedRules
-          .slice(0, currentRuleIndex)
-          .filter(({ passed }) => passed)
-          .reverse(),
-      ]
-    : evaluatedRules.filter(({ passed }) => passed).reverse();
+  const [showSolved, setShowSolved] = useState(true);
+  const [showAllEvents, setShowAllEvents] = useState(false);
+  const eventLog = useEventLog({
+    password,
+    solvedRules,
+    chaosPhases: { fire: fire.phase, water: water.phase, lightning: lightning.phase, ice: ice.phase },
+  });
+  const visibleEvents = showAllEvents ? eventLog : eventLog.slice(0, 6);
 
-  return (
-    <div className="pw-game">
-      <div className={`app-container ${fire.phase === "failed" ? "fire-game-over" : ""}`}>
-      <h1 className="title">
-        {fire.phase === "failed" ? "Password Destroyed" : "Password Game"}
-      </h1>
+  // Colour-coded character tiles (one per Unicode code point, emoji included)
+  const characters = toTiles(password);
 
-      {fire.phase === "failed" ? (
-        <>
+  const isChaosRule = currentRule?.category === "Chaos";
+  const ruleCounter = hasBroken
+    ? `Fix ${brokenRules.length === 1 ? "1 broken rule" : `${brokenRules.length} broken rules`} to continue`
+    : !currentRule
+      ? "All rules solved"
+      : isChaosRule
+        ? "Chaos event"
+        : `Rule ${currentRule.id} of ${coreRules.length}`;
+
+  const liveDataWarnings = [
+    liveData.exchangeRateStatus === "unavailable" && {
+      key: "rate",
+      text: "The current USD → INR exchange rate could not be loaded.",
+      retry: retryLiveData,
+    },
+    liveData.signalFlagStatus === "error" && {
+      key: "flags",
+      text: "The international signal flag vocabulary could not be loaded.",
+      retry: retrySignalFlagSource,
+    },
+    liveData.morseCodeStatus === "error" && {
+      key: "morse",
+      text: "The International Morse code alphabet could not be loaded.",
+      retry: retryMorseCodeSource,
+    },
+    liveData.natoAlphabetStatus === "error" && {
+      key: "nato",
+      text: "The NATO phonetic alphabet could not be loaded.",
+      retry: retryNatoAlphabetSource,
+    },
+    liveData.greekEnglishWordsStatus === "error" && {
+      key: "greek",
+      text: "Greek letter names could not be verified against the English dictionary.",
+      retry: retryGreekEnglishWordSources,
+    },
+  ].filter(Boolean);
+
+  // Fire destroyed the password: full-screen scene and a retry, nothing else
+  if (fire.phase === "failed") {
+    return (
+      <div className="pw-game">
+        <div className="app-container fire-game-over">
+          <h1 className="title">Password Destroyed</h1>
           <FireEffect {...fire} password={password} />
           <button className="fire-retry" type="button" onClick={fire.retry}>
             Try again
           </button>
-        </>
-      ) : water.phase === "failed" ? (
-        <>
-          <WaterEffect {...water} password={password} onDrainChange={water.updateDrainCommand} />
-          <button className="fire-retry water-retry" type="button" onClick={water.retry}>
-            Try again
-          </button>
-        </>
-      ) : (
-        <>
-          <div className={`fire-field-wrap stylized ${fire.phase === "active" ? "is-burning" : ""}`}>
-            <input
-              className={`password-input ${fire.phase === "active" ? "password-burning" : ""}`}
-              type="text"
-              value={password}
-              onBeforeInput={capturePasswordEdit}
-              onChange={(e) => updatePassword(e.target.value)}
-              placeholder="Type your password..."
-            />
-          </div>
-          <FireEffect {...fire} />
-          <WaterEffect {...water} password={password} onDrainChange={water.updateDrainCommand} />
-          <LightningEffect {...lightning} password={password} />
-          <IceEffect {...ice} password={password} />
-        </>
-      )}
-
-      {showHelper ? (
-      <aside className="password-helper" aria-live="polite" aria-label="Password analysis">
-        <div className="helper-topline">
-          <div className="helper-heading">
-            <span className="helper-heading-icon" aria-hidden="true">✦</span>
-            <div>
-              <strong>Password analysis</strong>
-              <span>Live character breakdown</span>
-            </div>
-          </div>
-          <div className="helper-actions">
-            <span className="helper-live">Live counts</span>
-            <button className="helper-toggle" type="button" onClick={() => setShowHelper(false)}>Hide helper</button>
-          </div>
         </div>
-
-        <div className="password-stats">
-          <article className="password-stat vowels">
-            <div><span>Vowels</span><i aria-hidden="true">◉</i></div>
-            <b>{vowelCount}</b>
-            <span className="stat-meter"><span style={{ width: `${statPercent(vowelCount, letterCount)}%` }} /></span>
-          </article>
-          <article className="password-stat consonants">
-            <div><span>Consonants</span><i aria-hidden="true">▤</i></div>
-            <b>{consonantCount}</b>
-            <span className="stat-meter"><span style={{ width: `${statPercent(consonantCount, letterCount)}%` }} /></span>
-          </article>
-          <article className="password-stat special">
-            <div><span>Special chars</span><i aria-hidden="true">✳</i></div>
-            <b>{specialCharacterCount}</b>
-            <span className="stat-meter"><span style={{ width: `${statPercent(specialCharacterCount, passwordCharacterCount)}%` }} /></span>
-          </article>
-        </div>
-
-        <div className="helper-hint">
-          <span aria-hidden="true">✦</span>
-          <div><strong>Next move</strong><p>{activeHint}</p></div>
-        </div>
-
-        <div className="helper-footer">
-          <div><span>Password length</span><b>{passwordCharacterCount} <small>characters</small></b></div>
-          <span className="length-meter"><span style={{ width: `${Math.min(passwordCharacterCount, 100)}%` }} /></span>
-        </div>
-      </aside>
-      ) : (
-        <button className="helper-show" type="button" onClick={() => setShowHelper(true)}>
-          ✦ View password helper
-        </button>
-      )}
-
-      <div className="progress-bar">
-        <div
-          className="progress-fill"
-          style={{
-            width: `${progress}%`,
-          }}
-        />
       </div>
+    );
+  }
 
-      <p className="progress-text">
-        {completedCoreRules} / {coreRules.length} Core Rules
-        Completed (
-        {Math.round(progress)}%)
-      </p>
+  return (
+    <div className="pw-game">
+      <div className="app-container">
+        <header className="pw-topbar">
+          <h1 className="pw-brand">Password Game</h1>
+          <span className="pw-counter">{ruleCounter}</span>
+        </header>
 
-      {liveData.exchangeRateStatus === "unavailable" ? (
-        <div className="live-data-warning" role="status">
-          <span>The current USD → INR exchange rate could not be loaded.</span>
-          <button type="button" onClick={retryLiveData}>
-            Retry
-          </button>
-        </div>
-      ) : null}
-      {liveData.signalFlagStatus === "error" ? (
-        <div className="live-data-warning" role="status">
-          <span>The international signal flag vocabulary could not be loaded.</span>
-          <button type="button" onClick={retrySignalFlagSource}>
-            Retry
-          </button>
-        </div>
-      ) : null}
-      {liveData.morseCodeStatus === "error" ? (
-        <div className="live-data-warning" role="status">
-          <span>The International Morse code alphabet could not be loaded.</span>
-          <button type="button" onClick={retryMorseCodeSource}>
-            Retry
-          </button>
-        </div>
-      ) : null}
-      {liveData.natoAlphabetStatus === "error" ? (
-        <div className="live-data-warning" role="status">
-          <span>The NATO phonetic alphabet could not be loaded.</span>
-          <button type="button" onClick={retryNatoAlphabetSource}>
-            Retry
-          </button>
-        </div>
-      ) : null}
-      {liveData.greekEnglishWordsStatus === "error" ? (
-        <div className="live-data-warning" role="status">
-          <span>Greek letter names could not be verified against the English dictionary.</span>
-          <button type="button" onClick={retryGreekEnglishWordSources}>
-            Retry
-          </button>
-        </div>
-      ) : null}
-
-      {displayedRules
-        .map(({ rule, passed }) => {
-
-          const isCurrent =
-            currentRule &&
-            currentRule.id ===
-              rule.id;
-
-          return (
-            <div
-              key={rule.id}
-              className={`
-                rule-card
-                ${
-                  passed
-                    ? "rule-passed"
-                    : "rule-failed"
-                }
-                ${
-                  isCurrent
-                    ? "current-rule"
-                    : ""
-                }
-                ${rule.category.toLowerCase()}
-              `}
-            >
-              <div className="rule-category">
-                <span className="rule-id">
-                  {rule.category === "Chaos" ? "Event" : `#${rule.id}`}
+        <main className="pw-column">
+          {water.phase === "failed" ? (
+            <div className="pw-water-failed">
+              <WaterEffect {...water} password={password} onDrainChange={water.updateDrainCommand} />
+              <button className="fire-retry water-retry" type="button" onClick={water.retry}>
+                Try again
+              </button>
+            </div>
+          ) : (
+            <section className="pw-field" aria-label="Your password">
+              <div className="pw-field-head">
+                <label className="pw-label" htmlFor="pw-password">Your password</label>
+                <span className="pw-muted">
+                  {passwordCharacterCount} {passwordCharacterCount === 1 ? "character" : "characters"}
                 </span>
-
-                {rule.category}
               </div>
-
-              <div className="rule-text">
-                {passed ? "✅" : "❌"}{" "}
-                {rule.getText
-                  ? rule.getText(password, liveData)
-                  : rule.text}
+              <div className={`fire-field-wrap stylized ${fire.phase === "active" ? "is-burning" : ""}`}>
+                <input
+                  id="pw-password"
+                  className={`password-input ${fire.phase === "active" ? "password-burning" : ""}`}
+                  type="text"
+                  value={password}
+                  onBeforeInput={capturePasswordEdit}
+                  onChange={(e) => updatePassword(e.target.value)}
+                  placeholder="Type your password..."
+                  autoComplete="off"
+                  spellCheck={false}
+                />
               </div>
+              <FireEffect {...fire} />
+              <WaterEffect {...water} password={password} onDrainChange={water.updateDrainCommand} />
+              <LightningEffect {...lightning} password={password} />
+              <IceEffect {...ice} password={password} />
 
-              {isCurrent && (
-                <div className="current-label">
-                  ⭐ Current Rule
+              {characters.length > 0 ? (
+                <div
+                  className={`pw-tiles ${characters.length > 24 ? "pw-tiles-compact" : ""}`}
+                  aria-hidden="true"
+                >
+                  {characters.map(({ character, kind }, index) => (
+                    <span key={index} className={`pw-tile pw-tile-${kind}`}>
+                      {kind === "space" ? "␣" : character}
+                      <small>{TILE_LABEL[kind]}</small>
+                    </span>
+                  ))}
                 </div>
+              ) : (
+                <p className="pw-tiles-empty">Your characters will appear here as you type.</p>
+              )}
+              <ul className="pw-legend" aria-label="Character counts">
+                <li><i className="pw-dot pw-dot-vowel" aria-hidden="true" />Vowels {vowelCount}</li>
+                <li><i className="pw-dot pw-dot-consonant" aria-hidden="true" />Consonants {consonantCount}</li>
+                <li><i className="pw-dot pw-dot-digit" aria-hidden="true" />Digits {digitCount}</li>
+                <li><i className="pw-dot pw-dot-symbol" aria-hidden="true" />Symbols {specialCharacterCount}</li>
+              </ul>
+            </section>
+          )}
+
+          <section aria-label="Progress">
+            <div className="pw-segments" aria-hidden="true">
+              {segments.map(({ id, state }) => (
+                <span key={id} className={`pw-segment pw-segment-${state}`} />
+              ))}
+            </div>
+            <div className="pw-segments-foot">
+              <span>
+                {completedCoreRules} / {coreRules.length} core rules solved
+              </span>
+              <span>{Math.round(progress)}%</span>
+            </div>
+          </section>
+
+          {hasBroken && (
+            <section className="pw-broken" aria-labelledby="pw-broken-title">
+              <h2 id="pw-broken-title" className="pw-broken-title">
+                {brokenRules.length === 1 ? "A solved rule broke" : `${brokenRules.length} solved rules broke`}. Fix
+                {brokenRules.length === 1 ? " it" : " them"} to continue.
+              </h2>
+              {brokenRules.map(({ rule }) => (
+                <article key={rule.id} className="pw-broken-card" aria-label={`Broken: ${ruleText(rule)}`}>
+                  <div className="pw-chips">
+                    <span className="pw-chip pw-chip-rule">{ruleChip(rule)}</span>
+                    <span className="pw-chip pw-chip-bad">Broken by your last edit</span>
+                  </div>
+                  <p className="pw-broken-text">{ruleText(rule)}</p>
+                  {showHelper && <p className="pw-broken-hint">{hintFor(rule)}</p>}
+                </article>
+              ))}
+            </section>
+          )}
+
+          {currentRule ? (
+            <section
+              className={`pw-current ${isChaosRule ? "pw-current-chaos" : ""} ${currentSolved ? "pw-current-waiting" : ""}`}
+              aria-labelledby="pw-current-rule"
+            >
+              <div className="pw-current-head">
+                <div className="pw-chips">
+                  {hasBroken && <span className="pw-chip pw-chip-plain">CURRENT RULE</span>}
+                  <span className="pw-chip pw-chip-rule">{ruleChip(currentRule)}</span>
+                  {currentSolved ? (
+                    <span className="pw-chip pw-chip-ok">Solved</span>
+                  ) : (
+                    <span className="pw-chip pw-chip-bad">Not met yet</span>
+                  )}
+                </div>
+                <button
+                  className="pw-link-button"
+                  type="button"
+                  aria-expanded={showHelper}
+                  onClick={() => setShowHelper((shown) => !shown)}
+                >
+                  {showHelper ? "Hide hints" : "Show hints"}
+                </button>
+              </div>
+              <h2 id="pw-current-rule" className="pw-current-text">{ruleText(currentRule)}</h2>
+              {currentSolved && (
+                <p className="pw-waiting-note" role="status">
+                  Done. The next rule unlocks once the broken {brokenRules.length === 1 ? "rule" : "rules"} above
+                  {brokenRules.length === 1 ? " is" : " are"} fixed.
+                </p>
+              )}
+              {showHelper && (
+                <>
+                  {!currentSolved && (
+                    <div className="pw-hint" aria-live="polite">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z" />
+                      </svg>
+                      <p>{hintFor(currentRule)}</p>
+                    </div>
+                  )}
+                  <div className="pw-stats">
+                    <div className="pw-stat">
+                      <small>Vowels</small>
+                      <strong className="pw-text-vowel">{vowelCount}</strong>
+                      <span className="pw-meter"><span className="pw-meter-vowel" style={{ width: `${statPercent(vowelCount, letterCount)}%` }} /></span>
+                    </div>
+                    <div className="pw-stat">
+                      <small>Consonants</small>
+                      <strong className="pw-text-consonant">{consonantCount}</strong>
+                      <span className="pw-meter"><span className="pw-meter-consonant" style={{ width: `${statPercent(consonantCount, letterCount)}%` }} /></span>
+                    </div>
+                    <div className="pw-stat">
+                      <small>Special characters</small>
+                      <strong className="pw-text-symbol">{specialCharacterCount}</strong>
+                      <span className="pw-meter"><span className="pw-meter-symbol" style={{ width: `${statPercent(specialCharacterCount, passwordCharacterCount)}%` }} /></span>
+                    </div>
+                    <div className="pw-stat">
+                      <small>Digits</small>
+                      <strong className="pw-text-digit">{digitCount}</strong>
+                      <span className="pw-meter"><span className="pw-meter-digit" style={{ width: `${statPercent(digitCount, passwordCharacterCount)}%` }} /></span>
+                    </div>
+                    <div className="pw-stat pw-stat-total">
+                      <small>Total characters</small>
+                      <strong>{passwordCharacterCount}</strong>
+                      <span className="pw-meter"><span className="pw-meter-total" style={{ width: `${Math.min(passwordCharacterCount, 100)}%` }} /></span>
+                    </div>
+                  </div>
+                </>
+              )}
+            </section>
+          ) : hasBroken ? (
+            <section className="pw-current pw-current-waiting" aria-labelledby="pw-almost">
+              <span className="pw-chip pw-chip-ok">Almost there</span>
+              <h2 id="pw-almost" className="pw-current-text">Every other rule is solved. Fix the broken rule above to finish.</h2>
+            </section>
+          ) : (
+            <section className="pw-current pw-current-won" aria-labelledby="pw-won">
+              <span className="pw-chip pw-chip-ok">Complete</span>
+              <h2 id="pw-won" className="pw-current-text">Every rule is satisfied. Your password survived.</h2>
+            </section>
+          )}
+
+          {liveDataWarnings.map(({ key, text, retry }) => (
+            <div key={key} className="live-data-warning" role="status">
+              <span>{text}</span>
+              <button type="button" onClick={retry}>Retry</button>
+            </div>
+          ))}
+
+          <section className="pw-log" aria-labelledby="pw-log-title">
+            <div className="pw-solved-head">
+              <h3 id="pw-log-title" className="pw-label">Event log</h3>
+              {eventLog.length > 6 && (
+                <button
+                  className="pw-link-button"
+                  type="button"
+                  aria-expanded={showAllEvents}
+                  aria-controls="pw-log-list"
+                  onClick={() => setShowAllEvents((shown) => !shown)}
+                >
+                  {showAllEvents ? "Show latest" : `Show all (${eventLog.length})`}
+                </button>
               )}
             </div>
-          );
-        })}
+            {eventLog.length === 0 ? (
+              <p className="pw-muted pw-log-empty">Solved rules, broken rules and chaos events will show up here.</p>
+            ) : (
+              <ol id="pw-log-list" className="pw-log-list" aria-live="polite">
+                {visibleEvents.map((entry) => (
+                  <li key={entry.id} className={`pw-log-item pw-log-${entry.kind}${entry.chaos ? ` pw-log-${entry.chaos}` : ""}`}>
+                    <span className="pw-log-time">{entry.time}</span>
+                    <span className="pw-log-icon" aria-hidden="true">
+                      {entry.kind === "solved" && (
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5" /></svg>
+                      )}
+                      {entry.kind === "broken" && (
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
+                      )}
+                      {entry.kind === "chaos" && (
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7z" /></svg>
+                      )}
+                    </span>
+                    <span>{entry.text}</span>
+                  </li>
+                ))}
+              </ol>
+            )}
+          </section>
+
+          {solvedRules.length > 0 && (
+            <section aria-labelledby="pw-solved-title">
+              <div className="pw-solved-head">
+                <h3 id="pw-solved-title" className="pw-label">Solved ({solvedRules.length})</h3>
+                <button
+                  className="pw-link-button"
+                  type="button"
+                  aria-expanded={showSolved}
+                  aria-controls="pw-solved-list"
+                  onClick={() => setShowSolved((shown) => !shown)}
+                >
+                  {showSolved ? "Collapse" : "Show"}
+                </button>
+              </div>
+              {showSolved && (
+                <ul id="pw-solved-list" className="pw-solved">
+                  {solvedRules.map(({ rule }) => (
+                    <li key={rule.id}>
+                      <svg className="pw-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <path d="M20 6L9 17l-5-5" />
+                      </svg>
+                      <span className="pw-solved-id">{rule.category === "Chaos" ? "Event" : `#${rule.id}`}</span>
+                      <span>{rule.getText ? rule.getText(password, liveData) : rule.text}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+          )}
+        </main>
       </div>
     </div>
   );

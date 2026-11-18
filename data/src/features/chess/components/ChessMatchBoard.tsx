@@ -431,10 +431,10 @@ export const ChessMatchBoard: React.FC<ChessMatchBoardProps> = ({
   return (
     <div className="w-full max-w-2xl mx-auto flex flex-col gap-4 select-none">
       {/* ── Top Game Bar: Header, Live status, Sound toggle ──────────────────── */}
-      <div className="flex items-center justify-between px-4 py-3 bg-[#101638] border border-[rgba(255,255,255,0.08)] rounded-2xl shadow-xl">
+      <div className="flex items-center justify-between px-4 py-3 bg-[#FFFFFF] border border-[rgba(30,27,36,0.08)] rounded-2xl shadow-xl">
         <Link
           href="/games"
-          className="flex items-center gap-1.5 text-xs font-semibold text-[#B8C3E0] hover:text-[#39DFFF] transition-colors"
+          className="flex items-center gap-1.5 text-xs font-semibold text-[#6E6878] hover:text-[#FF5A3C] transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Exit Arena</span>
@@ -445,7 +445,7 @@ export const ChessMatchBoard: React.FC<ChessMatchBoardProps> = ({
             {match.is_check ? "Check!" : isGameActive ? "Speed Blitz 5+3" : "Finished"}
           </Badge>
           <span
-            className={cn("w-2 h-2 rounded-full", isConnected ? "bg-[#39DFFF] animate-pulse shadow-[0_0_8px_#39DFFF]" : "bg-[#FF5370]")}
+            className={cn("w-2 h-2 rounded-full", isConnected ? "bg-[#FF5A3C] animate-pulse shadow-[0_0_8px_#FF5A3C]" : "bg-[#E5484D]")}
             title={isConnected ? "Realtime connected" : "Connecting..."}
           />
         </div>
@@ -456,7 +456,7 @@ export const ChessMatchBoard: React.FC<ChessMatchBoardProps> = ({
             const nextMuted = chessSounds.toggleMute();
             setIsMuted(nextMuted);
           }}
-          className="p-1.5 rounded-lg text-[#B8C3E0] hover:text-[#39DFFF] hover:bg-[#070B25] transition-colors"
+          className="p-1.5 rounded-lg text-[#6E6878] hover:text-[#FF5A3C] hover:bg-[#FFF6EC] transition-colors"
           title={isMuted ? "Unmute sounds" : "Mute sounds"}
         >
           {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
@@ -488,20 +488,20 @@ export const ChessMatchBoard: React.FC<ChessMatchBoardProps> = ({
         className={cn(
           "flex items-center justify-between p-3.5 sm:p-4 rounded-2xl border transition-all duration-200",
           isOppTurn && isGameActive
-            ? "bg-[#101638] border-[#39DFFF] shadow-lg shadow-[rgba(57,223,255,0.15)] ring-1 ring-[#39DFFF]/40"
-            : "bg-[#101638] border-[rgba(255,255,255,0.08)] shadow-xl",
+            ? "bg-[#FFFFFF] border-[#FF5A3C] shadow-lg shadow-[rgba(255,90,60,0.15)] ring-1 ring-[#FF5A3C]/40"
+            : "bg-[#FFFFFF] border-[rgba(30,27,36,0.08)] shadow-xl",
         )}
       >
         <div className="flex items-center gap-3 min-w-0">
           <Avatar
             src={oppPlayer.avatar_url ?? undefined}
             name={oppPlayer.display_name}
-            className="w-10 h-10 border border-[rgba(57,223,255,0.25)] shrink-0"
+            className="w-10 h-10 border border-[rgba(255,90,60,0.25)] shrink-0"
           />
           <div className="min-w-0">
             <div className="flex items-center gap-2 min-w-0">
-              <span className="font-bold text-sm text-[#F5F7FF] truncate">{oppPlayer.display_name}</span>
-              <span className="text-[10px] text-[#B8C3E0] uppercase font-mono shrink-0">
+              <span className="font-bold text-sm text-[#1E1B24] truncate">{oppPlayer.display_name}</span>
+              <span className="text-[10px] text-[#6E6878] uppercase font-mono shrink-0">
                 {isWhiteViewer ? "Black" : "White"}
               </span>
             </div>
@@ -514,7 +514,7 @@ export const ChessMatchBoard: React.FC<ChessMatchBoardProps> = ({
               ))}
               {/* Material Advantage Badge */}
               {((isWhiteViewer && captured.advantage < 0) || (!isWhiteViewer && captured.advantage > 0)) && (
-                <span className="text-[10px] font-bold text-[#39DFFF] ml-1">
+                <span className="text-[10px] font-bold text-[#FF5A3C] ml-1">
                   +{Math.abs(captured.advantage)}
                 </span>
               )}
@@ -526,18 +526,18 @@ export const ChessMatchBoard: React.FC<ChessMatchBoardProps> = ({
         <div
           className={cn(
             "flex items-center gap-2 px-3 py-1.5 rounded-xl border font-mono font-bold text-lg md:text-xl shrink-0",
-            isOppClockLow ? "bg-[rgba(255,83,112,0.15)] border-[#FF5370] text-[#FF5370] animate-pulse" : "bg-[#070B25] border-[rgba(255,255,255,0.08)] text-[#F5F7FF]",
+            isOppClockLow ? "bg-[rgba(229,72,77,0.15)] border-[#E5484D] text-[#E5484D] animate-pulse" : "bg-[#FFF6EC] border-[rgba(30,27,36,0.08)] text-[#1E1B24]",
           )}
         >
-          <Clock className="w-4 h-4 text-[#8B98B5]" />
+          <Clock className="w-4 h-4 text-[#6E6878]" />
           <span>{formatTime(oppClockMs)}</span>
         </div>
       </div>
 
       {/* ── Draw Offer Notification Banner (if opponent offered) ────────────── */}
       {oppOfferedDraw && isGameActive && (
-        <div className="p-3.5 bg-[#101638] border border-[rgba(245,158,11,0.3)] rounded-2xl flex items-center justify-between gap-3 animate-in fade-in">
-          <div className="flex items-center gap-2 text-xs text-[#FBBF24]">
+        <div className="p-3.5 bg-[#FFFFFF] border border-[rgba(245,158,11,0.3)] rounded-2xl flex items-center justify-between gap-3 animate-in fade-in">
+          <div className="flex items-center gap-2 text-xs text-[#FFC23D]">
             <Handshake className="w-4 h-4 shrink-0 text-[#F59E0B]" />
             <span>{oppPlayer.display_name} offers a draw.</span>
           </div>
@@ -582,20 +582,20 @@ export const ChessMatchBoard: React.FC<ChessMatchBoardProps> = ({
         className={cn(
           "flex items-center justify-between p-3.5 sm:p-4 rounded-2xl border transition-all duration-200",
           isMyTurn && isGameActive
-            ? "bg-[#101638] border-[#39DFFF] shadow-lg shadow-[rgba(57,223,255,0.15)] ring-1 ring-[#39DFFF]/40"
-            : "bg-[#101638] border-[rgba(255,255,255,0.08)] shadow-xl",
+            ? "bg-[#FFFFFF] border-[#FF5A3C] shadow-lg shadow-[rgba(255,90,60,0.15)] ring-1 ring-[#FF5A3C]/40"
+            : "bg-[#FFFFFF] border-[rgba(30,27,36,0.08)] shadow-xl",
         )}
       >
         <div className="flex items-center gap-3 min-w-0">
           <Avatar
             src={myPlayer.avatar_url ?? undefined}
             name={myPlayer.display_name}
-            className="w-10 h-10 border border-[rgba(57,223,255,0.25)] shrink-0"
+            className="w-10 h-10 border border-[rgba(255,90,60,0.25)] shrink-0"
           />
           <div className="min-w-0">
             <div className="flex items-center gap-2 min-w-0">
-              <span className="font-bold text-sm text-[#F5F7FF] truncate">{myPlayer.display_name} (You)</span>
-              <span className="text-[10px] text-[#B8C3E0] uppercase font-mono shrink-0">
+              <span className="font-bold text-sm text-[#1E1B24] truncate">{myPlayer.display_name} (You)</span>
+              <span className="text-[10px] text-[#6E6878] uppercase font-mono shrink-0">
                 {isWhiteViewer ? "White" : "Black"}
               </span>
             </div>
@@ -608,7 +608,7 @@ export const ChessMatchBoard: React.FC<ChessMatchBoardProps> = ({
               ))}
               {/* Material Advantage Badge */}
               {((isWhiteViewer && captured.advantage > 0) || (!isWhiteViewer && captured.advantage < 0)) && (
-                <span className="text-[10px] font-bold text-[#39DFFF] ml-1">
+                <span className="text-[10px] font-bold text-[#FF5A3C] ml-1">
                   +{Math.abs(captured.advantage)}
                 </span>
               )}
@@ -620,16 +620,16 @@ export const ChessMatchBoard: React.FC<ChessMatchBoardProps> = ({
         <div
           className={cn(
             "flex items-center gap-2 px-3 py-1.5 rounded-xl border font-mono font-bold text-lg md:text-xl shrink-0",
-            isMyClockLow ? "bg-[rgba(255,83,112,0.15)] border-[#FF5370] text-[#FF5370] animate-pulse" : "bg-[#070B25] border-[rgba(255,255,255,0.08)] text-[#F5F7FF]",
+            isMyClockLow ? "bg-[rgba(229,72,77,0.15)] border-[#E5484D] text-[#E5484D] animate-pulse" : "bg-[#FFF6EC] border-[rgba(30,27,36,0.08)] text-[#1E1B24]",
           )}
         >
-          <Clock className="w-4 h-4 text-[#8E9B97]" />
+          <Clock className="w-4 h-4 text-[#8E8798]" />
           <span>{formatTime(myClockMs)}</span>
         </div>
       </div>
 
       {/* ── In-Game Action Bar ──────────────────────────────────────────────── */}
-      <div className="flex items-center justify-between gap-3 p-3 bg-[#101638] border border-[rgba(255,255,255,0.08)] rounded-2xl shadow-xl">
+      <div className="flex items-center justify-between gap-3 p-3 bg-[#FFFFFF] border border-[rgba(30,27,36,0.08)] rounded-2xl shadow-xl">
         {oppHasTimedOut ? (
           <Button
             variant="coral"
@@ -670,13 +670,13 @@ export const ChessMatchBoard: React.FC<ChessMatchBoardProps> = ({
       {/* ── Resignation Confirmation Modal ──────────────────────────────────── */}
       {showResignConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in">
-          <div className="bg-[#101638] border border-[rgba(255,255,255,0.08)] rounded-3xl p-6 sm:p-7 max-w-sm w-full text-center space-y-4 shadow-2xl">
-            <div className="w-12 h-12 rounded-2xl bg-[rgba(255,83,112,0.15)] border border-[rgba(255,83,112,0.3)] text-[#FF5370] flex items-center justify-center mx-auto">
+          <div className="bg-[#FFFFFF] border border-[rgba(30,27,36,0.08)] rounded-3xl p-6 sm:p-7 max-w-sm w-full text-center space-y-4 shadow-2xl">
+            <div className="w-12 h-12 rounded-2xl bg-[rgba(229,72,77,0.15)] border border-[rgba(229,72,77,0.3)] text-[#E5484D] flex items-center justify-center mx-auto">
               <ShieldAlert className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="font-display font-bold text-lg text-[#F5F7FF]">Resign Chess Match?</h3>
-              <p className="text-xs text-[#B8C3E0] mt-1 leading-relaxed">
+              <h3 className="font-display font-bold text-lg text-[#1E1B24]">Resign Chess Match?</h3>
+              <p className="text-xs text-[#6E6878] mt-1 leading-relaxed">
                 Resigning concludes the game immediately as a defeat and grants your opponent the right to assign a Dare.
               </p>
             </div>

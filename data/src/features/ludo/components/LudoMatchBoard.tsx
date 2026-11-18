@@ -335,10 +335,10 @@ export function LudoMatchBoard({ matchId, viewerId, players, initialSnapshot }: 
   return (
     <div className="w-full max-w-lg mx-auto flex flex-col gap-4 select-none">
       {/* Top bar */}
-      <div className="flex items-center justify-between px-4 py-3 bg-[#101638] border border-[rgba(255,255,255,0.08)] rounded-2xl shadow-xl">
+      <div className="flex items-center justify-between px-4 py-3 bg-[#FFFFFF] border border-[rgba(30,27,36,0.08)] rounded-2xl shadow-xl">
         <Link
           href="/play/ludo"
-          className="flex items-center gap-1.5 text-xs font-semibold text-[#B8C3E0] hover:text-[#39DFFF] transition-colors"
+          className="flex items-center gap-1.5 text-xs font-semibold text-[#6E6878] hover:text-[#FF5A3C] transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Lobby</span>
@@ -348,7 +348,7 @@ export function LudoMatchBoard({ matchId, viewerId, players, initialSnapshot }: 
           <span
             className={cn(
               "w-2 h-2 rounded-full",
-              isConnected ? "bg-[#39DFFF] animate-pulse shadow-[0_0_8px_#39DFFF]" : "bg-[#FF5370]",
+              isConnected ? "bg-[#FF5A3C] animate-pulse shadow-[0_0_8px_#FF5A3C]" : "bg-[#E5484D]",
             )}
             title={isConnected ? "Live updates connected" : "Reconnecting…"}
           />
@@ -371,7 +371,7 @@ export function LudoMatchBoard({ matchId, viewerId, players, initialSnapshot }: 
 
       {actionError && (
         <div
-          className="p-3 bg-[rgba(255,83,112,0.1)] border border-[rgba(255,83,112,0.3)] rounded-2xl text-xs text-[#FF5370] font-medium"
+          className="p-3 bg-[rgba(229,72,77,0.1)] border border-[rgba(229,72,77,0.3)] rounded-2xl text-xs text-[#E5484D] font-medium"
           role="alert"
         >
           {actionError}
@@ -380,26 +380,26 @@ export function LudoMatchBoard({ matchId, viewerId, players, initialSnapshot }: 
 
       {/* ── Waiting for the friend to open the match ─────────────────────────── */}
       {phase === "waiting" && (
-        <div className="rounded-3xl border border-[rgba(57,223,255,0.2)] bg-[#101638] p-6 text-center space-y-4 shadow-xl animate-fade-in">
-          <div className="w-14 h-14 mx-auto rounded-2xl bg-[#39DFFF]/10 border border-[#39DFFF]/30 flex items-center justify-center text-[#39DFFF]">
+        <div className="rounded-3xl border border-[rgba(255,90,60,0.2)] bg-[#FFFFFF] p-6 text-center space-y-4 shadow-xl animate-fade-in">
+          <div className="w-14 h-14 mx-auto rounded-2xl bg-[#FF5A3C]/10 border border-[#FF5A3C]/30 flex items-center justify-center text-[#FF5A3C]">
             <Hourglass className="w-7 h-7 animate-pulse" aria-hidden="true" />
           </div>
           <div className="flex items-center justify-center gap-2">
             <Avatar src={opponent.avatar_url} name={opponent.display_name} size="sm" />
-            <h1 className="font-display font-black text-xl text-[#F5F7FF] truncate">Waiting for {opponent.display_name}</h1>
+            <h1 className="font-display font-black text-xl text-[#1E1B24] truncate">Waiting for {opponent.display_name}</h1>
           </div>
-          <p className="text-sm text-[#B8C3E0]">
+          <p className="text-sm text-[#6E6878]">
             They&apos;ll see your challenge in their Ludo lobby. The game starts as soon as they open it.
           </p>
           {waitingDeadlineMs > 0 && serverNow > 0 && (
-            <p className="text-xs font-mono text-[#8B98B5]">Challenge expires in {formatClock(waitingDeadlineMs - serverNow)}</p>
+            <p className="text-xs font-mono text-[#6E6878]">Challenge expires in {formatClock(waitingDeadlineMs - serverNow)}</p>
           )}
           <Button
             variant="ghost"
             size="sm"
             onClick={handleCancel}
             loading={submitting}
-            className="text-[#FF5370] hover:text-[#FF8599]"
+            className="text-[#E5484D] hover:text-[#F08A8D]"
           >
             Cancel challenge
           </Button>
@@ -419,7 +419,7 @@ export function LudoMatchBoard({ matchId, viewerId, players, initialSnapshot }: 
             }))}
           />
 
-          <div className="rounded-3xl border border-[rgba(255,255,255,0.08)] bg-[#101638] p-2 sm:p-3 shadow-xl">
+          <div className="rounded-3xl border border-[rgba(30,27,36,0.08)] bg-[#FFFFFF] p-2 sm:p-3 shadow-xl">
             <LudoBoard
               state={state}
               myColor={myColor}
@@ -431,17 +431,17 @@ export function LudoMatchBoard({ matchId, viewerId, players, initialSnapshot }: 
           </div>
 
           {live && !playing && !terminal && (
-            <p className="text-sm text-[#B8C3E0] flex items-center justify-center gap-2">
+            <p className="text-sm text-[#6E6878] flex items-center justify-center gap-2">
               <Spinner size="sm" /> Getting both players ready…
             </p>
           )}
 
           {playing && (
-            <div className="rounded-3xl border border-[rgba(255,255,255,0.08)] bg-[#101638] p-4 sm:p-5 shadow-xl space-y-3">
-              <p className="min-h-[1.25rem] text-sm font-semibold text-[#F5F7FF]" aria-live="polite">
+            <div className="rounded-3xl border border-[rgba(30,27,36,0.08)] bg-[#FFFFFF] p-4 sm:p-5 shadow-xl space-y-3">
+              <p className="min-h-[1.25rem] text-sm font-semibold text-[#1E1B24]" aria-live="polite">
                 {event ?? "Roll a 6 to bring a token out."}
               </p>
-              <TurnClock remainingMs={remainingMs} color={turnColor ? COLOR_HEX[turnColor] : "#39DFFF"} mine={myTurn} />
+              <TurnClock remainingMs={remainingMs} color={turnColor ? COLOR_HEX[turnColor] : "#FF5A3C"} mine={myTurn} />
               <LudoDice
                 value={shownDice(state)}
                 rolling={rolling}
@@ -457,16 +457,16 @@ export function LudoMatchBoard({ matchId, viewerId, players, initialSnapshot }: 
 
       {/* ── Result ───────────────────────────────────────────────────────────── */}
       {showResult && (
-        <div className="rounded-3xl border border-[rgba(57,223,255,0.25)] bg-[#101638] p-6 space-y-5 shadow-2xl animate-slide-up">
+        <div className="rounded-3xl border border-[rgba(255,90,60,0.25)] bg-[#FFFFFF] p-6 space-y-5 shadow-2xl animate-slide-up">
           <div className="text-center space-y-2">
             <div
               className={cn(
                 "w-16 h-16 mx-auto rounded-2xl border flex items-center justify-center",
                 iWon
-                  ? "bg-[#39DFFF]/15 border-[#39DFFF]/40 text-[#39DFFF]"
+                  ? "bg-[#FF5A3C]/15 border-[#FF5A3C]/40 text-[#FF5A3C]"
                   : iLost
-                  ? "bg-[#FF5370]/15 border-[#FF5370]/40 text-[#FF5370]"
-                  : "bg-[#070B25] border-[rgba(255,255,255,0.12)] text-[#B8C3E0]",
+                  ? "bg-[#E5484D]/15 border-[#E5484D]/40 text-[#E5484D]"
+                  : "bg-[#FFF6EC] border-[rgba(30,27,36,0.12)] text-[#6E6878]",
               )}
             >
               {iWon ? (
@@ -477,7 +477,7 @@ export function LudoMatchBoard({ matchId, viewerId, players, initialSnapshot }: 
                 <Award className="w-8 h-8" aria-hidden="true" />
               )}
             </div>
-            <h2 className="font-display font-black text-2xl text-[#F5F7FF]">
+            <h2 className="font-display font-black text-2xl text-[#1E1B24]">
               {phase === "cancelled"
                 ? "Challenge called off"
                 : phase === "aborted"
@@ -489,12 +489,12 @@ export function LudoMatchBoard({ matchId, viewerId, players, initialSnapshot }: 
                 : "Match over"}
             </h2>
             {phase === "completed" && (
-              <p className="text-sm text-[#B8C3E0]">
+              <p className="text-sm text-[#6E6878]">
                 Tokens home: Me {tokensHome(state, myColor)}/4 · {opponent.display_name} {tokensHome(state, oppColor)}/4
               </p>
             )}
             {phase === "forfeited" && (
-              <p className="text-sm text-[#B8C3E0]">
+              <p className="text-sm text-[#6E6878]">
                 {iWon ? `${opponent.display_name} left the match.` : "You left the match."}
               </p>
             )}
@@ -512,13 +512,13 @@ export function LudoMatchBoard({ matchId, viewerId, players, initialSnapshot }: 
           )}
 
           {phase === "completed" && iWon && !challenge && (
-            <div className="bg-[rgba(255,83,112,0.1)] border border-[rgba(255,83,112,0.3)] rounded-2xl p-4 text-center space-y-3">
-              <div className="flex items-center justify-center gap-1.5 text-[#FF8599] text-sm font-bold">
+            <div className="bg-[rgba(229,72,77,0.1)] border border-[rgba(229,72,77,0.3)] rounded-2xl p-4 text-center space-y-3">
+              <div className="flex items-center justify-center gap-1.5 text-[#F08A8D] text-sm font-bold">
                 <Sparkles className="w-4 h-4" aria-hidden="true" />
                 <span>Winner&apos;s privilege</span>
               </div>
-              <p className="text-xs text-[#B8C3E0]">
-                You beat <strong className="text-[#F5F7FF]">{opponent.display_name}</strong>. Pick a dare for them.
+              <p className="text-xs text-[#6E6878]">
+                You beat <strong className="text-[#1E1B24]">{opponent.display_name}</strong>. Pick a dare for them.
               </p>
               <Button variant="coral" size="md" onClick={() => setDareOpen(true)} className="w-full font-bold">
                 <Flame className="w-4 h-4 mr-2" />
@@ -528,7 +528,7 @@ export function LudoMatchBoard({ matchId, viewerId, players, initialSnapshot }: 
           )}
 
           {phase === "completed" && iLost && !challenge && (
-            <p className="text-center text-xs text-[#8B98B5]">
+            <p className="text-center text-xs text-[#6E6878]">
               {opponent.display_name} may send you a dare. It will appear here.
             </p>
           )}
@@ -570,11 +570,11 @@ function TurnClock({ remainingMs, color, mine }: { remainingMs: number; color: s
   return (
     <div className="space-y-1">
       <div className="flex items-center justify-between text-[11px] font-mono uppercase tracking-wider">
-        <span className="text-[#8B98B5]">{mine ? "Your time" : "Their time"}</span>
-        <span className={low ? "text-[#FF5370] font-bold" : "text-[#B8C3E0]"}>{secs}s</span>
+        <span className="text-[#6E6878]">{mine ? "Your time" : "Their time"}</span>
+        <span className={low ? "text-[#E5484D] font-bold" : "text-[#6E6878]"}>{secs}s</span>
       </div>
       <div
-        className="h-1.5 rounded-full bg-[#070B25] overflow-hidden"
+        className="h-1.5 rounded-full bg-[#FFF6EC] overflow-hidden"
         role="progressbar"
         aria-label="Turn time left"
         aria-valuemin={0}
@@ -583,7 +583,7 @@ function TurnClock({ remainingMs, color, mine }: { remainingMs: number; color: s
       >
         <div
           className="h-full rounded-full transition-[width] duration-200 ease-linear"
-          style={{ width: `${fraction * 100}%`, backgroundColor: low ? "#FF5370" : color }}
+          style={{ width: `${fraction * 100}%`, backgroundColor: low ? "#E5484D" : color }}
         />
       </div>
     </div>

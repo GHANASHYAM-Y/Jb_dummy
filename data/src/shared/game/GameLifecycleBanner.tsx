@@ -161,15 +161,15 @@ export function GameLifecycleBanner({
       <div
         className={cn(
           "w-full rounded-2xl border px-4 py-3 flex flex-wrap items-center justify-between gap-3 text-sm transition-all shadow-md",
-          isTerminal && endReason === "forfeit" && iWon && "bg-[#101638] border-[#39DFFF]/40 text-[#39DFFF]",
-          isTerminal && endReason === "forfeit" && iLost && "bg-[#181126] border-[#FF5370]/40 text-[#FF5370]",
-          isTerminal && endReason === "disconnect_timeout" && iWon && "bg-[#101638] border-[#39DFFF]/40 text-[#39DFFF]",
-          isTerminal && (endReason === "inactivity_timeout" || endReason === "waiting_timeout" || endReason === "both_left") && "bg-[#101638] border-[#FBBF24]/40 text-[#FBBF24]",
-          !isTerminal && opponentDisconnected && "bg-[#1C162E] border-[#FF5370]/50 text-[#FF5370] animate-pulse",
-          !isTerminal && phase === "reconnecting" && !opponentDisconnected && "bg-[#1C1A2E] border-[#FBBF24]/40 text-[#FBBF24]",
-          !isTerminal && phase === "active" && !opponentDisconnected && "bg-[#101638]/90 border-[#315BFF]/30 text-[#F5F7FF]",
-          !isTerminal && phase === "waiting" && "bg-[#101638] border-[#315BFF]/30 text-[#B8C3E0]",
-          !isTerminal && phase === "ready" && "bg-[#101638] border-[#39DFFF]/30 text-[#39DFFF]",
+          isTerminal && endReason === "forfeit" && iWon && "bg-[#FFFFFF] border-[#FF5A3C]/40 text-[#FF5A3C]",
+          isTerminal && endReason === "forfeit" && iLost && "bg-[#181126] border-[#E5484D]/40 text-[#E5484D]",
+          isTerminal && endReason === "disconnect_timeout" && iWon && "bg-[#FFFFFF] border-[#FF5A3C]/40 text-[#FF5A3C]",
+          isTerminal && (endReason === "inactivity_timeout" || endReason === "waiting_timeout" || endReason === "both_left") && "bg-[#FFFFFF] border-[#FFC23D]/40 text-[#FFC23D]",
+          !isTerminal && opponentDisconnected && "bg-[#1C162E] border-[#E5484D]/50 text-[#E5484D] animate-pulse",
+          !isTerminal && phase === "reconnecting" && !opponentDisconnected && "bg-[#1C1A2E] border-[#FFC23D]/40 text-[#FFC23D]",
+          !isTerminal && phase === "active" && !opponentDisconnected && "bg-[#FFFFFF]/90 border-[#EADBC8] text-[#1E1B24]",
+          !isTerminal && phase === "waiting" && "bg-[#FFFFFF] border-[#EADBC8] text-[#6E6878]",
+          !isTerminal && phase === "ready" && "bg-[#FFFFFF] border-[#FF5A3C]/30 text-[#FF5A3C]",
           className
         )}
       >
@@ -178,21 +178,21 @@ export function GameLifecycleBanner({
           {isTerminal ? (
             terminalMessage ? (
               iWon ? (
-                <CheckCircle2 className="w-5 h-5 text-[#39DFFF] flex-shrink-0" />
+                <CheckCircle2 className="w-5 h-5 text-[#FF5A3C] flex-shrink-0" />
               ) : iLost ? (
-                <XCircle className="w-5 h-5 text-[#FF5370] flex-shrink-0" />
+                <XCircle className="w-5 h-5 text-[#E5484D] flex-shrink-0" />
               ) : (
-                <AlertTriangle className="w-5 h-5 text-[#FBBF24] flex-shrink-0" />
+                <AlertTriangle className="w-5 h-5 text-[#FFC23D] flex-shrink-0" />
               )
             ) : null
           ) : opponentDisconnected ? (
-            <WifiOff className="w-5 h-5 text-[#FF5370] flex-shrink-0 animate-bounce" />
+            <WifiOff className="w-5 h-5 text-[#E5484D] flex-shrink-0 animate-bounce" />
           ) : phase === "reconnecting" ? (
-            <RefreshCw className="w-5 h-5 text-[#FBBF24] flex-shrink-0 animate-spin" />
+            <RefreshCw className="w-5 h-5 text-[#FFC23D] flex-shrink-0 animate-spin" />
           ) : phase === "active" ? (
-            <Wifi className="w-5 h-5 text-[#39DFFF] flex-shrink-0" />
+            <Wifi className="w-5 h-5 text-[#FF5A3C] flex-shrink-0" />
           ) : (
-            <Hourglass className="w-5 h-5 text-[#9BA8D7] flex-shrink-0" />
+            <Hourglass className="w-5 h-5 text-[#6E6878] flex-shrink-0" />
           )}
 
           <div className="flex flex-col">
@@ -229,8 +229,8 @@ export function GameLifecycleBanner({
               className={cn(
                 "flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono font-medium border",
                 inactivitySecondsRemaining < 120
-                  ? "bg-[#FF5370]/15 text-[#FF5370] border-[#FF5370]/40 animate-pulse"
-                  : "bg-[#070B25] text-[#9BA8D7] border-[#315BFF]/30"
+                  ? "bg-[#E5484D]/15 text-[#E5484D] border-[#E5484D]/40 animate-pulse"
+                  : "bg-[#FFF6EC] text-[#6E6878] border-[#EADBC8]"
               )}
               title="Game will abort if neither player moves for 10 minutes"
             >
@@ -245,7 +245,7 @@ export function GameLifecycleBanner({
             <button
               type="button"
               onClick={() => setShowLeaveModal(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-bold bg-[#FF5370]/15 text-[#FF5370] border border-[#FF5370]/30 hover:bg-[#FF5370]/25 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-bold bg-[#E5484D]/15 text-[#E5484D] border border-[#E5484D]/30 hover:bg-[#E5484D]/25 transition-colors cursor-pointer"
             >
               <LogOut className="w-3.5 h-3.5" />
               <span>{t("game.action.leave") || "Leave Game"}</span>
@@ -260,17 +260,17 @@ export function GameLifecycleBanner({
           <div
             role="dialog"
             aria-modal="true"
-            className="w-full max-w-md rounded-3xl bg-[#0D1336] border border-[#FF5370]/40 p-6 shadow-[0_20px_60px_rgba(7,11,37,0.95)] text-[#F5F7FF] space-y-4"
+            className="w-full max-w-md rounded-3xl bg-[#0D1336] border border-[#E5484D]/40 p-6 shadow-[0_20px_60px_rgba(255,246,236,0.95)] text-[#1E1B24] space-y-4"
           >
-            <div className="w-12 h-12 rounded-2xl bg-[#FF5370]/20 text-[#FF5370] border border-[#FF5370]/40 flex items-center justify-center mx-auto">
+            <div className="w-12 h-12 rounded-2xl bg-[#E5484D]/20 text-[#E5484D] border border-[#E5484D]/40 flex items-center justify-center mx-auto">
               <AlertTriangle className="w-6 h-6" />
             </div>
 
             <div className="text-center space-y-2">
-              <h3 className="font-display font-bold text-xl text-[#F5F7FF]">
+              <h3 className="font-display font-bold text-xl text-[#1E1B24]">
                 {t("game.action.leave") || "Leave Game"}
               </h3>
-              <p className="text-sm text-[#9BA8D7] leading-relaxed">
+              <p className="text-sm text-[#6E6878] leading-relaxed">
                 {t("game.action.leave_confirm") ||
                   "Are you sure you want to leave? Your opponent will be awarded the victory immediately."}
               </p>
@@ -282,7 +282,7 @@ export function GameLifecycleBanner({
                 size="sm"
                 onClick={() => setShowLeaveModal(false)}
                 disabled={isLeaving}
-                className="text-[#9BA8D7] hover:text-[#F5F7FF]"
+                className="text-[#6E6878] hover:text-[#1E1B24]"
               >
                 Cancel
               </Button>
@@ -291,7 +291,7 @@ export function GameLifecycleBanner({
                 size="sm"
                 onClick={handleLeaveConfirm}
                 loading={isLeaving}
-                className="bg-[#FF5370] hover:bg-[#E03E5A] text-white font-bold"
+                className="bg-[#E5484D] hover:bg-[#E03E5A] text-white font-bold"
               >
                 Confirm Forfeit
               </Button>

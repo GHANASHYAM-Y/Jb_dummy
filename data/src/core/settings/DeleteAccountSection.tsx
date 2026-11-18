@@ -66,14 +66,14 @@ export function DeleteAccountSection() {
   }, [loading]);
 
   return (
-    <div id="delete-account" className="rounded-2xl border border-[rgba(255,83,112,0.3)] bg-[#101638] p-6 sm:p-8 shadow-[0_0_24px_rgba(255,83,112,0.1)]">
+    <div id="delete-account" className="rounded-[26px] border-2 border-[#F6C9CB] bg-white p-5 sm:p-6 shadow-[0_4px_0_#F6C9CB]">
       <div className="flex items-start gap-4 mb-5">
-        <div className="w-12 h-12 rounded-xl bg-[#FF5370]/15 border border-[#FF5370]/30 flex items-center justify-center flex-shrink-0 text-[#FF5370]">
-          <Trash2 className="h-6 w-6 text-[#FF5370]" />
+        <div className="w-11 h-11 rounded-full bg-[#FDECEC] flex items-center justify-center flex-shrink-0 text-[#E5484D]">
+          <Trash2 className="h-6 w-6 text-[#E5484D]" />
         </div>
         <div>
-          <h3 className="font-display font-bold text-lg text-[#F5F7FF]">{t("account.delete")}</h3>
-          <p className="text-[#B8C3E0] text-sm mt-1 leading-relaxed">
+          <h3 className="font-display font-semibold text-lg text-[#1E1B24]">{t("account.delete")}</h3>
+          <p className="text-[#6E6878] text-sm mt-1 leading-relaxed">
             {t("account.delete_confirm_body")}
           </p>
         </div>
@@ -91,15 +91,15 @@ export function DeleteAccountSection() {
           {t("account.delete")}
         </Button>
       ) : (
-        <div className="mt-5 space-y-4 border-t border-[rgba(255,83,112,0.2)] pt-5">
+        <div className="mt-5 space-y-4 border-t-2 border-[#F6C9CB] pt-5">
           <div className="flex items-center justify-between">
-            <p className="font-semibold text-[#FF5370] text-sm">
+            <p className="font-semibold text-[#E5484D] text-sm">
               {t("account.delete_confirm_title")}
             </p>
             <button
               onClick={handleClose}
               disabled={loading}
-              className="text-[#B8C3E0] hover:text-[#F5F7FF] transition-colors p-1 rounded-md"
+              className="inline-flex items-center justify-center w-11 h-11 text-[#6E6878] hover:text-[#1E1B24] hover:bg-[#F5EADC] transition-colors rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A3C]"
               aria-label="Cancel"
             >
               <X className="h-4 w-4" />
@@ -113,7 +113,7 @@ export function DeleteAccountSection() {
           )}
 
           <div>
-            <label htmlFor="delete-confirm-input" className="evo-label text-[#FF5370]">
+            <label htmlFor="delete-confirm-input" className="evo-label text-[#E5484D]">
               {t("account.delete_type_confirm")}
             </label>
             <input
@@ -126,7 +126,7 @@ export function DeleteAccountSection() {
               spellCheck={false}
               className={cn(
                 "evo-input font-mono tracking-widest mt-2",
-                isConfirmed && "border-[#FF5370] text-[#FF5370] font-bold shadow-[0_0_12px_rgba(255,83,112,0.3)]",
+                isConfirmed && "border-[#E5484D] text-[#E5484D] font-bold shadow-[0_3px_0_#F6C9CB]",
               )}
             />
           </div>

@@ -143,7 +143,9 @@ npm run dev
 
 Open http://localhost:3000.
 
-There is also a Windows helper, `start-servers.bat` in the repo root. It installs packages if needed, then runs a dev server (port 3000) and a production-style server (port 3001, which builds first and takes a couple of minutes) together in one window. Press Ctrl+C to stop both.
+**Run both servers inside VS Code (recommended):** open the repo folder in VS Code, press `Ctrl+Shift+P`, choose **Tasks: Run Task**, then **Start servers (dev + prod)**. The dev server (port 3000) and a production-style server (port 3001, which builds first and takes a couple of minutes) open side by side in VS Code's Terminal panel. You can also start just one of them from the same list. The tasks live in `.vscode/tasks.json`.
+
+**Or use the batch file:** `start-servers.bat` in the repo root installs packages if needed, then runs both servers in the terminal you start it from. Run it as `.\start-servers.bat` in VS Code's terminal to keep everything inside VS Code. Press Ctrl+C to stop.
 
 | Command | What it does |
 |---------|--------------|

@@ -12,7 +12,7 @@
  *    with clear exit/back navigation to the Game arena.
  * 4. Authenticated users are redirected to the Game page (/games).
  * 5. Search API (/api/friends/search) enforces privacy controls and blocks.
- * 6. Coastal Modern color tokens and styling are consistently applied.
+ * 6. Concept B color tokens and styling are consistently applied.
  */
 
 import { describe, it, expect } from "vitest";
@@ -172,19 +172,20 @@ describe("EVOAIQU Architecture Standard — Public Website & Unauthenticated Acc
   });
 
   it("does not render the authenticated mobile bottom navigation for unauthenticated visitors", () => {
-    expect(navCode).toContain("!isFullScreenGame && Boolean(user)");
+    expect(navCode).toContain("if (!user) {");
+    expect(navCode).toContain("</nav>");
   });
 });
 
-describe("EVOAIQU Architecture Standard — Coastal Modern Design System", () => {
+describe("EVOAIQU Architecture Standard — Concept B Design System", () => {
   const navPath = path.resolve(__dirname, "../core/navigation/AppNavigation.tsx");
   const navCode = fs.readFileSync(navPath, "utf-8");
 
-  it("utilizes EVOAIQU Coastal Modern palette tokens", () => {
-    // Ivory (#F7F8F4), Teal (#167D78), Pale Teal (#DDF2EB), Evergreen (#203331)
-    expect(navCode).toContain("#F7F8F4");
-    expect(navCode).toContain("#167D78");
-    expect(navCode).toContain("#DDF2EB");
-    expect(navCode).toContain("#203331");
+  it("utilizes EVOAIQU Concept B palette tokens", () => {
+    // Cream (#FFF6EC), Tangerine (#FF5A3C), Sand line (#EADBC8), Ink (#1E1B24)
+    expect(navCode).toContain("#FFF6EC");
+    expect(navCode).toContain("#FF5A3C");
+    expect(navCode).toContain("#EADBC8");
+    expect(navCode).toContain("#1E1B24");
   });
 });
